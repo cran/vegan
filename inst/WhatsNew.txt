@@ -1,5 +1,16 @@
 VEGAN STABLE VERSIONS 
 
+Version 1.6-1
+=============
+
+* Minor maintanenance release to satisfy tests in R-devel. There was a
+  buglet in ordisegments that caused a warning. I had introduced a
+  trick to handle printCoefmat before it was invented to replace
+  print.coefmat, but this failed in R-devel.
+
+* Vignettes included in this release. These were only in devel
+  versions of my web pages previously.
+
 Version 1.6-0 (Fisher)
 ======================
 

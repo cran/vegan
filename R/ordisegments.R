@@ -1,5 +1,5 @@
 "ordisegments" <-
-function (ord, groups, levels, replicates, display = display, 
+function (ord, groups, levels, replicates, display = "sites", 
     ...) 
 {
     pts <- scores(ord, display = "sites", ...)

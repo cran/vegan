@@ -1,8 +1,6 @@
 "print.summary.decorana" <-
     function (x, ...) 
 {
-    if (!exists("printCoefmat", envir = NULL))
-        printCoefmat <- print.coefmat
     digits <- x$digits
     if (!is.null(x$spec.scores)) {
         cat("Species scores:\n\n")

@@ -1,7 +1,7 @@
 Package: vegan 
 Title: Community Ecology Package
-Version: 1.6-0
-Date: Oct-20, 2003
+Version: 1.6-1
+Date: Dec-12, 2003
 Author: Jari Oksanen <jari.oksanen@oulu.fi> 
 Maintainer: Jari Oksanen <jari.oksanen@oulu.fi>
 Description: Ordination methods and other useful functions for community and 
