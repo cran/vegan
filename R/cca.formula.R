@@ -1,8 +1,12 @@
 "cca.formula" <-
-function (formula, data) 
+    function (formula, data) 
 {
     if (missing(data)) {
         data <- parent.frame()
+    }
+    if (formula[[3]] == ".") {
+        point <- paste(names(data), collapse="+")
+        formula <- update(formula, paste(". ~", point))
     }
     Terms <- terms(formula, "Condition", data = data)
     specdata <- formula[[2]]
@@ -13,21 +17,23 @@ function (formula, data)
         partterm <- attr(Terms, "variables")[[1 + indPartial]]
         Pterm <- deparse(partterm[[2]])
         P.formula <- as.formula(paste("~", Pterm))
-        mf <- model.frame(P.formula, data)
-        Z <- model.matrix(P.formula, data)
-        formula <- update(formula, 
-                          paste(".~.-", deparse(partterm, width.cutoff=500)))
+        mf <- model.frame(P.formula, data, na.action=na.fail)
+        Z <- model.matrix(P.formula, mf)
+        formula <- update(formula, paste(".~.-", deparse(partterm, 
+                                                         width.cutoff = 500)))
     }
     formula[[2]] <- NULL
-    mf <- model.frame(formula, data)
-    Y <- model.matrix(formula, mf)
-    if (any(colnames(Y) == "(Intercept)")) {
-        xint <- which(colnames(Y) == "(Intercept)")
-        Y <- Y[, -xint]
+    if (formula[[2]] == "1")
+        Y <- NULL
+    else {
+        mf <- model.frame(formula, data, na.action=na.fail)
+        Y <- model.matrix(formula, mf)
+        if (any(colnames(Y) == "(Intercept)")) {
+            xint <- which(colnames(Y) == "(Intercept)")
+            Y <- Y[, -xint]
+        }
     }
-    if (is.null(Z)) 
-        sol <- cca.default(X, Y)
-    else sol <- cca.default(X, Y, Z)
+    sol <- cca.default(X, Y, Z)
     sol$Call <- match.call()
     sol$Call[[1]] <- as.name("cca")
     sol

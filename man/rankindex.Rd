@@ -42,7 +42,8 @@ rankindex(grad, veg, method="kendall")
   instability in rank correlations.  Small differences in rank
   correlations should not be taken too seriously.  Probably this method
   should be replaced with a sounder method, but I do not yet know
-  which\ldots 
+  which\ldots  You may experiment with \code{\link{mantel}},
+  \code{\link{anosim}} or even \code{\link{protest}}. 
 
   Kendall's rank correlation may be very slow with large data sets and
   you may consider
@@ -51,7 +52,9 @@ rankindex(grad, veg, method="kendall")
 
 
 \seealso{\code{\link{vegdist}}, \code{\link[MASS]{isoMDS}},
-    \code{\link[ctest]{cor.test}}, \code{\link{Machine}}  }
+    \code{\link[ctest]{cor.test}}, \code{\link{Machine}}, and for
+    alternatives \code{\link{anosim}}, \code{\link{mantel}} and
+    \code{\link{protest}}. }
 
 \examples{
 data(varespec)

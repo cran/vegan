@@ -32,9 +32,8 @@ downweight(veg, fraction = 5)
   \item{before}{Hill's piecewise transformation: values before transformation. }
   \item{after}{Hill's piecewise transformation: values after
   transformation -- these must correspond to values in \code{before}.}
-  \item{x}{A \code{decorana} result object.}
-  \item{object}{A \code{decorana} result object.}
-  \item{choices}{Axes used.}
+  \item{x, object}{A \code{decorana} result object.}
+  \item{choices}{Axes shown.}
   \item{origin}{Use true origin even in detrended correspondence analysis.}
   \item{display}{Display only sites, only species, both or neither.}
   \item{cex}{Plot character size.}
@@ -60,7 +59,7 @@ downweight(veg, fraction = 5)
   with detrending.  In orthogonalization the successive axes are made
   non-correlated, but detrending should remove all systematic dependence
   between axes.  Detrending is made using a five-segment smoothing
-  window with weigths (1,2,3,2,1) on \code{mk} segments -- which indeed
+  window with weights (1,2,3,2,1) on \code{mk} segments -- which indeed
   is more robust than the suggested alternative of detrending by
   polynomials. The
   packing of sites at the ends of the gradient is undone by rescaling
@@ -113,7 +112,7 @@ downweight(veg, fraction = 5)
   original Fortran code (which is in public domain), or about 1/3 of the
   original program.  I have tried to implement the original behaviour,
   although a great part of preparatory steps were written in \R
-  language, and may so differ somewhat from the original code. However,
+  language, and may differ somewhat from the original code. However,
   well-known bugs are corrected and strict criteria used (Oksanen &
   Minchin 1997).
 
@@ -123,8 +122,8 @@ downweight(veg, fraction = 5)
   and extensive alternatives in \R, but these options are included for
   compliance with the original software.  If different fraction of
   abundance is needed in downweighting, function \code{downweight} must
-  be applied before \code{decorana}.  Function \code{downweight} can
-  indeed be applied prior to correspondence analysis, and so it can be
+  be applied before \code{decorana}.  Function \code{downweight} 
+  indeed can be applied prior to correspondence analysis, and so it can be
   used together with \code{\link{cca}}, \code{\link[CoCoAn]{CAIV}} and
   \code{\link[multiv]{ca}} as well.
 

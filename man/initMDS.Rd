@@ -4,7 +4,7 @@
 \title{ Random Start and Axis Scaling for isoMDS }
 \description{
   Function \code{initMDS} gives a random  start for multidimensional
-  scaling, and \code{postMDS} rforms some post-standardizations for
+  scaling, and \code{postMDS} performs some post-standardizations for
   multidimensional scaling, in order to make the configurations easier
   to interpret 
 }
@@ -28,7 +28,7 @@ postMDS(X, dist, pc=TRUE, center=TRUE, halfchange=TRUE, threshold=0.8,
 }
 \details{
   Non-metric Multidimensional Scaling (NMDS) is commonly regarded as the
-  most robust unconstrained ordination method in community ecology (Micnhin
+  most robust unconstrained ordination method in community ecology (Minchin
   1987).  Functions \code{initMDS} and \code{postMDS} together with some
   other functions are intended to 
   help run NMDS in \code{\link[MASS]{isoMDS}} like recommended by
@@ -51,14 +51,14 @@ postMDS(X, dist, pc=TRUE, center=TRUE, halfchange=TRUE, threshold=0.8,
 
     \item NMDS solutions with minimum stress should be compared for
     consistency.  You should be satisfied only when several minimum
-    stress solutions have similar configurations as well.  In large data
-    sets in particular, single points may be unstable even with about
+    stress solutions have similar configurations. In particular in large data
+    sets, single points may be unstable even with about
     equal stress.  Function \code{postMDS} provides a simple solution
     for fixing the scaling of NMDS.  Function \code{\link{procrustes}}
-    provides Procrustes rotation for a more formal test.
+    provides Procrustes rotation for more formal inspection.
     }
 
-  Function \code{postMDS} provides the following way of fixing the
+  Function \code{postMDS} provides the following ways of ``fixing'' the
   indeterminacy of scaling and orientation of axes in NMDS:
   Centring moves the origin to the
   average of each axis.  Principal components rotate the configuration
@@ -104,10 +104,10 @@ rankindex(scale(varechem),varespec)
 rankindex(scale(varechem),wisconsin(varespec))
 vare.dist <- vegdist(wisconsin(varespec), "bray")
 # Get the baseline solution: start with cmdscale
-mds.null <- isoMDS(vare.dist)
+mds.null <- isoMDS(vare.dist, tol=1e-7)
 ## See if you can get any better.
 repeat{
-  mds.1<- isoMDS(vare.dist, initMDS(vare.dist), maxit=200, trace=FALSE)
+  mds.1<- isoMDS(vare.dist, initMDS(vare.dist), maxit=200, trace=FALSE, tol=1e-7)
   if(mds.1$stress < mds.null$stress) break
 }
 # Scale solutions ("fix translation, rotation and scale")
