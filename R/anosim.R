@@ -4,7 +4,7 @@ function (dis, grouping, permutations = 1000, strata)
     if(!require(mva))
       stop("Requires library `mva'")
     x <- as.dist(dis)
-    sol <- c(Call = match.call())
+    sol <- c(call = match.call())
     grouping <- as.factor(grouping)
     matched <- function(irow, icol, grouping) {
         grouping[irow] == grouping[icol]

@@ -74,10 +74,7 @@ read.cep(file, maxdata=10000, positive=TRUE, trace=FALSE, force=FALSE)
 \note{
   The function relies on smooth linking of Fortran file IO in \R
   session.  This is not guaranteed to work, and therefore the function
-  is not portable.  It works at least with a lucky combination of
-  \code{gcc}, \code{g77} and \code{libc} releases in \code{Linux}, like
-  in Red Hat 7.1, where this function was developed.  However, it may
-  not work in your system, but it
+  may not work in \emph{your} system, but it
   can crash the \R session.  Therefore the default is that the function
   does not run.  If you still want to try:
   \enumerate{

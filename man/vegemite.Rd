@@ -2,7 +2,7 @@
 \alias{vegemite}
 \alias{coverscale}
 
-\title{Prints a Compact, Ordered Vegetation Table. }
+\title{Prints a Compact, Ordered Vegetation Table }
 \description{
   The function prints a compact vegetation table, where species are
   lines, and each site takes only one row, without spaces.  The
@@ -39,12 +39,11 @@ coverscale(x, scale=c("Braun.Blanquet", "Domin", "Hult", "Hill", "fix", "log"))
   When \code{use} is an
   object from \code{\link[mva]{hclust}}, the sites are ordered similarly
   as in the cluster dendrogram.
-  There is no natural, unique ordering in hierarchic
-  clustering, but in some cases species are still nicely ordered.
   If ordination methods provide species scores, these are used for
   ordering species.  In all cases where species scores are missing,
   species are ordered by their weighted averages (\code{\link{wascores}})
-  on site scores.
+  on site scores. There is no natural, unique ordering in hierarchic
+  clustering, but in some cases species are still nicely ordered.
   Alternatively, species and sites can be ordered explicitly giving
   their indices or names in parameters \code{sp.ind} and
   \code{site.ind}.  If these are given, they take precedence over
@@ -56,7 +55,7 @@ coverscale(x, scale=c("Braun.Blanquet", "Domin", "Hult", "Hill", "fix", "log"))
   vegetation science (\code{coverscale} can be called directly, too).
   Braun-Blanquet and Domin scales are actually not
   strict cover scales, and the limits used for codes \code{r} and
-  \code{+} are arbitrary.  Alternative \code{Hill} may be
+  \code{+} are arbitrary.  Scale \code{Hill} may be
   inappropriately named, since Mark O. Hill probably never intended this
   as a cover scale.  However, it is used as default `cut levels' in his
   \code{TWINSPAN}, and surprisingly many users stick to this default,

@@ -1,6 +1,7 @@
 "plot.envfit" <-
     function (x, choices = c(1, 2), arrow.mul = 1, col = "blue", add = TRUE, ...) 
 {
+    formals(arrows) <- c(formals(arrows), alist(... = ))
     if (!is.null(x$vectors)) {
         vect <- arrow.mul * sqrt(x$vectors$r) * x$vectors$arrows[,choices]
         if (!any(dim(vect))) 

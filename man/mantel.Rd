@@ -65,7 +65,8 @@ mantel(xdis, ydis, method="pearson", permutations=1000, strata)
   }
 
 \seealso{\code{\link{cor.test}} for correlation tests,
-  \code{\link{procrustes}} for an alternative with ordination diagrams,
+  \code{\link{protest}} (``Procrustes test'') for an alternative with
+  ordination diagrams,
   and \code{\link{anosim}} for comparing dissimilarities against
   classification.  For dissimilarity matrices, see \code{\link{vegdist}}
   or \code{\link[mva]{dist}}. }

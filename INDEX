@@ -1,31 +1,34 @@
-anosim                  Analysis of Similarities 
-anova.cca               Permutation Test for Constrained Correspondence
-                        Analysis 
-cca                     [Partial] [Constrained] Correspondence Analysis
-                        and Redundancy Analysis 
+anosim                  Analysis of Similarities
+anova.cca               Permutation Test for Constrained
+                        Correspondence Analysis
+cca                     [Partial] [Constrained] Correspondence
+                        Analysis and Redundancy Analysis
 decorana                Detrended Correspondence Analysis and Basic
-                        Reciprocal Averaging 
+                        Reciprocal Averaging
 decostand               Standardizaton Methods for Community Ecology
 diversity               Ecological Diversity Indices and Rarefaction
-                        Species Richness 
+                        Species Richness
 dune                    Vegetation and Environment in Dutch Dune
-                        Meadows. 
+                        Meadows.
 envfit                  Fits an Environmental Vector or Factor onto an
-                        Ordination 
-initMDS                 Random Start and Axis Scaling for isoMDS 
-mantel                  Mantel Test for Two Dissimilarity Matrices 
-ordiplot                Alternative Point plot and identify Functions
-                        for Ordination 
+                        Ordination
+initMDS                 Random Start and Axis Scaling for isoMDS
+mantel                  Mantel Test for Two Dissimilarity Matrices
+ordihull                Add Graphical Items to Ordination Diagrams
+ordiplot                Alternative plot and identify Functions for
+                        Ordination
 ordisurf                Smooths Variables and Plots Contours on
-                        Ordination. 
-procrustes              Procrustes Rotation of Two Configurations 
+                        Ordination.
+plot.cca                Plot or Extract Results of Constrained
+                        Correspondence Analysis or Redundancy Analysis
+procrustes              Procrustes Rotation of Two Configurations
 rankindex               Compares Dissimilarity Indices for Gradient
-                        Detection 
-read.cep                Reads a CEP (Canoco) data file 
-scores                  Get Species or Site Scores from an Ordination 
+                        Detection
+read.cep                Reads a CEP (Canoco) data file
+scores                  Get Species or Site Scores from an Ordination
 varespec                Vegetation and environment in lichen pastures
 vegan-internal          Internal vegan functions
 vegdist                 Good Dissimilarity Measures for Ecological
-                        Gradients 
-vegemite                Prints a Compact, Ordered Vegetation Table. 
-wascores                Weighted Averages Scores for Species 
+                        Gradients
+vegemite                Prints a Compact, Ordered Vegetation Table
+wascores                Weighted Averages Scores for Species

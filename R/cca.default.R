@@ -81,9 +81,9 @@ function (X, Y, Z, ...)
         CA$tot.chi <- sum(CA$eig)
         CA$Xbar <- Xbar
     }
-    Call <- match.call()
-    Call[[1]] <- as.name("cca")
-    sol <- list(Call = Call, grand.total = gran.tot, rowsum = rowsum, 
+    call <- match.call()
+    call[[1]] <- as.name("cca")
+    sol <- list(call = call, grand.total = gran.tot, rowsum = rowsum, 
                 colsum = colsum, tot.chi = tot.chi, pCCA = pCCA, CCA = CCA, 
                 CA = CA)
     class(sol) <- "cca"

@@ -2,6 +2,7 @@
 \alias{decorana}
 \alias{print.decorana}
 \alias{summary.decorana}
+\alias{print.summary.decorana}
 \alias{plot.decorana}
 \alias{downweight}
 \alias{scores.decorana}
@@ -84,14 +85,14 @@ downweight(veg, fraction = 5)
   model, where all species initially have unit width responses and
   equally spaced modes.
 
-  Function \code{summary.decorana} prints the ordination scores,
+  Function \code{summary} prints the ordination scores,
   possible prior weights used in downweighting, and the marginal totals
-  after applying these weights. Function \code{plot.decorana} plots
+  after applying these weights. Function \code{plot} plots
   species and site scores.  Classical \code{decorana} scaled the axes
   so that smallest site score was 0 (and smallest species score was
-  negative), but \code{summary.decorana}, \code{plot.decorana} and
-  \code{scores.decorana}  use
-  the true origin, unless \code{origin=FALSE}. 
+  negative), but \code{summary}, \code{plot} and
+  \code{scores}  use
+  the true origin, unless \code{origin = FALSE}. 
 }
 \value{
   Function returns an object of class \code{decorana}, which has

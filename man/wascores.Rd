@@ -1,6 +1,6 @@
 \name{wascores}
 \alias{wascores}
-%- Also NEED an `\alias' for EACH other topic documented here.
+
 \title{ Weighted Averages Scores for Species }
 \description{
   Computes Weighted Averages scores of species for ordination
@@ -9,14 +9,19 @@
 \usage{
 wascores(x, w, expand=FALSE)
 } 
-%- maybe also `usage' for other objects documented here.
+
 \arguments{
   \item{x}{Environmental variables or ordination scores.}
   \item{w}{Weights: species abundances.}
-  \item{expand}{ Not yet implemented. }
+  \item{expand}{Expand weighted averages so that they have the same
+    weighted variance as the corresponding environmental variables.  }
 }
 \details{
-  Computes weighted averages.
+  Computes weighted averages. Weighted averages `shrink': they cannot be
+  more extreme than values usd for calculating the averages. With
+  \code{expand = TRUE}, the function `dehsrinks' the weighted averages
+  by making their weighted variance equal to the weighted variance of
+  the corresponding environmental variable.
 }
 \value{
   Returns a matrix where species define rows and ordination axes or
@@ -47,7 +52,7 @@ wascores(varechem, varespec)
 }
 
 }
-\keyword{ multivariate }%-- one or more ...
+\keyword{ multivariate }
 \keyword{ univar }
 
 

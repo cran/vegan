@@ -11,13 +11,15 @@
 
 \title{Procrustes Rotation of Two Configurations }
 \description{
-  Rotates a configuration to maximum similarity
-  with another configuration.
+ Function \code{procrustes} rotates a configuration to maximum similarity
+  with another configuration. Function \code{protest} tests the
+  non-randomness (`significance') between two configurations.
 }
 \usage{
 procrustes(X, Y, scale = TRUE, symmetric = FALSE)
 \method{summary}{procrustes}(object, ...)
-\method{plot}{procrustes}(x, kind=1, choices=c(1,2), xlab, ylab, main, ...)
+\method{plot}{procrustes}(x, kind=1, choices=c(1,2), xlab, ylab, main,
+     ar.col = "blue", len=0.05, ...)
 \method{residuals}{procrustes}(object, ...)
 \method{fitted}{procrustes}(object, truemean = TRUE, ...)
 protest(X, Y, permutations = 1000, strata)
@@ -29,8 +31,7 @@ protest(X, Y, permutations = 1000, strata)
   \item{scale}{Allow scaling of axes of \code{Y}.}
   \item{symmetric}{Use symmetric Procrustes statistic (the rotation will
     still be non-symmetric).}
-  \item{x}{An object of class \code{procrustes}.}
-  \item{object}{An object of class \code{procrustes}.}
+  \item{x, object}{An object of class \code{procrustes}.}
   \item{kind}{The kind of plot produced: \code{kind=1} plots shifts in
     two configurations and \code{kind=2} plots an impulse diagram of
     residuals. }
@@ -44,6 +45,8 @@ protest(X, Y, permutations = 1000, strata)
   \item{strata}{An integer vector or factor specifying the strata for
     permutation. If supplied, observations are permuted only within the
     specified strata.}
+  \item{ar.col}{Arrow colour.}
+  \item{len}{Width of the arrow head.}
   \item{...}{Other parameters passed to functions.}
 }
 \details{
@@ -61,8 +64,18 @@ protest(X, Y, permutations = 1000, strata)
 
   Instead of matrix, \code{X} and \code{Y} can be results from an
   ordination form which \code{\link{scores}} can extract results.
+
   Function \code{plot} plots a \code{procrustes}
-  object and \code{residuals} returns the pointwise
+  object and  returns invisibly an \code{ordiplot} object so that
+  function \code{\link{identify.ordiplot}} can be used for identifying
+  points. The items in the \code{ordiplot} object are called
+  \code{heads} and \code{points} with \code{kind=1} (ordination diagram)
+  and \code{sites} with \code{kind=2} (residuals).  In ordination
+  diagrams, the arrow heads point to the target configuration, which may
+  be either logical or illogical.  Function \code{plot} passes
+  parameters to underlying plotting functions.
+
+  Function \code{residuals} returns the pointwise
   residuals, and \code{fitted} the fitted values, either centred to zero
   mean (if \code{truemean=FALSE}) or with the original scale (these
   hardly make sense if \code{symmetric = TRUE}). In

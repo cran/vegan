@@ -8,7 +8,7 @@ function (x, use, scale, sp.ind = NULL, site.ind = NULL, zero = ".")
             if (is.null(sp.ind)) 
                 sp.ind <- order(wascores(use, x))
         }
-        else if (!is.null(class(use)) && class(use) == "hclust") {
+        else if (!is.null(attr(use, "class")) && class(use) == "hclust") {
             if (is.null(site.ind))  
                 site.ind <- use$order
             if (is.null(sp.ind)) 

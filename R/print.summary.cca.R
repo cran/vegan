@@ -2,8 +2,8 @@
 function (x, digits = x$digits, ...) 
 {
     cat("\nCall:\n")
-    cat(deparse(x$Call), "\n")
-    if (x$Call[1] =="cca") {
+    cat(deparse(x$call), "\n")
+    if (x$call[1] == "cca") {
         inertname <- "Mean Square Congingency Coefficient"
         statnam <- "averages"
     }
@@ -11,18 +11,19 @@ function (x, digits = x$digits, ...)
         inertnam <- "Variance"
         statnam = "sums"
     }
-    cat("\nPartitioning of ", inertnam, ":\n", sep="")
+    cat("\nPartitioning of ", inertnam, ":\n", sep = "")
     out <- rbind(Total = x$tot.chi, "Conditioned out" = x$partial.chi, 
-                 Constrained = x$constr.chi, Unconstrained = x$unconst.chi)
+        Constrained = x$constr.chi, Unconstrained = x$unconst.chi)
     colnames(out) <- ""
     print(out, digits = digits, ...)
-    cat("\nEigenvalues, and their contribution to the", inertnam,"\n")
+    cat("\nEigenvalues, and their contribution to the", inertnam, 
+        "\n")
     if (!is.null(x$partial.chi)) {
         cat("after removing the contribution of conditiniong variables\n")
     }
     cat("\n")
     out <- rbind(lambda = c(x$ev.con, x$ev.uncon), accounted = c(x$ev.con.account, 
-                                                   x$ev.uncon.account))
+        x$ev.uncon.account))
     print(out, digits = digits, ...)
     cat("\nScaling", x$scaling, "for species and site scores\n")
     if (x$scaling == 2) {
@@ -38,12 +39,12 @@ function (x, digits = x$digits, ...)
         other.ent <- NULL
     }
     cat("--", ev.ent, "are scaled proportional to eigenvalues\n")
-    if (!is.null(other.ent))
+    if (!is.null(other.ent)) 
         cat("--", other.ent, "are unscaled: weighted dispersion equal")
     cat(" on all dimensions\n")
     cat("\n\nSpecies scores\n\n")
     print(x$species, digits = digits, ...)
-    cat("\n\nSite scores (weighted",statnam,"of species scores)\n\n")
+    cat("\n\nSite scores (weighted", statnam, "of species scores)\n\n")
     print(x$sites, digits = digits, ...)
     if (!is.null(x$constraints)) {
         cat("\n\nSite constraints (linear combinations of constraining variables)\n\n")
@@ -52,6 +53,10 @@ function (x, digits = x$digits, ...)
     if (!is.null(x$biplot)) {
         cat("\n\nBiplot scores for constraining variables\n\n")
         print(x$biplot, digits = digits, ...)
+    }
+    if (!is.na(x$centroids)) {
+        cat("\n\nCentroids for factor constraints\n\n")
+        print(x$centroids, digits = digits, ...)
     }
     cat("\n")
     invisible(x)

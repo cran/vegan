@@ -1,12 +1,73 @@
 VEGAN STABLE VERSIONS 
 
+Version 1.4-3 (Luova)
+=====================
+
+Based on devel version 1.5-30
+
+* `cca' and `rda' use canonical expansion of the formula and return
+  the `terms' component.  Functions like `terms', `formula' and
+  `update' magically started to work with cca and rda (and eight lines
+  of code would allow `step' and `stepAIC' to work magically in model
+  building... but it's so much magic that I don't trust it). Some of
+  the allowed things are now `mod <- cca(dune ~ . - Use, dune.env)'
+  (all variables but `Use' in dune.env), and `update(mod, . ~ . -
+  Manure)' (remove `Manure' from the previous).
+
+* `cca' and `rda' find centroids of factor levels with factor
+  constraints (only with formula interface). These can be accessed
+  with `display="cn"' in `scores', `summary' and `plot'.  If
+  `display="cn"' is requested in `plot', biplot arrows are still drawn
+  unless there is a class centroid with the same name: continuous
+  variables are still shown as arrows and ordered factors both as
+  arrows as centroids.
+
+* Enhanced user control of many ordination plots. Some accept more
+  graphical parameters (`ordiplot', `plot.procrustes'). New functions
+  `points.cca' and `text.cca' to add these items into CCA/RDA
+  plots (documented separately).
+
+* `identify.ordiplot' knows more alternatives, among them
+  `plot.procrustes'.  This was helped with new, very generic
+  `scores.ordiplot'.
+
+* New functions to add graphical items in ordination diagrams:
+  `ordihull' draws convex hulls for groups,  `ordiarrows' draws
+  arrows, `ordisegments' segments, `ordigrid' combines points in to a
+  grid, `ordispider' combines points to their (weighted) centroids or
+  WA scores to the corresponding LC score in cca/rda, `ordiellipse'
+  draws dispersion or confidence ellipses for points. All these take a
+  groups argument for selecting subsets of points. `ordispider'
+  obsoletes `spider.cca' (introduced in the previous release). 
+
+* Implemented simple ``deshrinking'' of weighted averages in
+  `wascores'.
+
+* A new diversity function `fisher.alpha' that estimates the diversity
+  as the alpha parameter of Fisher's log-series. Thanks to Bob O'Hara
+  <bob.ohara@helsinki.fi> for the main code.
+
+* `summary.decorana' now in canonical form so that printing is done by
+  `print.summary.decorana' and user can intercept and catch the
+  result.  Several users had been surprised of the earlier
+  non-canonical behaviour. `summary' knows again the prior weights
+  used in downweighting of rare species (these evaporated in 1.4-0).
+
+* rda summary/scores/plot bugfix: Scaling of site scores was wrong
+  with scaling alternatives 1 and 3.
+
+* envfit (vectorfit, factorfit) bug fixes: Can now handle single
+  vectors (labelling, permutation). Recognize now `choices' so that
+  the user can select ordination axes.
+
+* Checked with released R-1.7.0.
+
 Version 1.4-2
 =============
 
 Based on devel version 1.5-18
 
-New functions and data sets
----------------------------
+New functions and data sets:
 
 * dune: A new data set -- the classic Dune Meadow data with the
   environmental data.
@@ -33,8 +94,7 @@ New functions and data sets
 * spider.cca: A tiny function that joins each WA score to the
   corresponding LC score in cca/rda plots.
 
-Minor changes
--------------
+Minor changes:
 
 * Checked with R-1.7.0 (unstable devel version, snapshot 2003-02-05)
   and corrected as needed. 
@@ -46,10 +106,9 @@ Minor changes
 Version 1.4-1 (Logan)
 =====================
 
-Based on devel version 1.5-10
+Based on devel version 1.5-10.
 
-New features
-------------
+New features:
 
 * Permutation tests added to envfit (vectorfit, factorfit) and
   procrustes (called protest).
@@ -63,8 +122,8 @@ New features
 
 * rarefy(): A new function for rarefaction species richness.
 
-Other changes
--------------
+Other changes:
+
 
 * cca.default(): Handles now NULL matrices X and Z: skips them.
 

@@ -2,7 +2,7 @@
 function(x, digits = max(3, getOption("digits") - 3), ...)
 {
     cat("\nCall:\n")
-    cat(deparse(x$Call), "\n\n")
+    cat(deparse(x$call), "\n\n")
     chi <- rbind(x$tot.chi, x$pCCA$tot.chi, x$CCA$tot.chi, x$CA$tot.chi)
     rnk <- rbind(NA, x$pCCA$rank, x$CCA$rank, x$CA$rank)
     tbl <- cbind(chi,rnk)

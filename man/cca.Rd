@@ -3,15 +3,12 @@
 \alias{cca.default}
 \alias{cca.formula}
 \alias{print.cca}
-\alias{plot.cca}
 \alias{summary.cca}
 \alias{print.summary.cca}
-\alias{scores.cca}
 \alias{rda}
 \alias{rda.default}
 \alias{rda.formula}
 \alias{summary.rda}
-\alias{spider.cca}
 
 \title{ [Partial] [Constrained] Correspondence Analysis and Redundancy
   Analysis } 
@@ -27,13 +24,9 @@
 \method{cca}{formula}(formula, data)
 \method{cca}{default}(X, Y, Z, ...)
 \method{summary}{cca}(object, scaling=2, axes=6, digits, ...)
-\method{plot}{cca}(x, choices=c(1,2), display=c("sp","wa","bp"), scaling=2, type, ...)
-\method{scores}{cca}(x, choices=c(1,2),
-display=c("sp","wa","bp"),scaling=2, ...)
 \method{rda}{formula}(formula, data, scale=FALSE)
 \method{rda}{default}(X, Y, Z, scale=FALSE, ...)
 \method{summary}{rda}(object, scaling=2, axes=6, digits, ...)
-spider.cca(x, ...)
 }
 
 \arguments{
@@ -55,20 +48,11 @@ spider.cca(x, ...)
     scaled symmetrically by square root of eigenvalues. }
   \item{axes}{Number of axes in summaries.}
   \item{digits}{Number of digits in output.}
-  \item{choices}{Axes shown.}
-  \item{display}{Scores shown.  These must some of the alternatives
-    \code{sp} for species scores, \code{wa} for site scores, \code{lc}
-    for linear constraints or ``LC scores'', or \code{bp} for biplot
-    arrows.}
-  \item{type}{Type of plot: partial match to \code{text}
-    for text labels, \code{points} for points, and \code{none} for
-    setting frames only.  If omitted, \code{text} is selected for
-    smaller data sets, and \code{points} for larger.}
   \item{scale}{Scale species to unit variance (like correlations do).}
   \item{...}{Other parameters for \code{print} or \code{plot} functions.}
 }
 \details{
-  Since thier introduction (ter Braak 1986), constrained or canonical
+  Since their introduction (ter Braak 1986), constrained or canonical
   correspondence analysis, and its spin-off, redundancy analysis have
   been the most popular ordination methods in community ecology.
   Functions \code{cca} and \code{rda} are  similar to popular
@@ -79,13 +63,12 @@ spider.cca(x, ...)
   regression on constraining variables, and the fitted values are
   submitted to correspondence analysis performed via singular value
   decomposition (\code{\link{svd}}). Function \code{rda} is similar, but uses
-  ordinary, unweighted linear regression and unweighted SVD..
+  ordinary, unweighted linear regression and unweighted SVD.
 
   The functions can be called either with matrix entries for community
   data and constraints, or with formula interface.  In general, the
   formula interface is preferred, because it allows a better control of
-  the model (and will be developed in further releases), and allows
-  factor constraints.
+  the model and allows factor constraints.
 
   In matrix interface, the
   community data matrix \code{X} must be given, but any other data
@@ -106,8 +89,8 @@ spider.cca(x, ...)
   Instead of separate matrices, the model can be defined using a model
   \code{\link{formula}}.  The left hand side must be the
   community data matrix (\code{X}).  The right hand side defines the
-  constraining model.  Most usual features of \code{\link{formula}}
-  apply: The constraints can contain ordered or unordered factors,
+  constraining model.
+  The constraints can contain ordered or unordered factors,
   interactions among variables and functions of variables.  The defined
   \code{\link{contrasts}} are honoured in \code{\link{factor}}
   variables.  The formula can include a special term \code{Condition}
@@ -116,8 +99,8 @@ spider.cca(x, ...)
     z)}, \code{cca(X ~ y + Condition(z))}, where \code{y} and \code{z}
   refer to single variable constraints and conditions.  
 
-  Constrained correspondence analysis is indeed a constrained method.
-  This means, that CCA does not try to display all variation in the
+  Constrained correspondence analysis is indeed a constrained method:
+  CCA does not try to display all variation in the
   data, but only the part that can be explained by the used constraints.
   Consequently, the results are strongly dependent on the set of
   constraints and their transformations or interactions among the
@@ -145,7 +128,7 @@ spider.cca(x, ...)
   should probably be avoided.
 
   According to folklore, \code{rda} should be used with ``short
-  gradients'' rather than \code{\link{cca}}. However, this is not based
+  gradients'' rather than \code{cca}. However, this is not based
   on research which finds methods based on Euclidean metric as uniformly
   weaker than those based on Chi-squared metric.
   
@@ -174,13 +157,7 @@ spider.cca(x, ...)
   were little affected.  Therefore the \code{plot} function uses site
   scores (``WA scores'') as the default. This is consistent with the
   usage in general statistics and other function in \R
-  (\code{\link[MASS]{lda}}, \code{\link[mva]{cancor}}).  Utility
-  function \code{spider.cca} plots both ``LC'' and ``WA'' scores, and
-  unites them to each other with lines. The function is particularly
-  useful with single class constraints, when it can be used to assess
-  the goodness of classification: ``LC'' scores give the predicted
-  (constrained) location, and line segments indicate how well the
-  species composition could be used to predict those. 
+  (\code{\link[MASS]{lda}}, \code{\link[mva]{cancor}}).
 }
 \value{
   Function \code{cca} returns a big object of class \code{cca}.  It has
@@ -193,7 +170,8 @@ spider.cca(x, ...)
   item \code{wa} for site scores and \code{biplot} for endpoints of
   biplot arrows.  All these scores are unscaled (actually, their
   weighted sum of squares is one). The result object can be
-  accessed with functions \code{summary} and \code{scores} which
+  accessed with functions \code{summary} and \code{\link{scores.cca}}
+  which
   know how to scale the results for display.  The traditional 
   alternative in correspondence analysis (see \code{\link{decorana}})
   was to scale sites by
@@ -211,18 +189,15 @@ spider.cca(x, ...)
   spin-off from \code{cca}, and the object uses the same item names as
   \code{cca}, which are misleading in this case. The only specific
   function is \code{summary.rda}, but otherwise the object \code{rda} is
-  accessed with \code{cca} methods (\code{print}, \code{plot},
-  \code{scores}, \code{\link{anova.cca}}). The analysis stores unscaled
+  accessed with \code{cca} methods (\code{print}, \code{\link{plot.cca}},
+  \code{\link{scores.cca}}, \code{\link{anova.cca}}). The analysis
+  stores unscaled
   results names similarly as in \code{cca}, but \code{summary.rda} (and
   hence \code{plot} and \code{scores} functions) scales these so that
   site and species scores are similarly scaled to each other as in
   \code{Canoco}. However, the \code{summary.rda} scores differ from
   \code{Canoco} by a constant multiplier so that they define a real
   biplot or an approximation of the data.
-
-  The \code{plot} function returns invisibly a plotting structure which
-  can be used by function \code{\link{identify.ordiplot}} to identify
-  the points.
 }
 \references{ The original method was by ter Braak, but the current
   implementations follows Legendre and Legendre.
@@ -248,6 +223,9 @@ spider.cca(x, ...)
 }
 
 \seealso{
+  There is a special documentation for \code{\link{plot.cca}} function
+  with its helper functions (\code{\link{text.cca}},
+  \code{\link{points.cca}}, \code{\link{scores.cca}}).
   Function \code{\link{anova.cca}} provides an ANOVA like permutation
   test for the ``significance'' of constraints.
   Function \code{\link[CoCoAn]{CAIV}} provides an alternative
@@ -277,8 +255,6 @@ data(dune)
 data(dune.env)
 dune.Manure <- rda(dune ~ Manure, dune.env)
 plot(dune.Manure) 
-# How good is the classification to predict species composition:
-spider.cca(dune.Manure)
 }
 \keyword{ multivariate }
 

@@ -28,7 +28,7 @@ function (x, permutations = 100, model = c("reduced", "full"), strata)
         ca.ev <- sum(diag(crossprod(qr.resid(Q, Y))))
         F.perm[i] <- (cca.ev/q)/(ca.ev/r)
     }
-    sol <- list(Call = x$Call, model = model, F.0 = F.0, F.perm = F.perm, 
+    sol <- list(call = x$call, model = model, F.0 = F.0, F.perm = F.perm, 
         nperm = permutations)
     if(!missing(strata)) {
         sol$strata <- deparse(substitute(strata)) 

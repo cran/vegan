@@ -172,7 +172,7 @@ c
       integer idplot(maxdat), idspec(maxdat)
       double precision abund(maxdat)
  
-      integer id, ii, j, i, ier
+      integer id, j, i, ier
       double precision work(nitem)
 
       nsp = nitem
