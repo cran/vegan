@@ -1,22 +1,23 @@
 "summary.decorana" <-
-  function (x, digits = 3, origin=TRUE,
+  function (object, digits = 3, origin=TRUE,
             display=c("both", "species","sites","none"), ...) 
 {
   display <- match.arg(display)
-  print(x)
+  print(object)
   if (origin) {
-    x$cproj <- sweep(x$cproj, 2, x$origin, "-")
-    x$rproj <- sweep(x$rproj, 2, x$origin, "-")
+    object$cproj <- sweep(object$cproj, 2, object$origin, "-")
+    object$rproj <- sweep(object$rproj, 2, object$origin, "-")
   }
   if (display == "both" || display == "species") {
     cat("Species scores:\n\n")
-    TABLE <- cbind(round(x$cproj, digits), Weights = x$v, Totals = x$adotj)
+    TABLE <- cbind(round(object$cproj, digits), Weights = object$v,
+                   Totals = object$adotj)
     print(TABLE, digits = digits)
     cat("\n\n")
   }
   if (display == "both" || display == "sites") {
     cat("Site scores:\n\n")
-    TABLE <- cbind(round(x$rproj, digits), Totals = x$aidot)
+    TABLE <- cbind(round(object$rproj, digits), Totals = object$aidot)
     print(TABLE, digits = digits)
     cat("\n")
   }
