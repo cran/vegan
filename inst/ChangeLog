@@ -1,5 +1,84 @@
 VEGAN STABLE VERSIONS 
 
+Version 1.6-5 (Oct 12, 2004) 
+
+	* Based on version 1.7-27. Checked with R-1.9.1 (Linux, MacOS X)
+	and R-2.0.0 (Linux, patched version in Windows XP). Passed other
+	tests, but some examples in 'humpfit' failed in Windows XP, and
+	are not run on that platfrom. General cleanup in documentation.
+	Does not 'require(mva)' any longer.
+
+	* anosim: corrected the equation in docs (function was
+	correct). Thanks to Yong Cao for notifying this.
+
+	* bioenv.formula: finds now variables from attach'ed data.frames
+	and 'data' need not be specified.
+
+	* capscale & deviance.rda: capscale was modified so that its
+	result could be handled with step (added a terms component).
+	Function deviance.capscale was deleted so that deviance.rda will
+	be used. A literature reference to AIC in CCA/RDA was added to the
+	documentation.
+
+	* cca/rda/capscale: Small eigenvalues are made to zero and rank
+	reduced accordingly. Most often influences 'capscale'.
+	
+	* cca/rda/capscale: Now alias constraints that are collinear with
+	other constraints or conditions in partial analysis. New function
+	'alias.cca' to print aliased contrasts. NB this does not influence
+	the proper ordination results, but only to the selection of biplot
+	scores and centroids displayed. 'summary' no longer gives a
+	redundant warning.
+
+	* decorana: removes empty species with a warning instead of
+	stopping with error. Still error with empty sites. The behaviour
+	is similar to 'cca'.
+
+	* envfit (vectorfit, factorfit): Has now a formula interface.
+	Bottlenecks in permutation changed now into C functions. Much
+	faster, in particular 'factorfit' which was 25 times faster in my
+	tests.  plot.envfit could drop names (dimensions). Now honours
+	'scaling' argument in cca/rda/capscale (used to 'scaling = 2'
+	always).
+
+	* envfit, ordisurf: have now weights parameter 'w'. Weights are
+	used for the results of 'cca' and 'decorana' as default, or they
+	can be supplied by the user. In this way, envfit gives equal
+	results to biplot scores and centroids in 'cca', and ordisurf is
+	consistent with envfit. Both can now access 'lc' scores of 'cca'
+	etc. 
+
+	* estimateR:  Abundance-based estimators of extrapolated richness,
+	written by Bob O'Hara <bob.ohara@helsinki.fi>. 
+
+	* humpfit: Asesses now the dispersion parameter in non-Poisson
+        models (summary.humpfit). Added a profile method that inherits
+        from profile.glm, so that you can use plot.profile.glm,
+        pairs.profile.glm and confint.profile.glm of MASS for displaying
+        profile and finding the confidence intervals from the profile
+        likelihood.
+
+	* fisherfit: prints now standard error of the estimate. Added
+        'profile' and 'confint' methods.
+	
+	* metaMDS:  A new function to collect all Peter Minchin's
+        recommendations to run nonmetric multidimensional scaling: (1)
+        adequate data transformation with Wisconsin double and sqrt if
+        needed, (2) use of adequate dissimilarity measure, (3) possible
+        stepacross if needed (this Minchin didn't have), (4) run NMDS with
+        several random starts and stop after finding two similar
+        solutions, (5) scale results with postMDS, and (6) add species
+        scores with wascores. Function has print and plot methods.
+        Function scores.default changed to understand metaMDS.
+
+	* specpool: Chao is now based on unbiased equation. Standard
+	errors now estimated for Chao, 1st-order jackknife and bootstrap
+	richness, but SE of 2nd-order jackknife still missing.
+	
+	* vegdist: an option for binary indices, since some users believed
+	these are not in vegan, although you can get them with
+	'decostand'.
+
 Version 1.6-4 (June 10, 2004)
 
 	* Based on 1.7-12.
@@ -24,14 +103,14 @@ Version 1.6-4 (June 10, 2004)
 
 	* deviance.cca and extractAIC.cca: auxilliary functions which
 	allow automatic model building with `step' or `stepAIC' (MASS)
-	functions in CCA and RDA. Unfortunately, CCA and RDA do not have
+	functions in cca and rda. Unfortunately, cca and rda do not have
 	deviance or AIC, and these functions are certainly wrong and
 	dangerous. However, with continuous candidate variables they
 	select the variables in the same order as Canoco.
 
 	* humpfit: A new family of functions to fit the no-interaction
-	model to species richness -- biomass data.(J. Oksanen,
-	J. Ecol. 84, 293-295; 1996)
+	model (Oksanen, J., J. Ecol. 84, 293-295; 1996) to species
+	richness -- biomass data.
 	
 	* vegdist: corrected a bug in Gower index -- range standardization
 	was made to sites, but it should be done to species. Thanks to

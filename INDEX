@@ -4,9 +4,9 @@ anova.cca               Permutation Test for Constrained
                         Correspondence Analysis, Redundancy Analysis
                         and Constrained Analysis of Principal
                         Coordinates
-bioenv                  Best subset of environmental variables with
-                        maximum (rank) correlation with community
-                        dissimilarities.
+bioenv                  Best Subset of Environmental Variables with
+                        Maximum (Rank) Correlation with Community
+                        Dissimilarities
 capscale                [Partial] Constrained Analysis of Principal
                         Coordinates
 cca                     [Partial] [Constrained] Correspondence
@@ -25,13 +25,15 @@ dune                    Vegetation and Environment in Dutch Dune
 envfit                  Fits an Environmental Vector or Factor onto an
                         Ordination
 fisherfit               Fit Fisher's Logseries and Preston's Lognormal
-                        model to Abundance Data
+                        Model to Abundance Data
 humpfit                 No-interaction Model for Hump-backed Species
                         Richness vs. Biomass
-initMDS                 Random Start and Axis Scaling for isoMDS
 make.cepnames           Abbreviates a Botanical or Zoological Latin
                         Name into an Eight-character Name
 mantel                  Mantel Test for Two Dissimilarity Matrices
+metaMDS                 Nonmetric Multidimensional Scaling with Stable
+                        Solution from Random Starts, Axis Scaling and
+                        Species Scores
 ordiParseFormula        Internal vegan functions
 ordihull                Add Graphical Items to Ordination Diagrams
 ordiplot                Alternative plot and identify Functions for

@@ -9,6 +9,7 @@
 \alias{rda.default}
 \alias{rda.formula}
 \alias{summary.rda}
+\alias{alias.cca}
 
 \title{ [Partial] [Constrained] Correspondence Analysis and Redundancy
   Analysis } 
@@ -26,6 +27,7 @@
 \method{rda}{formula}(formula, data, scale=FALSE)
 \method{rda}{default}(X, Y, Z, scale=FALSE, ...)
 \method{summary}{cca}(object, scaling=2, axes=6, digits, ...)
+\method{alias}{cca}(object, ...)
 }
 
 \arguments{
@@ -102,7 +104,13 @@
   for conditioning variables (``covariables'') ``partialled out'' before
   analysis.  So the following commands are equivalent: \code{cca(X, y,
     z)}, \code{cca(X ~ y + Condition(z))}, where \code{y} and \code{z}
-  refer to single variable constraints and conditions.  
+  refer to single variable constraints and conditions.
+
+  If some of the constraints are redundant linear combinations of other
+  constraints or conditions, not all biplot scores can be estimated.
+  In that case a
+  message is displayed when the results are printed. The aliased
+  constraints can be listed using function \code{alias}.
 
   Constrained correspondence analysis is indeed a constrained method:
   CCA does not try to display all variation in the
@@ -113,7 +121,7 @@
   as constraints.  However, such exploratory problems are better
   analysed with
   unconstrained methods such as correspondence analysis
-  (\code{\link{decorana}}, \code{\link[mva]{ca}}) or non-metric
+  (\code{\link{decorana}}, \code{\link[MASS]{ca}}) or non-metric
   multidimensional scaling (\code{\link[MASS]{isoMDS}}) and
   environmental interpretation after analysis
   (\code{\link{envfit}}, \code{\link{ordisurf}}).
@@ -162,7 +170,7 @@
   were little affected.  Therefore the \code{plot} function uses site
   scores (``WA scores'') as the default. This is consistent with the
   usage in statistics and other functions in \R
-  (\code{\link[MASS]{lda}}, \code{\link[mva]{cancor}}).
+  (\code{\link[MASS]{lda}}, \code{\link{cancor}}).
 }
 \value{
   Function \code{cca} returns a big object of class \code{cca}.  It has

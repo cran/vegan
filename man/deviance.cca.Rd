@@ -41,8 +41,8 @@
   The deviance of \code{\link{cca}} is equal to Chi-square of
   the residual data matrix after fitting the constraints.  The deviance of
   \code{\link{rda}} is defined as the residual sum of squares.
-  The
-  deviance of \code{\link{capscale}} is \code{NA}.
+  The deviance function of \code{rda} is also used for
+  \code{\link{capscale}}. 
   Function \code{extractAIC} mimics
   \code{extractAIC.lm} in translating deviance to AIC.
 
@@ -67,10 +67,10 @@
   \code{extractAIC} returns effective degrees of freedom and ``AIC''. 
 }
 \references{
-  I do not know any publication using these functions. However, their
-  derivation is so obvious that somebody may have published them, or
-  somebody probably will publish them some day.  } 
-
+  Godínez-Domínguez, E.  & Freire, J. (2003) Information-theoretic
+  approach for selection of spatial and temporal models of community
+  organization. \emph{Marine Ecology Progress Series} 253, 17--24.
+}
 \author{ Jari  Oksanen }
 
 \note{

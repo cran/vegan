@@ -13,13 +13,15 @@
   be able to handle unknown (and variable) sample sizes.
 }
 
-\usage{ vegdist(x, method="bray", diag=FALSE, upper=FALSE) } 
+\usage{ vegdist(x, method="bray", binary=FALSE, diag=FALSE, upper=FALSE) } 
 \arguments{
   \item{x}{ Community data matrix.}
   \item{method}{Dissimilarity index, partial match to  \code{"manhattan"},
     \code{"euclidean"}, \code{"canberra"}, \code{"bray"}, \code{"kulczynski"},
      \code{"jaccard"}, \code{"gower"}, \code{"morisita"}, \code{"horn"} or
-    \code{"mountford"}.}
+     \code{"mountford"}.}
+  \item{binary}{Perform presence/absence standardization before analysis
+    using \code{\link{decostand}}.}
   \item{diag}{Compute diagonals. }
   \item{upper}{Return only the upper diagonal. }
 }
@@ -91,7 +93,7 @@
   divided by \eqn{\log(2)} 
   so that the results will be in the conventional range \eqn{0 \dots 1}.
 
-  Morisita index can be used with genuine count data only. Its
+  Morisita index can be used with genuine count data (integers) only. Its
   Horn--Morisita variant is able to handle any abundance data.
 
   Euclidean and Manhattan dissimilarities are not good in gradient
@@ -104,13 +106,15 @@
   equalizing site totals with \code{\link{decostand}}.
 
   The naming conventions vary. The one adopted here is traditional
-  rather than truthful to priority. The abbreviation \code{"horn"} for
+  rather than truthful to priority. For instance, the Bray index is
+  known also as Steinhaus, Czekanowski and Sørensen index.  The
+  abbreviation \code{"horn"} for
   the Horn--Morisita index is misleading, since there is a separate
   Horn index. The abbreviation will be changed if that index is implemented in
   \code{vegan}. 
 }
 \value{
-  Should provide a drop-in replacement for \code{\link[mva]{dist}} and
+  Should provide a drop-in replacement for \code{\link{dist}} and
   return a distance object of the same type. 
 }
 \references{
@@ -130,14 +134,14 @@
 
 \author{ Jari Oksanen }
 
-\note{The  function is an alternative to \code{\link[mva]{dist}} adding
+\note{The  function is an alternative to \code{\link{dist}} adding
   some ecologically meaningful indices.  Both methods should produce
   similar types of objects which can be interchanged in any method
   accepting either.  Manhattan and Euclidean dissimilarities should be
   identical in both methods, and Canberra dissimilarity may be similar.
 }
 
-\seealso{ \code{\link{decostand}}, \code{\link[mva]{dist}},
+\seealso{ \code{\link{decostand}}, \code{\link{dist}},
   \code{\link{rankindex}}, \code{\link[MASS]{isoMDS}}, \code{\link{stepacross}}. }
 
 \examples{

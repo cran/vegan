@@ -25,14 +25,14 @@
     sites <- object$CCA$wa.eig[, 1:cc.dim, drop = FALSE]
     site.constr <- object$CCA$u[, 1:cc.dim, drop = FALSE]
     centroids <- NA
-    if (!is.null(object$CCA$centroids) && !is.na(object$CCA$centroids)[1]) 
+    if (!is.null(object$CCA$centroids) && !is.na(object$CCA$centroids[1])) 
         centroids <- object$CCA$centroids[, 1:cc.dim, drop = FALSE]
     evscale <- sqrt(summ$ev.con[1:cc.dim])
     if (abs(scaling) == 2) {
         if (cc.dim) {
             species <- sweep(species, 2, evscale, "*")
             sites <- sweep(sites, 2, evscale, "/")
-            if (!is.na(centroids)[1]) 
+            if (!is.na(centroids[1])) 
                 centroids <- sweep(centroids, 2, evscale, "/")
         }
         if (add.dim) {
@@ -59,11 +59,11 @@
         if (cc.dim) {
             species <- sweep(species, 2, sqrt(evscale), "*")
             sites <- sweep(sites, 2, sqrt(evscale), "/")
-            if (!is.na(centroids)[1]) 
+            if (!is.na(centroids[1])) 
                 centroids <- sweep(centroids, 2, sqrt(evscale), 
                                    "/")
             site.constr <- sweep(site.constr, 2, sqrt(evscale), 
-                                     "*")
+                                 "*")
         }
         if (add.dim) {
             evscale0 <- sqrt(sqrt(summ$ev.uncon[1:add.dim]))
@@ -77,18 +77,18 @@
     }
     if (scaling < 0) {
         evscale <- evscale0 <- NULL
-        if(cc.dim)
+        if (cc.dim) 
             evscale <- summ$ev.con[1:cc.dim]
-        if(add.dim)
+        if (add.dim) 
             evscale0 <- summ$ev.uncon[1:add.dim]
         evscale <- c(evscale, evscale0)
         evscale <- sqrt(1/(1 - evscale))
         species <- sweep(species, 2, evscale, "*")
         sites <- sweep(sites, 2, evscale, "*")
-        if (!is.na(centroids)[1]) 
+        if (!is.na(centroids[1])) 
             centroids <- sweep(centroids, 2, evscale[1:cc.dim], 
                                "*")
-        if (!is.null(site.constr))
+        if (!is.null(site.constr)) 
             site.constr <- sweep(site.constr, 2, evscale[1:cc.dim], 
                                  "*")
     }

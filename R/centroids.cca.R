@@ -1,9 +1,9 @@
 "centroids.cca" <-
-function (x, mf, wt) 
+    function (x, mf, wt) 
 {
     mf <- mf[, unlist(lapply(mf, is.factor)), drop = FALSE]
     if (ncol(mf) == 0) 
-        return(NA)
+        return(NULL)
     if (missing(wt)) 
         wt <- rep(1, nrow(mf))
     x <- sweep(x, 1, wt, "*")
@@ -17,7 +17,7 @@ function (x, mf, wt)
     out <- NULL
     for (i in 1:length(tmp)) {
         rownames(tmp[[i]]) <- paste(pnam[i], rownames(tmp[[i]]), 
-            sep = "")
+                                    sep = "")
         out <- rbind(out, tmp[[i]])
     }
     out

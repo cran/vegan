@@ -20,7 +20,7 @@ stepacross(dis, path = "shortest", toolong = 1, trace = TRUE)
   \item{dis}{Dissimilarity data inheriting from class \code{dist} or
     a an object, such as a matrix, that can be converted to a
     dissimilarity matrix. Functions \code{\link{vegdist}} and
-    \code{\link[mva]{dist}} are some functions producing suitable
+    \code{\link{dist}} are some functions producing suitable
     dissimilarity data. }
   \item{path}{The method of stepping across (partial match)
     Alternative \code{"shortest"} finds the shortest paths, and
@@ -89,7 +89,7 @@ stepacross(dis, path = "shortest", toolong = 1, trace = TRUE)
 \value{
   Function returns an object of class \code{dist} with extended
   dissimilarities (see functions \code{\link{vegdist}} and
-  \code{\link[mva]{dist}}). 
+  \code{\link{dist}}). 
   The value of \code{path} is appended to the \code{method} attribute.
 }
 \references{

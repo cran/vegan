@@ -38,7 +38,7 @@ wisconsin(x)
     (Legendre & Gallagher 2001). When used with Euclidean
     distance, the matrix should be similar to the  the
     Chi-square distance used in correspondence analysis. However, the
-    results from \code{\link[mva]{cmdscale}} would still differ, since
+    results from \code{\link{cmdscale}} would still differ, since
     CA is a weighted ordination method (default \code{MARGIN =
       1}).
   }

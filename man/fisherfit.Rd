@@ -3,6 +3,9 @@
 \alias{as.fisher}
 \alias{plot.fisherfit}
 \alias{print.fisherfit}
+\alias{profile.fisherfit}
+\alias{confint.fisherfit}
+\alias{plot.profile.fisherfit}
 \alias{prestonfit}
 \alias{prestondistr}
 \alias{as.preston}
@@ -11,7 +14,7 @@
 \alias{print.prestonfit}
 \alias{veiledspec}
 
-\title{ Fit Fisher's Logseries and Preston's Lognormal model to Abundance Data }
+\title{Fit Fisher's Logseries and Preston's Lognormal Model to Abundance Data}
 \description{
   Function \code{fisherfit} fits Fisher's logseries to abundance
   data. Function \code{prestonfit} groups species frequencies into
@@ -21,6 +24,9 @@
 }
 \usage{
 fisherfit(x, ...)
+\method{confint}{fisherfit}(object, parm, level = 0.95, ...)
+\method{profile}{fisherfit}(fitted, alpha = 0.01, maxsteps = 20, del = zmax/5, 
+    ...)
 prestonfit(x, ...)
 prestondistr(x, truncate = -1, ...)
 \method{plot}{prestonfit}(x, xlab = "Frequency", ylab = "Species", bar.col = "skyblue", 
@@ -33,6 +39,12 @@ as.fisher(x, ...)
 \arguments{
   \item{x}{Community data vector for fitting functions or their result
     object for \code{plot} functions.}
+  \item{object, fitted}{Fitted model.}
+  \item{parm}{Not used.}
+  \item{level}{The confidence level required.}
+  \item{alpha}{The extend of profiling as significance.}
+  \item{maxsteps}{Maximum number of steps in profiling.}
+  \item{del}{Step length.}
   \item{truncate}{Truncation point for log-Normal model, in log2
     units. Default value \eqn{-1} corresponds to the left border of zero
     Octave. The choice strongly influences the fitting results.}
@@ -55,6 +67,20 @@ as.fisher(x, ...)
   estimated separately but taken to be \eqn{N/(N+\alpha)}. Helper
   function \code{as.fisher} transforms abundance data into Fisher
   frequency table.
+
+  Function  \code{fisherfit} estimates the standard error of
+  \eqn{\alpha}{alpha}. However, the confidence limits cannot be directly
+  estimated from the standard error, but you should use function
+  \code{confint} based on profile likelihood. Function \code{confint}
+  uses function \code{\link[MASS]{confint.glm}} of the \code{MASS}
+  package, using \code{profile.fisherfit} for the profile
+  likelihood. Function \code{profile.fisherfit} follows
+  \code{\link[MASS]{profile.glm}} and finds the \eqn{\tau}{tau} parameter or
+  signed square root of two times log-Likelihood profile. The profile can
+  be inspected with a \code{plot} function which shows the \eqn{\tau}{tau}
+  and a dotted line corresponding to the Normal assumption: if standard
+  errors can be directly used in Normal inference these two lines
+  are similar.
 
   Preston (1948) was not satisfied with Fisher's model which seemed to
   imply infinite species richness, and postulated that rare species is a
@@ -125,7 +151,7 @@ as.fisher(x, ...)
   frequency 1 were shown in the lowest octave, and the rest were
   transferred to the second octave. Half of the species from the second
   octave were transferred to the higher one as well, but this is usually
-  not as large number of species. This practice makes data look more
+  not as large number of species. This practise makes data look more
   lognormal by reducing the usually high lowest octaves, but is too
   unfair to be followed. Therefore the octaves used in this function
   include the upper limit. If you do not accept this, you must change
@@ -135,14 +161,17 @@ as.fisher(x, ...)
 \seealso{\code{\link{diversity}}, \code{\link{fisher.alpha}},
   \code{\link{radfit}}, \code{\link{specpool}}. Function
   \code{\link[MASS]{fitdistr}} of \code{MASS} package was used as the
-  model for \code{fitdistr}. Function \code{\link{density}} can be used for
+  model for \code{prestondistr}. Function \code{\link{density}} can be used for
   smoothed ``non-parametric'' estimation of responses, and
   \code{\link{qqplot}} is an alternative, traditional and more effective
   way of studying concordance of observed abundances to any distribution model.
 }
 \examples{
 data(BCI)
-plot(fisherfit(BCI[5,]))
+mod <- fisherfit(BCI[5,])
+mod
+plot(profile(mod))
+confint(mod)
 # prestonfit seems to need large samples
 mod.oct <- prestonfit(colSums(BCI))
 mod.ll <- prestondistr(colSums(BCI))

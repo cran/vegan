@@ -30,14 +30,14 @@ coverscale(x, scale=c("Braun.Blanquet", "Domin", "Hult", "Hill", "fix", "log"))
   can be used for abundance, and there are no spaces between columns.
 
   The parameter \code{use} can be a vector or an object from
-  \code{\link[mva]{hclust}} or any ordination result recognized by
+  \code{\link{hclust}} or any ordination result recognized by
   \code{\link{scores}}. 
   If \code{use} is a vector, it is used
   for ordering sites.  If \code{use} is an object from ordination, both
   sites and species
   are arranged by the first axis.  
   When \code{use} is an
-  object from \code{\link[mva]{hclust}}, the sites are ordered similarly
+  object from \code{\link{hclust}}, the sites are ordered similarly
   as in the cluster dendrogram.
   If ordination methods provide species scores, these are used for
   ordering species.  In all cases where species scores are missing,

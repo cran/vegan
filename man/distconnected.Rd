@@ -28,7 +28,7 @@ spantree(dis, toolong = 1)
   \item{dis}{Dissimilarity data inheriting from class \code{dist} or
     a an object, such as a matrix, that can be converted to a
     dissimilarity matrix. Functions \code{\link{vegdist}} and
-    \code{\link[mva]{dist}} are some functions producing suitable
+    \code{\link{dist}} are some functions producing suitable
     dissimilarity data.}
   \item{toolong}{ Shortest dissimilarity regarded as \code{NA}.
     The function uses a fuzz factor, so
@@ -81,7 +81,7 @@ spantree(dis, toolong = 1)
   Function \code{distconnected} returns a vector for
   observations using integers to identify connected groups. If the data
   are connected, values will be all \code{1}. Function \code{no.shared}
-  returns an object of class \code{\link[mva]{dist}}. Function \code{spantree}
+  returns an object of class \code{\link{dist}}. Function \code{spantree}
   returns a list with two vectors, each of length \eqn{n-1}. The
   number of links in a tree is one less the number of observations, and
   the first item is omitted. The items are  
@@ -97,7 +97,7 @@ spantree(dis, toolong = 1)
 \author{ Jari Oksanen }
 \note{
   In principle, minimum spanning tree is equivalent to single linkage
-  clustering that can be performed using \code{\link[mva]{hclust}} or
+  clustering that can be performed using \code{\link{hclust}} or
   \code{\link[cluster]{agnes}}. However, these functions combine
   clusters to each other and the information of the actually connected points
   (the ``single link'') cannot be recovered from the result. The
@@ -107,10 +107,10 @@ spantree(dis, toolong = 1)
 }
 
 
-\seealso{\code{\link{vegdist}} or \code{\link[mva]{dist}} for getting
+\seealso{\code{\link{vegdist}} or \code{\link{dist}} for getting
   dissimilarities, \code{\link{stepacross}} for a case where you may need
     \code{distconnected}, \code{\link{ordispantree}} for displaying
-    results of \code{spantree}, and \code{\link[mva]{hclust}} or
+    results of \code{spantree}, and \code{\link{hclust}} or
     \code{\link[cluster]{agnes}} for single linkage clustering. 
 }
 \examples{
