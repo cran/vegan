@@ -1,0 +1,12 @@
+decostand                Standardizaton Methods for Community Ecology
+diversity                Ecological Diversity Indices
+initMDS                  Random Start for isoMDS
+postMDS                  Scaling of Multi-Dimensional Scaling Results
+procrustes               Procrustes Rotation of Two Configurations
+rankindex                Compares Dissimilarity Indices for Gradient
+                         Detection
+varespec                 Vegetation and environment in lichen pastures
+vectorfit                Fits an Environmental Vector to an Ordination
+vegdist                  Good Dissimilarity Measures for Ecological
+                         Gradients
+wascores                 Weighted Averages Scores for Species
