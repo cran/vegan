@@ -1,12 +1,12 @@
 "ordiplot" <-
-    function (ord, choices = c(1, 2), type="points", ...) 
+function (ord, choices = c(1, 2), type = "points", ...) 
 {
     if (!is.null(attr(ord, "class")) && (class(ord) == "decorana" || 
-                                 any(class(ord) == "cca"))) {
+        any(class(ord) == "cca"))) {
         out <- plot(ord, choices, type = type, ...)
     }
     else {
-        type <- match.arg(type, c("points","none"))
+        type <- match.arg(type, c("points", "text", "none"))
         X <- scores(ord, choices = choices, display = "sites")
         options(show.error.messages = FALSE)
         Y <- try(scores(ord, choices = choices, display = "species"))
@@ -22,11 +22,17 @@
         xlim <- range(X[, 1], Y[, 1])
         ylim <- range(X[, 2], Y[, 2])
         plot(X, xlim = xlim, ylim = ylim, asp = 1, type = "n", 
-             ...)
-        if (type != "none") {
+            ...)
+        if (type == "points") {
             points(X, pch = 1, col = 1, cex = 0.7, ...)
             if (!is.null(Y)) 
-                points(Y, pch = "+", col = "red", cex = 0.7, ...)
+                points(Y, pch = "+", col = "red", cex = 0.7, 
+                  ...)
+        }
+        if (type == "text") {
+            text(X, labels = rownames(X), col = 1, cex = 0.7, ...)
+            if (!is.null(Y))
+                text(Y, labels = rownames(Y), col = "red", cex = 0.7, ...)
         }
         out <- list(sites = X, species = Y)
     }

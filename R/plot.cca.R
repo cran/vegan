@@ -9,7 +9,7 @@
     if (!is.null(g$centroids)) {
         if (is.null(g$biplot)) 
             g$biplot <- scores(x, choices, "bp", scaling)
-        if (!is.na(g$centroids)) {
+        if (!is.na(g$centroids)[1]) {
             bipnam <- rownames(g$biplot)
             cntnam <- rownames(g$centroids)
             g$biplot <- g$biplot[!(bipnam %in% cntnam), , drop = FALSE]

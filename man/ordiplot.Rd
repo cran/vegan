@@ -2,6 +2,8 @@
 \alias{ordiplot}
 \alias{identify.ordiplot}
 \alias{scores.ordiplot}
+\alias{points.ordiplot}
+\alias{text.ordiplot}
 
 \title{ Alternative plot and identify Functions for Ordination }
 \description{
@@ -15,17 +17,20 @@
 \usage{
 ordiplot(ord, choices = c(1, 2), type="points", ...)
 \method{identify}{ordiplot}(x, what, ...)
+\method{points}{ordiplot}(x, what, ...)
+\method{text}{ordiplot}(x, what, ...)
 }
 
 \arguments{
   \item{ord}{A result from an ordination.}
   \item{choices}{Axes shown. }
-  \item{type}{The type of graph which may be \code{"points"} or
+  \item{type}{The type of graph which may be \code{"points"},
+    \code{"text"} or
     \code{"none"} for any ordination method, or any of the alternatives
     in \code{\link{plot.cca}} or \code{\link{plot.decorana}} in
     \code{\link{cca}}, \code{\link{rda}} or \code{\link{decorana}}
     graphs.}
-  \item{\dots}{Other graphcial parameters. }
+  \item{\dots}{Other graphical parameters. }
   \item{x}{A result object from \code{ordiplot}.}
   \item{what}{Items identified in the ordination plot. The types depend
     on the kind of plot used. Most methods know \code{sites} and
@@ -49,6 +54,12 @@ ordiplot(ord, choices = c(1, 2), type="points", ...)
   these methods return invisibly an \code{"ordiplot"} object which can
   be used by \code{identify.ordiplot} to label points. For other
   ordinations it relies on \code{\link{scores}} to extract the scores.
+
+  For full user control of plots, it is best to call \code{ordiplot}
+  with \code{type = "none"} and save the result, and then add sites and
+  species using \code{points.ordiplot} or \code{text.ordiplot} which
+  both pass all their arguments to the corresponging default graphical
+  functions. 
 }
 \value{
   Function \code{ordiplot} returns invisibly an object of class
@@ -77,11 +88,23 @@ ordiplot(ord, choices = c(1, 2), type="points", ...)
 }
 
 \examples{
+# Draw a cute NMDS plot
 data(dune)
-ordina <- cca(dune)
-tmp <- ordiplot(ordina)
-# identify needs user interaction
-\dontrun{identify(tmp, "spec")}
+dune.dis <- vegdist(wisconsin(dune))
+library(MASS)
+dune.mds <- isoMDS(dune.dis)
+dune.mds <- postMDS(dune.mds, dune.dis)
+# Dirty trick: Save species weighted averages in cproj which we
+# know in ordiplot... (you should ask me to improve the function)
+dune.mds$cproj <- wascores(dune.mds$points, dune, expand = TRUE)
+fig <- ordiplot(dune.mds, type = "none")
+points(fig, "sites", pch=21, col="red", bg="yellow")
+text(fig, "species", col="blue", cex=0.9)
+# A quick plot of the previous.
+# identify is not run automatically because it needs user interaction:
+\dontrun{fig <- ordiplot(dune.mds)}
+\dontrun{identify(fig, "spec")}
 }
 \keyword{ hplot }
 \keyword{ iplot }
+\keyword{ aplot }
