@@ -1,5 +1,36 @@
 VEGAN STABLE VERSIONS 
 
+Version 1.4-4
+=============
+
+* Based on devel version 1.5-35.
+
+* decorana: Finds now eigenvalues from the final solution as ratio of
+  biased weighted variances of site and species scores. The values
+  returned by the legacy Fortran function are called ``decorana
+  values''.
+
+* downweight: passes the downweighting fraction as an attribute, and
+  decorana catches and prints the fraction.
+
+* wascores: Uses now biased variances for expading WAs and returns the
+  shrinkage factors as an attribute "shrinkage".  Shrinkage factors
+  are equal to eigenvalues in CCA when only this one variable is used
+  as constraint. Function `eigengrad' returns only these eigenvalues.
+
+* rda summary/plot bugfix: Failed with non-default scaling (1 or 3)
+  when there were no factor constraints. Corrected a statement giving
+  a harmless warning in plot.cca.
+
+* ordiplot knows now option type = "text".  New simpleminded functions
+  points.ordiplot and text.ordiplot for adding items in an ordiplot
+  graph.
+
+* ordiarrows, ordisegments could drop dimensions (when will I learn!)
+  and fail if only one arrow or one segment should be drawn.  One
+  argument was missing in a `gl' command in `ordigrid'.
+
+
 Version 1.4-3 (Luova)
 =====================
 

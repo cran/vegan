@@ -91,8 +91,21 @@ downweight(veg, fraction = 5)
   species and site scores.  Classical \code{decorana} scaled the axes
   so that smallest site score was 0 (and smallest species score was
   negative), but \code{summary}, \code{plot} and
-  \code{scores}  use
-  the true origin, unless \code{origin = FALSE}. 
+  \code{scores}  use the true origin, unless \code{origin = FALSE}.
+
+  In addition to proper eigenvalues, the function also reports `decorana
+  values' in detrended analysis. These are the values that the legacy
+  code of \code{decorana} returns as `eigenvalues'.
+  They are estimated internally during
+  iteration, and it seems that detrending interferes the estimation 
+  so that these values are generally too low and have unclear
+  interpretation. Moreover, `decorana values' are estimated before
+  rescaling which will change the eigenvalues. The
+  proper eigenvalues are estimated after extraction of the axes and
+  they are always the ratio of biased weighted variances of site and
+  species scores even in detrended and rescaled solutions. The
+  `decorana values' are provided only for the the compatibility with
+  legacy software, and they should not be used.
 }
 \value{
   Function returns an object of class \code{decorana}, which has
@@ -172,5 +185,4 @@ plot(scores(cca(noisy ~ x), dis="sites"), asp=1, type="b", main="CCA")
 par(opar)
   }
 \keyword{ multivariate }
-
 

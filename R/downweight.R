@@ -1,5 +1,5 @@
 "downweight" <-
-    function (veg, fraction = 5) 
+function (veg, fraction = 5) 
 {
     Const1 <- 1e-10
     if (fraction < 1) 
@@ -13,6 +13,7 @@
     downers <- y2 < amax
     v[downers] <- (y2/amax)[downers]
     veg <- sweep(veg, 2, v, "*")
-    attr(veg,"v") <- v
+    attr(veg, "v") <- v
+    attr(veg, "fraction") <- fraction
     veg
 }

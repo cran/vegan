@@ -1,5 +1,6 @@
 \name{wascores}
 \alias{wascores}
+\alias{eigengrad}
 
 \title{ Weighted Averages Scores for Species }
 \description{
@@ -8,6 +9,7 @@
 }
 \usage{
 wascores(x, w, expand=FALSE)
+eigengrad(x, w)
 } 
 
 \arguments{
@@ -17,20 +19,30 @@ wascores(x, w, expand=FALSE)
     weighted variance as the corresponding environmental variables.  }
 }
 \details{
-  Computes weighted averages. Weighted averages `shrink': they cannot be
-  more extreme than values usd for calculating the averages. With
-  \code{expand = TRUE}, the function `dehsrinks' the weighted averages
-  by making their weighted variance equal to the weighted variance of
-  the corresponding environmental variable.
+  Function \code{wascores} computes weighted averages. Weighted averages
+  `shrink': they cannot be more extreme than values usd for calculating
+  the averages. With \code{expand = TRUE}, the function `dehsrinks' the
+  weighted averages by making their biased weighted variance equal to
+  the biased weighted variance of the corresponding environmental
+  variable.  Function \code{eigengrad} returns the inverses of squared
+  expansion factors or the attribute \code{shrinkage} of the
+  \code{wascores} result for each environmental gradient.  This is equal
+  to the constrained eigenvalue of \code{\link{cca}} when only this one
+  gradient was used as a constraint, and describes the strength of the
+  gradient. 
 }
 \value{
-  Returns a matrix where species define rows and ordination axes or
-  environmental variables define columns.
+  Function \code{wascores} returns a matrix where species define rows
+  and ordination axes or environmental variables define columns. If
+  \code{expand = TRUE}, attribute \code{shrinkage} has the inverses of
+  squared expansion factors or \code{\link{cca}} eigenvalues for the
+  variable.  Function \code{eigengrad} returns only the \code{shrinkage}
+  attribute. 
 }
 
 \author{ Jari Oksanen }
 
-\seealso{ \code{\link[MASS]{isoMDS}} }
+\seealso{ \code{\link[MASS]{isoMDS}}, \code{\link{cca}}. }
 
 \examples{
 data(varespec)

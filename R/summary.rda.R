@@ -49,7 +49,7 @@ function (object, scaling = 2, axes = 6, digits = max(3, getOption("digits") -
         if (cc.dim) {
             site.constr <- sweep(site.constr, 2, evscale, "*")
             sites <- sweep(sites, 2, evscale, "*")
-            if (!is.null(centroids)) 
+            if (!is.na(centroids)[1]) 
                 centroids <- sweep(centroids, 2, evscale, "*")
         }
         if (add.dim) {
@@ -65,7 +65,7 @@ function (object, scaling = 2, axes = 6, digits = max(3, getOption("digits") -
         if (cc.dim) {
             species <- sweep(species, 2, sqrt(evscale), "*")
             sites <- sweep(sites, 2, sqrt(evscale), "/")
-            if (!is.null(centroids)) 
+            if (!is.na(centroids)[1]) 
                 centroids <- sweep(centroids, 2, sqrt(evscale), 
                   "/")
             site.constr <- sweep(site.constr, 2, sqrt(evscale), 

@@ -1,5 +1,6 @@
 "ordisegments" <-
-    function (ord, groups, levels, replicates, display = display, ...) 
+function (ord, groups, levels, replicates, display = display, 
+    ...) 
 {
     pts <- scores(ord, display = "sites", ...)
     npoints <- nrow(pts)
@@ -10,9 +11,9 @@
     for (is in inds) {
         gr <- out[groups == is]
         if (length(gr) > 1) {
-            X <- pts[gr, ]
-            X0 <- X[-nrow(X), ]
-            X1 <- X[-1, ]
+            X <- pts[gr, , drop=FALSE ]
+            X0 <- X[-nrow(X), , drop=FALSE]
+            X1 <- X[-1, , drop=FALSE]
             segments(X0[, 1], X0[, 2], X1[, 1], X1[, 2], ...)
         }
     }
