@@ -1,0 +1,396 @@
+VEGAN STABLE VERSIONS 
+
+Version 1.6-2: Based on devel version 1.7-3.
+
+	* renyi: should work now (again?).
+
+	* prestondistr: The truncation level was badly chosen. Now default
+	level is set to -1, or log2(-1) = 0.5 which might be the left
+	limit of the first octave. This is now a parameter, leaving the
+	choice as the responsibility of the user.
+
+	* cca.default: Removes missing species and issues a warning
+	instead of stopping with error.  
+	
+Version 1.6-1: Based on devel version 1.7-1.
+
+	* Minor maintanenance release to satisfy tests in R-devel. There
+	was a buglet in ordisegments that caused a warning. I had
+	introduced a trick to handle printCoefmat before it was invented
+	to replace print.coefmat, but this failed in R-devel.  
+
+	* Vignettes included in this release. These were only in devel
+	versions of my web pages previously.
+
+Version 1.6-0 (Fisher)
+
+
+	* Based on devel version 1.5-58. Passes checks with R-1.8.0 and
+	R-1.7.0 and compiles into a Windows binary. Many functions were
+	contributed by Roeland Kindt (Nairobi, Kenya).
+
+	* BCI: A new data set on tree counts on 1-ha plots in the Barro
+	Colorado Island. Thanks to Roeland Kindt and Richard S. Condit.
+
+	* capscale: A new function for [partial] constrained analysis of
+	principal coordinates (CAP).
+
+	* cca, rda: Can now handle cases where the number of constraints
+	is higher than the number of species.
+
+	* cca, decorana: Find now if data have empty rows or columns.
+
+	* decostand: Added Chi-square transformation.
+
+	* distconnected: A new function to find if vegetation data are
+	disconnected below given threshold dissimilarity level. Utility
+	function no.shared gives a logical dissimilarity matrix with
+	values TRUE for cases with no shared species.
+
+	* fisher.alpha: Should work with large sample sizes now (bug
+	report thanks to Ariel Bergamini).
+
+	* fisherfit, prestonfit, prestondistr: New functions to fit
+	Fisher's logarithmic series and Preston's log-normal model.
+
+	* make.cepnames: New utility function to change Latin names into
+	4+4 character CEP names.
+
+	* ordicluster, ordispantree: New functions in the ordihull family
+	to overlay a cluster dendrogram or a spanning tree onto an
+	ordination. Weights are now really used with cca and decorana
+	plots.
+
+	* radfit: New function to fit Ranked Abundance Dominance or
+	Dominance/ Diversity models with maximum likelihood: Pre-emption,
+	log-normal, veiled log-normal, Zipf and Zipf--Mandelbrot models.
+
+	* rankindex: Can now use stepacross and new dissimilarity indices
+	of vegdist.
+
+	* rarefy: Can now optionally find SE of rarefied richness.
+
+	* renyi: A new function to find Rényi diversities or Hill numbers
+	with any scale (thanks to Roeland Kindt).
+
+	* scores.ordiplot: should be more robust now.
+
+	* spantree: A new function to find a minimum spanning tree using
+	only dissimilarities below a threshold or disregarding NA
+	dissimilarities.
+
+	* specaccum: A new function for species accumulation
+	curves. Thanks to Roeland Kindt.
+
+	* specnumber: A very simple utility function to find species
+	richness.
+
+	* specpool: New function for extrapolated species richness in a
+	species pool, or for estimating the number of unseen species.
+
+	* stepacross: New function for estimation of dissimilarities
+	between sites that have no shared species. Implements both
+	flexible shortest paths and their approximation known as extended
+	dissimilarities.
+
+	* vegdist: New dissimilarity indices Jaccard (finally), Morisita,
+	Horn--Morisita and Mountford.
+
+Version 1.4-4
+
+	* Based on devel version 1.5-35.
+
+	* decorana: Finds now eigenvalues from the final solution as ratio
+	of biased weighted variances of site and species scores. The
+	values returned by the legacy Fortran function are called
+	``decorana values''.
+
+	* downweight: passes the downweighting fraction as an attribute,
+	and decorana catches and prints the fraction.
+
+	* wascores: Uses now biased variances for expading WAs and returns
+	the shrinkage factors as an attribute "shrinkage".  Shrinkage
+	factors are equal to eigenvalues in CCA when only this one
+	variable is used as constraint. Function `eigengrad' returns only
+	these eigenvalues.
+
+	* rda summary/plot bugfix: Failed with non-default scaling (1 or
+	3) when there were no factor constraints. Corrected a statement
+	giving a harmless warning in plot.cca.
+
+	* ordiplot knows now option type = "text".  New simpleminded
+	functions points.ordiplot and text.ordiplot for adding items in an
+	ordiplot graph.
+
+	* ordiarrows, ordisegments could drop dimensions (when will I
+	learn!)  and fail if only one arrow or one segment should be
+	drawn.  One argument was missing in a `gl' command in `ordigrid'.
+
+
+Version 1.4-3 (Luova)
+
+	* Based on devel version 1.5-30
+
+	* `cca' and `rda' use canonical expansion of the formula and
+	return the `terms' component.  Functions like `terms', `formula'
+	and `update' magically started to work with cca and rda (and eight
+	lines of code would allow `step' and `stepAIC' to work magically
+	in model building... but it's so much magic that I don't trust
+	it). Some of the allowed things are now `mod <- cca(dune ~ . -
+	Use, dune.env)'
+	(all variables but `Use' in dune.env), and `update(mod, . ~ . -
+	Manure)' (remove `Manure' from the previous).
+
+	* `cca' and `rda' find centroids of factor levels with factor
+	constraints (only with formula interface). These can be accessed
+	with `display="cn"' in `scores', `summary' and `plot'.  If
+	`display="cn"' is requested in `plot', biplot arrows are still
+	drawn unless there is a class centroid with the same name:
+	continuous variables are still shown as arrows and ordered factors
+	both as arrows as centroids.
+
+	* Enhanced user control of many ordination plots. Some accept more
+	graphical parameters (`ordiplot', `plot.procrustes'). New
+	functions `points.cca' and `text.cca' to add these items into
+	CCA/RDA plots (documented separately).
+
+	* `identify.ordiplot' knows more alternatives, among them
+	`plot.procrustes'.  This was helped with new, very generic
+	`scores.ordiplot'.
+
+	* New functions to add graphical items in ordination diagrams:
+	`ordihull' draws convex hulls for groups, `ordiarrows' draws
+	arrows, `ordisegments' segments, `ordigrid' combines points in to
+	a grid, `ordispider' combines points to their (weighted) centroids
+	or WA scores to the corresponding LC score in cca/rda,
+	`ordiellipse' draws dispersion or confidence ellipses for
+	points. All these take a groups argument for selecting subsets of
+	points. `ordispider' obsoletes `spider.cca' (introduced in the
+	previous release).
+
+	* Implemented simple ``deshrinking'' of weighted averages in
+	`wascores'.
+
+	* A new diversity function `fisher.alpha' that estimates the
+	diversity as the alpha parameter of Fisher's log-series. Thanks to
+	Bob O'Hara <bob.ohara@helsinki.fi> for the main code.
+
+	* `summary.decorana' now in canonical form so that printing is
+	done by `print.summary.decorana' and user can intercept and catch
+	the result.  Several users had been surprised of the earlier
+	non-canonical behaviour. `summary' knows again the prior weights
+	used in downweighting of rare species (these evaporated in 1.4-0).
+
+	* rda summary/scores/plot bugfix: Scaling of site scores was wrong
+	with scaling alternatives 1 and 3.
+
+	* envfit (vectorfit, factorfit) bug fixes: Can now handle single
+	vectors (labelling, permutation). Recognize now `choices' so that
+	the user can select ordination axes.
+
+	* Checked with released R-1.7.0.
+
+Version 1.4-2
+
+
+Based on devel version 1.5-18
+
+	* New functions and data sets:
+
+	* dune: A new data set -- the classic Dune Meadow data with the
+	environmental data.
+
+	* ordiplot, identify.ordiplot: New functions to plot "any"
+	ordination result and identify plotted points. Intended to provide
+	similar functionality as `plot', `plotid' and `specid' functions
+	in `labdsv' without name clashes. Functions `plot.cca' and
+	`plot.decorana' return (invisibly) `ordiplot' objects as well, and
+	these can be used by `identify' to label species and sites.
+
+	* rda: Redundancy Analysis, or optionally, yet another PCA. This
+	is a spin-off from cca(), and it is documented together with
+	cca. The only new functions are rda, rda.default, rda.formula and
+	summary.rda. Otherwise rda uses cca methods which were changed to
+	be aware of rda.
+
+	* read.cep: A function to read Cornell Ecology Package or CEP
+	formatted files into R. This has been in devel versions since
+	1.1-1, but it never made to the releases, since this worked only
+	in Linux, but crashed R in Windows. It seemed to work in R-1.6.1
+	with gcc 3.2
+	(MinGW) in Windows, so it is included. Treat with caution.
+
+	* spider.cca: A tiny function that joins each WA score to the
+	corresponding LC score in cca/rda plots.
+
+Minor changes:
+
+	* Checked with R-1.7.0 (unstable devel version, snapshot
+	2003-02-05) and corrected as needed.
+
+	* Added symmetric scaling (=3) to alternitves in cca and rda.
+
+	* Minor improvements and bug fixes in vegemite.
+
+Version 1.4-1 (Logan)
+
+Based on devel version 1.5-10.
+
+New features:
+
+	* Permutation tests added to envfit (vectorfit, factorfit) and
+	procrustes (called protest).
+
+	* All permutation tests take now argument strata: If given,
+	permutations made only within strats. Concerns anosim, anova.cca
+	(permutest.cca), mantel, envfit (factorfit, envfit) and protest
+	(in procrustes).
+
+	* fitted.procrustes(): A new function.
+
+	* rarefy(): A new function for rarefaction species richness.
+
+Other changes:
+
+
+	* cca.default(): Handles now NULL matrices X and Z: skips them.
+
+	* cca.formula(): Knows now cca(X ~ 1) and permforms unconstrained
+	CA, and cca(X ~ ., data) and perfors CCA using all variables in
+	`data' as constraints. Has now na.action=na.fail so that cca
+	crashes more informatively (used to crash mysteriously). A more
+	graceful na.action may come. Assignment "=" corrected to the true
+	blue "<-" (used to crash in old R).
+
+	* envfit (factorfit, vectorfit): Use `scores' now. Various
+	bugfixes and should work now with single factors or vectors.
+
+	* plot.envfit(): Options `choices' works now like documented.
+
+	* ordisurf(): A new name to surf() to avoid name clash with
+	labdsv.
+  
+	* procrustes(): added option `symmetric' for symmetric rotation
+	and goodness of fit statistic.
+
+	* plot.procrustes(): Keyword `axes' changed to `choices' to be
+	consistent with other functions.
+
+	* vegemite(): A new name to vegetab. The name was chosen because
+	the output is so compact (and to avoid confusion with function
+	vegtab in labdsv). Function checks now that the cover codes fit in
+	one column and splits the output if it does not fit into used page
+	width.
+
+Version 1.4-0
+
+Based on devel version 1.3-19.
+
+New functions:
+
+	* `anosim': Analysis of Similarities.
+
+	* `cca': [Partial] [Constrained] Correspondence Analysis.  This is
+	an alternative to Dray's `CAIV' (package `CoCoAn').  Differences
+	include formula interface, WA scores in addition to LC scores,
+	partial CCA, residual CA after constraints, algorithm based on svd
+	(and much faster), more standard support functions (`plot',
+	`summary', `print').
+
+	* `anova.cca' and `permutest.cca': Permutation tests for `cca'.
+
+	* `envfit': A new wrapper function which calls either `vectorfit'
+	or new `factorfit' function, and `plot.envfit' for easier display
+	of results in graphs.  
+
+	* `mantel': Mantel test for two
+	dissimilarity matrices.
+
+	* `scores': A generic function to extract scores from `cca',
+	`decorana' or even from some common ordination methods in R.
+
+	* `surf': Surface fitting for ordination, intended as an
+	alternative to `vectorfit'.
+
+	* `vegetab': Prints a compact, ordered vegetation table, together
+	with `coverscale' to transform data into compact format.
+
+Other changes:
+
+	* `downweight': directly callable instead of being embedded in
+	`decorana'. Now it can be used with other downweighting thresholds
+	or with other CA's than `decorana', e.g., `cca', `ca', `CAIV'.
+
+	* `plot.decorana': new keyword `type', removed keyword `tol'.
+
+	* `vectorfit': centres now ordination before fitting, so it will
+	work with other ordinations than MDS.
+
+	* Mainly user invisible changes in `plot.decorana',
+	`plot.procrustes', `postMDS', `print.summary.procrustes',
+	`vectorfit', `procrustes'.  One of the main changes was that
+	`eqscplot' of `MASS' library was replaced with `plot(..., asp=1)'
+	of standard R (but this is not S-plus compliant).
+
+	* Edited help files.  More examples run from help files.
+
+	* Tried to improve LabDSV compliance, see
+	http://labdsv.nr.usu.edu/.
+
+	* Checked with R-1.5.0.  However, `log' in diversity not changed
+	into `logb' (yet), although base is specified, because `logb'
+	won't work in R pre-1.5.0.
+
+Version 1.2-1
+
+	* Checked with R-1.4-0 (frozen snapshot) tools: Documentation and
+	method consistency corrected (summary.decorana.R, decorana.Rd),
+	and file permissions changed.
+
+	* decorana.Rd: removed dependence on package `multiv' in the
+	example, since it is not a `recommended package' -- replaced with
+	`decorana(..., ira=1)'.
+
+Version 1.2-0
+
+
+Based on experimental version 1.1-6. Doesn't include read.cep() of the
+experimental version, because the function is certainly unportable to
+all platforms (works on Red Hat Linux 7.1, but perhaps nowhere else).
+
+Major new feature:
+
+	* decorana(): R port of Mark Hill's DECORANA for Detrended
+	correspondence analysis, with methods print(), summary() and
+	plot().
+
+Minor changes:
+
+	* postMDS(): finds isoMDS scores and doesn't destroy list
+	structure.
+
+	* vectorfit: finds isoMDS scores and decorana row scores (which
+	are uncentred, though).
+
+	* Proof reading in documentation.
+
+Version 1.0-3
+
+	*`plot.procrustes': selection of axes plotted, improved scaling in
+	graphics, control of axis labels.  
+
+	* `postMDS': added plot to demonstrate half-change scaling.
+
+	* `procrustes': target can now have lower dimensionality than
+	rotated matrix.
+
+Version 1.0-2
+
+
+	* Fixed bugs in documentation.
+
+	* `plot.procrustes': Fixed passing `...' to graphics functions.
+
+Version 1.0-1
+
+	* The first public version.

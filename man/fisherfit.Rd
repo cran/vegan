@@ -22,7 +22,7 @@
 \usage{
 fisherfit(x, ...)
 prestonfit(x, ...)
-prestondistr(x, ...)
+prestondistr(x, truncate = -1, ...)
 \method{plot}{prestonfit}(x, xlab = "Frequency", ylab = "Species", bar.col = "skyblue", 
     line.col = "red", lwd = 2, ...)
 \method{lines}{prestonfit}(x, line.col = "red", lwd = 2, ...)
@@ -33,6 +33,9 @@ as.fisher(x, ...)
 \arguments{
   \item{x}{Community data vector for fitting functions or their result
     object for \code{plot} functions.}
+  \item{truncate}{Truncation point for log-Normal model, in log2
+    units. Default value \eqn{-1} corresponds to the left border of zero
+    Octave. The choice strongly influences the fitting results.}
   \item{xlab, ylab}{Labels for \code{x} and \code{y} axes.}
   \item{bar.col}{Colour of data bars.}
   \item{line.col}{Colour of fitted line.}
