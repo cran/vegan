@@ -1,5 +1,55 @@
 VEGAN STABLE VERSIONS 
 
+Version 1.4-1 (Logan)
+=====================
+
+Based on devel version 1.5-10
+
+New features
+------------
+
+* Permutation tests added to envfit (vectorfit, factorfit) and
+  procrustes (called protest).
+
+* All permutation tests take now argument strata: If given,
+  permutations made only within strats. Concerns anosim, anova.cca
+  (permutest.cca), mantel, envfit (factorfit, envfit) and protest (in
+  procrustes). 
+
+* fitted.procrustes(): A new function.
+
+* rarefy(): A new function for rarefaction species richness.
+
+Other changes
+-------------
+
+* cca.default(): Handles now NULL matrices X and Z: skips them.
+
+* cca.formula(): Knows now cca(X ~ 1) and permforms unconstrained CA,
+  and cca(X ~ ., data) and perfors CCA using all variables in `data'
+  as constraints. Has now na.action=na.fail so that cca crashes more
+  informatively (used to crash mysteriously). A more graceful
+  na.action may come. Assignment "=" corrected to the true blue "<-"
+  (used to crash in old R).
+
+* envfit (factorfit, vectorfit): Use `scores' now. Various bugfixes
+  and should work now with single factors or vectors.
+
+* plot.envfit(): Options `choices' works now like documented.
+
+* ordisurf(): A new name to surf() to avoid name clash with labdsv.
+  
+* procrustes(): added option `symmetric' for symmetric rotation and
+  goodness of fit statistic. 
+
+* plot.procrustes(): Keyword `axes' changed to `choices' to be
+  consistent with other functions.
+
+* vegemite(): A new name to vegetab. The name was chosen because the
+  output is so compact (and to avoid confusion with function vegtab in
+  labdsv). Function checks now that the cover codes fit in one column
+  and splits the output if it does not fit into used page width.
+
 Version 1.4-0
 =============
 

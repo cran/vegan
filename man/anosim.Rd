@@ -11,7 +11,7 @@
   of sampling units.
 }
 \usage{
-anosim(dis, grouping, permutations=1000)
+anosim(dis, grouping, permutations=1000, strata)
 }
 %- maybe also `usage' for other objects documented here.
 \arguments{
@@ -19,6 +19,9 @@ anosim(dis, grouping, permutations=1000)
   \item{grouping}{Factor for grouping observations.}
   \item{permutations}{Number of permutation to assess the significance
     of the ANOSIM statistic. }
+  \item{strata}{An integer vector or factor specifying the strata for
+    permutation. If supplied, observations are permuted only within the
+    specified strata.}
 }
 \details{
   Analysis of similarities (ANOSIM) provides a way to test statistically
@@ -43,12 +46,12 @@ anosim(dis, grouping, permutations=1000)
   grouping.
 
   The statistical significance of observed \eqn{R} is assessed by
-  permuting the grouping vector to obtain the empiricial
+  permuting the grouping vector to obtain the empirical
   distribution of \eqn{R} under null-model.
 
   The function has \code{summary} and \code{plot} methods.  These both
   show valuable information to assess the validity of the method:  The
-  function assumes that all ranked dissimilarities within groups should
+  function assumes that all ranked dissimilarities within groups 
   have about equal median and range.  The \code{plot} method uses
   \code{\link{boxplot}} with options \code{notch=TRUE} and
   \code{varwidth=TRUE}. 
@@ -66,7 +69,7 @@ anosim(dis, grouping, permutations=1000)
 }
 \references{
   Clarke, K. R. (1993). Non-parametric multivariate analysis of changes
-  in community structure. Australian Journal of Ecology 18, 117-143.
+  in community structure. \emph{Australian Journal of Ecology} 18, 117-143.
 }
 \author{Jari Oksanen, with the help from Peter R. Minchin.}
 \note{

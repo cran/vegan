@@ -1,23 +1,24 @@
 anosim                  Analysis of Similarities 
-anova.cca               Permutation Test for Constrained Correpondence
+anova.cca               Permutation Test for Constrained Correspondence
                         Analysis 
 cca                     [Partial] [Constrained] Correspondence Analysis 
 decorana                Detrended Correspondence Analysis and Basic
                         Reciprocal Averaging 
 decostand               Standardizaton Methods for Community Ecology
-diversity               Ecological Diversity Indices 
+diversity               Ecological Diversity Indices and Rarefaction
+                        Species Richness 
 envfit                  Fits an Environmental Vector or Factor onto an
                         Ordination 
 initMDS                 Random Start and Axis Scaling for isoMDS 
 mantel                  Mantel Test for Two Dissimilarity Matrices 
+ordisurf                Smooths Variables and Plots Contours on
+                        Ordination. 
 procrustes              Procrustes Rotation of Two Configurations 
 rankindex               Compares Dissimilarity Indices for Gradient
                         Detection 
 scores                  Get Species or Site Scores from an Ordination 
-surf                    Smooths Variables and Plots Contours on
-                        Ordination. 
 varespec                Vegetation and environment in lichen pastures
 vegdist                 Good Dissimilarity Measures for Ecological
                         Gradients 
-vegetab                 Prints a Compact, Ordered Vegetation Table. 
+vegemite                Prints a Compact, Ordered Vegetation Table. 
 wascores                Weighted Averages Scores for Species 

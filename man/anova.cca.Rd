@@ -3,43 +3,47 @@
 \alias{permutest.cca}
 \alias{print.permutest.cca}
 \alias{print.anova.cca}
+\alias{permuted.index}
 
 \title{Permutation Test for
-  Constrained Correpondence Analysis }
+  Constrained Correspondence Analysis }
 \description{
   The function performs an ANOVA like permutation test for Constrained
   Correspondence Analysis to assess the significance of constraints.
 }
 \usage{
 \method{anova}{cca}(object, alpha=0.05, beta=0.1, step=100, perm.max=2000, ...)
-permutest.cca(x, permutations=100, model=c("reduced","full"))
+permutest.cca(x, permutations=100, model=c("reduced","full"), strata)
 }
 %- maybe also `usage' for other objects documented here.
 \arguments{
   \item{object,x}{A result object from \code{\link{cca}}. }
   \item{alpha}{Targeted Type I error rate. }
   \item{beta}{Accepted Type II error rate. }
-  \item{step}{Number of permutation in one step. }
+  \item{step}{Number of permutations in one step. }
   \item{perm.max}{Maximum number of permutations. }
   \item{\dots}{Parameters to permutest.cca. }
   \item{permutations}{Number of permutations for assessing significance
     of constraints.}
   \item{model}{Permutation model (partial match).}
+  \item{strata}{An integer vector or factor specifying the strata for
+    permutation. If supplied, observations are permuted only within the
+    specified strata.}
 }
 \details{
   Functions \code{anova.cca} and \code{permutest.cca} implement an ANOVA
   like permutation test for the joint effect of constraints in CCA.
   These two functions differ in printout style and in interface.
   Function \code{permutest.cca} is the proper workhorse, but
-  \code{anova.cca} can pass all parameters to \code{permutest.cca},
-  so either can be used.
+  \code{anova.cca} passes all parameters to \code{permutest.cca},
+  so either can be used. 
 
   In \code{anova.cca} the number of permutations is controlled by
   targeted ``critical'' \eqn{P} value (\code{alpha}) and accepted Type
   II or rejection error (\code{beta}).  If the results of permutations
   differ from the targeted \code{alpha} at risk level given by
   \code{beta}, the permutations are
-  terminated.  However, if the current estimate of \eqn{P} does not
+  terminated.  If the current estimate of \eqn{P} does not
   differ significantly from \code{alpha} of the alternative hypothesis,
   the permutations are
   continued by \code{step} new permutations.  
@@ -57,7 +61,7 @@ permutest.cca(x, permutations=100, model=c("reduced","full"))
   remains constant, so that pseudo-\eqn{F} and eigenvalues would give
   equal results.  In partial CCA, the effect of conditioning variables
   (``covariables'') is removed before permutation, and these residuals
-  are added to the unpermuted fitted values of partial CCA (fitted
+  are added to the non-permuted fitted values of partial CCA (fitted
   values of \code{X ~ Z}).  Consequently, the total Chi-square is not
   fixed, and test based on pseudo-\eqn{F} would differ from the test based on
   plain eigenvalues.
@@ -69,7 +73,7 @@ permutest.cca(x, permutations=100, model=c("reduced","full"))
   uses \code{\link{print.anova}} for printing.
 }
 \references{
-  Legendre, P. and Legendre, L. (1998) Numerical Ecology. 2nd English
+  Legendre, P. and Legendre, L. (1998). \emph{Numerical Ecology}. 2nd English
   ed. Elsevier.
 }
 \author{Jari  Oksanen}

@@ -16,25 +16,25 @@
   These are all very popular ordination techniques in community ecology.
 }
 \usage{
-\method{cca}{default}(X, Y, Z)
 \method{cca}{formula}(formula, data)
+\method{cca}{default}(X, Y, Z)
 \method{summary}{cca}(object, scaling=2, axes=6, digits, ...)
 \method{plot}{cca}(x, choices=c(1,2), display=c("sp","wa","bp"), scaling=2, type, ...)
 \method{scores}{cca}(x, choices=c(1,2), display=c("sp","wa","bp"),scaling=2, ...)
 }
 
 \arguments{
-  \item{X}{ Community data matrix. }
-  \item{Y}{ Constraining matrix, typically of environmental variables.
-    Can be missing. }
-  \item{Z}{ Conditioning matrix, the effect of which is removed
-    (`partialled out') before next step. Can be missing.}
   \item{formula}{Model formula, where the left hand side gives the
     community data matrix, right hand side gives the constraining variables,
     and conditioning variables can be given within a special function
     \code{Condition}.}
   \item{data}{Data frame containing the variables on the right hand side
     of the model formula.}
+  \item{X}{ Community data matrix. }
+  \item{Y}{ Constraining matrix, typically of environmental variables.
+    Can be missing. }
+  \item{Z}{ Conditioning matrix, the effect of which is removed
+    (`partialled out') before next step. Can be missing.}
   \item{object, x}{A \code{cca} result object.}
   \item{scaling}{Scaling for species and site scores. Either species
     (\code{2}) or site (\code{1}) scores are scaled by eigenvalues, and
@@ -58,7 +58,7 @@
   Function \code{cca} implements a version which is compliant to popular
   proprietary software \code{Canoco}, although implementation is
   completely different.  Function \code{cca} is based on Legendre &
-  Legendre (1998) algorithm: 
+  Legendre's (1998) algorithm: 
   Chi-square transformed data matrix is subjected to weighted linear
   regression on constraining variables, and the fitted values are
   submitted to correspondence analysis performed via singular value
@@ -97,25 +97,26 @@
 
   Constrained correspondence analysis is indeed a constrained method.
   This means, that CCA does not try to display all variation in the
-  data, but only the part that can be explained by used constraints.
+  data, but only the part that can be explained by the used constraints.
   Consequently, the results are strongly dependent on the set of
   constraints and their transformations or interactions among the
   constraints.  The shotgun method is to use all environmental variables
-  as such as constraints.  However, such exploratory problems are better
+  as constraints.  However, such exploratory problems are better
   analysed with
-  unconstrained methods such as correspondencence analysis
+  unconstrained methods such as correspondence analysis
   (\code{\link{decorana}}, \code{\link[mva]{ca}}) or non-metric
   multidimensional scaling (\code{\link[MASS]{isoMDS}}) and
   environmental interpretation after analysis
-  (\code{\link{envfit}}).  CCA is a good choice if the user has
+  (\code{\link{envfit}}, \code{\link{ordisurf}}).
+  CCA is a good choice if the user has
   clear and strong \emph{a priori} hypotheses on constraints and is not
   interested in the major structure in the data set.  
 
-  CCA is able to correct the common
+  CCA is able to correct a common
   curve artefact in correspondence analysis by
   forcing the configuration into linear constraints.  However, the curve
   artefact can be avoided only with a low number of constraints that do
-  not have a curvilinear relation to each other.  The curve can reappear
+  not have a curvilinear relation with each other.  The curve can reappear
   even with two badly chosen constraints or a single factor.  Although
   the formula
   interface makes easy to include polynomial or interaction terms, such
@@ -126,14 +127,14 @@
   conditioning or ``background'' or ``random'' variables or
   ``covariables'' before CCA proper.  In fact, pCCA compares models
   \code{cca(X ~ z)} and \code{cca(X ~ y + z)} and attributes their
-  difference to the effect of \code{y} cleansed from the effect of
+  difference to the effect of \code{y} cleansed of the effect of
   \code{z}.  Some people have used the method for extracting
   ``components of variance'' in CCA.  However, if the effect of
-  variables together is stronger than sum of both separate, this can
+  variables together is stronger than sum of both separately, this can
   cause increase of total Chi-square after ``partialling out'' some
   variation, and give negative ``components of variance''.  In general,
-  such components are not to be trusted due to interactions between two sets
-  of variables.
+  such components of ``variance'' are not to be trusted due to
+  interactions between two sets of variables.
   
   The function has \code{summary} and \code{plot} methods.  The
   \code{summary} method lists all species and site scores, and results
@@ -143,8 +144,10 @@
   constrained to unconstrained analysis.  However, McCune (1997) showed
   that noisy environmental variables (and all environmental
   measurements are noisy) destroy ``LC scores'' whereas ``WA scores''
-  where little affected.  Therefore the \code{plot} function uses site
-  scores (``WA scores'') as the default.  
+  were little affected.  Therefore the \code{plot} function uses site
+  scores (``WA scores'') as the default. This is consistent with the
+  usage in general statistics and other function in \R
+  (\code{\link[MASS]{lda}}, \code{\link[mva]{cancor}}). 
 
 }
 \value{
@@ -162,8 +165,9 @@
   \code{eig} set and one unscaled set.  The result object can be
   accessed with functions \code{summary} and \code{scores.cca} which
   know how to select correct combination.  The traditional 
-  alternative before CCA (\code{scaling=1}) was to scale sites by
-  eigenvalues and leave species unscaled, so that configuration of sites
+  alternative before CCA  was to scale sites by
+  eigenvalues and leave species unscaled (\code{scaling=1}),
+  so that configuration of sites
   would reflect the real structure in data (longer axes for higher
   eigenvalues).  Species scores would not reflect axis lengths, and they
   would have larger variation than species scores, which was motivated
@@ -174,19 +178,19 @@
 \references{ The original method was by ter Braak, but the current
   implementations follows Legendre and Legendre.
 
-  Legendre, P. and Legendre, L. (1998) Numerical Ecology. 2nd English
+  Legendre, P. and Legendre, L. (1998) \emph{Numerical Ecology}. 2nd English
   ed. Elsevier.
 
   McCune, B. (1997) Influence of noisy environmental data on canonical
-  correspondence analysis. Ecology 78, 2617-2623.
+  correspondence analysis. \emph{Ecology} 78, 2617-2623.
   
   Palmer, M. W. (1993) Putting things in even better order: The
-  advantages of canonical correspondence analysis.  Ecology 74,
+  advantages of canonical correspondence analysis.  \emph{Ecology} 74,
   2215-2230. 
   
   Ter Braak, C. J. F. (1986) Canonical Correspondence Analysis: a new
   eigenvector technique for multivariate direct gradient
-  analysis. Ecology 67, 1167-1179.
+  analysis. \emph{Ecology} 67, 1167-1179.
   
 }
 \author{
@@ -198,7 +202,10 @@
   Function \code{\link{anova.cca}} provides an ANOVA like permutation
   test for the ``significance'' of constraints.
   Function \code{\link[CoCoAn]{CAIV}} provides an alternative
-  implementation of CCA (it is internally quite different).  
+  implementation of CCA (it is internally quite different). Established
+  statistical alternatives include canonical correlations for continuous
+  variable (\code{\link[mva]{cancor}}), and (linear) discriminant
+  analysis for factor constraints (\code{\link[MASS]{lda}}).
 }
 
 \examples{

@@ -2,7 +2,6 @@
 function (X, dist, pc = TRUE, center = TRUE, halfchange = TRUE, 
     threshold = 0.8, nthreshold = 10, plot = FALSE) 
 {
-    require(mva)
     Size <- attributes(dist)$Size
     if (any(attributes(X)$names == "points")) 
         x <- X$points
@@ -10,6 +9,8 @@ function (X, dist, pc = TRUE, center = TRUE, halfchange = TRUE,
     if (center) 
         x <- scale(x, scale = FALSE)
     if (pc) {
+        if(!require(mva))
+          stop("PCA rotation requires package `mva'")
         dn <- dimnames(x)
         x <- prcomp(x, center = center)$x
         dimnames(x) <- dn

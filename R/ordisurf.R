@@ -1,9 +1,11 @@
-"surf" <-
+"ordisurf" <-
 function (x, y, choices = c(1, 2), knots = 10, family = "gaussian", 
     col = "red", thinplate = TRUE, add = FALSE, ...) 
 {
-    require(mgcv)
-    require(akima)
+    if(!require(mgcv))
+      stop("Requires package `mgcv'")
+    if (!require(akima))
+      stop("Requires package `akima'")
     X <- scores(x, choices = choices, display = "sites")
     x1 <- X[, 1]
     x2 <- X[, 2]

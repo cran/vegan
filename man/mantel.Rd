@@ -12,7 +12,7 @@
 
 }
 \usage{
-mantel(xdis, ydis, method="pearson", permutations=1000)
+mantel(xdis, ydis, method="pearson", permutations=1000, strata)
 }
 %- maybe also `usage' for other objects documented here.
 \arguments{
@@ -20,13 +20,16 @@ mantel(xdis, ydis, method="pearson", permutations=1000)
   \item{ydis}{ Second dissimilarity matrix or a \code{dist} object. }
   \item{method}{ Correlation method, as accepted by \code{cor.test}:
     \code{pearson}, \code{spearman} or \code{kendall}. }
-  \item{permutations}{Number of permutations in assessing signficance. }
+  \item{permutations}{Number of permutations in assessing significance. }
+  \item{strata}{An integer vector or factor specifying the strata for
+    permutation. If supplied, observations are permuted only within the
+    specified strata.}
 }
 \details{
   Mantel statistic is simply a correlation between entries of two
   dissimilarity matrices (some use cross products, but these are linearly
   related).  However, the significance cannot be directly assessed,
-  because there are \eqn{N(N-1)/2} entries for \eqn{N} observations.
+  because there are \eqn{N(N-1)/2} entries for just \eqn{N} observations.
   Mantel developed asymptotic test, but here we use permutations of
   \eqn{N} rows and columns of dissimilarity matrix.
 
@@ -48,9 +51,9 @@ mantel(xdis, ydis, method="pearson", permutations=1000)
   
 }
 \references{ The test is due to Mantel, of course, but the
-  current implemenation is based on Legendre and Legendre.
+  current implementation is based on Legendre and Legendre.
 
-  Legendre, P. and Legendre, L. (1998) Numerical Ecology. 2nd English
+  Legendre, P. and Legendre, L. (1998) \emph{Numerical Ecology}. 2nd English
   Edition. Elsevier.
   
 }

@@ -1,7 +1,7 @@
-\name{vegetab}
-\alias{vegetab}
+\name{vegemite}
+\alias{vegemite}
 \alias{coverscale}
-%- Also NEED an `\alias' for EACH other topic documented here.
+
 \title{Prints a Compact, Ordered Vegetation Table. }
 \description{
   The function prints a compact vegetation table, where species are
@@ -10,10 +10,10 @@
   variables or results from an ordination or cluster analysis.
 }
 \usage{
-vegetab(x, use, scale, sp.ind, site.ind, zero=".")
+vegemite(x, use, scale, sp.ind, site.ind, zero=".")
 coverscale(x, scale=c("Braun.Blanquet", "Domin", "Hult", "Hill", "fix", "log"))
 }
-%- maybe also `usage' for other objects documented here.
+
 \arguments{
   \item{x}{Vegetation data. }
   \item{use}{Either a vector or an object from \code{cca},
@@ -28,8 +28,6 @@ coverscale(x, scale=c("Braun.Blanquet", "Domin", "Hult", "Hill", "fix", "log"))
   Unlike in ordinary data matrices, species are used as rows and sites
   as columns.  The table is printed in compact form:  only one character
   can be used for abundance, and there are no spaces between columns.
-  The function does not check the length of abundance codes, but
-  violation is obvious in ugly printout.
 
   The parameter \code{use} can be a vector or an object from
   \code{\link[mva]{hclust}} or any ordination result recognized by
@@ -40,19 +38,19 @@ coverscale(x, scale=c("Braun.Blanquet", "Domin", "Hult", "Hill", "fix", "log"))
   are arranged by the first axis.  
   When \code{use} is an
   object from \code{\link[mva]{hclust}}, the sites are ordered similarly
-  as in the cluster dendrogam.
+  as in the cluster dendrogram.
   There is no natural, unique ordering in hierarchic
   clustering, but in some cases species are still nicely ordered.
   If ordination methods provide species scores, these are used for
   ordering species.  In all cases where species scores are missing,
-  species are ordered by their weighted averages (\code{\link{wascores}}
+  species are ordered by their weighted averages (\code{\link{wascores}})
   on site scores.
   Alternatively, species and sites can be ordered explicitly giving
   their indices or names in parameters \code{sp.ind} and
   \code{site.ind}.  If these are given, they take precedence over
   \code{use}. 
 
-  If \code{scale} is given, \code{vegetab} calls
+  If \code{scale} is given, \code{vegemite} calls
   \code{coverscale} to transform percent cover
   scale or some other scales into traditional class scales used in
   vegetation science (\code{coverscale} can be called directly, too).
@@ -82,8 +80,8 @@ coverscale(x, scale=c("Braun.Blanquet", "Domin", "Hult", "Hill", "fix", "log"))
 \references{ The cover scales are presented in many textbooks of vegetation
   science; I used:
 
-  Shimwell, D.W. (1971) The Description and Classification of
-  Vegetation. Sidgwick & Jackson.
+  Shimwell, D.W. (1971) \emph{The Description and Classification of
+  Vegetation}. Sidgwick & Jackson.
 }
 \author{Jari Oksanen}
 
@@ -91,14 +89,19 @@ coverscale(x, scale=c("Braun.Blanquet", "Domin", "Hult", "Hill", "fix", "log"))
   `cover scales', \code{\link{wascores}} for weighted averages.
   }
 
+\note{ This function was called \code{vegetab} in older versions of
+  \code{vegan}.  The new name was chosen  because the output is so
+  compact (and to avoid confusion with the \code{vegtab} function in the
+  \code{labdsv} package).
+    }
 \examples{
 data(varespec)
 ## Print only more common species 
 freq <- apply(varespec > 0, 2, sum)
-vegetab(varespec, scale="Hult", sp.ind = freq > 10)
+vegemite(varespec, scale="Hult", sp.ind = freq > 10)
 ## Order by correspondence analysis, use Hill scaling and layout:
 dca <- decorana(varespec)
-vegetab(varespec, dca, "Hill", zero="-")
+vegemite(varespec, dca, "Hill", zero="-")
 }
 \keyword{ print }
 \keyword{ manip }

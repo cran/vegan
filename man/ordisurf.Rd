@@ -1,16 +1,16 @@
-\name{surf}
-\alias{surf}
-%- Also NEED an `\alias' for EACH other topic documented here.
+\name{ordisurf}
+\alias{ordisurf}
+
 \title{ Smooths Variables and Plots Contours on Ordination. }
 \description{
-  Function \code{surf} fits a smooth surface for given variable and
+  Function \code{ordisurf} fits a smooth surface for given variable and
   plots the result on ordination diagram.
 }
 \usage{
-surf(x, y, choices=c(1, 2), knots=10, family="gaussian", col="red",
+ordisurf(x, y, choices=c(1, 2), knots=10, family="gaussian", col="red",
      thinplate = TRUE, add = FALSE, ...)
 }
-%- maybe also `usage' for other objects documented here.
+
 \arguments{
   \item{x}{Ordination configuration, either a matrix or a result known
     by \code{\link{scores}}. }
@@ -25,7 +25,7 @@ surf(x, y, choices=c(1, 2), knots=10, family="gaussian", col="red",
   \item{\dots}{ Other graphical parameters. }
 }
 \details{
-  Function \code{surf} fits a smooth surface using thinplate spline
+  Function \code{ordisurf} fits a smooth surface using thinplate spline
   fitting in \code{\link[mgcv]{gam}}, and  interpolates the fitted
   values  into a
   regular grid using \code{\link[akima]{interp}}.  Finally, it plots the
@@ -48,16 +48,18 @@ surf(x, y, choices=c(1, 2), knots=10, family="gaussian", col="red",
   ordination as they have equal smoothing in all directions and are
   rotation invariant.  However, they seem to fail badly in some case,
   and then separate spline smoothing may be used.
+
+  The function was called \code{surf} in older version of \code{vegan};
+  new names was chosen to avoid name clashes with the \code{labdsv} package.
 }
 
-
 \seealso{ For basic routines \code{\link[mgcv]{gam}},
-  \code{\link[akima]{interp}} \code{\link{scores}}, and
-  \code{\link{envfit}} for a poorer but more traditional and compact
+  \code{\link[akima]{interp}} and \code{\link{scores}}. Function 
+  \code{\link{envfit}} provides a poorer but more traditional and compact
   alternative. } 
 
 \examples{
-## The examples are not run by `example(surf)' because they need
+## The examples are not run by `example(ordisurf)' because they need
 ## libraries `mgcv' and `akima' which may not exist in every system.
 \dontrun{data(varespec)}
 \dontrun{data(varechem)}
@@ -67,9 +69,9 @@ surf(x, y, choices=c(1, 2), knots=10, family="gaussian", col="red",
 \dontrun{vare.mds <- isoMDS(vare.dist)}
 \dontrun{attach(varespec)}
 \dontrun{attach(varechem)}
-\dontrun{surf(vare.mds, Baresoil, xlab="Dim1", ylab="Dim2")}
+\dontrun{ordisurf(vare.mds, Baresoil, xlab="Dim1", ylab="Dim2")}
 ## Total cover of reindeer lichens
-\dontrun{surf(vare.mds, Cla.ste+Cla.arb+Cla.ran, xlab="Dim1", ylab="Dim2")} 
+\dontrun{ordisurf(vare.mds, Cla.ste+Cla.arb+Cla.ran, xlab="Dim1", ylab="Dim2")} 
 }
-\keyword{ multivariate }% at least one, from doc/KEYWORDS
+\keyword{ multivariate }
 \keyword{ aplot }

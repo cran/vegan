@@ -31,7 +31,7 @@
   \code{loadings}.
   If \code{x} is a matrix, \code{scores.default} returns the chosen
   columns of that matrix, ignoring whether species or sites were
-  requested (do not regard this as a bug but a feature, please).
+  requested (do not regard this as a bug but as a feature, please).
   Currently the function seems to work at least for \code{\link[MASS]{isoMDS}},
   \code{\link[mva]{prcomp}}, \code{\link[mva]{princomp}},
   \code{\link[multiv]{ca}}, \code{\link[multiv]{pca}}.  It may work for

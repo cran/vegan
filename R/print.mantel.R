@@ -8,12 +8,14 @@ function (x, digits = max(3, getOption("digits") - 3), ...)
     cat(formatC(x$statistic, digits = digits), "\n")
     nperm <- x$permutations
     if (nperm) {
-      cat("      Significance:",format.pval(x$signif, eps=1/nperm))
-      cat(" (based on ", nperm, " permutations)","\n\n")
-      out <- quantile(x$perm, c(0.9, 0.95, 0.975, 0.99))
-      cat("Empirical upper confidence limits of r:\n")
-      print(out,digits=3)
+        cat("      Significance:", format.pval(x$signif, eps = 1/nperm), "\n\n")
+        out <- quantile(x$perm, c(0.9, 0.95, 0.975, 0.99))
+        cat("Empirical upper confidence limits of r:\n")
+        print(out, digits = 3)
+        cat("\nBased on", nperm, "permutations")
+        if (!is.null(x$strata))
+           cat(", stratified within", x$strata)
     }
-    cat("\n")
+    cat("\n\n")
     invisible(x)
 }
