@@ -1,7 +1,7 @@
 /*********************************************************
  Changes a data matrix into a form used internally in Mark
  Hill's programs DECORANA and TWINSPAN.
- There ass an R version, but porfiling showed it was a bottleneck.
+ There was an R version, but profiling showed it was a bottleneck.
  Using this C version saved 30& running time in all matrix sizes
  tested (although it matters only for large data sets).
  The original R function is at the end of this function as a comment.

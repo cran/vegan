@@ -14,12 +14,12 @@
 \usage{
 procrustes(X, Y, scale=TRUE)
 \method{summary}{procrustes}(object, ...)
-\method{plot}{procrustes}(x, kind=1, axes=c(1,2), xlab="", ylab="", main="", ...)
+\method{plot}{procrustes}(x, kind=1, axes=c(1,2), xlab, ylab, main, ...)
 \method{residuals}{procrustes}(object, ...)
 }
 %- maybe also `usage' for other objects documented here.
 \arguments{
-  \item{X}{Target matrix.}
+  \item{X}{Target matrix}
   \item{Y}{Matrix to be rotated.}
   \item{scale}{Allow scaling of axes of \code{Y}.}
   \item{x}{An object of class \code{procrustes}.}
@@ -42,6 +42,8 @@ procrustes(X, Y, scale=TRUE)
   configuration \code{Y} for maximum similarity.  Since \code{Y} is scaled
   to fit \code{X}, the scaling is non-symmetric.
 
+  Instead of matrix, \code{X} and \code{Y} can be results from an
+  ordination form which \code{\link{scores}} can extract results.
   Function \code{plot.procrustes} plots a \code{procrustes}
   object and \code{residuals.procrustes} returns the pointwise
   residuals. In addition, there are \code{summary} and \code{print}
@@ -63,12 +65,13 @@ procrustes(X, Y, scale=TRUE)
   J.M. (1979). Multivariate Analysis. Academic Press. }
 \author{Jari Oksanen }
 
-\seealso{\code{\link[MASS]{isoMDS}}, \code{\link{initMDS}},
-  \code{\link[MASS]{eqscplot}} } 
+\seealso{\code{\link[MASS]{isoMDS}}, \code{\link{initMDS}} } 
 
 \examples{
 data(varespec)
 vare.dist <- vegdist(wisconsin(varespec))
+library(MASS)  ## isoMDS
+library(mva)   ## cmdscale to start isoMDS
 mds.null <- isoMDS(vare.dist)
 ## This was a good seed for me: your rng may vary.
 set.seed(237)
@@ -76,8 +79,8 @@ mds.alt <- isoMDS(vare.dist, initMDS(vare.dist), maxit=200)
 vare.proc <- procrustes(mds.alt$points, mds.null$points)
 vare.proc
 summary(vare.proc)
-\dontrun{plot(vare.proc)}
-\dontrun{plot(vare.proc, kind=2)}
+plot(vare.proc)
+plot(vare.proc, kind=2)
 residuals(vare.proc)
 ## Reset rng:
 rm(.Random.seed)

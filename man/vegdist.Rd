@@ -64,7 +64,12 @@ vegdist(x, method="bray", diag=FALSE, upper=FALSE)
   some ecologically meaningful indices.  Both methods should produce
   similar types of objects which can be interchanged in any method
   accepting either.  Manhattan and Euclidean dissimilarities should be
-  identical in both methods, and Canberra dissimilary may be similar.}
+  identical in both methods, and Canberra dissimilary may be similar.
+
+  Function \code{vegdist} does not \code{\link{require}} package
+  \code{mva} as such, but handling of its result object may be difficult
+  without support functions in \code{mva}.
+}
 
 
 \seealso{ \code{\link{decostand}}, \code{\link[mva]{dist}},

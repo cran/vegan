@@ -1,10 +1,10 @@
 "procrustes" <-
   function (X, Y, scale = TRUE) 
 {
-  if (any(attributes(X)$names == "points")) 
-    X <- X$points
-  if (any(attributes(Y)$names == "points")) 
-    Y <- Y$points
+  if (is.list(X))
+    X <- scores(X)
+  if (is.list(Y))
+    Y <- scores(Y)
   X <- as.matrix(X)
   Y <- as.matrix(Y)
   if (ncol(X) < ncol(Y)) {
