@@ -1,5 +1,5 @@
 "plot.cca" <-
-    function (x, choices = c(1, 2), display = c("sp", "wa", "bp"), 
+    function (x, choices = c(1, 2), display = c("sp", "wa", "cn"), 
               scaling = 2, type, ...) 
 {
     TYPES <- c("text", "points", "none")

@@ -1,8 +1,8 @@
 "anosim" <-
-function (dis, grouping, permutations = 1000, strata) 
+    function (dis, grouping, permutations = 1000, strata) 
 {
-    if(!require(mva))
-      stop("Requires library `mva'")
+    if (!require(mva)) 
+        stop("Requires library `mva'")
     x <- as.dist(dis)
     sol <- c(call = match.call())
     grouping <- as.factor(grouping)
@@ -38,9 +38,10 @@ function (dis, grouping, permutations = 1000, strata)
     sol$statistic <- as.numeric(statistic)
     sol$class.vec <- cl.vec
     sol$dis.rank <- x.rank
+    sol$dissimilarity <- attr(dis, "method") 
     if (!missing(strata)) {
         sol$strata <- deparse(substitute(strata))
-        sol$stratum.values <- strata 
+        sol$stratum.values <- strata
     }
     class(sol) <- "anosim"
     sol

@@ -1,12 +1,15 @@
 "ordiellipse" <-
-function (ord, groups, display = "sites", kind = c("sd", "se"), 
-    conf, draw=c("lines","polygon"), w = weights(ord, display), ...) 
+    function (ord, groups, display = "sites", kind = c("sd", "se"), 
+              conf, draw = c("lines", "polygon"), w = weights(ord, display), 
+              ...) 
 {
     if (!require(ellipse)) 
         stop("Requires package `ellipse' (from CRAN)")
     kind <- match.arg(kind)
     draw <- match.arg(draw)
     pts <- scores(ord, display = display, ...)
+    w <- eval(w)
+    if (length(w) == 1) w <- rep(1, nrow(pts))
     if (is.null(w)) 
         w <- rep(1, nrow(pts))
     out <- seq(along = groups)
@@ -23,10 +26,12 @@ function (ord, groups, display = "sites", kind = c("sd", "se"),
                 t <- 1
             else t <- sqrt(qchisq(conf, 2))
             if (draw == "lines") 
-               lines(ellipse(mat$cov, centre = mat$center, t = t), ...)
+                lines(ellipse(mat$cov, centre = mat$center, t = t), 
+                      ...)
             else {
-               xy <- ellipse(mat$cov, center=mat$center, t=t)
-               polygon(xy[,1] + mat$center[1], xy[,2] + mat$center[2], ...)
+                xy <- ellipse(mat$cov, center = mat$center, t = t)
+                polygon(xy[, 1] + mat$center[1], xy[, 2] + mat$center[2], 
+                        ...)
             }
         }
     }

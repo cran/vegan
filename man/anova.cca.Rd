@@ -4,11 +4,13 @@
 \alias{print.permutest.cca}
 \alias{print.anova.cca}
 
-\title{Permutation Test for
-  Constrained Correspondence Analysis }
+\title{Permutation Test for Constrained Correspondence Analysis,
+  Redundancy Analysis and Constrained Analysis of Principal Coordinates }
 \description{
   The function performs an ANOVA like permutation test for Constrained
-  Correspondence Analysis to assess the significance of constraints.
+  Correspondence Analysis (\code{\link{cca}}), Redundancy Analysis
+  (\code{\link{rda}}) or Constrained Analysis of Principal Coordinates
+  (\code{\link{capscale}}) to assess the significance of constraints.
 }
 \usage{
 \method{anova}{cca}(object, alpha=0.05, beta=0.1, step=100, perm.max=2000, ...)
@@ -32,7 +34,7 @@ permutest.cca(x, permutations=100, model=c("reduced","full"), strata)
 \details{
   Functions \code{anova.cca} and \code{permutest.cca} implement an ANOVA
   like permutation test for the joint effect of constraints in
-  \code{\link{cca}} or \code{\link{rda}}.
+  \code{\link{cca}}, \code{\link{rda}} or \code{\link{capscale}}.
   Functions \code{anova.cca} and \code{permutest.cca} differ in printout
   style and in interface.
   Function \code{permutest.cca} is the proper workhorse, but
@@ -49,19 +51,18 @@ permutest.cca(x, permutations=100, model=c("reduced","full"), strata)
   continued with \code{step} new permutations.  
   
   The function \code{permutest.cca} implements a permutation test for
-  the ``significance'' of constraints in \code{\link{cca}} or
-  \code{\link{rda}}.  Residuals after
-  partial CCA/RDA are permuted with choice \code{model="reduced"}, and
-  residuals after CCA/RDA under choice \code{model="full"}.  If there is no
-  partial CCA/RDA stage, the former simply permutes the data. 
-  The test statistic is
-  ``pseudo-\eqn{F}'', which is the ratio of constrained and unconstrained
-  total Inertia (Chi-squares or variances), each divided by their
-  respective ranks.  In plain
-  CCA under \code{reduced} model, the community data is permuted, and
+  the ``significance'' of constraints in \code{\link{cca}},
+  \code{\link{rda}} or \code{\link{capscale}}.  Residuals after
+  partial CCA/RDA/CAP are permuted with choice \code{model = "reduced"},
+  and residuals after CCA/RDA/CAP under choice \code{model = "full"}.
+  If there is no partial CCA/RDA/CAP stage, the former simply permutes
+  the data. The test statistic is ``pseudo-\eqn{F}'', which is the ratio
+  of constrained and unconstrained total Inertia (Chi-squares, variances
+  or something similar), each divided by their respective ranks.  In plain
+  CCA/RDA/CAP under \code{reduced} model, the community data is permuted, and
   the sum of all eigenvalues
   remains constant, so that pseudo-\eqn{F} and eigenvalues would give
-  equal results.  In partial CCA/RDA, the effect of conditioning variables
+  equal results.  In partial CCA/RDA/CAP, the effect of conditioning variables
   (``covariables'') is removed before permutation, and these residuals
   are added to the non-permuted fitted values of partial CCA (fitted
   values of \code{X ~ Z}).  Consequently, the total Chi-square is not
@@ -79,7 +80,7 @@ permutest.cca(x, permutations=100, model=c("reduced","full"), strata)
   ed. Elsevier.
 }
 \author{Jari  Oksanen}
-\seealso{\code{\link{cca}} for Constrained Correspondence Analysis. }
+\seealso{\code{\link{cca}}, \code{\link{rda}}, \code{\link{capscale}}. }
 
 \examples{
 data(varespec)

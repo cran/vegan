@@ -1,26 +1,35 @@
 \name{rankindex}
 \alias{rankindex}
-%- Also NEED an `\alias' for EACH other topic documented here.
+
 \title{Compares Dissimilarity Indices for Gradient Detection }
 \description{
   Rank correlations between dissimilarity indices
   and gradient separation.
 }
 \usage{
-rankindex(grad, veg, method="kendall")
+rankindex(grad, veg, indices = c("euc", "man", "gow", "bra", "kul"),
+          stepacross = FALSE, method = "kendall", ...)
 }
-%- maybe also `usage' for other objects documented here.
+
 \arguments{
   \item{grad}{The gradient variable or matrix. }
   \item{veg}{The community data matrix. }
+  \item{indices}{Dissimilarity indices compared, partial matches to
+    alternatives in \code{\link{vegdist}}.}
+  \item{stepacross}{Use \code{\link{stepacross}} to find
+    a shorter path dissimilarity. The dissimilarities for site pairs
+    with no shared species are set \code{NA} using
+    \code{\link{no.shared}} so that indices with no fixed
+    upper limit can also be analysed.}
   \item{method}{Rank correlation method used. }
+  \item{...}{Other parameters to \code{\link{stepacross}}.}
 }
 \details{
   A good dissimilarity index for multidimensional scaling 
   should have a high rank-order similarity with gradient separation.
-  The function compares all indices in \code{\link{vegdist}} against
+  The function compares most indices in \code{\link{vegdist}} against
   gradient separation using rank correlation coefficients in
-  \code{\link[ctest]{cor.test}}. 
+  \code{\link[ctest]{cor.test}}.
 }
 \value{
   Returns a named vector of rank correlations.
@@ -51,7 +60,8 @@ rankindex(grad, veg, method="kendall")
 }
 
 
-\seealso{\code{\link{vegdist}}, \code{\link[MASS]{isoMDS}},
+\seealso{\code{\link{vegdist}}, \code{\link{stepacross}},
+  \code{\link{no.shared}}, \code{\link[MASS]{isoMDS}},
     \code{\link[ctest]{cor.test}}, \code{\link{Machine}}, and for
     alternatives \code{\link{anosim}}, \code{\link{mantel}} and
     \code{\link{protest}}. }

@@ -3,7 +3,7 @@
 \alias{print.anosim}
 \alias{summary.anosim}
 \alias{plot.anosim}
-%- Also NEED an `\alias' for EACH other topic documented here.
+
 \title{ Analysis of Similarities }
 \description{
   Analysis of similarities (ANOSIM) provides a way to test statistically
@@ -13,7 +13,7 @@
 \usage{
 anosim(dis, grouping, permutations=1000, strata)
 }
-%- maybe also `usage' for other objects documented here.
+
 \arguments{
   \item{dis}{Dissimilarity matrix.}
   \item{grouping}{Factor for grouping observations.}
@@ -66,6 +66,8 @@ anosim(dis, grouping, permutations=1000, strata)
     between classes and class name for corresponding dissimilarity
     within class.}
   \item{dis.rank}{Rank of dissimilarity entry.}
+  \item{dissimilarity}{The name of the dissimilarity index: the
+    \code{"method"} entry of the \code{dist} object.}
 }
 \references{
   Clarke, K. R. (1993). Non-parametric multivariate analysis of changes

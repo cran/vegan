@@ -5,7 +5,7 @@
 \title{Prints a Compact, Ordered Vegetation Table }
 \description{
   The function prints a compact vegetation table, where species are
-  lines, and each site takes only one row, without spaces.  The
+  rows, and each site takes only one column without spaces.  The
   vegetation table can be ordered by explicit indexing, by environmental
   variables or results from an ordination or cluster analysis.
 }
@@ -17,7 +17,7 @@ coverscale(x, scale=c("Braun.Blanquet", "Domin", "Hult", "Hill", "fix", "log"))
 \arguments{
   \item{x}{Vegetation data. }
   \item{use}{Either a vector or an object from \code{cca},
-    \code{decorana} or \code{hclust} for ordering sites and species.}
+    \code{decorana} \emph{etc.} or \code{hclust} for ordering sites and species.}
   \item{sp.ind}{Species indices. }
   \item{site.ind}{Site indices. }
   \item{zero}{Character used for zeros. }
@@ -71,7 +71,8 @@ coverscale(x, scale=c("Braun.Blanquet", "Domin", "Hult", "Hill", "fix", "log"))
   10 with \code{X} and positive values below 1 with \code{+}. 
 }
 \value{
-  The function is used mainly to print a table, but it returns a list
+  The function is used mainly to print a table, but it returns
+  (invisibly) a list
   with items:
   \item{spec}{Ordered species indices.}
   \item{sites}{Ordered site indices.}

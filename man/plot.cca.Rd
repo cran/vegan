@@ -8,16 +8,17 @@
   or Redundancy Analysis}
 \description{
   Functions to plot or extract results of constrained correspondence analysis
-  (\code{\link{cca}}) or redundancy analysis (\code{\link{rda}}).
+  (\code{\link{cca}}), redundancy analysis (\code{\link{rda}}) or
+  constrained analysis of principal coordinates (\code{\link{capscale}}).
 }
 \usage{
-\method{plot}{cca}(x, choices = c(1, 2), display = c("sp", "wa", "bp"),
+\method{plot}{cca}(x, choices = c(1, 2), display = c("sp", "wa", "cn"),
          scaling = 2, type, ...)
 \method{text}{cca}(x, display = "sites", choices = c(1, 2), scaling = 2,
     mul.arrow = 1, head.arrow = 0.05, ...)
 \method{points}{cca}(x, display = "sites", choices = c(1, 2), scaling = 2,
     mul.arrow = 1, head.arrow = 0.05, ...)
-\method{scores}{cca}(x, choices=c(1,2), display=c("sp","wa","bp"),scaling=2, ...)
+\method{scores}{cca}(x, choices=c(1,2), display=c("sp","wa","cn"),scaling=2, ...)
 }
 
 \arguments{
@@ -56,8 +57,8 @@
   their parameters, allowing thus a full user control of produced plots.
 
   Environmental variables receive a special treatment. With
-  \code{display="bp"}, arrows will be drawn. These are labeled with
-  \code{text} and unlabeled with \code{points}. The basic \code{plot}
+  \code{display="bp"}, arrows will be drawn. These are labelled with
+  \code{text} and unlabelled with \code{points}. The basic \code{plot}
   function uses a simple (but not very clever) heuristics for adjusting
   arrow lengths to plots, but with \code{points.cca} and \code{text.cca}
   the user must give the expansion factor in
@@ -65,12 +66,14 @@
   \code{display="cn"} which requests centroids of levels of
   \code{\link{factor}} variables (these are available only if there were
   factors and a formula interface was used in \code{\link{cca}} or
-  \code{\link{rda}}). With this option, biplot arrows are plotted as
-  well for cases which do not have a centroid: Continuous variables are
-  presented with arrows and ordered factors with arrows and centroids.
+  \code{\link{rda}}). With this option, biplot arrows are plotted in
+  addition to centroids in cases which do not have a centroid: Continuous
+  variables are presented with arrows and ordered factors with arrows
+  and centroids. 
 
   If you want to have still a better control of plots, it is better to
-  produce them by hand. Function \code{scores} helps in extracting the
+  produce them using primitive \code{plot} commands.. Function
+  \code{scores} helps in extracting the 
   needed components with the selected \code{scaling}.
 }
 \value{
@@ -85,7 +88,8 @@
   future version.
   }
 
-\seealso{\code{\link{cca}} and \code{\link{rda}} for getting something
+\seealso{\code{\link{cca}}, \code{\link{rda}} and \code{\link{capscale}}
+  for getting something
   to plot, \code{\link{ordiplot}} for an alternative plotting routine
   and more support functions, and \code{\link{text}},
   \code{\link{points}} and \code{\link{arrows}} for the basic routines.  }

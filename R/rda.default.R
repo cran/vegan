@@ -28,6 +28,7 @@
         else rank <- Q$rank - pCCA$rank
         Y <- qr.fitted(Q, Xbar)
         sol <- svd(Y)
+        rank <- min(rank, length(sol$d))
         sol$d <- sol$d/sqrt(NR)
         ax.names <- paste("RDA", 1:length(sol$d), sep = "")
         colnames(sol$u) <- ax.names
@@ -77,6 +78,8 @@
     call[[1]] <- as.name("rda")
     sol <- list(call = call, grand.total = NA, rowsum = NA, colsum = NA, 
                 tot.chi = tot.chi, pCCA = pCCA, CCA = CCA, CA = CA)
+    sol$method <- "rda"
+    sol$inertia <- if (scale) "correlations" else "variance"
     class(sol) <- c("rda", "cca")
     sol
 }

@@ -21,18 +21,26 @@ wisconsin(x)
   The function offers following standardization methods for community
   data:
   \itemize{
-    \item \code{total}: divide by margin total (default \code{MARGIN=1}).
-    \item \code{max}: divide by margin maximum (default \code{MARGIN=2}).
+    \item \code{total}: divide by margin total (default \code{MARGIN = 1}).
+    \item \code{max}: divide by margin maximum (default \code{MARGIN = 2}).
     \item \code{freq}: divide by margin maximum and multiply by number of
-    non-zero items, so that the average of non-zero entries is one (default
-    \code{MARGIN=2}).
-    \item \code{normalize}: make margin sum of squares equal to unity (default
-    \code{MARGIN=1}).
+    non-zero items, so that the average of non-zero entries is one
+    (Oksanen 1983; default \code{MARGIN = 2}).
+    \item \code{normalize}: make margin sum of squares equal to one (default
+    \code{MARGIN = 1}).
     \item \code{range}: standardize values into range 0 \dots 1 (default
-    \code{MARGIN=2}).
+    \code{MARGIN = 2}).
     \item \code{standardize}: scale into zero mean and unit variance
-    (default \code{MARGIN=2}).
+    (default \code{MARGIN = 2}).
     \item \code{pa}: scale into presence/absence scale (0/1).
+    \item \code{chi.square}: divide by row sums and square root of
+    column sums, and adjust for square root of matrix total
+    (Legendre & Gallagher 2001). When used with Euclidean
+    distance, the matrix should be similar to the  the
+    Chi-square distance used in correspondence analysis. However, the
+    results from \code{\link[mva]{cmdscale}} would still differ, since
+    CA is a weighted ordination method (default \code{MARGIN =
+      1}).
   }
   Standardization, as contrasted to transformation, means that the
   entries are transformed relative to other entries.
@@ -48,17 +56,31 @@ wisconsin(x)
   site totals (\code{tot}). 
 }
 \value{
-  Returns the standardized matrix.
+  Returns the standardized data frame.
 }
 \author{Jari Oksanen}
 \note{Common transformations can be made with standard \R functions.}
 
+\references{
+  Legendre, P. & Gallagher, E.D. (2001) Ecologically meaningful
+  transformations for ordination of species data. \emph{Oecologia} 129:
+  271--280.
+
+  Oksanen, J. (1983) Ordination of boreal heath-like vegetation with
+  principal component analysis, correspondence analysis and
+  multidimensional scaling. \emph{Vegetatio} 52, 181--189.
+  }
 
 \examples{
 data(varespec)
 sptrans <- decostand(varespec, "max")
 apply(sptrans, 2, max)
 sptrans <- wisconsin(varespec)
+# Chi-square: Similar but not identical to Correspondence Analysis.
+sptrans <- decostand(varespec, "chi.square")
+plot(procrustes(rda(sptrans), cca(varespec)))
+# Hellinger transformation (Legendre & Callagher 2001):
+sptrans <- sqrt(decostand(varespec, "total"))
 }
 \keyword{ multivariate}%-- one or more ...
 \keyword{ manip }
