@@ -1,6 +1,6 @@
-"summary.cca" <-
-function (object, scaling = 2, axes = 6, digits = max(3, getOption("digits") - 
-    3), ...) 
+"summary.rda" <-
+    function (object, scaling = 2, axes = 6, digits = max(3, getOption("digits") - 
+                                             3), ...) 
 {
     axes <- min(axes, sum(object$CCA$rank, object$CA$rank))
     summ <- object[c("Call", "tot.chi")]
@@ -22,16 +22,22 @@ function (object, scaling = 2, axes = 6, digits = max(3, getOption("digits") -
     biplot <- object$CCA$biplot[, 1:cc.dim, drop = FALSE]
     add.dim <- axes - cc.dim
     species <- object$CCA$v[, 1:cc.dim, drop = FALSE]
-    sites <- object$CCA$wa.eig[, 1:cc.dim, drop = FALSE]
+    sites <- object$CCA$wa[, 1:cc.dim, drop = FALSE]
     site.constr <- object$CCA$u[, 1:cc.dim, drop = FALSE]
-    evscale <- sqrt(summ$ev.con[1:cc.dim])
+    sum.ev <- object$tot.chi
+    if (is.null(object$CCA$u))
+        nr <- nrow(object$CA$u)
+    else
+        nr <- nrow(object$CCA$u)
+    const <- sqrt(sqrt((nr-1)*sum.ev))
+    evscale <- sqrt(summ$ev.con[1:cc.dim]/sum.ev)
     if (scaling == 2) {
         if (cc.dim) {
             species <- sweep(species, 2, evscale, "*")
-            sites <- sweep(sites, 2, evscale, "/")
+            #sites <- sweep(sites, 2, evscale, "/")
         }
         if (add.dim) {
-            evscale0 <- sqrt(summ$ev.uncon[1:add.dim])
+            evscale0 <- sqrt(summ$ev.uncon[1:add.dim]/sum.ev)
             tmp <- object$CA$v[, 1:add.dim, drop = FALSE]
             tmp <- sweep(tmp, 2, evscale0, "*")
             species <- cbind(species, tmp)
@@ -39,12 +45,12 @@ function (object, scaling = 2, axes = 6, digits = max(3, getOption("digits") -
         }
     }
     if (scaling == 1) {
-        if (cc.dim)
+        if (cc.dim) 
             site.constr <- sweep(site.constr, 2, evscale, "*")
         if (add.dim) {
-            evscale0 <- sqrt(summ$ev.uncon[1:add.dim])
+            evscale0 <- sqrt(summ$ev.uncon[1:add.dim]/sum.ev)
             species <- cbind(species, object$CA$v[, 1:add.dim, 
-                drop = FALSE])
+                                                  drop = FALSE])
             tmp <- object$CA$u[, 1:add.dim, drop = FALSE]
             tmp <- sweep(tmp, 2, evscale0, "*")
             sites <- cbind(sites, tmp)
@@ -54,10 +60,11 @@ function (object, scaling = 2, axes = 6, digits = max(3, getOption("digits") -
         if (cc.dim) {
             species <- sweep(species, 2, sqrt(evscale), "*")
             sites <- sweep(sites, 2, sqrt(evscale), "/")
-            site.constr <- sweep(site.constr, 2, sqrt(evscale), "*")
+            site.constr <- sweep(site.constr, 2, sqrt(evscale), 
+                                 "*")
         }
         if (add.dim) {
-            evscale0 <- sqrt(sqrt(summ$ev.uncon[1:add.dim]))
+            evscale0 <- sqrt(sqrt(summ$ev.uncon[1:add.dim]/sum.ev))
             tmp <- object$CA$u[, 1:add.dim, drop = FALSE]
             tmp <- sweep(tmp, 2, evscale0, "*")
             sites <- cbind(sites, tmp)
@@ -66,9 +73,9 @@ function (object, scaling = 2, axes = 6, digits = max(3, getOption("digits") -
             species <- cbind(species, tmp)
         }
     }
-    summ$species <- species
-    summ$sites <- sites
-    summ$constraints <- site.constr
+    summ$species <- const * species
+    summ$sites <- const * sites
+    summ$constraints <- const * site.constr
     summ$biplot <- biplot
     summ$digits <- digits
     class(summ) <- "summary.cca"

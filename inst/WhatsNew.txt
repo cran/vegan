@@ -1,5 +1,48 @@
 VEGAN STABLE VERSIONS 
 
+Version 1.4-2
+=============
+
+Based on devel version 1.5-18
+
+New functions and data sets
+---------------------------
+
+* dune: A new data set -- the classic Dune Meadow data with the
+  environmental data.
+
+* ordiplot, identify.ordiplot: New functions to plot "any" ordination
+  result and identify plotted points. Intended to provide similar
+  functionality as `plot', `plotid' and `specid' functions in `labdsv'
+  without name clashes. Functions `plot.cca' and `plot.decorana'
+  return (invisibly) `ordiplot' objects as well, and these can be used
+  by `identify' to label species and sites.
+
+* rda: Redundancy Analysis, or optionally, yet another PCA. This is a
+  spin-off from cca(), and it is documented together with cca. The
+  only new functions are rda, rda.default, rda.formula and
+  summary.rda. Otherwise rda uses cca methods which were changed to be
+  aware of rda.
+
+* read.cep: A function to read Cornell Ecology Package or CEP
+  formatted files into R. This has been in devel versions since 1.1-1,
+  but it never made to the releases, since this worked only in Linux,
+  but crashed R in Windows. It seemed to work in R-1.6.1 with gcc 3.2
+  (MinGW) in Windows, so it is included. Treat with caution.
+
+* spider.cca: A tiny function that joins each WA score to the
+  corresponding LC score in cca/rda plots.
+
+Minor changes
+-------------
+
+* Checked with R-1.7.0 (unstable devel version, snapshot 2003-02-05)
+  and corrected as needed. 
+
+* Added symmetric scaling (=3) to alternitves in cca and rda.
+
+* Minor improvements and bug fixes in vegemite.
+
 Version 1.4-1 (Logan)
 =====================
 

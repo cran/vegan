@@ -1,7 +1,7 @@
 "plot.decorana" <-
-function (x, choices = c(1, 2), origin = TRUE, display = c("both", 
-    "sites", "species", "none"), cex = 0.8, cols = c(1, 2), type, 
-    ...) 
+    function (x, choices = c(1, 2), origin = TRUE, display = c("both", 
+                                                   "sites", "species", "none"), cex = 0.8, cols = c(1, 2), type, 
+              ...) 
 {
     display <- match.arg(display)
     sites <- x$rproj
@@ -44,7 +44,7 @@ function (x, choices = c(1, 2), origin = TRUE, display = c("both",
         ylim <- range(sp.y, st.y)
     })
     plot(sites, type = "n", xlim = xlim, ylim = ylim, asp = 1, 
-        ...)
+         ...)
     if (origin) {
         abline(h = 0, lty = 3)
         abline(v = 0, lty = 3)
@@ -63,5 +63,7 @@ function (x, choices = c(1, 2), origin = TRUE, display = c("both",
             text(specs, spenam, cex = cex, col = cols[2])
         else points(specs, pch = "+", cex = cex, col = cols[2])
     }
-    invisible()
+    out <- list(sites = sites, species = specs)
+    class(out) <- "ordiplot"
+    invisible(out)
 }

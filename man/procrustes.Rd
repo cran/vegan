@@ -116,10 +116,8 @@ protest(X, Y, permutations = 1000, strata)
 \author{Jari Oksanen }
 
 \note{The function \code{protest} follows Peres-Neto & Jackson (2001),
-  but its implementation is still after Mardia \emph{et al.}
-  (1979). Peres-Neto & Jackson standardized the dimensions to unit
-  variance which distorts the configuration, whereas \code{protest} uses
-  original configuration.  }
+  but the implementation is still after Mardia \emph{et al.}
+  (1979).}
 
 \seealso{\code{\link[MASS]{isoMDS}}, \code{\link{initMDS}} for obtaining
 objects for \code{procrustes}, and \code{\link{mantel}} for an
