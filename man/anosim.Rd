@@ -28,7 +28,7 @@ anosim(dis, grouping, permutations=1000, strata)
   whether there is a significant difference between two or more groups
   of sampling units.  Function \code{anosim} operates directly on a
   dissimilarity matrix.  A suitable dissimilarity matrix is produced by
-  functions \code{\link[mva]{dist}} or \code{\link{vegdist}}.  The
+  functions \code{\link{dist}} or \code{\link{vegdist}}.  The
   method is philosophically allied with NMDS ordination
   (\code{\link[MASS]{isoMDS}}), in that it uses only the rank order of
   dissimilarity values.
@@ -39,7 +39,7 @@ anosim(dis, grouping, permutations=1000, strata)
   statistic \eqn{R} is based on the difference of mean ranks between
   groups (\eqn{r_B}) and within groups (\eqn{r_W}):
 
-  \deqn{R = (r_B - r_W)/(N/(N-1)/4)}
+  \deqn{R = (r_B - r_W)/(N (N-1) / 4)}
 
   The divisor is chosen so that \eqn{R} will be in the interval
   \eqn{-1 \dots +1}, value \eqn{0} indicating completely random
@@ -81,7 +81,7 @@ anosim(dis, grouping, permutations=1000, strata)
 
 }
 
-\seealso{\code{\link[mva]{dist}} and \code{\link{vegdist}} for obtaining
+\seealso{\code{\link{dist}} and \code{\link{vegdist}} for obtaining
   dissimilarities, and \code{\link{rank}} for ranking real values.  For
   comparing dissimilarities against continuous variables, see
   \code{\link{mantel}}.  }

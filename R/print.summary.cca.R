@@ -2,7 +2,9 @@
     function (x, digits = x$digits, ...) 
 {
     cat("\nCall:\n")
-    statnam <- if (x$method == "rda") "sums" else "averages"
+    statnam <- if (x$method == "rda") 
+        "sums"
+    else "averages"
     cat("\nPartitioning of ", x$inertia, ":\n", sep = "")
     out <- rbind(Total = x$tot.chi, "Conditioned out" = x$partial.chi, 
                  Constrained = x$constr.chi, Unconstrained = x$unconst.chi)
@@ -46,7 +48,7 @@
         cat("\n\nBiplot scores for constraining variables\n\n")
         print(x$biplot, digits = digits, ...)
     }
-    if (!is.na(x$centroids)) {
+    if (!is.na(x$centroids[1])) {
         cat("\n\nCentroids for factor constraints\n\n")
         print(x$centroids, digits = digits, ...)
     }

@@ -66,7 +66,7 @@ mantel(xdis, ydis, method="pearson", permutations=1000, strata)
   ordination diagrams,
   and \code{\link{anosim}} for comparing dissimilarities against
   classification.  For dissimilarity matrices, see \code{\link{vegdist}}
-  or \code{\link[mva]{dist}}. }
+  or \code{\link{dist}}. }
 
 \examples{
 ## Is vegetation related to environment?

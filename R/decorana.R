@@ -6,8 +6,10 @@
     Const2 <- 5
     Const3 <- 1e-11
     veg <- as.matrix(veg)
-    if (any(rowSums(veg) <= 0) || any(colSums(veg) <= 0))
-        stop("All row and column sums must be >0 in the community matrix")
+    if (any(rowSums(veg) <= 0))
+        stop("All row sums must be >0 in the community matrix: remove empty sites.")
+    if (any(colSums(veg) <= 0))
+        warning("Some species were removed because they were missing in the data.")
     nr <- nrow(veg)
     nc <- ncol(veg)
     mk <- mk + 4

@@ -1,7 +1,12 @@
 "ordisurf" <-
 function (x, y, choices = c(1, 2), knots = 10, family = "gaussian", 
-    col = "red", thinplate = TRUE, add = FALSE, ...) 
+    col = "red", thinplate = TRUE, add = FALSE, display = c("sites", "lc"),
+          w = weights(x), ...) 
 {
+    w <- eval(w)
+    if (!is.null(w) && length(w) == 1)
+        w <- NULL
+    display <- match.arg(display)
     if(!require(mgcv))
       stop("Requires package `mgcv'")
     if (!require(akima))
@@ -10,9 +15,10 @@ function (x, y, choices = c(1, 2), knots = 10, family = "gaussian",
     x1 <- X[, 1]
     x2 <- X[, 2]
     if (thinplate)
-       mod <- gam(y ~ s(x1, x2, k = knots), family = family)
+       mod <- gam(y ~ s(x1, x2, k = knots), family = family, weights = w)
     else
-       mod <- gam(y ~ s(x1, k=knots) + s(x2, k=knots), family = family)
+       mod <- gam(y ~ s(x1, k=knots) + s(x2, k=knots), family = family,
+                  weights = w)
     fit <- predict(mod, type = "response")
     if (!add) {
         plot(X, asp = 1, ...)

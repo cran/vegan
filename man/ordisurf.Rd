@@ -8,7 +8,8 @@
 }
 \usage{
 ordisurf(x, y, choices=c(1, 2), knots=10, family="gaussian", col="red",
-     thinplate = TRUE, add = FALSE, ...)
+     thinplate = TRUE, add = FALSE, display = c("sites", "lc"),
+     w = weights(x), ...)
 }
 
 \arguments{
@@ -22,6 +23,11 @@ ordisurf(x, y, choices=c(1, 2), knots=10, family="gaussian", col="red",
   \item{col}{ Colour of contours. }
   \item{thinplate}{Use thinplate splines in \code{\link[mgcv]{gam}}.}
   \item{add}{Add contours on an existing diagram or draw a new plot. }
+  \item{display}{Use ordinary site scores or linear combination scores
+    (\code{"lc"}) in constrained ordination (\code{\link{cca}},
+    \code{\link{rda}}, \code{\link{capscale}})}
+  \item{w}{Prior weights on the data. Concerns mainly \code{\link{cca}}
+    and \code{\link{decorana}} results which have nonconstant weights.}
   \item{\dots}{ Other graphical parameters. }
 }
 \details{
@@ -33,13 +39,25 @@ ordisurf(x, y, choices=c(1, 2), knots=10, family="gaussian", col="red",
   with sample plots and fitted contours.  The function uses
   \code{\link{scores}} to extract ordination scores, and \code{x} can be
   any result object known by that function.
+
+  User can supply a vector of prior weights \code{w}. If the ordination
+  object has weights, these will be used. In practise this means that
+  the row totals are used as weights with
+  \code{\link{cca}} or
+  \code{\link{decorana}} results. This means that sites with lower
+  totals will
+  have lower weights. If you do not like this, but want to give
+  equal weights to all sites, you should set \code{w = NULL}. The
+  behaviour is consistent with \code{\link{envfit}}. For complete
+  accordance with constrained \code{\link{cca}}, you should set
+  \code{display = "lc"} (and possibly \code{scaling = 2}).
 }
 \value{
   Function is usually called for its side effect of drawing the contour
   plot, but it returns the result object of \code{\link[mgcv]{gam}}.
 }
 \author{ Dave Roberts and Jari Oksanen }
-\note{ The funtion requires libraries \code{mgcv}
+\note{ The function requires libraries \code{mgcv}
   (\code{\link[mgcv]{gam}}) and \code{akima}
   (\code{\link[akima]{interp}}).  In fact, it is a very primitive wrapper
   for these.
@@ -48,9 +66,6 @@ ordisurf(x, y, choices=c(1, 2), knots=10, family="gaussian", col="red",
   ordination as they have equal smoothing in all directions and are
   rotation invariant.  However, they seem to fail badly in some case,
   and then separate spline smoothing may be used.
-
-  The function was called \code{surf} in older version of \code{vegan};
-  new names was chosen to avoid name clashes with the \code{labdsv} package.
 }
 
 \seealso{ For basic routines \code{\link[mgcv]{gam}},
@@ -64,7 +79,6 @@ ordisurf(x, y, choices=c(1, 2), knots=10, family="gaussian", col="red",
 \dontrun{data(varespec)}
 \dontrun{data(varechem)}
 \dontrun{library(MASS)}
-\dontrun{library(mva)}
 \dontrun{vare.dist <- vegdist(varespec)}
 \dontrun{vare.mds <- isoMDS(vare.dist)}
 \dontrun{attach(varespec)}

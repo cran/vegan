@@ -89,15 +89,14 @@ ordiplot(ord, choices = c(1, 2), type="points", ...)
 }
 
 \examples{
-# Draw a cute NMDS plot
+# Draw a cute NMDS plot from a non-vegan ordinatin (isoMDS).
+# Function metaMDS would be an easier alternative.
 data(dune)
 dune.dis <- vegdist(wisconsin(dune))
 library(MASS)
 dune.mds <- isoMDS(dune.dis)
 dune.mds <- postMDS(dune.mds, dune.dis)
-# Dirty trick: Save species weighted averages in cproj which we
-# know in ordiplot... (you should ask me to improve the function)
-dune.mds$cproj <- wascores(dune.mds$points, dune, expand = TRUE)
+dune.mds$species <- wascores(dune.mds$points, dune, expand = TRUE)
 fig <- ordiplot(dune.mds, type = "none")
 points(fig, "sites", pch=21, col="red", bg="yellow")
 text(fig, "species", col="blue", cex=0.9)

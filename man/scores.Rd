@@ -33,7 +33,7 @@
   columns of that matrix, ignoring whether species or sites were
   requested (do not regard this as a bug but as a feature, please).
   Currently the function seems to work at least for \code{\link[MASS]{isoMDS}},
-  \code{\link[mva]{prcomp}}, \code{\link[mva]{princomp}},
+  \code{\link{prcomp}}, \code{\link{princomp}},
   \code{\link[multiv]{ca}}, \code{\link[multiv]{pca}}.  It may work in
   other cases or fail mysteriously.
 }
@@ -49,7 +49,6 @@ particular -- but all work with keywords \code{display="sites"} and
 }
 \examples{
 data(varespec)
-library(mva)
 vare.pca <- prcomp(varespec)
 scores(vare.pca, choices=c(1,2))
 }

@@ -166,7 +166,6 @@ x <- seq(0,6,length=15) ## The gradient
 u <- seq(-2,8,len=23)   ## The optima
 pack <- outer(x,u,gaussresp)
 matplot(x, pack, type="l", main="Species packing")
-library(mva)    ## prcomp
 opar <- par(mfrow=c(2,2))
 plot(scores(prcomp(pack)), asp=1, type="b", main="PCA")
 plot(scores(decorana(pack, ira=1)), asp=1, type="b", main="CA")

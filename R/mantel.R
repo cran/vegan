@@ -1,8 +1,6 @@
 "mantel" <-
 function (xdis, ydis, method = "pearson", permutations = 1000, strata) 
 {
-    if (!require(mva))
-      stop("Requires library `mva'")
     xdis <- as.dist(xdis)
     ydis <- as.vector(as.dist(ydis))
     tmp <- cor.test(as.vector(xdis), ydis, method = method)

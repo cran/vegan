@@ -15,9 +15,9 @@
 \method{plot}{cca}(x, choices = c(1, 2), display = c("sp", "wa", "cn"),
          scaling = 2, type, ...)
 \method{text}{cca}(x, display = "sites", choices = c(1, 2), scaling = 2,
-    mul.arrow = 1, head.arrow = 0.05, ...)
+    arrow.mul = 1, head.arrow = 0.05, ...)
 \method{points}{cca}(x, display = "sites", choices = c(1, 2), scaling = 2,
-    mul.arrow = 1, head.arrow = 0.05, ...)
+    arrow.mul = 1, head.arrow = 0.05, ...)
 \method{scores}{cca}(x, choices=c(1,2), display=c("sp","wa","cn"),scaling=2, ...)
 }
 
@@ -37,7 +37,7 @@
     (\code{2}) or site (\code{1}) scores are scaled by eigenvalues, and
     the other set of scores is left unscaled, or with \code{3} both are
     scaled symmetrically by square root of eigenvalues. }
-  \item{mul.arrow}{Factor to expand arrows to fit the graph.}
+  \item{arrow.mul}{Factor to expand arrows in the graph.}
   \item{head.arrow}{Default length of arrow heads.}
   \item{...}{Other parameters for plotting functions.}
 }
@@ -99,7 +99,7 @@ data(dune)
 data(dune.env)
 mod <- cca(dune ~ A1 + Moisture + Management, dune.env)
 plot(mod, type="n")
-text(mod, dis="cn", mul=2)
+text(mod, dis="cn", arrow = 2)
 points(mod, pch=21, col="red", bg="yellow", cex=1.2)
 text(mod, "species", col="blue", cex=0.8)
 }

@@ -48,7 +48,6 @@ eigengrad(x, w)
 data(varespec)
 data(varechem)
 library(MASS)  ## isoMDS
-library(mva)   ## cmdscale to start isoMDS
 vare.dist <- vegdist(wisconsin(varespec))
 vare.mds <- isoMDS(vare.dist)
 vare.points <- postMDS(vare.mds$points, vare.dist)

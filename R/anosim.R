@@ -1,8 +1,6 @@
 "anosim" <-
     function (dis, grouping, permutations = 1000, strata) 
 {
-    if (!require(mva)) 
-        stop("Requires library `mva'")
     x <- as.dist(dis)
     sol <- c(call = match.call())
     grouping <- as.factor(grouping)

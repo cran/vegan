@@ -86,8 +86,8 @@ protest(X, Y, permutations = 1000, strata)
   plots, you can draw the axes using \code{plot} with \code{kind = 0},
   and then add items with \code{points} or \code{lines}.  These
   functions pass all parameters to the underlying functions so that you
-  can select the plotting characters, their size, colours etc., or youc
-  an select the width, colour and type of line \code{\link{segments}} or
+  can select the plotting characters, their size, colours etc., or you
+  can select the width, colour and type of line \code{\link{segments}} or
   arrows, or you can select the orientation and head width of
   \code{\link{arrows}}.
 
@@ -156,10 +156,7 @@ alternative to \code{protest} without need of dimension reduction.}
 data(varespec)
 vare.dist <- vegdist(wisconsin(varespec))
 library(MASS)  ## isoMDS
-library(mva)   ## cmdscale to start isoMDS
 mds.null <- isoMDS(vare.dist, tol=1e-7)
-## This was a good seed for me: your rng may vary.
-set.seed(237)
 mds.alt <- isoMDS(vare.dist, initMDS(vare.dist), maxit=200, tol=1e-7)
 vare.proc <- procrustes(mds.alt$points, mds.null$points)
 vare.proc
@@ -167,8 +164,6 @@ summary(vare.proc)
 plot(vare.proc)
 plot(vare.proc, kind=2)
 residuals(vare.proc)
-## Reset rng:
-rm(.Random.seed)
 }
-\keyword{multivariate }%-- one or more ...
+\keyword{multivariate }
 \keyword{htest}

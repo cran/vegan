@@ -8,16 +8,16 @@
 \alias{ripley.subsets}
 \alias{ripley.subs}
 
-\title{Best subset of environmental variables with
-  maximum (rank) correlation with community dissimilarities. }
+\title{Best Subset of Environmental Variables with
+  Maximum (Rank) Correlation with Community Dissimilarities }
 \description{
   Function finds the best subset of environmental variables, so that
   the Euclidean distances of scaled environmental variables have the
-  highest (rank) correlation with community dissimilarities.  
+  maximum (rank) correlation with community dissimilarities.  
 }
 \usage{
 \method{bioenv}{default}(comm, env, method = "spearman", index = "bray",
-upto = ncol(env), ...)
+       upto = ncol(env), ...)
 \method{bioenv}{formula}(formula, data, ...)
 }
 
@@ -51,8 +51,8 @@ upto = ncol(env), ...)
   Clarke & Ainsworth (1993) suggested this method to be used for
   selecting the best subset of environmental variables in interpreting
   results of nonmetric multidimensional scaling (NMDS). They recommended a
-  parallel display of NMDS of the community dissimilarities and NMDS of
-  Euclidean distances for the best subset of scaled environmental
+  parallel display of NMDS of community dissimilarities and NMDS of
+  Euclidean distances from the best subset of scaled environmental
   variables.  They warned against the use of Procrustes analysis, but
   to me this looks like a good way of comparing these two ordinations.
 

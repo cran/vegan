@@ -59,7 +59,7 @@ ordispantree(ord, tree, display = "sites", ...)
     corresponding value found from the Chi-squared distribution with
     2df. }
   \item{cluster}{Result of hierarchic cluster analysis, such as
-    \code{\link[mva]{hclust}} or \code{\link[cluster]{agnes}}.}
+    \code{\link{hclust}} or \code{\link[cluster]{agnes}}.}
   \item{prune}{Number of upper level hierarchies removed from the
     dendrogram. If \code{prune} \eqn{>0}, dendrogram will be
     disconnected.}
@@ -106,7 +106,7 @@ ordispantree(ord, tree, display = "sites", ...)
 
   Function \code{ordicluster} overlays a cluster dendrogram onto
   ordination. It needs the result from a hierarchic clustering such as
-  \code{\link[mva]{hclust}} or \code{\link[cluster]{agnes}}, or other
+  \code{\link{hclust}} or \code{\link[cluster]{agnes}}, or other
   with a similar structure. Function \code{ordicluster} connects
   cluster centroids to each other with line
   \code{\link{segments}}. Function uses centroids of all points in the 

@@ -1,5 +1,5 @@
 "scores.default" <-
-function (x, display = c("sites", "species"), choices, ...) 
+    function (x, display = c("sites", "species"), choices, ...) 
 {
     display <- match.arg(display)
     att <- attributes(x)$names
@@ -12,10 +12,14 @@ function (x, display = c("sites", "species"), choices, ...)
             X <- x$x
         else if ("scores" %in% att) 
             X <- x$scores
+        else if ("sites" %in% att)
+            X <- x$sites
         else stop("Can't find scores")
     }
     else if (is.list(x) && display == "species") {
-        if ("cproj" %in% att) 
+        if ("species" %in% att)
+            X <- x$species
+        else if ("cproj" %in% att) 
             X <- x$cproj
         else if ("rotation" %in% att) 
             X <- x$rotation
@@ -23,14 +27,14 @@ function (x, display = c("sites", "species"), choices, ...)
             X <- x$loadings
         else stop("Can't find scores")
     }
-    else if(is.matrix(x))
+    else if (is.matrix(x)) 
         X <- x
     if (is.null(rownames(X))) {
-       root <- substr(display, 1, 4)
-       rownames(X) <- paste(root,1:nrow(X), sep="")
+        root <- substr(display, 1, 4)
+        rownames(X) <- paste(root, 1:nrow(X), sep = "")
     }
-    if (is.null(colnames(X)))
-       colnames(X) <- paste("Dim",1:ncol(X), sep="")
+    if (is.null(colnames(X))) 
+        colnames(X) <- paste("Dim", 1:ncol(X), sep = "")
     if (!missing(choices)) 
         X <- X[, choices]
     X <- as.matrix(X)

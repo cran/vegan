@@ -1,7 +1,8 @@
 "weights.cca" <-
-    function(object, display="sites", ...)
+    function (object, display = "sites", ...) 
 {
-    display <- match.arg(display, c("sites","species"))
-    if (display == "sites") object$rowsum
+    display <- match.arg(display, c("sites", "species", "lc", "wa"))
+    if (display %in% c("sites", "lc", "wa")) 
+        object$rowsum
     else object$colsum
 }

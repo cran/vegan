@@ -23,7 +23,7 @@ capscale(formula, data, distance = "euclidean", comm = NULL, ...)
   especially as defined in \code{\link{cca}} and \code{\link{rda}}. The
   LHS must be either a community data matrix or a dissimilarity matrix,
   e.g., from
-  \code{\link{vegdist}} or \code{\link[mva]{dist}}.
+  \code{\link{vegdist}} or \code{\link{dist}}.
   If the LHS is a data matrix, function \code{\link{vegdist}}
   will be used to find the dissimilarities. RHS defines the constraints.
   The constraints can be continuous or factors, they can be transformed
@@ -41,7 +41,7 @@ capscale(formula, data, distance = "euclidean", comm = NULL, ...)
     species scores when the LHS of the \code{formula} was a
     dissimilarity matrix. This is not used if the LHS is a data
     frame. If this is not supplied, the ``species scores'' are the axes
-    of initial metric scaling (\code{\link[mva]{cmdscale}}) and may be confusing.}
+    of initial metric scaling (\code{\link{cmdscale}}) and may be confusing.}
   \item{\dots}{Other parameters passed to \code{\link{rda}}. }
 }
 \details{
@@ -49,12 +49,12 @@ capscale(formula, data, distance = "euclidean", comm = NULL, ...)
   Redundancy Analysis of results of Metric (Classical) Multidimensional
   Scaling (Anderson & Willis 2003). Function capscale uses two steps:
   (1) it ordinates the dissimilarity matrix using
-  \code{\link[mva]{cmdscale}} and (2) analyses these results using
+  \code{\link{cmdscale}} and (2) analyses these results using
   \code{\link{rda}}. If the user supplied a community data frame instead
   of dissimilarities, the function will find the needed dissimilarity
   matrix using \code{\link{vegdist}} with specified
   \code{distance}. However, the method will accept dissimilarity
-  matrices from \code{\link{vegdist}}, \code{\link[mva]{dist}}, or any
+  matrices from \code{\link{vegdist}}, \code{\link{dist}}, or any
   other method producing similar matrices. The constraining variables can be
   continuous or factors or both, they can have interaction terms,
   or they can be transformed in the call. Moreover, there can be a
@@ -66,7 +66,7 @@ capscale(formula, data, distance = "euclidean", comm = NULL, ...)
   Anderson & Willis (2003) in three major points:
   \enumerate{
     \item Anderson & Willis used orthonormal solution of
-    \code{\link[mva]{cmdscale}}, whereas \code{capscale} uses axes
+    \code{\link{cmdscale}}, whereas \code{capscale} uses axes
     weighted by corresponding eigenvalues, so that the ordination
     distances are best approximations of original dissimilarities. In
     the original method, later ``noise'' axes are just as important as
@@ -106,7 +106,7 @@ capscale(formula, data, distance = "euclidean", comm = NULL, ...)
 }
 \author{ Jari Oksanen }
 \note{ 
-  Function \code{\link{rda}} usually divides the ordination results by
+  Function \code{\link{rda}} usually divides the ordination scores by
   number of
   sites minus one. In this way, the inertia is variance instead of sum
   of squares, and the eigenvalues sum up to variance. Many
@@ -124,7 +124,7 @@ capscale(formula, data, distance = "euclidean", comm = NULL, ...)
 
 \seealso{\code{\link{rda}}, \code{\link{cca}}, \code{\link{plot.cca}},
   \code{\link{anova.cca}}, \code{\link{vegdist}},
-  \code{\link[mva]{dist}}, \code{\link[mva]{cmdscale}}.}
+  \code{\link{dist}}, \code{\link{cmdscale}}.}
 \examples{
 data(varespec)
 data(varechem)

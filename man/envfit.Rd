@@ -1,5 +1,7 @@
 \name{envfit}
 \alias{envfit}
+\alias{envfit.default}
+\alias{envfit.formula}
 \alias{vectorfit}
 \alias{factorfit}
 \alias{plot.envfit}
@@ -15,11 +17,14 @@
   the factors show the averages of factor levels.
 }
 \usage{
-envfit(X, P, permutations = 0, strata, choices=c(1,2))
+\method{envfit}{default}(X, P, permutations = 0, strata, choices=c(1,2), ...)
+\method{envfit}{formula}(formula, data, ...)
 \method{plot}{envfit}(x, choices = c(1,2), arrow.mul = 1, p.max = NULL,
    col = "blue", add = TRUE, ...)
-vectorfit(X, P, permutations = 0, strata, choices=c(1,2))
-factorfit(X, P, permutations = 0, strata, choices=c(1,2))
+vectorfit(X, P, permutations = 0, strata, choices=c(1,2),
+      display = c("sites", "lc"), w = weights(X), ...)
+factorfit(X, P, permutations = 0, strata, choices=c(1,2)
+      display = c("sites", "lc"), w = weights(X), ...)
 }
 
 \arguments{
@@ -27,6 +32,7 @@ factorfit(X, P, permutations = 0, strata, choices=c(1,2))
   \item{P}{ Matrix or vector of environmental variable(s). }
   \item{permutations}{ Number of permutations for assessing significance
     of vectors or factors.}
+  \item{formula, data}{Model  \code{\link{formula}} and data.  }
   \item{x}{A result object from \code{envfit}.}
   \item{choices}{Axes to plotted.}
   \item{arrow.mul}{Multiplier for vector lengths.}
@@ -38,7 +44,12 @@ factorfit(X, P, permutations = 0, strata, choices=c(1,2))
   \item{strata}{An integer vector or factor specifying the strata for
     permutation. If supplied, observations are permuted only within the
     specified strata.}
-  \item{...}{Parameters to \code{text} function.}
+  \item{display}{Use ordinary site scores or linear combination scores
+    (\code{"lc"}) in constrained ordination (\code{\link{cca}},
+    \code{\link{rda}}, \code{\link{capscale}}).}
+  \item{w}{Weights used in fitting (concerns mainly \code{\link{cca}}
+    and \code{\link{decorana}} results which have nonconstant weights).}
+  \item{...}{Parameters passed to other functions.}
 }
 \details{
   Function \code{envfit} finds vectors or factor averages of
@@ -47,14 +58,22 @@ factorfit(X, P, permutations = 0, strata, choices=c(1,2))
   \code{envfit}
   uses \code{factorfit} for \code{\link{factor}} variables and
   \code{vectorfit} for other variables.  If \code{X} is a matrix or a
-  vector, \code{envfit} uses only \code{vectorfit}.
+  vector, \code{envfit} uses only \code{vectorfit}. Alternatively, the
+  model can be defined a simplified model \code{\link{formula}}, where
+  the left hand side must be an ordination result object or a matrix of
+  ordination scores, and right hand
+  side lists the environmental variables. The formula interface can be
+  used for easier selection and/or transformation of environmental
+  variables. Only the main effects will be analysed even if interaction
+  terms were defined in the formula. 
   
   Functions \code{vectorfit} and \code{factorfit} can be called directly.
   Function \code{vectorfit} finds directions in the ordination space
   towards which the environmental vectors change most rapidly and to
   which they have maximal correlations with the ordination
   configuration.  Function \code{factorfit} finds averages of ordination
-  scores for factor levels.
+  scores for factor levels. Function \code{factorfit} treats ordered
+  and unordered factors similarly.
 
   If \code{permutations} \eqn{> 0}, the `significance' of fitted vectors
   or factors is assessed using permutation of environmental variables.
@@ -62,6 +81,20 @@ factorfit(X, P, permutations = 0, strata, choices=c(1,2))
   (\eqn{r^2}).
   For factors this is defined as \eqn{r^2 = 1 - ss_w/ss_t}, where
   \eqn{ss_w} and \eqn{ss_t} are within-group and total sums of squares.
+
+  User can supply a vector of prior  weights \code{w}. If the ordination
+  object has weights, these will be used. In practise this means that
+  the row totals are used as weights with
+  \code{\link{cca}} or
+  \code{\link{decorana}} results. This means that sites with lower
+  totals will
+  have lower weights. If you do not like this, but want to give
+  equal weights to all sites, you should set \code{w = NULL}.
+  The weighted fitting gives similar results to biplot
+  arrows and class centroids in \code{\link{cca}}.
+  For complete
+  similarity between fitted vectors and biplot arrows, you should set
+  \code{display = "lc"} (and possibly \code{scaling = 2}).   
 }
 \value{
   Functions \code{vectorfit} and \code{factorfit} return lists of
@@ -71,7 +104,7 @@ factorfit(X, P, permutations = 0, strata, choices=c(1,2))
   \item{arrows}{Arrow endpoints from \code{vectorfit}. The arrows are
     scaled to unit length.}
   \item{centroids}{Class centroids from \code{factorfit}.}
-  \item{r}{Goodness of fit statistic: Squared orrelation coefficient}
+  \item{r}{Goodness of fit statistic: Squared correlation coefficient}
   \item{permutations}{Number of permutations.}
   \item{pvals}{Empirical P-values for each variable.}
 
@@ -107,15 +140,29 @@ factorfit(X, P, permutations = 0, strata, choices=c(1,2))
 data(varespec)
 data(varechem)
 library(MASS)
-library(mva)
-vare.dist <- vegdist(wisconsin(varespec))
-vare.mds <- isoMDS(vare.dist)
-vare.mds <- postMDS(vare.mds, vare.dist)
-vare.fit <- envfit(vare.mds$points, varechem, 1000)
-vare.fit
-ordiplot(vare.mds)
-plot(vare.fit)
-plot(vare.fit, p.max = 0.05, col = "red")
+ord <- metaMDS(varespec)
+(fit <- envfit(ord, varechem, perm = 1000))
+plot(ord)
+plot(fit)
+plot(fit, p.max = 0.05, col = "red")
+## Adding fitted arrows to CCA. We use "lc" scores, and draw
+## arrows separately to control their lengths.
+ord <- cca(varespec ~ Al + P + K, varechem)
+plot(ord, display = c("sp", "lc"), type="p")
+text(ord, display = "bp", col = "red", arrow=2)
+fit <- envfit(ord, varechem, perm = 1000, display = "lc")
+plot(fit, arrow = 2, p.max = 0.05)
+## Class variables, formula interface, and displaying the
+## inter-class variability with `ordispider'
+data(dune)
+data(dune.env)
+attach(dune.env)
+ord <- cca(dune)
+fit <- envfit(ord ~ Moisture + A1, dune.env)
+plot(ord, type = "n")
+ordispider(ord, Moisture, col="skyblue")
+points(ord, display = "sites", col = as.numeric(Moisture), pch=16)
+plot(fit, arrow=2, cex=1.2)
 }
 \keyword{multivariate }
 \keyword{aplot}
