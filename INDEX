@@ -1,14 +1,23 @@
-decorana                 Detrended Correspondence Analysis and Basic
-                         Reciprocal Averaging
-decostand                Standardizaton Methods for Community Ecology
-diversity                Ecological Diversity Indices
-initMDS                  Random Start for isoMDS
-postMDS                  Scaling of Multi-Dimensional Scaling Results
-procrustes               Procrustes Rotation of Two Configurations
-rankindex                Compares Dissimilarity Indices for Gradient
-                         Detection
-varespec                 Vegetation and environment in lichen pastures
-vectorfit                Fits an Environmental Vector to an Ordination
-vegdist                  Good Dissimilarity Measures for Ecological
-                         Gradients
-wascores                 Weighted Averages Scores for Species
+anosim                  Analysis of Similarities 
+anova.cca               Permutation Test for Constrained Correpondence
+                        Analysis 
+cca                     [Partial] [Constrained] Correspondence Analysis 
+decorana                Detrended Correspondence Analysis and Basic
+                        Reciprocal Averaging 
+decostand               Standardizaton Methods for Community Ecology
+diversity               Ecological Diversity Indices 
+envfit                  Fits an Environmental Vector or Factor onto an
+                        Ordination 
+initMDS                 Random Start and Axis Scaling for isoMDS 
+mantel                  Mantel Test for Two Dissimilarity Matrices 
+procrustes              Procrustes Rotation of Two Configurations 
+rankindex               Compares Dissimilarity Indices for Gradient
+                        Detection 
+scores                  Get Species or Site Scores from an Ordination 
+surf                    Smooths Variables and Plots Contours on
+                        Ordination. 
+varespec                Vegetation and environment in lichen pastures
+vegdist                 Good Dissimilarity Measures for Ecological
+                        Gradients 
+vegetab                 Prints a Compact, Ordered Vegetation Table. 
+wascores                Weighted Averages Scores for Species 

@@ -1,25 +1,18 @@
 "vectorfit" <-
   function (X, P) 
 {
-  X <- as.matrix(X)
-  P <- as.matrix(P)
-  nc <- ncol(X)
-  nr <- ncol(P)
-  sol <- matrix(NA, nrow = nr, ncol = nc + 1)
-  rownames(sol) <- colnames(P)
-  if (is.null(colnames(X)))
-    colnames(sol) <- c(paste("Dim", 1:nc, sep = ""), "r")
-  else
-    colnames(sol) <- c(colnames(X), "r")
-  Q <- qr(X)
-  for (i in 1:nr) {
-    H <- qr.fitted(Q, P[, i])
-    heads <- qr.coef(Q, P[, i])
-    heads <- decostand(as.matrix(heads), "norm", 2)
-    r <- cor(H, P[, i])
-    sol[i, 1:nc] <- heads
-    sol[i, nc + 1] <- r
-  }
-  sol
+    X <- as.matrix(X)
+    X <- scale(X, scale = FALSE)
+    P <- as.matrix(P)
+    nc <- ncol(X)
+    Q <- qr(X)
+    H <- qr.fitted(Q, P)
+    heads <- qr.coef(Q,P)
+    r <- diag(cor(H,P))  
+    heads <- decostand(heads, "norm", 2)
+    sol <- cbind(t(heads), r)
+    if (is.null(colnames(X)))
+        colnames(sol) <- c(paste("Dim", 1:nc, sep = ""), "r")
+    else colnames(sol) <- c(colnames(X), "r")
+    sol
 }
-

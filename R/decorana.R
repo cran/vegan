@@ -26,16 +26,8 @@
     }
   }
   v <- NULL
-  if (iweigh) {
-    yeig1 <- apply(veg, 2, sum)
-    y2 <- apply(veg^2, 2, sum) + Const1
-    y2 <- yeig1^2/y2
-    amax <- max(y2)/Const2
-    v <- rep(1, ncol(veg))
-    downers <- y2 < amax
-    v[downers] <- (y2/amax)[downers]
-    veg <- sweep(veg, 2, v, "*")
-  }
+  if (iweigh) 
+    veg <- downweight(veg, Const2)
   adotj <- apply(veg, 2, sum)
   adotj[adotj < Const3] <- Const3
   aidot <- apply(veg, 1, sum)

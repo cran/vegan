@@ -1,5 +1,5 @@
 "print.summary.procrustes" <-
-  function (x, digits = max(3, getOption("digits") - 3), ...) 
+  function (x, digits = x$digits, ...) 
 {
   cat("\nCall:\n")
   cat(deparse(x$call), "\n")
@@ -14,5 +14,5 @@
   rq <- structure(quantile(x$resid), names = nam)
   print(rq, digits = digits, ...)
   cat("\n")
-  invisible()
+  invisible(x)
 }

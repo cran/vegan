@@ -30,20 +30,25 @@ wascores(x, w, expand=FALSE)
 \examples{
 data(varespec)
 data(varechem)
+library(MASS)  ## isoMDS
+library(mva)   ## cmdscale to start isoMDS
 vare.dist <- vegdist(wisconsin(varespec))
 vare.mds <- isoMDS(vare.dist)
 vare.points <- postMDS(vare.mds$points, vare.dist)
 vare.wa <- wascores(vare.points, varespec)
-\dontrun{eqscplot(vare.points, pch="+")}
-\dontrun{text(vare.wa, rownames(vare.wa), cex=0.8, col="blue")}
+plot(scores(vare.points), pch="+", asp=1)
+text(vare.wa, rownames(vare.wa), cex=0.8, col="blue")
 ## Omit rare species (frequency <= 4)
 freq <- apply(varespec>0, 2, sum)
-\dontrun{eqscplot(vare.points, pch="+")}
-\dontrun{text(vare.wa[freq > 4,], rownames(vare.wa)[freq > 4],cex=0.8,col="blue")
+plot(scores(vare.points), pch="+", asp=1)
+text(vare.wa[freq > 4,], rownames(vare.wa)[freq > 4],cex=0.8,col="blue")
 ## Works for environmental variables, too.
-wa <- wascores(varechem, varespec)
+wascores(varechem, varespec)
 }
 
 }
 \keyword{ multivariate }%-- one or more ...
 \keyword{ univar }
+
+
+

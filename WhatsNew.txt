@@ -1,4 +1,64 @@
-VEGAN VERSIONS 
+VEGAN STABLE VERSIONS 
+
+Version 1.4-0
+=============
+
+Based on devel version 1.3-19.
+
+New functions:
+--------------
+
+* `anosim': Analysis of Similarities.
+
+* `cca': [Partial] [Constrained] Correspondence Analysis.  This is an
+  alternative to Dray's `CAIV' (package `CoCoAn').  Differences
+  include formula interface, WA scores in addition to LC scores,
+  partial CCA, residual CA after constraints, algorithm based on svd
+  (and much faster), more standard support functions (`plot',
+  `summary', `print').
+
+* `anova.cca' and `permutest.cca': Permutation tests for `cca'.
+
+* `envfit': A new wrapper function which calls either `vectorfit' or
+  new `factorfit' function, and `plot.envfit' for easier display of
+  results in graphs.
+
+* `mantel': Mantel test for two dissimilarity matrices.
+
+* `scores': A generic function to extract scores from `cca',
+  `decorana' or even from some common ordination methods in R.
+
+* `surf': Surface fitting for ordination, intended as an alternative
+  to `vectorfit'.
+
+* `vegetab': Prints a compact, ordered vegetation table, together with
+  `coverscale' to transform data into compact format.
+
+Other changes:
+--------------
+
+* `downweight': directly callable instead of being embedded in
+  `decorana'. Now it can be used with other downweighting thresholds
+  or with other CA's than `decorana', e.g., `cca', `ca', `CAIV'.
+
+* `plot.decorana': new keyword `type', removed keyword `tol'.
+
+* `vectorfit': centres now ordination before fitting, so it will work
+  with other ordinations than MDS.
+
+* Mainly user invisible changes in `plot.decorana', `plot.procrustes',
+  `postMDS', `print.summary.procrustes', `vectorfit', `procrustes'.
+  One of the main changes was that `eqscplot' of `MASS' library was
+  replaced with `plot(..., asp=1)' of standard R (but this is not
+  S-plus compliant).
+
+* Edited help files.  More examples run from help files.  
+
+* Tried to improve LabDSV compliance, see http://labdsv.nr.usu.edu/.
+
+* Checked with R-1.5.0.  However, `log' in diversity not changed into
+  `logb' (yet), although base is specified, because `logb' won't work
+  in R pre-1.5.0. 
 
 Version 1.2-1
 =============

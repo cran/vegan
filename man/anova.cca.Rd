@@ -1,0 +1,89 @@
+\name{anova.cca}
+\alias{anova.cca}
+\alias{permutest.cca}
+\alias{print.permutest.cca}
+\alias{print.anova.cca}
+
+\title{Permutation Test for
+  Constrained Correpondence Analysis }
+\description{
+  The function performs an ANOVA like permutation test for Constrained
+  Correspondence Analysis to assess the significance of constraints.
+}
+\usage{
+\method{anova}{cca}(object, alpha=0.05, beta=0.1, step=100, perm.max=2000, ...)
+permutest.cca(x, permutations=100, model=c("reduced","full"))
+}
+%- maybe also `usage' for other objects documented here.
+\arguments{
+  \item{object,x}{A result object from \code{\link{cca}}. }
+  \item{alpha}{Targeted Type I error rate. }
+  \item{beta}{Accepted Type II error rate. }
+  \item{step}{Number of permutation in one step. }
+  \item{perm.max}{Maximum number of permutations. }
+  \item{\dots}{Parameters to permutest.cca. }
+  \item{permutations}{Number of permutations for assessing significance
+    of constraints.}
+  \item{model}{Permutation model (partial match).}
+}
+\details{
+  Functions \code{anova.cca} and \code{permutest.cca} implement an ANOVA
+  like permutation test for the joint effect of constraints in CCA.
+  These two functions differ in printout style and in interface.
+  Function \code{permutest.cca} is the proper workhorse, but
+  \code{anova.cca} can pass all parameters to \code{permutest.cca},
+  so either can be used.
+
+  In \code{anova.cca} the number of permutations is controlled by
+  targeted ``critical'' \eqn{P} value (\code{alpha}) and accepted Type
+  II or rejection error (\code{beta}).  If the results of permutations
+  differ from the targeted \code{alpha} at risk level given by
+  \code{beta}, the permutations are
+  terminated.  However, if the current estimate of \eqn{P} does not
+  differ significantly from \code{alpha} of the alternative hypothesis,
+  the permutations are
+  continued by \code{step} new permutations.  
+  
+  The function \code{permutest.cca} implements a permutation test for
+  the ``significance'' of constraints in \code{cca}.  Residuals after
+  partial CCA are permuted with choice \code{model="reduced"}, and
+  residuals after CCA under choice \code{model="full"}.  If there is no
+  partial CCA stage, the former simply permutes the data. 
+  The test statistic is
+  ``pseudo-\eqn{F}'', which is the ratio of constrained and unconstrained
+  total Chi-squares, each divided by their respective ranks.  In plain
+  CCA under \code{reduced} model, the community data is permuted, and
+  the sum of all eigenvalues
+  remains constant, so that pseudo-\eqn{F} and eigenvalues would give
+  equal results.  In partial CCA, the effect of conditioning variables
+  (``covariables'') is removed before permutation, and these residuals
+  are added to the unpermuted fitted values of partial CCA (fitted
+  values of \code{X ~ Z}).  Consequently, the total Chi-square is not
+  fixed, and test based on pseudo-\eqn{F} would differ from the test based on
+  plain eigenvalues.
+}
+\value{
+  Function \code{permutest.cca} returns an object of class
+  \code{permutest.cca} which has its own \code{print} method.  The
+  function \code{anova.cca} fills in an \code{\link{anova}} table and
+  uses \code{\link{print.anova}} for printing.
+}
+\references{
+  Legendre, P. and Legendre, L. (1998) Numerical Ecology. 2nd English
+  ed. Elsevier.
+}
+\author{Jari  Oksanen}
+\seealso{\code{\link{cca}} for Constrained Correspondence Analysis. }
+
+\examples{
+data(varespec)
+data(varechem)
+vare.cca <- cca(varespec ~ Al + P + K, varechem)
+anova(vare.cca)
+permutest.cca(vare.cca)
+## Test for adding variable N to the previous model:
+anova(cca(varespec ~ N + Condition(Al + P + K), varechem), step=40)
+}
+\keyword{ multivariate }
+\keyword{ htest }
+
