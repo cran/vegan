@@ -1,6 +1,6 @@
 "ordispider" <-
     function (ord, groups, display = "sites", w = weights(ord, display), 
-              ...) 
+              show.groups, ...) 
 {
     if (inherits(ord, "cca") && missing(groups)) {
         lc <- scores(ord, display = "lc", ...)
@@ -10,9 +10,16 @@
     }
     pts <- scores(ord, display = display, ...)
     w <- eval(w)
-    if (length(w) == 1) w <- rep(1, nrow(pts))
+    if (length(w) == 1) 
+        w <- rep(1, nrow(pts))
     if (is.null(w)) 
         w <- rep(1, nrow(pts))
+    if (!missing(show.groups)) {
+        take <- groups %in% show.groups
+        pts <- pts[take, , drop = FALSE]
+        groups <- groups[take]
+        w <- w[take]
+    }
     out <- seq(along = groups)
     inds <- names(table(groups))
     for (is in inds) {

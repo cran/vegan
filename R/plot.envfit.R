@@ -22,7 +22,7 @@
                 x$factors <- NULL
         }
     }
-    if (!is.null(vect)) {
+    if (!is.null(x$vectors)) {
         if (axis) {
             maxarr <- round(sqrt(max(x$vectors$r)), 1)
             ax <- -c(-1,0,1) * arrow.mul * maxarr

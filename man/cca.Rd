@@ -9,7 +9,6 @@
 \alias{rda.default}
 \alias{rda.formula}
 \alias{summary.rda}
-\alias{alias.cca}
 
 \title{ [Partial] [Constrained] Correspondence Analysis and Redundancy
   Analysis } 
@@ -27,7 +26,6 @@
 \method{rda}{formula}(formula, data, scale=FALSE)
 \method{rda}{default}(X, Y, Z, scale=FALSE, ...)
 \method{summary}{cca}(object, scaling=2, axes=6, digits, ...)
-\method{alias}{cca}(object, ...)
 }
 
 \arguments{
@@ -105,12 +103,6 @@
   analysis.  So the following commands are equivalent: \code{cca(X, y,
     z)}, \code{cca(X ~ y + Condition(z))}, where \code{y} and \code{z}
   refer to single variable constraints and conditions.
-
-  If some of the constraints are redundant linear combinations of other
-  constraints or conditions, not all biplot scores can be estimated.
-  In that case a
-  message is displayed when the results are printed. The aliased
-  constraints can be listed using function \code{alias}.
 
   Constrained correspondence analysis is indeed a constrained method:
   CCA does not try to display all variation in the
@@ -240,9 +232,12 @@
   with its helper functions (\code{\link{text.cca}},
   \code{\link{points.cca}}, \code{\link{scores.cca}}).
   Function \code{\link{anova.cca}} provides an ANOVA like permutation
-  test for the ``significance'' of constraints.
+  test for the ``significance'' of constraints. Automatic model building
+  (dangerous!) is discussed in \code{\link{deviance.cca}}.  Diagnostic
+  tools, prediction and adding new points in ordination are discussed in
+  \code{\link{goodness.cca}} and \code{\link{predict.cca}}.
   Functions \code{\link[CoCoAn]{CAIV}} (library \code{CoCoAn}) and
-  \code{\link[ade4]{cca}} (library \code{ade4}) provide an alternative
+  \code{\link[ade4]{cca}} (library \code{ade4}) provide alternative
   implementations of CCA (these are internally quite
   different). Function \code{\link{capscale}} is a non-Euclidean generalization of
   \code{rda}.

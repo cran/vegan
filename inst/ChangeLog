@@ -1,5 +1,38 @@
 VEGAN STABLE VERSIONS 
 
+Version 1.6-7 (Jan 24, 2005)
+
+	* Based on devel version 1.7-42.
+
+	* plot.envfit did not plot vectors.  Thanks to Roeland Kindt and
+	Ron E. VanNimwegen for bug reports and fixes. 
+
+	* ordisurf obeys now keyword 'display', and '...' will transfer
+	arguments to 'scores'.
+
+	* ordisegments: obeys now keyword 'display'.
+
+        * ordigrid: works now.
+
+        * ordihull, ordiarrows, ordisegments, ordispider, ordiellipse:
+        have a new keyword 'show.groups' to show only specified groups.
+        With the help of this argument it is possible to use different
+        colours and linetypes for each group.  Further, it makes possible
+        to plot results of logical comparisons (such as A1 > 4) by setting
+        show.groups = T. Two user requests.
+
+	* new diagnostic and helper functions for 'cca', 'rda' and
+	'capscale': 'goodness' to estimate the proportion of inertia
+	accounted for or residuals for sites or species; 'inertcomp' to
+	decompose species and site inertia for conditioned, contrained and
+	residual componets; 'vif.cca' to estimate the variance inflation
+	factors for constraints and conditions; 'fitted' and 'residuals'
+	to approximate data by ordination scores; 'predict' to approximate
+	data or find site or species scores, possibly with 'newdata';
+	'coef' to find the regression coefficients. 'alias.cca' is now
+	similar to 'alias.lm' (simplified version of the latter).
+
+
 Version 1.6-6 (Jan 7, 2005)
 
 	* Based on version 1.7-34, but without still experimental

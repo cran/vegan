@@ -9,6 +9,7 @@
         w.c <- apply(x, 2, weighted.mean, w = w)
         x <- sweep(x, 2, w.c, "-")
         x <- sweep(x, 1, sqrt(w), "*")
+        attr(x, "centre") <- w.c
         x
     }
     X <- as.matrix(X)
@@ -33,7 +34,7 @@
         tmp <- sum(svd(Z, nu = 0, nv = 0)$d^2)
         if (Q$rank) {
             pCCA <- list(rank = Q$rank, tot.chi = tmp, QR = Q, 
-                         Fit = Z)
+                         Fit = Z, envcentre = attr(Z.r, "centre"))
             Xbar <- qr.resid(Q, Xbar)
         }
     }
@@ -67,8 +68,8 @@
                                 1, 1/sqrt(rowsum), "*")
             CCA$wa <- sweep(CCA$wa.eig, 2, 1/sol$d[1:rank], "*")
             oo <- Q$pivot
-             if (!is.null(pCCA$rank))
-                oo <- oo[-(1:pCCA$rank)] - ncol(Z.r) 
+            if (!is.null(pCCA$rank)) 
+                oo <- oo[-(1:pCCA$rank)] - ncol(Z.r)
             oo <- oo[1:rank]
             if (length(oo) < ncol(Y.r)) 
                 CCA$alias <- colnames(Y.r)[-oo]
@@ -77,6 +78,7 @@
             CCA$rank <- rank
             CCA$tot.chi <- sum(CCA$eig)
             CCA$QR <- Q
+            CCA$envcentre <- attr(Y.r, "centre")
             CCA$Xbar <- Xbar
             Xbar <- qr.resid(Q, Xbar)
         }

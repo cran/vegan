@@ -1,6 +1,6 @@
 "capscale" <-
-  function (formula, data, distance = "euclidean", comm = NULL, 
-            ...) 
+    function (formula, data, distance = "euclidean", comm = NULL, 
+              ...) 
 {
     if (!inherits(formula, "formula")) 
         stop("Needs a model formula")
@@ -55,14 +55,16 @@
     }
     if (!is.null(sol$CCA)) 
         sol$CCA$centroids <- centroids.cca(sol$CCA$wa, d$modelframe)
-    if (!is.null(sol$CCA$alias))
+    if (!is.null(sol$CCA$alias)) 
         sol$CCA$centroids <- unique(sol$CCA$centroids)
     if (!is.null(sol$CCA$centroids)) {
         rs <- rowSums(sol$CCA$centroids^2)
-        sol$CCA$centroids <- sol$CCA$centroids[rs > 1e-4, , drop=FALSE]
+        sol$CCA$centroids <- sol$CCA$centroids[rs > 1e-04, , 
+                                               drop = FALSE]
     }
     sol$call <- match.call()
     sol$terms <- terms(formula, "Condition", data = data)
+    sol$terminfo <- ordiTerminfo(d, data)
     sol$call$formula <- formula(d$terms, width.cutoff = 500)
     sol$call$formula[[2]] <- formula[[2]]
     sol$method <- "capscale"

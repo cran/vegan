@@ -21,15 +21,20 @@
   \code{\link{ordiplot}}.
 }
 \usage{
-ordihull(ord, groups, display = "sites", draw = c("lines","polygon"), ...)
-ordiarrows(ord, groups, levels, replicates, display = "sites", ...)
-ordisegments(ord, groups, levels, replicates, display = "sites", ...)
+ordihull(ord, groups, display = "sites", draw = c("lines","polygon"),
+         show.groups, ...)
+ordiarrows(ord, groups, levels, replicates, display = "sites",
+         show.groups, ...)
+ordisegments(ord, groups, levels, replicates, display = "sites",
+         show.groups, ...)
 ordigrid(ord, levels, replicates, display = "sites",  ...)
-ordispider(ord, groups, display="sites", w = weights(ord, display), ...)
+ordispider(ord, groups, display="sites", w = weights(ord, display),
+         show.groups, ...)
 ordiellipse(ord, groups, display="sites", kind = c("sd","se"), conf,
-            draw = c("lines","polygon"), w = weights(ord, display), ...)
+         draw = c("lines","polygon"), w = weights(ord, display),
+         show.groups, ...)
 ordicluster(ord, cluster, prune = 0, display = "sites",
-            w = weights(ord, display), ...)
+         w = weights(ord, display), ...)
 ordispantree(ord, tree, display = "sites", ...)
 }
 
@@ -47,6 +52,10 @@ ordispantree(ord, tree, display = "sites", ...)
     draw the
     line. Graphical parameters are passed to both. The main difference
     is that \code{polygon}s may be filled and non-transparent.}
+  \item{show.groups}{Show only given groups. This can be a vector, or
+    \code{TRUE} if you want to show items for which condition is
+    \code{TRUE}. This argument makes it possible to use different
+    colours and line types for groups. The default is to show all groups. }
   \item{w}{Weights used to find the average within group. Weights are
     used automatically for \code{\link{cca}}
     and \code{\link{decorana}} results, unless undone by the
