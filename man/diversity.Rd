@@ -10,11 +10,11 @@ diversity(x, index="shannon", MARGIN=1, base=exp(1))
 }
 %- maybe also `usage' for other objects documented here.
 \arguments{
-  \item{x}{Community data matrix}
+  \item{x}{Community data matrix.}
   \item{index}{Diversity index, one of \code{shannon}, \code{simpson} or
   \code{invsimpson}.}
   \item{MARGIN}{Margin for which the index is computed. }
-  \item{base}{ The logarithm \code{base} used in \code{shannon}  }
+  \item{base}{ The logarithm \code{base} used in \code{shannon}.  }
 }
 \details{
   Shannon or Shannon--Weaver (or Shannon--Wiener) index is defined as
@@ -38,7 +38,7 @@ diversity(x, index="shannon", MARGIN=1, base=exp(1))
 \examples{
 data(varespec)
 H <- diversity(varespec)
-## Species richness (S) and Pielou's evennes (J):
+## Species richness (S) and Pielou's evenness (J):
 S <- apply(varespec>0, 1, sum)
 J <- H/log(S)
 }

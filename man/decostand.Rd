@@ -57,7 +57,7 @@ wisconsin(x)
 \examples{
 data(varespec)
 sptrans <- decostand(varespec, "max")
-apply(sptrans, 1, max)
+apply(sptrans, 2, max)
 sptrans <- wisconsin(varespec)
 }
 \keyword{ multivariate}%-- one or more ...

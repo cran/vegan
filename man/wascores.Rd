@@ -19,8 +19,8 @@ wascores(x, w, expand=FALSE)
   Computes weighted averages.
 }
 \value{
-  Returns a matrix where species define rows and environmental variables
-  define columns.
+  Returns a matrix where species define rows and ordination axes or
+  environmental variables define columns.
 }
 
 \author{ Jari Oksanen }
@@ -28,8 +28,6 @@ wascores(x, w, expand=FALSE)
 \seealso{ \code{\link[MASS]{isoMDS}} }
 
 \examples{
-library(MASS)
-library(mva)
 data(varespec)
 data(varechem)
 vare.dist <- vegdist(wisconsin(varespec))
@@ -41,7 +39,11 @@ vare.wa <- wascores(vare.points, varespec)
 ## Omit rare species (frequency <= 4)
 freq <- apply(varespec>0, 2, sum)
 \dontrun{eqscplot(vare.points, pch="+")}
-\dontrun{text(vare.wa[freq > 4,], rownames(vare.wa)[freq > 4], cex=0.8, col="blue")}
+\dontrun{text(vare.wa[freq > 4,], rownames(vare.wa)[freq > 4],cex=0.8,col="blue")
+## Works for environmental variables, too.
+wa <- wascores(varechem, varespec)
+}
+
 }
 \keyword{ multivariate }%-- one or more ...
 \keyword{ univar }
