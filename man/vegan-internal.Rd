@@ -3,6 +3,7 @@
 \alias{permuted.index}
 \alias{centroids.cca}
 \alias{spider.cca}
+\alias{ordiTerminfo}
 
 \title{Internal vegan functions}
 
@@ -10,7 +11,8 @@
   Internal vegan functions.
 }
 \usage{
-ordiParseFormula(formula, data)
+ordiParseFormula(formula, data, xlev = NULL)
+ordiTerminfo(d, data)
 centroids.cca(x, mf, wt)
 permuted.index(n, strata)
 spider.cca(x, ...)

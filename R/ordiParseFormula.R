@@ -1,5 +1,5 @@
 "ordiParseFormula" <-
-    function (formula, data) 
+    function (formula, data, xlev = NULL) 
 {
     Terms <- terms(formula, "Condition", data = data)
     flapart <- fla <- formula <- formula(Terms, width.cutoff = 500)
@@ -12,8 +12,13 @@
         partterm <- attr(Terms, "variables")[[1 + indPartial]]
         Pterm <- deparse(partterm[[2]])
         P.formula <- as.formula(paste("~", Pterm))
-        mf <- model.frame(P.formula, data, na.action = na.fail)
+        zlev <- xlev[names(xlev) %in% Pterm]
+        mf <- model.frame(P.formula, data, na.action = na.fail, xlev = zlev)
         Z <- model.matrix(P.formula, mf)
+        if (any(colnames(Z) == "(Intercept)")) {
+            xint <- which(colnames(Z) == "(Intercept)")
+            Z <- Z[, -xint, drop = FALSE]
+        }
         formula <- update(formula, paste(".~.-", deparse(partterm, 
                                                          width.cutoff = 500)))
         flapart <- update(formula, paste(". ~ . +", Pterm))
@@ -22,7 +27,9 @@
     if (formula[[2]] == "1" || formula[[2]] == "0") 
         Y <- NULL
     else {
-        mf <- model.frame(formula, data, na.action = na.fail)
+        if (exists("Pterm"))
+            xlev <- xlev[!(names(xlev) %in% Pterm)]
+        mf <- model.frame(formula, data, na.action = na.fail, xlev = xlev)
         Y <- model.matrix(formula, mf)
         if (any(colnames(Y) == "(Intercept)")) {
             xint <- which(colnames(Y) == "(Intercept)")
@@ -30,5 +37,5 @@
         }
     }
     list(X = X, Y = Y, Z = Z, terms = terms(fla, width.cutoff = 500), 
-         terms.expand = terms(flapart, width.cutoff = 500), modelframe=mf)
+         terms.expand = terms(flapart, width.cutoff = 500), modelframe = mf)
 }

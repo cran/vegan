@@ -42,6 +42,8 @@ ordisurf                Smooths Variables and Plots Contours on
                         Ordination.
 plot.cca                Plot or Extract Results of Constrained
                         Correspondence Analysis or Redundancy Analysis
+predict.cca             Prediction and Diagnostic Tools for
+                        Constrained Ordination (CCA, RDA)
 procrustes              Procrustes Rotation of Two Configurations
 radfit                  Rank -- Abundance or Dominance / Diversity
                         Models

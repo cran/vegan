@@ -8,7 +8,7 @@
 }
 \usage{
 ordisurf(x, y, choices=c(1, 2), knots=10, family="gaussian", col="red",
-     thinplate = TRUE, add = FALSE, display = c("sites", "lc"),
+     thinplate = TRUE, add = FALSE, display = "sites",
      w = weights(x), ...)
 }
 
@@ -23,9 +23,8 @@ ordisurf(x, y, choices=c(1, 2), knots=10, family="gaussian", col="red",
   \item{col}{ Colour of contours. }
   \item{thinplate}{Use thinplate splines in \code{\link[mgcv]{gam}}.}
   \item{add}{Add contours on an existing diagram or draw a new plot. }
-  \item{display}{Use ordinary site scores or linear combination scores
-    (\code{"lc"}) in constrained ordination (\code{\link{cca}},
-    \code{\link{rda}}, \code{\link{capscale}})}
+  \item{display}{Type of scores known by \code{\link{scores}}: typically
+    "sites" for ordinary site scores or "lc" for linear combination scores.}
   \item{w}{Prior weights on the data. Concerns mainly \code{\link{cca}}
     and \code{\link{decorana}} results which have nonconstant weights.}
   \item{\dots}{ Other graphical parameters. }

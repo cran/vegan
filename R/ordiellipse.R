@@ -1,7 +1,7 @@
 "ordiellipse" <-
     function (ord, groups, display = "sites", kind = c("sd", "se"), 
               conf, draw = c("lines", "polygon"), w = weights(ord, display), 
-              ...) 
+              show.groups, ...) 
 {
     if (!require(ellipse)) 
         stop("Requires package `ellipse' (from CRAN)")
@@ -9,9 +9,16 @@
     draw <- match.arg(draw)
     pts <- scores(ord, display = display, ...)
     w <- eval(w)
-    if (length(w) == 1) w <- rep(1, nrow(pts))
+    if (length(w) == 1) 
+        w <- rep(1, nrow(pts))
     if (is.null(w)) 
         w <- rep(1, nrow(pts))
+     if (!missing(show.groups)) {
+        take <- groups %in% show.groups
+        pts <- pts[take, , drop = FALSE]
+        groups <- groups[take]
+        w <- w[take]
+    }   
     out <- seq(along = groups)
     inds <- names(table(groups))
     for (is in inds) {
