@@ -1,0 +1,44 @@
+VEGAN VERSIONS 
+
+Version 1.2-0
+=============
+
+Based on experimental version 1.1-6. Doesn't include read.cep() of the
+experimental version, because the function is certainly unportable to
+all platforms (works on Red Hat Linux 7.1, but perhaps nowhere else).
+
+Major new feature:
+
+* decorana(): R port of Mark Hill's DECORANA for Detrended
+  correspondence analysis, with methods print(), summary() and plot().
+
+Minor changes:
+
+* postMDS(): finds isoMDS scores and doesn't destroy list structure.
+
+* vectorfit: finds isoMDS scores and decorana row scores (which are
+  uncentred, though).
+
+* Proof reading in documentation.
+
+Version 1.0-3
+=============
+
+* `plot.procrustes': selection of axes plotted, improved scaling in
+  graphics, control of axis labels.
+
+* `postMDS': added plot to demonstrate half-change scaling. 
+
+* `procrustes': target can now have lower dimensionality than rotated matrix.
+
+Version 1.0-2
+=============
+
+* Fixed bugs in documentation.
+
+* `plot.procrustes': Fixed passing `...' to graphics functions.
+
+Version 1.0-1
+=============
+
+* The first public version.

@@ -1,23 +1,24 @@
 \name{postMDS}
 \alias{postMDS}
-%- Also NEED an `\alias' for EACH other topic documented here.
 \title{ Scaling of Multi-Dimensional Scaling Results }
 \description{
   Function performs some post-standardizations for multidimensional
   scaling, in order to make the configurations easier to interpret.
 }
 \usage{
-postMDS(x, dist, pc=TRUE, center=TRUE, halfchange=TRUE, threshold=0.8, nthreshold=10)
+postMDS(X, dist, pc=TRUE, center=TRUE, halfchange=TRUE, threshold=0.8,
+        nthreshold=10, plot=FALSE)
 }
 %- maybe also `usage' for other objects documented here.
 \arguments{
-  \item{x}{Configuration from multidimensional scaling. }
+  \item{X}{Configuration from multidimensional scaling. }
   \item{dist}{Dissimilarity matrix used in multidimensional scaling. }
   \item{pc}{Rotate to principal components. }
   \item{center}{Centre the configuration. }
   \item{halfchange}{Scale axes to half-change units.}
   \item{threshold}{Largest dissimilarity used in half-change scaling. }
   \item{nthreshold}{ Minimum number of points in half-change scaling. }
+  \item{plot}{Show half-change scaling plot.}
 }
 \details{
   Multidimensional scaling has no internal, natural scaling or
@@ -44,22 +45,29 @@ postMDS(x, dist, pc=TRUE, center=TRUE, halfchange=TRUE, threshold=0.8, nthreshol
   such as Kulczynski, Bray-Curtis and Canberra indices. 
 }
 \value{
-  Standardized configuration (an array: stress and attributes are dropped).
+  Scaled configuration as an array or an \code{\link[MASS]{isoMDS}}
+  object with scaled configuration.
 }
 
 \author{Jari Oksanen, based on unpublished method by Peter Minchin. }
 
+\note{
+  The function knows where the find the configuration in
+  \code{\link[MASS]{isoMDS}} result, and it will return a similar object
+  with scaled configuration. Alternatively, it can handle directly
+  arrays and return an array.
+  }
+
 \seealso{ \code{\link[mva]{dist}}, \code{\link{vegdist}}, \code{\link[MASS]{isoMDS}} }
 
 \examples{
-library(mva)
-library(MASS)
 data(varespec)
 vare.dist <- vegdist(varespec)
 mds.null <- isoMDS(vare.dist)
-\dontrun{par(mfrow=c(1,2))}
+\dontrun{opar <- par(mfrow=c(1,2))}
 \dontrun{eqscplot(mds.null$points)}
 mds.post <- postMDS(mds.null$points, vare.dist)
 \dontrun{eqscplot(mds.post)}
+\dontrun{par(opar)}
 }
-\keyword{multivariate }%-- one or more ...
+\keyword{multivariate }

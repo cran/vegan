@@ -5,7 +5,7 @@
 \alias{print.summary.procrustes}
 \alias{plot.procrustes}
 \alias{residuals.procrustes}
-%- Also NEED an `\alias' for EACH other topic documented here.
+
 \title{Procrustes Rotation of Two Configurations }
 \description{
   Rotates a configuration to maximum similarity
@@ -13,23 +13,24 @@
 }
 \usage{
 procrustes(X, Y, scale=TRUE)
-%\method{print}{procrustes}(x, ...)
 \method{summary}{procrustes}(object, ...)
-%\method{print}{summary.procrustes}(x, ...)
-\method{plot}{procrustes}(x, kind=1, ...)
-\method{residuals}{procrustes}(object)
+\method{plot}{procrustes}(x, kind=1, axes=c(1,2), xlab="", ylab="", main="", ...)
+\method{residuals}{procrustes}(object, ...)
 }
 %- maybe also `usage' for other objects documented here.
 \arguments{
   \item{X}{Target matrix.}
   \item{Y}{Matrix to be rotated.}
-  \item{scale}{Allow scaling of axes of Y.}
+  \item{scale}{Allow scaling of axes of \code{Y}.}
   \item{x}{An object of class \code{procrustes}.}
   \item{object}{An object of class \code{procrustes}.}
   \item{kind}{The kind of plot produced: \code{kind=1} plots shifts in
     two configurations and \code{kind=2} plots an impulse diagram of
     residuals. }
-  \item{...}{Parameters passed to plotting functions}
+  \item{axes}{Axes (dimensions) plotted.}
+  \item{xlab, ylab}{Axis labels, if defaults unacceptable.}
+  \item{main}{Plot title, if default unacceptable.}
+  \item{...}{Other parameters passed to functions.}
 }
 \details{
   Procrustes rotation rotates a matrix to maximum similarity with a
@@ -66,20 +67,19 @@ procrustes(X, Y, scale=TRUE)
   \code{\link[MASS]{eqscplot}} } 
 
 \examples{
-library(MASS)
-library(mva)
 data(varespec)
 vare.dist <- vegdist(wisconsin(varespec))
 mds.null <- isoMDS(vare.dist)
 ## This was a good seed for me: your rng may vary.
-## Reset your rng if you run this example.
 set.seed(237)
-mds.alt <- isoMDS(vare.dist, initMDS(vare.dist))
+mds.alt <- isoMDS(vare.dist, initMDS(vare.dist), maxit=200)
 vare.proc <- procrustes(mds.alt$points, mds.null$points)
 vare.proc
 summary(vare.proc)
 \dontrun{plot(vare.proc)}
 \dontrun{plot(vare.proc, kind=2)}
 residuals(vare.proc)
+## Reset rng:
+rm(.Random.seed)
 }
 \keyword{multivariate }%-- one or more ...

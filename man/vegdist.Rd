@@ -23,17 +23,18 @@ vegdist(x, method="bray", diag=FALSE, upper=FALSE)
     \tab \eqn{d_{jk} = \sqrt{\sum_i (x_{ij}-x_{ik})^2}}{d[jk] = sqrt(sum (x[ij]-x[ik])^2)}
     \cr
     \code{manhattan}
-    \tab \eqn{d_{jk} = \sum_i |x_{ij} - x{ik}|}{d[jk] = sum(abs(x[ij]-x[ik]))}
+    \tab \eqn{d_{jk} = \sum_i |x_{ij} - x_{ik}|}{d[jk] = sum(abs(x[ij] -
+      x[ik]))}
     \cr
     \code{gower}
     \tab \eqn{d_{jk} = \sum_i \frac{|x_{ij}-x_{ik}|}{\max_i-\min_i}}{d[jk] = sum (abs(x[ij]-x[ik])/(max(i)-min(i))}
     \cr
     \code{canberra}
     \tab \eqn{d_{jk}=\frac{1}{N-Z} \sum_i
-      \frac{|x_{ij}-x{ik}|}{x_{ij}+x_{ik}}}{d[jk] = (1/NZ) sum ((x[ij]-x[ik])/(x[ij]+x[ik]))}
+      \frac{|x_{ij}-x_{ik}|}{x_{ij}+x_{ik}}}{d[jk] = (1/NZ) sum ((x[ij]-x[ik])/(x[ij]+x[ik]))}
     \cr
     \code{bray}
-    \tab \eqn{\frac{\sum_i |x_{ij}-x{ik}|}{\sum_i (x_{ij}+x_{ik})}}{d[jk] = (sum abs(x[ij]-x[ik])/(sum (x[ij]+x[ik]))}
+    \tab \eqn{d_{jk} = \frac{\sum_i |x_{ij}-x_{ik}|}{\sum_i (x_{ij}+x_{ik})}}{d[jk] = (sum abs(x[ij]-x[ik])/(sum (x[ij]+x[ik]))}
     \cr
     \code{kulczynski}
     \tab \eqn{d_{jk} = 1-0.5(\frac{\sum_i \min(x_{ij},x_{ik})}{\sum_i x_{ij}} +

@@ -22,9 +22,10 @@ vectorfit(X, P)
 }
 \value{
   Returns a matrix where rows correspond to environmental variables and
-  first \eqn{k} columns labeled \code{head1 \ldots headk} give the
-  endpoints of environmental vectors (or their direction cosines) and
-  the last row gives the correlation coefficient to the fitted vector.
+  columns give the
+  endpoints of environmental vectors (or their direction cosines), plus
+  an extra column that
+  gives the correlation coefficient to the fitted vector.
   The vectors are of unit length.  Further scaling is left for the
   user.
 
@@ -32,11 +33,22 @@ vectorfit(X, P)
 \references{ I found this in folklore\ldots I hope this is correct\ldots  }
 \author{Jari Oksanen }
 
+\note{
+  Fitted vectors have become the method of choice in displaying
+  environmental variables in ordination.  Indeed, they are the optimal
+  way of presenting environmental variables in Constrained
+  Correspondence Analysis, since there they are the linear constraints.
+  In unconstrained ordination the relation between external variables
+  and ordination configuration may be less linear, and therefore other
+  methods than arrows may be more useful.  The simplest is to adjust the
+  plotting symbol sizes (\code{cex}) by an environmental variables.
+  More fancy methods involve smoothing and regression methods that
+  abound in \R. 
+  }
+
 \seealso{\code{\link[MASS]{isoMDS}} }
 
 \examples{
-library(MASS)
-library(mva)
 data(varespec)
 data(varechem)
 vare.dist <- vegdist(wisconsin(varespec))
@@ -44,7 +56,7 @@ vare.mds <- isoMDS(vare.dist)
 vare.points <- postMDS(vare.mds$points, vare.dist)
 vare.fit <- vectorfit(vare.points, varechem)
 ## Scale vectors by correlation coefficient
-vare.wfit <- vare.fit[,1:2]*sqrt(vare.fit[,"r"])
+vare.wfit <- vare.fit[,1:2] * vare.fit[,"r"]
 \dontrun{eqscplot(vare.points, pch="+", tol=0.1)}
 \dontrun{arrows(0,0, vare.wfit[,1], vare.wfit[,2], len=0.1, col="blue")}
 \dontrun{text(1.05*vare.wfit, rownames(vare.wfit))}

@@ -1,11 +1,12 @@
 Package: vegan 
 Title: Community Ecology Package
-Version: 1.0-1
-Date: 2001/09/05
+Version: 1.2-0
+Date: Nov 14, 2001
 Author: Jari Oksanen <jari.oksanen@oulu.fi> 
 Maintainer: Jari Oksanen <jari.oksanen@oulu.fi>
-Description: Various help functions for community ecologists
+Description: Help functions for community ecologists
 License: GPL2
 Url: http://cc.oulu.fi/~jarioksa/
+
 
 

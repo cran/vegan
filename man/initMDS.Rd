@@ -34,16 +34,13 @@ initMDS(x, k=2)
   \code{\link{procrustes}}.  }
 
 \examples{
-library(mva)
-library(MASS)
 data(varespec)
-vare.dist <- vegdist(varespec, "bray")
+vare.dist <- vegdist(wisconsin(varespec), "bray")
 mds.null <- isoMDS(vare.dist)
-## See if you can get any better
-## (This is a small data set, and an easy case: probably you can't
-## improve much).
+## See if you can get any better.
 stress <- rep(NA,10)
 for (i in 1:10)
-  stress[i] <- isoMDS(vare.dist, initMDS(vare.dist), maxit=200, trace=F)
+  stress[i] <- isoMDS(vare.dist, initMDS(vare.dist), maxit=200, trace=F)$stress
+rbind(stress, stress < mds.null$stress)
 }
 \keyword{ multivariate }%-- one or more ...

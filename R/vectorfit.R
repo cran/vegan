@@ -7,7 +7,10 @@
   nr <- ncol(P)
   sol <- matrix(NA, nrow = nr, ncol = nc + 1)
   rownames(sol) <- colnames(P)
-  colnames(sol) <- c(paste("head", 1:nc, sep = ""), "r")
+  if (is.null(colnames(X)))
+    colnames(sol) <- c(paste("Dim", 1:nc, sep = ""), "r")
+  else
+    colnames(sol) <- c(colnames(X), "r")
   Q <- qr(X)
   for (i in 1:nr) {
     H <- qr.fitted(Q, P[, i])
@@ -19,3 +22,4 @@
   }
   sol
 }
+
