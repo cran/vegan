@@ -14,7 +14,8 @@ decorana(veg, iweigh=0, iresc=4, ira=0, mk=26, short=0, before=NULL,
          after=NULL)
 \method{plot}{decorana}(x, choices=c(1,2), origin=TRUE, display=c("both","sites","species","none"),
      cex = 0.8, tol = 0.1, cols = c(1,2), ...)
-\method{summary}{decorana}(x, digits=3, origin=TRUE, display=c("both", "species","sites","none"), ...)
+\method{summary}{decorana}(object, digits=3, origin=TRUE,
+     display=c("both", "species","sites","none"), ...)
 }
 
 \arguments{
@@ -28,12 +29,15 @@ decorana(veg, iweigh=0, iresc=4, ira=0, mk=26, short=0, before=NULL,
   \item{after}{Hill's piecewise transformation: values after
   transformation -- these must correspond to values in \code{before}.}
   \item{x}{A \code{decorana} result object.}
+  \item{object}{A \code{decorana} result object.}
   \item{choices}{Axes to be plotted.}
   \item{origin}{Use true origin even in detrended correspondence analysis.}
   \item{display}{Display only sites, only species, both or neither.}
   \item{cex}{Plot character size.}
   \item{tol}{Proportion of empty space at the margins.}
   \item{cols}{Colours used for sites and species.}
+  \item{digits}{Number of digits in summary output.}
+  \item{...}{Other parameters for \code{plot} function.}
   }
 }
 \details{
@@ -135,10 +139,9 @@ pack <- outer(x,u,gaussresp)
 \dontrun{matplot(x, pack, type="l", main="Species packing")}
 library(MASS)   ## isoMDS, eqscplot
 library(mva)    ## prcomp, cmdscale (for isoMDS)
-library(multiv) ## ca
 \dontrun{opar <- par(mfrow=c(2,2))}
 \dontrun{eqscplot(prcomp(pack)$x, type="b", main="PCA")}
-\dontrun{eqscplot(ca(pack)$rproj, type="b", main="CA")}
+\dontrun{eqscplot(decorana(pack, ira=1)$rproj, type="b", main="CA")}
 \dontrun{eqscplot(decorana(pack)$rproj, type="b", main="DCA")}
 \dontrun{eqscplot(isoMDS(vegdist(pack), maxit=200)$points, type="b", main="NMDS")}
 ### Let's add some noise:
@@ -148,7 +151,7 @@ noisy <- (0.5 + runif(length(pack)))*pack
 \dontrun{matplot(x, noisy, type="l", main="Noisy model")}
 \dontrun{par(mfrow=c(2,2))}
 \dontrun{eqscplot(prcomp(noisy)$x, type="b", main="PCA")}
-\dontrun{eqscplot(ca(noisy)$rproj, type="b", main="CA")}
+\dontrun{eqscplot(decorana(noisy, ira=1)$rproj, type="b", main="CA")}
 \dontrun{eqscplot(decorana(noisy)$rproj, type="b", main="DCA")}
 \dontrun{eqscplot(isoMDS(vegdist(noisy), maxit=200)$points, type="b", main="NMDS")}
 \dontrun{par(opar)}

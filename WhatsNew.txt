@@ -1,5 +1,16 @@
 VEGAN VERSIONS 
 
+Version 1.2-1
+=============
+
+* Checked with R-1.4-0 (frozen snapshot) tools: Documentation and
+  method consistency corrected (summary.decorana.R, decorana.Rd), and
+  file permissions changed.
+
+* decorana.Rd: removed dependence on package `multiv' in the example,
+  since it is not a `recommended package' -- replaced with
+  `decorana(..., ira=1)'.
+
 Version 1.2-0
 =============
 
