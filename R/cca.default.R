@@ -11,8 +11,12 @@
         x
     }
     X <- as.matrix(X)
-    if (any(rowSums(X) <= 0) || any(colSums(X) <= 0)) 
-        stop("All row and column sums must be >0 in the community matrix")
+    if (any(rowSums(X) <= 0)) 
+        stop("All row sums must be >0 in the community data matrix")
+    if (any(colSums(X) <= 0)) {
+        X <- X[, colSums(X) > 0]
+        warning("Some species were removed because they were missing in the data")
+    }
     gran.tot <- sum(X)
     X <- X/gran.tot
     rowsum <- apply(X, 1, sum)
