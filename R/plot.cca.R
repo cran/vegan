@@ -54,8 +54,11 @@
             points(g$constraints, pch = 2, cex = 0.7, col = "darkgreen")
     }
     if (!is.null(g$biplot) && type != "none") {
-        if (length(display) > 1) 
-            mul <- min(abs(xran), abs(yran))
+        if (length(display) > 1) {
+            mul <- par("usr")/c(range(g$biplot[, 1]), range(g$biplot[, 2]))
+            mul <- mul[is.finite(mul) & mul>0]
+            mul <- 0.75 * min(mul)
+        }
         else mul <- 1
         arrows(0, 0, mul * g$biplot[, 1], mul * g$biplot[, 2], 
                len = 0.05, col = "blue")

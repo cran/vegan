@@ -13,7 +13,7 @@
   (\code{\link{capscale}}) to assess the significance of constraints.
 }
 \usage{
-\method{anova}{cca}(object, alpha=0.05, beta=0.1, step=100, perm.max=2000, ...)
+\method{anova}{cca}(object, alpha=0.05, beta=0.01, step=100, perm.max=10000, ...)
 permutest.cca(x, permutations=100, model=c("reduced","full"), strata)
 }
 
@@ -72,8 +72,8 @@ permutest.cca(x, permutations=100, model=c("reduced","full"), strata)
 \value{
   Function \code{permutest.cca} returns an object of class
   \code{permutest.cca} which has its own \code{print} method.  The
-  function \code{anova.cca} fills in an \code{\link{anova}} table and
-  uses \code{\link{print.anova}} for printing.
+  function \code{anova.cca} calls \code{permutest.cca}, fills an
+  \code{\link{anova}} table and uses \code{\link{print.anova}} for printing.
 }
 \references{
   Legendre, P. and Legendre, L. (1998). \emph{Numerical Ecology}. 2nd English

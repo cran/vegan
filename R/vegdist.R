@@ -11,7 +11,7 @@
     if (method == -1) 
         stop("ambiguous distance method")
     if (method == 6)
-        x <- decostand(x,"range",1)
+        x <- decostand(x, "range", 2)
     N <- nrow(x <- as.matrix(x))
     d <- .C("veg_distance", x = as.double(x), nr = N, nc = ncol(x), 
             d = double(N * (N - 1)/2), diag = as.integer(FALSE), 

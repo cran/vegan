@@ -28,7 +28,7 @@
     if (!is.null(object$CCA$centroids) && !is.na(object$CCA$centroids)[1]) 
         centroids <- object$CCA$centroids[, 1:cc.dim, drop = FALSE]
     evscale <- sqrt(summ$ev.con[1:cc.dim])
-    if (scaling == 2) {
+    if (abs(scaling) == 2) {
         if (cc.dim) {
             species <- sweep(species, 2, evscale, "*")
             sites <- sweep(sites, 2, evscale, "/")
@@ -43,7 +43,7 @@
             sites <- cbind(sites, object$CA$u[, 1:add.dim, drop = FALSE])
         }
     }
-    if (scaling == 1) {
+    if (abs(scaling) == 1) {
         if (cc.dim) 
             site.constr <- sweep(site.constr, 2, evscale, "*")
         if (add.dim) {
@@ -55,7 +55,7 @@
             sites <- cbind(sites, tmp)
         }
     }
-    if (scaling == 3) {
+    if (abs(scaling) == 3) {
         if (cc.dim) {
             species <- sweep(species, 2, sqrt(evscale), "*")
             sites <- sweep(sites, 2, sqrt(evscale), "/")
@@ -63,7 +63,7 @@
                 centroids <- sweep(centroids, 2, sqrt(evscale), 
                                    "/")
             site.constr <- sweep(site.constr, 2, sqrt(evscale), 
-                                 "*")
+                                     "*")
         }
         if (add.dim) {
             evscale0 <- sqrt(sqrt(summ$ev.uncon[1:add.dim]))
@@ -74,6 +74,23 @@
             tmp <- sweep(tmp, 2, evscale0, "*")
             species <- cbind(species, tmp)
         }
+    }
+    if (scaling < 0) {
+        evscale <- evscale0 <- NULL
+        if(cc.dim)
+            evscale <- summ$ev.con[1:cc.dim]
+        if(add.dim)
+            evscale0 <- summ$ev.uncon[1:add.dim]
+        evscale <- c(evscale, evscale0)
+        evscale <- sqrt(1/(1 - evscale))
+        species <- sweep(species, 2, evscale, "*")
+        sites <- sweep(sites, 2, evscale, "*")
+        if (!is.na(centroids)[1]) 
+            centroids <- sweep(centroids, 2, evscale[1:cc.dim], 
+                               "*")
+        if (!is.null(site.constr))
+            site.constr <- sweep(site.constr, 2, evscale[1:cc.dim], 
+                                 "*")
     }
     summ$species <- species
     summ$sites <- sites

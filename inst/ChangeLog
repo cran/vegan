@@ -1,5 +1,42 @@
 VEGAN STABLE VERSIONS 
 
+Version 1.6-4 (June 10, 2004)
+
+	* Based on 1.7-12.
+
+	* anova.cca: Changed defaults to beta=0.01 and perm.max=10000.
+
+	* bioenv: A new function implementing the BIO-ENV procedure of
+        Clarke & Ainsworth (Mar. Ecol. Prog. Ser. 92, 205-219; 1993).  The
+        function finds the subset of scaled environmental variables with
+        maximum (rank) correlation with community data.
+
+	* cca: added ter Braak scaling, a.k.a. Hill scaling, with
+	negative values of `scaling'. This scaling should approximate
+	Hill's non-linear rescaling of `decorana', but it the scaling is
+	linear and does not rescale. The scaling is very simple: the
+	results from corresponding positive scaling are multipiled with
+	sqrt(1/(1-lambda)). 
+
+	* plot.cca: Better heuristics used for the length of biplot
+	arrows, and they are now longer in general. Axes are drawn for
+	biplot arrows also with `text.cca' and `points.cca' functions.
+
+	* deviance.cca and extractAIC.cca: auxilliary functions which
+	allow automatic model building with `step' or `stepAIC' (MASS)
+	functions in CCA and RDA. Unfortunately, CCA and RDA do not have
+	deviance or AIC, and these functions are certainly wrong and
+	dangerous. However, with continuous candidate variables they
+	select the variables in the same order as Canoco.
+
+	* humpfit: A new family of functions to fit the no-interaction
+	model to species richness -- biomass data.(J. Oksanen,
+	J. Ecol. 84, 293-295; 1996)
+	
+	* vegdist: corrected a bug in Gower index -- range standardization
+	was made to sites, but it should be done to species. Thanks to
+	Brett Melbourne <bamelbourne@ucdavis.edu> for the bug report.
+	
 Version 1.6-3 (Mar 22, 2004)
 
 	* Still based on 1.7-3, but ported some changes from version

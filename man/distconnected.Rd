@@ -13,7 +13,7 @@
   dissimilarity object, where \code{TRUE} means that sites have no
   species in common. This is a minimal structure for
   \code{distconnected} or can be used to set missing values to
-  dissimilarities corresponding to no shared species.
+  dissimilarities.
   Function \code{spantree} finds a minimum spanning tree
   connecting all points, but disregarding dissimilarities that are at or
   above the threshold or \code{NA}.  
@@ -116,7 +116,7 @@ spantree(dis, toolong = 1)
 \examples{
 ## There are no disconnected data in vegan, and the following uses an
 ## extremely low threshold limit for connectedness. This is for
-## illustration only, and not a recommended practise.
+## illustration only, and not a recommended practice.
 data(dune)
 dis <- vegdist(dune)
 ord <- cmdscale(dis) ## metric MDS

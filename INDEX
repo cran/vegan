@@ -1,9 +1,12 @@
+BCI                     Barro Colorado Island Tree Counts
 anosim                  Analysis of Similarities
 anova.cca               Permutation Test for Constrained
                         Correspondence Analysis, Redundancy Analysis
                         and Constrained Analysis of Principal
                         Coordinates
-BCI                     Barro Colorado Island Tree Counts
+bioenv                  Best subset of environmental variables with
+                        maximum (rank) correlation with community
+                        dissimilarities.
 capscale                [Partial] Constrained Analysis of Principal
                         Coordinates
 cca                     [Partial] [Constrained] Correspondence
@@ -11,6 +14,8 @@ cca                     [Partial] [Constrained] Correspondence
 decorana                Detrended Correspondence Analysis and Basic
                         Reciprocal Averaging
 decostand               Standardizaton Methods for Community Ecology
+deviance.cca            Statistics Resembling Deviance and AIC for
+                        Constrained Ordination
 distconnected           Connectedness and Minimum Spanning Tree for
                         Dissimilarities
 diversity               Ecological Diversity Indices and Rarefaction
@@ -21,10 +26,13 @@ envfit                  Fits an Environmental Vector or Factor onto an
                         Ordination
 fisherfit               Fit Fisher's Logseries and Preston's Lognormal
                         model to Abundance Data
+humpfit                 No-interaction Model for Hump-backed Species
+                        Richness vs. Biomass
 initMDS                 Random Start and Axis Scaling for isoMDS
 make.cepnames           Abbreviates a Botanical or Zoological Latin
                         Name into an Eight-character Name
 mantel                  Mantel Test for Two Dissimilarity Matrices
+ordiParseFormula        Internal vegan functions
 ordihull                Add Graphical Items to Ordination Diagrams
 ordiplot                Alternative plot and identify Functions for
                         Ordination
@@ -45,7 +53,6 @@ specpool                Extrapolated Species Richness in a Species
 stepacross              Stepacross as Flexible Shortest Paths or
                         Extended Dissimilarities
 varespec                Vegetation and environment in lichen pastures
-vegan-internal          Internal vegan functions
 vegdist                 Dissimilarity Indices for Community Ecologists
 vegemite                Prints a Compact, Ordered Vegetation Table
 wascores                Weighted Averages Scores for Species

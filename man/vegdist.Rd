@@ -7,7 +7,8 @@
   Gower, Bray--Curtis, Jaccard and
   Kulczynski indices are good in detecting underlying
   ecological gradients (Faith et al. 1987). Morisita and Horn--Morisita
-  indices should be able to handle different sample sizes (Wolda 1981),
+  indices should be able to handle different sample sizes (Wolda 1981,
+  Krebs 1999),
   and Mountford (1962) index for presence--absence data should
   be able to handle unknown (and variable) sample sizes.
 }
@@ -37,7 +38,7 @@
     \tab \eqn{d_{jk} = \sum_i \frac{|x_{ij}-x_{ik}|}{\max x_i-\min x_i}}{d[jk] = sum (abs(x[ij]-x[ik])/(max(x[i])-min(x[i]))}
     \cr
     \code{canberra}
-    \tab \eqn{d_{jk}=\frac{1}{N-Z} \sum_i
+    \tab \eqn{d_{jk}=\frac{1}{NZ} \sum_i
       \frac{|x_{ij}-x_{ik}|}{x_{ij}+x_{ik}}}{d[jk] = (1/NZ) sum
       ((x[ij]-x[ik])/(x[ij]+x[ik]))}
     \cr
@@ -113,10 +114,12 @@
   return a distance object of the same type. 
 }
 \references{
-  Faith, D.P, Minchin, P.R. and Belbin, L. (1987).
+  Faith, D. P, Minchin, P. R. and Belbin, L. (1987).
   Compositional dissimilarity as a robust measure of ecological
   distance. \emph{Vegetatio} 69, 57--68.
 
+  Krebs, C. J. (1999). \emph{Ecological Methodology.} Addison Wesley Longman.
+  
   Mountford, M. D. (1962). An index of similarity and its application to
   classification problems. In: P.W.Murphy (ed.),
   \emph{Progress in Soil Zoology}, 43--50. Butterworths.
