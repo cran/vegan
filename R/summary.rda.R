@@ -64,12 +64,12 @@
     if (scaling == 3) {
         if (cc.dim) {
             species <- sweep(species, 2, sqrt(evscale), "*")
-            sites <- sweep(sites, 2, sqrt(evscale), "/")
+            sites <- sweep(sites, 2, sqrt(evscale), "*")
             if (!is.na(centroids)[1]) 
                 centroids <- sweep(centroids, 2, sqrt(evscale), 
-                                   "/")
+                                   "*")
             site.constr <- sweep(site.constr, 2, sqrt(evscale), 
-                                 "/")
+                                 "*")
         }
         if (add.dim) {
             evscale0 <- sqrt(sqrt(summ$ev.uncon[1:add.dim]/sum.ev))

@@ -8,7 +8,7 @@
 }
 \usage{
 rankindex(grad, veg, indices = c("euc", "man", "gow", "bra", "kul"),
-          stepacross = FALSE, method = "kendall", ...)
+          stepacross = FALSE, method = "spearman", ...)
 }
 
 \arguments{
@@ -21,7 +21,7 @@ rankindex(grad, veg, indices = c("euc", "man", "gow", "bra", "kul"),
     with no shared species are set \code{NA} using
     \code{\link{no.shared}} so that indices with no fixed
     upper limit can also be analysed.}
-  \item{method}{Rank correlation method used. }
+  \item{method}{Correlation method used. }
   \item{...}{Other parameters to \code{\link{stepacross}}.}
 }
 \details{
@@ -52,20 +52,18 @@ rankindex(grad, veg, indices = c("euc", "man", "gow", "bra", "kul"),
   correlations should not be taken too seriously.  Probably this method
   should be replaced with a sounder method, but I do not yet know
   which\ldots  You may experiment with \code{\link{mantel}},
-  \code{\link{anosim}} or even \code{\link{protest}}. 
+  \code{\link{anosim}} or even \code{\link{protest}}.
 
-  Kendall's rank correlation may be very slow with large data sets and
-  you may consider
-  other alternatives in \code{\link[ctest]{cor.test}}.
+  Earlier version of this function used \code{method = "kendall"}, but
+  that is far too slow in large data sets.
 }
-
 
 \seealso{\code{\link{vegdist}}, \code{\link{stepacross}},
   \code{\link{no.shared}}, \code{\link[MASS]{isoMDS}},
-    \code{\link[ctest]{cor.test}}, \code{\link{Machine}}, and for
+    \code{\link{cor}}, \code{\link{Machine}}, and for
     alternatives \code{\link{anosim}}, \code{\link{mantel}} and
     \code{\link{protest}}. }
-
+  
 \examples{
 data(varespec)
 data(varechem)

@@ -1,25 +1,28 @@
 \name{mantel}
 \alias{mantel}
+\alias{mantel.partial}
 \alias{print.mantel}
 
-\title{Mantel Test for Two Dissimilarity Matrices }
+\title{Mantel and Partial Mantel Tests for Dissimilarity Matrices }
 \description{
-  Function \code{mantel} finds the Mantel statistic as a matrix
-  correlation between two dissimilarity matrices, and evaluates the
-  significance of the statistic by permuting rows and columns of the
-  dissimilarity matrix.  The statistic is evaluated either as a moment
-  correlation or as a rank correlation.
+  Function \code{mantel}  finds the Mantel statistic as a matrix
+  correlation between two dissimilarity matrices, and function
+  \code{mantel.partial} finds the partial Mantel statistic as the
+  partial matrix correlation between three dissimilarity matricies.  The
+  significance of the statistic is evaluated by permuting rows and
+  columns of the first dissimilarity matrix. 
 
 }
 \usage{
 mantel(xdis, ydis, method="pearson", permutations=1000, strata)
+mantel.partial(xdis, ydis, zdis, method = "pearson", permutations = 1000, 
+    strata)
 }
 
 \arguments{
-  \item{xdis}{ First dissimilarity matrix or a \code{dist} object. }
-  \item{ydis}{ Second dissimilarity matrix or a \code{dist} object. }
-  \item{method}{ Correlation method, as accepted by \code{\link[ctest]{cor.test}}:
-    \code{pearson}, \code{spearman} or \code{kendall}. }
+  \item{xdis, ydis, zdis}{ Dissimilarity matrices or a \code{dist} objects. }
+  \item{method}{ Correlation method, as accepted by \code{\link{cor}}:
+    \code{"pearson"}, \code{"spearman"} or \code{"kendall"}. }
   \item{permutations}{Number of permutations in assessing significance. }
   \item{strata}{An integer vector or factor specifying the strata for
     permutation. If supplied, observations are permuted only within the
@@ -33,7 +36,14 @@ mantel(xdis, ydis, method="pearson", permutations=1000, strata)
   Mantel developed asymptotic test, but here we use permutations of
   \eqn{N} rows and columns of dissimilarity matrix.
 
-  The function uses \code{\link[ctest]{cor.test}}, which should accept
+  Partial Mantel statistic uses partial correlation
+  conditioned on the third matrix. Only the first matrix is permuted so
+  that the correlation structure between second and first matrices is
+  kept constant. Although \code{mantel.partial} silently accepts other
+  methods than \code{"pearson"}, partial correlations will probably be
+  wrong with other methods.
+
+  The function uses \code{\link{cor}}, which should accept
   alternatives \code{pearson} for product moment correlations and
   \code{spearman} or \code{kendall} for rank correlations.
 }
@@ -58,15 +68,21 @@ mantel(xdis, ydis, method="pearson", permutations=1000, strata)
   
 }
 
+\note{
+  Legendre & Legendre (1998) say that partial Mantel correlations 
+  often are difficult to interpet. 
+  }
+
 \author{Jari Oksanen }
 
 
-\seealso{\code{\link[ctest]{cor.test}} for correlation tests,
+\seealso{\code{\link{cor}} for correlation coefficients,
   \code{\link{protest}} (``Procrustes test'') for an alternative with
   ordination diagrams,
   and \code{\link{anosim}} for comparing dissimilarities against
   classification.  For dissimilarity matrices, see \code{\link{vegdist}}
-  or \code{\link{dist}}. }
+  or \code{\link{dist}}.  See \code{\link{bioenv}} for selecting
+  environmental variables. }
 
 \examples{
 ## Is vegetation related to environment?

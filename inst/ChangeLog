@@ -1,5 +1,30 @@
 VEGAN STABLE VERSIONS 
 
+Version 1.6-6 (Jan 7, 2005)
+
+	* Based on version 1.7-34, but without still experimental
+	functions predict, fitted, vif & goodness for cca and rda
+	objects. 
+
+	* mantel: implemented partial mantel test (function
+	'mantel.partial'). Both 'mantel' and 'mantel.partial' should be
+	marginally faster and not give so many superfluous warnings.
+
+	* plot.envfit: should be more reliable now. A new keyword 'at' to
+	position the bunch of arrows in other places than the origin.
+	Thanks to Roeland Kindt for fixes.
+
+	* rankindex: Default correlation now "spearman" since the older
+	default ("kendall") was far too slow in large data sets.  Should
+	not give so many superfluous warnings.
+
+	* summary.rda: Site scores were wrong with 'scaling = 3'.
+	Influences 'plot' and 'scores' commands for 'rda' and 'capscale'
+	results with 'scaling = 3'.
+
+	* vegdist: Issues a warning if 'method = "morisita"' is used with
+	non-integer data.
+	
 Version 1.6-5 (Oct 12, 2004) 
 
 	* Based on version 1.7-27. Checked with R-1.9.1 (Linux, MacOS X)
