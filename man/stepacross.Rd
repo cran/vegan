@@ -108,8 +108,8 @@ stepacross(dis, path = "shortest", toolong = 1, trace = TRUE)
 }
 \author{ Jari Oksanen}
 \note{
-  The function changes the original dissimilarities, and everybody does
-  not like this. It may be best to  use  the
+  The function changes the original dissimilarities, and not all
+  like this. It may be best to  use  the
   function only when you really \emph{must}:  extremely high
   beta diversity where a large proportion of dissimilarities are at their
   upper limit (no species in common). 
@@ -129,7 +129,8 @@ stepacross(dis, path = "shortest", toolong = 1, trace = TRUE)
 
 \seealso{
   Function \code{\link{distconnected}} can find connected groups in
-  disconnected data.
+  disconnected data, and function \code{\link{no.shared}} can be used to
+  set dissimilarities as \code{NA}. 
   Function \code{\link[pcurve]{pcdists}} in library \code{pcurve}
   contains an alternative implementation. 
  }

@@ -1,5 +1,5 @@
 "anova.cca" <-
-    function (object, alpha = 0.05, beta = 0.1, step = 100, perm.max = 2000, 
+    function (object, alpha = 0.05, beta = 0.01, step = 100, perm.max = 10000, 
               ...) 
 {
     betaq <- c(beta/2, 1 - beta/2)

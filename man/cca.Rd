@@ -44,7 +44,13 @@
   \item{scaling}{Scaling for species and site scores. Either species
     (\code{2}) or site (\code{1}) scores are scaled by eigenvalues, and
     the other set of scores is left unscaled, or with \code{3} both are
-    scaled symmetrically by square root of eigenvalues. }
+    scaled symmetrically by square root of eigenvalues.  Corresponding
+    negative values can be used in \code{cca} to additionally multiply
+    results with \eqn{\sqrt(1/(1-\lambda))}.  This scaling is known with
+    a misleading name of Hill scaling (although it has nothing to do
+    with Hill's rescaling of \code{\link{decorana}}).  Negative values
+    are not recognized for results of \code{rda}.
+  }
   \item{axes}{Number of axes in summaries.}
   \item{digits}{Number of digits in output.}
   \item{scale}{Scale species to unit variance (like correlations do).}

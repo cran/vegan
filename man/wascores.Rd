@@ -61,7 +61,7 @@ plot(scores(vare.points), pch="+", asp=1)
 text(vare.wa[freq > 4,], rownames(vare.wa)[freq > 4],cex=0.8,col="blue")
 ## Works for environmental variables, too.
 wascores(varechem, varespec)
-## And the strength of these variables was:
+## And the strengths of these variables are:
 eigengrad(varechem, varespec)
 }
 
