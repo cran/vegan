@@ -3,7 +3,6 @@
 \alias{permutest.cca}
 \alias{print.permutest.cca}
 \alias{print.anova.cca}
-\alias{permuted.index}
 
 \title{Permutation Test for
   Constrained Correspondence Analysis }

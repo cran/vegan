@@ -1,6 +1,6 @@
 "anova.cca" <-
-function (object, alpha = 0.05, beta = 0.1, step = 100, perm.max = 2000, 
-    ...) 
+    function (object, alpha = 0.05, beta = 0.1, step = 100, perm.max = 2000, 
+              ...) 
 {
     betaq <- c(beta/2, 1 - beta/2)
     nperm <- 0
@@ -20,13 +20,15 @@ function (object, alpha = 0.05, beta = 0.1, step = 100, perm.max = 2000,
     Pval <- c(hits/nperm, NA)
     nperm <- c(nperm, NA)
     table <- data.frame(df, chi, Fval, nperm, Pval)
-    dimnames(table) <- list(c("Model", "Residual"), c("Df", "Chisq", 
-        "F", "N.Perm", "Pr(>F)"))
-    head <- paste("Permutation test for CCA under", tst$model, 
-        "model\n")
-    if(!is.null(tst$strata))
-        head <- paste(head,"Permutations stratified within `", tst$strata,"'\n", sep="")
+    is.rda <- inherits(object, "rda")
+    dimnames(table) <- list(c("Model", "Residual"), c("Df", ifelse(is.rda, "Var","Chisq"), 
+                                                      "F", "N.Perm", "Pr(>F)"))
+    head <- paste("Permutation test for", ifelse(is.rda, "RDA", "CCA"),"under", tst$model, 
+                  "model\n")
+    if (!is.null(tst$strata)) 
+        head <- paste(head, "Permutations stratified within `", 
+                      tst$strata, "'\n", sep = "")
     mod <- paste("Model:", c(object$Call))
     structure(table, heading = c(head, mod), class = c("anova.cca", 
-        "anova", "data.frame"))
+                                             "anova", "data.frame"))
 }

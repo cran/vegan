@@ -1,6 +1,6 @@
 "scores.cca" <-
-function (x, choices = c(1, 2), display = c("sp", "wa", "bp"), 
-    scaling = 2, ...) 
+    function (x, choices = c(1, 2), display = c("sp", "wa", "bp"), 
+              scaling = 2, ...) 
 {
     tabula <- c("species", "sites", "constraints", "biplot")
     if (is.null(x$CCA)) 
@@ -8,7 +8,7 @@ function (x, choices = c(1, 2), display = c("sp", "wa", "bp"),
     else names(tabula) <- c("sp", "wa", "lc", "bp")
     if (length(display) == 1) {
         display <- match.arg(display, c("sites", "species", "wa", 
-            "lc", "bp"))
+                                        "lc", "bp"))
         if (display == "sites") 
             display <- "wa"
         else if (display == "species") 
@@ -39,9 +39,7 @@ function (x, choices = c(1, 2), display = c("sp", "wa", "bp"),
             tmp <- matrix(0, nrow = nr, ncol = (max.ax - nc))
             sol$biplot <- cbind(sol$biplot, tmp)
         }
-        sol$biplot <- sol$biplot[, choices]
-        if (nr == 1) 
-            dim(sol$biplot) <- c(nr, length(choices))
+        sol$biplot <- sol$biplot[, choices, drop=FALSE]
     }
     if (length(sol) == 1) 
         sol <- sol[[1]]
