@@ -53,8 +53,8 @@ vegdist(x, method="bray", diag=FALSE, upper=FALSE)
   standardizations. 
 }
 \value{
-  Should be interchangeable with \code{\link[mva]{dist}} and return a
-  distance object of the same type.
+  Should provide a drop-in replacement for \code{\link[mva]{dist}} and
+  return a distance object of the same type. 
 }
 \references{ Faith, D.P, Minchin, P.R. and Belbin, L. (1987)
   Compositional dissimilarity as a robust measure of ecological

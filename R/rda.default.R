@@ -73,9 +73,9 @@
         CA$tot.chi <- sum(CA$eig)
         CA$Xbar <- Xbar
     }
-    Call <- match.call()
-    Call[[1]] <- as.name("rda")
-    sol <- list(Call = Call, grand.total = NA, rowsum = NA, colsum = NA, 
+    call <- match.call()
+    call[[1]] <- as.name("rda")
+    sol <- list(call = call, grand.total = NA, rowsum = NA, colsum = NA, 
                 tot.chi = tot.chi, pCCA = pCCA, CCA = CCA, CA = CA)
     class(sol) <- c("rda", "cca")
     sol

@@ -1,14 +1,15 @@
 "scores.cca" <-
-    function (x, choices = c(1, 2), display = c("sp", "wa", "bp"), 
-              scaling = 2, ...) 
+function (x, choices = c(1, 2), display = c("sp", "wa", "bp"), 
+    scaling = 2, ...) 
 {
-    tabula <- c("species", "sites", "constraints", "biplot")
+    tabula <- c("species", "sites", "constraints", "biplot", 
+        "centroids")
+    names(tabula) <- c("sp", "wa", "lc", "bp", "cn")
     if (is.null(x$CCA)) 
-        names(tabula) <- c("sp", "wa", NA, NA)
-    else names(tabula) <- c("sp", "wa", "lc", "bp")
+        tabula <- tabula[1:2]
     if (length(display) == 1) {
         display <- match.arg(display, c("sites", "species", "wa", 
-                                        "lc", "bp"))
+            "lc", "bp", "cn"))
         if (display == "sites") 
             display <- "wa"
         else if (display == "species") 
@@ -39,7 +40,17 @@
             tmp <- matrix(0, nrow = nr, ncol = (max.ax - nc))
             sol$biplot <- cbind(sol$biplot, tmp)
         }
-        sol$biplot <- sol$biplot[, choices, drop=FALSE]
+        sol$biplot <- sol$biplot[, choices, drop = FALSE]
+    }
+    if ("centroids" %in% take && any(choices != 1) && !is.na(sol$centroids)) {
+        sol$centroids <- as.matrix(sol$centroids)
+        nc <- ncol(sol$centroids)
+        nr <- nrow(sol$centroids)
+        if (nc < max.ax) {
+            tmp <- matrix(0, nrow = nr, ncol = (max.ax - nc))
+            sol$centroids <- cbind(sol$centroids, tmp)
+        }
+        sol$centroids <- sol$centroids[, choices, drop = FALSE]
     }
     if (length(sol) == 1) 
         sol <- sol[[1]]

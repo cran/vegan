@@ -28,7 +28,7 @@
     if (!is.null(tst$strata)) 
         head <- paste(head, "Permutations stratified within `", 
                       tst$strata, "'\n", sep = "")
-    mod <- paste("Model:", c(object$Call))
+    mod <- paste("Model:", c(object$call))
     structure(table, heading = c(head, mod), class = c("anova.cca", 
                                              "anova", "data.frame"))
 }

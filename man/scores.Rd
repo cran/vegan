@@ -34,8 +34,8 @@
   requested (do not regard this as a bug but as a feature, please).
   Currently the function seems to work at least for \code{\link[MASS]{isoMDS}},
   \code{\link[mva]{prcomp}}, \code{\link[mva]{princomp}},
-  \code{\link[multiv]{ca}}, \code{\link[multiv]{pca}}.  It may work for
-  other cases, or fail mysteriously.
+  \code{\link[multiv]{ca}}, \code{\link[multiv]{pca}}.  It may work in
+  other cases or fail mysteriously.
 }
 \value{
   The function returns a matrix of requested scores.

@@ -15,10 +15,10 @@
   the factors show the averages of factor levels.
 }
 \usage{
-envfit(X, P, permutations = 0, strata)
+envfit(X, P, permutations = 0, strata, choices=c(1,2))
 \method{plot}{envfit}(x, choices = c(1,2), arrow.mul = 1, col = "blue", add = TRUE, ...)
-vectorfit(X, P, permutations = 0, strata)
-factorfit(X, P, permutations = 0, strata)
+vectorfit(X, P, permutations = 0, strata, choices=c(1,2))
+factorfit(X, P, permutations = 0, strata, choices=c(1,2))
 }
 %- maybe also `usage' for other objects documented here.
 \arguments{

@@ -6,6 +6,17 @@
     g <- scores(x, choices, display, scaling)
     if (!is.list(g)) 
         g <- list(default = g)
+    if (!is.null(g$centroids)) {
+        if (is.null(g$biplot)) 
+            g$biplot <- scores(x, choices, "bp", scaling)
+        if (!is.na(g$centroids)) {
+            bipnam <- rownames(g$biplot)
+            cntnam <- rownames(g$centroids)
+            g$biplot <- g$biplot[!(bipnam %in% cntnam), , drop = FALSE]
+            if (nrow(g$biplot) == 0) 
+                g$biplot <- NULL
+        }
+    }
     if (missing(type)) {
         nitlimit <- 80
         nit <- max(nrow(g$spe), nrow(g$sit), nrow(g$con), nrow(g$def))
@@ -49,8 +60,15 @@
         arrows(0, 0, mul * g$biplot[, 1], mul * g$biplot[, 2], 
                len = 0.05, col = "blue")
         text(1.1 * mul * g$biplot, rownames(g$biplot), col = "blue")
-        axis(3, at = c(-mul, 0, mul), labels = rep("", 3), col= "blue")
+        axis(3, at = c(-mul, 0, mul), labels = rep("", 3), col = "blue")
         axis(4, at = c(-mul, 0, mul), labels = c(-1, 0, 1), col = "blue")
+    }
+    if (!is.null(g$centroids) && !is.na(g$centroids) && type != 
+        "none") {
+        if (type == "text") 
+            text(g$centroids, rownames(g$centroids), col = "blue")
+        else if (type == "points") 
+            points(g$centroids, pch = "x", col = "blue")
     }
     if (!is.null(g$default) && type != "none") {
         if (type == "text") 

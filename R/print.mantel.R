@@ -2,7 +2,7 @@
 function (x, digits = max(3, getOption("digits") - 3), ...) 
 {
     cat("\nCall:\n")
-    cat(deparse(x$Call), "\n\n")
+    cat(deparse(x$call), "\n\n")
     cat("Mantel statistic based on", x$method, "\n\n")
     cat("Mantel statistic r: ")
     cat(formatC(x$statistic, digits = digits), "\n")

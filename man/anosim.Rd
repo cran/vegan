@@ -58,7 +58,7 @@ anosim(dis, grouping, permutations=1000, strata)
 }
 \value{
   The function returs a list of class \code{anosim} with following items:
-  \item{Call }{Function call.}
+  \item{call }{Function call.}
   \item{statistic}{The value of ANOSIM statistic \eqn{R}}
   \item{signif}{Significance from permutation.}
   \item{perm}{Permutation values of \eqn{R}}
@@ -71,11 +71,11 @@ anosim(dis, grouping, permutations=1000, strata)
   Clarke, K. R. (1993). Non-parametric multivariate analysis of changes
   in community structure. \emph{Australian Journal of Ecology} 18, 117-143.
 }
-\author{Jari Oksanen, with the help from Peter R. Minchin.}
+\author{Jari Oksanen, with a help from Peter R. Minchin.}
 \note{
   I don't quite trust this method.  Somebody should study its
-  performance carefully.  The function returns a lot information just to
-  ease further scrutiny.
+  performance carefully.  The function returns a lot of information 
+  to ease further scrutiny.
 
 }
 
@@ -85,14 +85,13 @@ anosim(dis, grouping, permutations=1000, strata)
   \code{\link{mantel}}.  }
 
 \examples{
-## There are no factors yet in example data set, so let's make one (this
-## is real though).
-reindeer <- c(rep("Grazed", 16), rep("Ungrazed", 8))
-data(varespec)
-vare.dist <- vegdist(varespec)
-vare.ano <- anosim(vare.dist, reindeer)
-summary(vare.ano)
-plot(vare.ano)
+data(dune)
+data(dune.env)
+dune.dist <- vegdist(dune)
+attach(dune.env)
+dune.ano <- anosim(dune.dist, Management)
+summary(dune.ano)
+plot(dune.ano)
 }
 \keyword{multivariate }
 \keyword{ nonparametric }

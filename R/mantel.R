@@ -23,7 +23,7 @@ function (xdis, ydis, method = "pearson", permutations = 1000, strata)
         signif <- NA
         perm <- NULL
     }
-    res <- list(Call = match.call(), method = variant, statistic = statistic, 
+    res <- list(call = match.call(), method = variant, statistic = statistic, 
         signif = signif, perm = perm, permutations = permutations)
     if (!missing(strata)) {
         res$strata <- deparse(substitute(strata))
