@@ -30,11 +30,11 @@ humpfit                 No-interaction Model for Hump-backed Species
                         Richness vs. Biomass
 make.cepnames           Abbreviates a Botanical or Zoological Latin
                         Name into an Eight-character Name
-mantel                  Mantel Test for Two Dissimilarity Matrices
+mantel                  Mantel and Partial Mantel Tests for
+                        Dissimilarity Matrices
 metaMDS                 Nonmetric Multidimensional Scaling with Stable
                         Solution from Random Starts, Axis Scaling and
                         Species Scores
-ordiParseFormula        Internal vegan functions
 ordihull                Add Graphical Items to Ordination Diagrams
 ordiplot                Alternative plot and identify Functions for
                         Ordination

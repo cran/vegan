@@ -16,6 +16,8 @@
     if (binary)
         x <- decostand(x, "pa")
     N <- nrow(x <- as.matrix(x))
+    if(method == 7 && !identical(all.equal(as.integer(x), as.vector(x)), TRUE))
+        warning("Morisita index may give meaningless results with non-integer values\n")
     d <- .C("veg_distance", x = as.double(x), nr = N, nc = ncol(x), 
             d = double(N * (N - 1)/2), diag = as.integer(FALSE), 
             method = as.integer(method), PACKAGE = "vegan")$d

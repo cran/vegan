@@ -1,6 +1,6 @@
 "rankindex" <-
     function (grad, veg, indices = c("euc", "man", "gow", "bra", "kul"),
-              stepacross = FALSE, method = "kendall", 
+              stepacross = FALSE, method = "spearman", 
               ...) 
 {
     grad <- as.matrix(grad)
@@ -14,7 +14,7 @@
             is.na(y) <- no.shared(veg)
             y <- stepacross(y, trace = FALSE, toolong=-1, ...)
         }
-        res[i] <- cor.test(span, y, method = method)$estimate
+        res[i] <- cor(span, y, method = method)
     }
     res
 }

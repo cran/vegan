@@ -19,8 +19,8 @@
 \usage{
 \method{envfit}{default}(X, P, permutations = 0, strata, choices=c(1,2), ...)
 \method{envfit}{formula}(formula, data, ...)
-\method{plot}{envfit}(x, choices = c(1,2), arrow.mul = 1, p.max = NULL,
-   col = "blue", add = TRUE, ...)
+\method{plot}{envfit}(x, choices = c(1,2), arrow.mul = 1, at = c(0,0), axis = FALSE, 
+    p.max = NULL, col = "blue", add = TRUE, ...)
 vectorfit(X, P, permutations = 0, strata, choices=c(1,2),
       display = c("sites", "lc"), w = weights(X), ...)
 factorfit(X, P, permutations = 0, strata, choices=c(1,2)
@@ -36,6 +36,8 @@ factorfit(X, P, permutations = 0, strata, choices=c(1,2)
   \item{x}{A result object from \code{envfit}.}
   \item{choices}{Axes to plotted.}
   \item{arrow.mul}{Multiplier for vector lengths.}
+  \item{at}{The origin of fitted arrows in the plot.}
+  \item{axis}{Plot axis showing the scaling of fitted arrows.}
   \item{p.max}{Maximum estimated \eqn{P} value for displayed
     variables.  You must calculate \eqn{P} values with setting
     \code{permutations} to use this option. }
@@ -49,7 +51,7 @@ factorfit(X, P, permutations = 0, strata, choices=c(1,2)
     \code{\link{rda}}, \code{\link{capscale}}).}
   \item{w}{Weights used in fitting (concerns mainly \code{\link{cca}}
     and \code{\link{decorana}} results which have nonconstant weights).}
-  \item{...}{Parameters passed to other functions.}
+  \item{...}{Parameters passed to \code{\link{scores}}.}
 }
 \details{
   Function \code{envfit} finds vectors or factor averages of

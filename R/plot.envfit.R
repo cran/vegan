@@ -1,15 +1,16 @@
 "plot.envfit" <-
-    function (x, choices = c(1, 2), arrow.mul = 1, p.max = NULL, 
-              col = "blue", add = TRUE, ...) 
+    function (x, choices = c(1, 2), arrow.mul = 1, at = c(0,0),  axis = FALSE,
+              p.max = NULL, col = "blue", add = TRUE, ...) 
 {
     formals(arrows) <- c(formals(arrows), alist(... = ))
+    vect <- NULL
     if (!is.null(p.max)) {
         if (!is.null(x$vectors)) {
             take <- x$vectors$pvals <= p.max
             x$vectors$arrows <- x$vectors$arrows[take, , drop = FALSE]
             x$vectors$r <- x$vectors$r[take]
             if (nrow(x$vectors$arrows) == 0) 
-                x$vectors <- NULL
+                x$vectors <-vect <-  NULL
         }
         if (!is.null(x$factors)) {
             tmp <- x$factors$pvals <= p.max
@@ -21,31 +22,39 @@
                 x$factors <- NULL
         }
     }
-    if (!is.null(x$vectors)) {
-        vect <- arrow.mul * sqrt(x$vectors$r) *
-            x$vectors$arrows[, choices, drop=FALSE]
+    if (!is.null(vect)) {
+        if (axis) {
+            maxarr <- round(sqrt(max(x$vectors$r)), 1)
+            ax <- -c(-1,0,1) * arrow.mul * maxarr
+        }
+        vect <- arrow.mul * sqrt(x$vectors$r) * x$vectors$arrows[, 
+                                                                 choices, drop = FALSE]
+        vtext <- sweep(1.1 * vect, 2, at, "+")
+        vect <- sweep(vect, 2, at, "+")
     }
     if (!add) {
-        xlim <- range(x$vectors$arrows[, choices[2]], x$factors$centroids[, 
-                                                                          choices[2]])
-        ylim <- range(x$vectors$arrows[, choices[1]], x$factors$centroids[, 
-                                                                          choices[1]])
-        if (!is.null(x$vectors)) 
-            plot(x$vectors$arrows[, choices, drop=FALSE], xlim = xlim, ylim = ylim, 
-                 asp = 1, type = "n", ...)
+        xlim <- range(at[1], vect[,1], x$factors$centroids[,1])
+        ylim <- range(at[2], vect[,2], x$factors$centroids[,2])
+        if (!is.null(vect)) 
+            plot(vect, xlim = xlim, ylim = ylim, asp = 1, type = "n", ...)
         else if (!is.null(x$factors)) 
-            plot(x$factors$centroids[, choices, drop=FALSE], asp = 1, xlim = xlim, 
-                 ylim = ylim, type = "n", ...)
+            plot(x$factors$centroids[, choices, drop = FALSE], 
+                 asp = 1, xlim = xlim, ylim = ylim, type = "n", 
+                 ...)
         else stop("Nothing to plot")
     }
-    if (!is.null(x$vectors)) {
-        arrows(0, 0, vect[, 1], vect[, 2], len = 0.05, col = col)
-        text(1.1 * vect, rownames(x$vectors$arrows), col = col, 
+    if (!is.null(vect)) {
+        arrows(at[1], at[2], vect[, 1], vect[, 2], len = 0.05, col = col)
+        text(vtext, rownames(x$vectors$arrows), col = col, 
              ...)
     }
     if (!is.null(x$factors)) {
-        text(x$factors$centroids[, choices, drop=FALSE], rownames(x$factors$centroids), 
+        text(x$factors$centroids[, choices, drop = FALSE], rownames(x$factors$centroids), 
              col = col, ...)
+    }
+    if (axis && !is.null(vect)) {
+        axis(3, at = ax + at[1], labels = c(maxarr, 0, maxarr), col = col)
+        axis(4, at = ax + at[2], labels = c(maxarr, 0, maxarr), col = col)
     }
     invisible()
 }
