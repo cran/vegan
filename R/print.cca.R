@@ -1,8 +1,6 @@
 "print.cca" <-
     function (x, digits = max(3, getOption("digits") - 3), ...) 
 {
-    if (!exists("printCoefmat", envir = NULL))
-        printCoefmat <- print.coefmat
     cat("\nCall:\n")
     cat(deparse(x$call), "\n\n")
     chi <- rbind(x$tot.chi, x$pCCA$tot.chi, x$CCA$tot.chi, x$CA$tot.chi)

@@ -1,8 +1,6 @@
 "print.factorfit" <-
     function (x, ...) 
 {
-    if (!exists("printCoefmat", envir = NULL))
-        printCoefmat <- print.coefmat
     if (x$permutations) 
         eps <- 1/x$permutations
     else eps <- .Machine$double.eps

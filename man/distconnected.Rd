@@ -81,7 +81,7 @@ spantree(dis, toolong = 1)
   Function \code{distconnected} returns a vector for
   observations using integers to identify connected groups. If the data
   are connected, values will be all \code{1}. Function \code{no.shared}
-  returns an object of class \code{\link{dist}}. Function \code{spantree}
+  returns an object of class \code{\link[mva]{dist}}. Function \code{spantree}
   returns a list with two vectors, each of length \eqn{n-1}. The
   number of links in a tree is one less the number of observations, and
   the first item is omitted. The items are  

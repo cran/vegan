@@ -1,8 +1,6 @@
 "print.radfit" <-
     function (x, ...) 
 {
-    if (!exists("printCoefmat", envir = NULL))
-        printCoefmat <- print.coefmat
     cat("\nRAD models, family", x$family$family, "\n")
     cat("No. of species ", length(x$y), ", total abundance ", 
         sum(x$y), "\n\n", sep = "")
