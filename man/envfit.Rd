@@ -16,7 +16,8 @@
 }
 \usage{
 envfit(X, P, permutations = 0, strata, choices=c(1,2))
-\method{plot}{envfit}(x, choices = c(1,2), arrow.mul = 1, col = "blue", add = TRUE, ...)
+\method{plot}{envfit}(x, choices = c(1,2), arrow.mul = 1, p.max = NULL,
+   col = "blue", add = TRUE, ...)
 vectorfit(X, P, permutations = 0, strata, choices=c(1,2))
 factorfit(X, P, permutations = 0, strata, choices=c(1,2))
 }
@@ -29,6 +30,9 @@ factorfit(X, P, permutations = 0, strata, choices=c(1,2))
   \item{x}{A result object from \code{envfit}.}
   \item{choices}{Axes to plotted.}
   \item{arrow.mul}{Multiplier for vector lengths.}
+  \item{p.max}{Maximum estimated \eqn{P} value for displayed
+    variables.  You must calculate \eqn{P} values with setting
+    \code{permutations} to use this option. }
   \item{col}{Colour in plotting.}
   \item{add}{Results added to an existing ordination plot.}
   \item{strata}{An integer vector or factor specifying the strata for
@@ -109,8 +113,9 @@ vare.mds <- isoMDS(vare.dist)
 vare.mds <- postMDS(vare.mds, vare.dist)
 vare.fit <- envfit(vare.mds$points, varechem, 1000)
 vare.fit
-plot(vare.mds$points, pch="+", asp=1, xlab="Dim1", ylab="Dim2")
+ordiplot(vare.mds)
 plot(vare.fit)
+plot(vare.fit, p.max = 0.05, col = "red")
 }
 \keyword{multivariate }
 \keyword{aplot}

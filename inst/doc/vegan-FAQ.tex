@@ -24,10 +24,8 @@
 
 \noindent 
 The document answers some frequently asked questions and explains some
-design decisions I have made in vegan.  The document was made with
-\texttt{vegan} version 
-1.7-2 
-and R version 1.8.1, 2003-11-21.
+design decisions I have made in vegan.  
+
 \end{abstract}
 
 \tableofcontents
@@ -360,17 +358,17 @@ cca(formula = varespec[i, ] ~ Al + K, data = varechem)
 
               Inertia Rank
 Total          2.0832     
-Constrained    0.1965    2
-Unconstrained  1.8867   21
+Constrained    0.3201    2
+Unconstrained  1.7631   21
 Inertia is mean squared contingency coefficient 
 
 Eigenvalues for constrained axes:
-  CCA1   CCA2 
-0.1371 0.0594 
+   CCA1    CCA2 
+0.24292 0.07719 
 
 Eigenvalues for unconstrained axes:
     CA1     CA2     CA3     CA4     CA5     CA6     CA7     CA8 
-0.50738 0.35205 0.20656 0.17113 0.16810 0.11490 0.08674 0.07436 
+0.46949 0.31495 0.22074 0.17464 0.12851 0.10353 0.09039 0.07379 
 (Showed only 8 of all 21 unconstrained eigenvalues)
 \end{Soutput}
 \end{Schunk}
@@ -428,11 +426,11 @@ Eigenvalues for unconstrained axes:
 > max(residuals(proc))
 \end{Sinput}
 \begin{Soutput}
-[1] 2.277664e-14
+[1] 1.739900e-14
 \end{Soutput}
 \end{Schunk}
 In \texttt{cca} the difference would be somewhat larger than now
-observed 2.2777e-14 because site
+observed 1.7399e-14 because site
 weights used for environmental variables are shuffled with the species
 data.
 

@@ -4,6 +4,8 @@
 \alias{summary.procrustes}
 \alias{print.summary.procrustes}
 \alias{plot.procrustes}
+\alias{points.procrustes}
+\alias{lines.procrustes}
 \alias{residuals.procrustes}
 \alias{fitted.procrustes}
 \alias{protest}
@@ -20,6 +22,8 @@ procrustes(X, Y, scale = TRUE, symmetric = FALSE)
 \method{summary}{procrustes}(object, ...)
 \method{plot}{procrustes}(x, kind=1, choices=c(1,2), xlab, ylab, main,
      ar.col = "blue", len=0.05, ...)
+\method{points}{procrustes}(x, display = c("target", "rotated"), ...)
+\method{lines}{procrustes}(x, type = c("segments", "arrows"), choices = c(1, 2), ...)  
 \method{residuals}{procrustes}(object, ...)
 \method{fitted}{procrustes}(object, truemean = TRUE, ...)
 protest(X, Y, permutations = 1000, strata)
@@ -32,12 +36,17 @@ protest(X, Y, permutations = 1000, strata)
   \item{symmetric}{Use symmetric Procrustes statistic (the rotation will
     still be non-symmetric).}
   \item{x, object}{An object of class \code{procrustes}.}
-  \item{kind}{The kind of plot produced: \code{kind=1} plots shifts in
-    two configurations and \code{kind=2} plots an impulse diagram of
-    residuals. }
+  \item{kind}{For \code{plot} function, the kind of plot produced:
+    \code{kind = 1} plots shifts in two configurations, \code{kind = 0}
+    draws a corresponding empty plot, and \code{kind = 2}
+    plots an impulse diagram of residuals.}
   \item{choices}{Axes (dimensions) plotted.}
   \item{xlab, ylab}{Axis labels, if defaults unacceptable.}
   \item{main}{Plot title, if default unacceptable.}
+  \item{display}{Show only the \code{"target"} or \code{"rotated"}
+    matrix as points.}
+  \item{type}{Combine \code{target} and \code{rotated} points with line
+    segments or arrows.}
   \item{truemean}{Use the original range of target matrix instead of
     centring the fitted values.}
   \item{permutations}{Number of permutation to assess the significance
@@ -73,7 +82,14 @@ protest(X, Y, permutations = 1000, strata)
   and \code{sites} with \code{kind=2} (residuals).  In ordination
   diagrams, the arrow heads point to the target configuration, which may
   be either logical or illogical.  Function \code{plot} passes
-  parameters to underlying plotting functions.
+  parameters to underlying plotting functions.  For full control of
+  plots, you can draw the axes using \code{plot} with \code{kind = 0},
+  and then add items with \code{points} or \code{lines}.  These
+  functions pass all parameters to the underlying functions so that you
+  can select the plotting characters, their size, colours etc., or youc
+  an select the width, colour and type of line \code{\link{segments}} or
+  arrows, or you can select the orientation and head width of
+  \code{\link{arrows}}.
 
   Function \code{residuals} returns the pointwise
   residuals, and \code{fitted} the fitted values, either centred to zero
