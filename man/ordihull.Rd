@@ -5,6 +5,8 @@
 \alias{ordigrid}
 \alias{ordispider}
 \alias{ordiellipse}
+\alias{ordicluster}
+\alias{ordispantree}
 \alias{weights.cca}
 \alias{weights.rda}
 \alias{weights.decorana}
@@ -12,7 +14,8 @@
 \title{Add Graphical Items to Ordination Diagrams}
 \description{
   Functions to add convex hulls, arrows, line segments, regular grids of
-  points, `spider' graphs or ellipses to ordination diagrams. The
+  points, `spider' graphs, ellipses, cluster dendrogram or spanning
+ trees to ordination diagrams. The
   ordination diagrams can be produced by \code{vegan}
   \code{\link{plot.cca}}, \code{\link{plot.decorana}} or
   \code{\link{ordiplot}}.
@@ -25,8 +28,11 @@ ordigrid(ord, levels, replicates, display = "sites",  ...)
 ordispider(ord, groups, display="sites", w = weights(ord, display), ...)
 ordiellipse(ord, groups, display="sites", kind = c("sd","se"), conf,
             draw = c("lines","polygon"), w = weights(ord, display), ...)
+ordicluster(ord, cluster, prune = 0, display = "sites",
+            w = weights(ord, display), ...)
+ordispantree(ord, tree, display = "sites", ...)
 }
-%- maybe also `usage' for other objects documented here.
+
 \arguments{
   \item{ord}{An ordination object or an \code{\link{ordiplot}} object. }
   \item{groups}{Factor giving the groups for which the graphical item is
@@ -45,14 +51,24 @@ ordiellipse(ord, groups, display="sites", kind = c("sd","se"), conf,
     used automatically for \code{\link{cca}}
     and \code{\link{decorana}} results, unless undone by the
     user. \code{w=NULL} sets equal weights to all points. }
-  \item{kind}{Wheter standard deviations of points (\code{sd}) or
+  \item{kind}{Whether standard deviations of points (\code{sd}) or
     standard deviations of their (weighted) averages (\code{se}) are
     used.}
   \item{conf}{Confidence limit for ellipses, e.g. 0.95. If given, the
     corresponding \code{sd} or \code{se} is multiplied with the
-    corresponding value found from the Chi-squared distribution with 2df. }
+    corresponding value found from the Chi-squared distribution with
+    2df. }
+  \item{cluster}{Result of hierarchic cluster analysis, such as
+    \code{\link[mva]{hclust}} or \code{\link[cluster]{agnes}}.}
+  \item{prune}{Number of upper level hierarchies removed from the
+    dendrogram. If \code{prune} \eqn{>0}, dendrogram will be
+    disconnected.}
+  \item{tree}{Structure defining a spanning tree. This can be a result
+    of \code{\link{spantree}} or a vector giving the child node of each
+    parent omitting the first point. Values \code{NA} means that there
+    is no link from the corresponding parent.}
   \item{\dots}{Parameters passed to graphical functions such
-    as \code{\link{lines}}, \code{\link{segments}}
+    as \code{\link{lines}}, \code{\link{segments}},
     \code{\link{arrows}}, \code{\link{polygon}} or to
     \code{\link{scores}} to select axes and
     scaling etc. }
@@ -85,7 +101,23 @@ ordiellipse(ord, groups, display="sites", kind = c("sd","se"), conf,
   point scores or standard error of the (weighted) average of
   scores, and the (weighted) correlation defines the direction of the
   principal axis of the ellipse. The function requires library
-  \code{ellipse}.   
+  \code{ellipse}. An ellipsoid hull can be drawn with function
+  \code{\link[cluster]{ellipsoidhull}} of package \code{cluster}.
+
+  Function \code{ordicluster} overlays a cluster dendrogram onto
+  ordination. It needs the result from a hierarchic clustering such as
+  \code{\link[mva]{hclust}} or \code{\link[cluster]{agnes}}, or other
+  with a similar structure. Function \code{ordicluster} connects
+  cluster centroids to each other with line
+  \code{\link{segments}}. Function uses centroids of all points in the 
+  clusters, and is therefore similar to average linkage methods.
+
+  Function \code{ordispantree} overlays a (minimum) spanning tree onto
+  ordination. It needs a result from \code{\link{spantree}} or a
+  vector listing children of each parent, starting from second (i.e.,
+  omitting the first: the number of links is one less number of
+  points). Missing links are denoted as \code{NA}. For an example, see
+  \code{\link{spantree}}. 
 }
 
 \note{These functions add graphical items to ordination graph: You must
@@ -110,6 +142,8 @@ attach(dune.env)
 plot(mod, type="n")
 ordihull(mod, Moisture)
 ordispider(mod, col="red")
+plot(mod, type = "p", display="sites")
+ordicluster(mod, hclust(vegdist(dune)), prune=3, col = "blue")
 # The following is not executed automatically because it needs
 # a non-standard library `ellipse'. 
 \dontrun{ordiellipse(mod, Moisture, kind="se", level=0.95, lwd=2, col="blue")}

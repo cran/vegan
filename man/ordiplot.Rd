@@ -12,7 +12,8 @@
   \code{identify.ordiplot} can be used to add labels to selected site,
   species or constraint points.  Function \code{identify.ordiplot} can
   be used to identify points from \code{\link{plot.cca}},
-  \code{\link{plot.decorana}} or \code{\link{plot.procrustes}} as well.
+  \code{\link{plot.decorana}}, \code{\link{plot.procrustes}} and
+  \code{\link{plot.rad}} as well.
 }
 \usage{
 ordiplot(ord, choices = c(1, 2), type="points", ...)
@@ -43,7 +44,7 @@ ordiplot(ord, choices = c(1, 2), type="points", ...)
 \details{
   Function \code{ordiplot} draws an ordination diagram using black circles for
   sites and red crosses for species.  It returns invisibly an object of
-  class \code{"ordiplot"} which can be used by \code{identify.ordiplot}
+  class \code{ordiplot} which can be used by \code{identify.ordiplot}
   to label selected sites or species, or constraints in
   \code{\link{cca}} and \code{\link{rda}}.
 
@@ -51,19 +52,19 @@ ordiplot(ord, choices = c(1, 2), type="points", ...)
   methods. For \code{\link{cca}}, \code{\link{rda}} and
   \code{\link{decorana}} it uses their \code{plot} method with option
   \code{type = "points"}. In addition, the \code{plot} functions of
-  these methods return invisibly an \code{"ordiplot"} object which can
+  these methods return invisibly an \code{ordiplot} object which can
   be used by \code{identify.ordiplot} to label points. For other
   ordinations it relies on \code{\link{scores}} to extract the scores.
 
   For full user control of plots, it is best to call \code{ordiplot}
   with \code{type = "none"} and save the result, and then add sites and
   species using \code{points.ordiplot} or \code{text.ordiplot} which
-  both pass all their arguments to the corresponging default graphical
+  both pass all their arguments to the corresponding default graphical
   functions. 
 }
 \value{
   Function \code{ordiplot} returns invisibly an object of class
-  \code{"ordiplot"} with items \code{sites}, \code{species} and
+  \code{ordiplot} with items \code{sites}, \code{species} and
   \code{constraints} (if these are available in the ordination
   object). Function \code{identify.ordiplot} uses this object to label
   the point.

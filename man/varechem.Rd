@@ -1,7 +1,7 @@
 \name{varespec}
 \alias{varechem}
 \alias{varespec}
-\non_function{}
+\docType{data}
 \title{Vegetation and environment in lichen pastures}
 \usage{
        data(varechem)

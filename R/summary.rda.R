@@ -1,6 +1,6 @@
 "summary.rda" <-
-function (object, scaling = 2, axes = 6, digits = max(3, getOption("digits") - 
-    3), ...) 
+    function (object, scaling = 2, axes = 6, digits = max(3, getOption("digits") - 
+                                             3), ...) 
 {
     axes <- min(axes, sum(object$CCA$rank, object$CA$rank))
     summ <- object[c("call", "tot.chi")]
@@ -24,8 +24,8 @@ function (object, scaling = 2, axes = 6, digits = max(3, getOption("digits") -
     species <- object$CCA$v[, 1:cc.dim, drop = FALSE]
     sites <- object$CCA$wa[, 1:cc.dim, drop = FALSE]
     centroids <- NA
-    if (!is.null(object$CCA$centroids) && !is.na(object$CCA$centroids)[1])
-       centroids <- object$CCA$centroids[, 1:cc.dim, drop = FALSE]
+    if (!is.null(object$CCA$centroids) && !is.na(object$CCA$centroids)[1]) 
+        centroids <- object$CCA$centroids[, 1:cc.dim, drop = FALSE]
     site.constr <- object$CCA$u[, 1:cc.dim, drop = FALSE]
     sum.ev <- object$tot.chi
     if (is.null(object$CCA$u)) 
@@ -55,7 +55,7 @@ function (object, scaling = 2, axes = 6, digits = max(3, getOption("digits") -
         if (add.dim) {
             evscale0 <- sqrt(summ$ev.uncon[1:add.dim]/sum.ev)
             species <- cbind(species, object$CA$v[, 1:add.dim, 
-                drop = FALSE])
+                                                  drop = FALSE])
             tmp <- object$CA$u[, 1:add.dim, drop = FALSE]
             tmp <- sweep(tmp, 2, evscale0, "*")
             sites <- cbind(sites, tmp)
@@ -67,9 +67,9 @@ function (object, scaling = 2, axes = 6, digits = max(3, getOption("digits") -
             sites <- sweep(sites, 2, sqrt(evscale), "/")
             if (!is.na(centroids)[1]) 
                 centroids <- sweep(centroids, 2, sqrt(evscale), 
-                  "/")
+                                   "/")
             site.constr <- sweep(site.constr, 2, sqrt(evscale), 
-                "/")
+                                 "/")
         }
         if (add.dim) {
             evscale0 <- sqrt(sqrt(summ$ev.uncon[1:add.dim]/sum.ev))
@@ -87,6 +87,8 @@ function (object, scaling = 2, axes = 6, digits = max(3, getOption("digits") -
     summ$biplot <- biplot
     summ$centroids <- const * centroids
     summ$digits <- digits
+    summ$inertia <- object$inertia
+    summ$method <- object$method
     class(summ) <- "summary.cca"
     summ
 }

@@ -1,18 +1,20 @@
 "print.summary.decorana" <-
-    function (x, ...)
+    function (x, ...) 
 {
+    if (!exists("printCoefmat", envir = NULL))
+        printCoefmat <- print.coefmat
     digits <- x$digits
     if (!is.null(x$spec.scores)) {
         cat("Species scores:\n\n")
-        TABLE <- cbind(x$spec.scores, Weights = x$spec.priorweights,
-                       Totals = x$spec.totals)  
-        print.coefmat(TABLE, digits=digits, ...)
+        TABLE <- cbind(x$spec.scores, Weights = x$spec.priorweights, 
+                       Totals = x$spec.totals)
+        printCoefmat(TABLE, digits = digits, na.print = "", ...)
         cat("\n")
     }
     if (!is.null(x$site.scores)) {
         cat("Site scores:\n\n")
         TABLE <- cbind(x$site.scores, Totals = x$site.totals)
-        print.coefmat(TABLE, digits = digits, ...)
+        printCoefmat(TABLE, digits = digits, na.print = "", ...)
         cat("\n")
     }
     invisible(x)

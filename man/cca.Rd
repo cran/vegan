@@ -23,10 +23,9 @@
 \usage{
 \method{cca}{formula}(formula, data)
 \method{cca}{default}(X, Y, Z, ...)
-\method{summary}{cca}(object, scaling=2, axes=6, digits, ...)
 \method{rda}{formula}(formula, data, scale=FALSE)
 \method{rda}{default}(X, Y, Z, scale=FALSE, ...)
-\method{summary}{rda}(object, scaling=2, axes=6, digits, ...)
+\method{summary}{cca}(object, scaling=2, axes=6, digits, ...)
 }
 
 \arguments{
@@ -41,7 +40,7 @@
     Can be missing. }
   \item{Z}{ Conditioning matrix, the effect of which is removed
     (`partialled out') before next step. Can be missing.}
-  \item{object, x}{A \code{cca} result object.}
+  \item{object}{A \code{cca} result object.}
   \item{scaling}{Scaling for species and site scores. Either species
     (\code{2}) or site (\code{1}) scores are scaled by eigenvalues, and
     the other set of scores is left unscaled, or with \code{3} both are
@@ -141,7 +140,7 @@
   \code{z}.  Some people have used the method for extracting
   ``components of variance'' in CCA.  However, if the effect of
   variables together is stronger than sum of both separately, this can
-  cause increase of total Chi-square after ``partialling out'' some
+  increase total Chi-square after ``partialling out'' some
   variation, and give negative ``components of variance''.  In general,
   such components of ``variance'' are not to be trusted due to
   interactions between two sets of variables.
@@ -156,7 +155,7 @@
   measurements are noisy) destroy ``LC scores'' whereas ``WA scores''
   were little affected.  Therefore the \code{plot} function uses site
   scores (``WA scores'') as the default. This is consistent with the
-  usage in general statistics and other function in \R
+  usage in statistics and other functions in \R
   (\code{\link[MASS]{lda}}, \code{\link[mva]{cancor}}).
 }
 \value{
@@ -228,11 +227,11 @@
   \code{\link{points.cca}}, \code{\link{scores.cca}}).
   Function \code{\link{anova.cca}} provides an ANOVA like permutation
   test for the ``significance'' of constraints.
-  Function \code{\link[CoCoAn]{CAIV}} provides an alternative
-  implementation of CCA (it is internally quite different). Established
-  statistical alternatives include canonical correlations for continuous
-  variable (\code{\link[mva]{cancor}}), and (linear) discriminant
-  analysis for factor constraints (\code{\link[MASS]{lda}}).
+  Functions \code{\link[CoCoAn]{CAIV}} (library \code{CoCoAn}) and
+  \code{\link[ade4]{cca}} (library \code{ade4}) provide an alternative
+  implementations of CCA (these are internally quite
+  different). Function \code{\link{capscale}} is a non-Euclidean generalization of
+  \code{rda}.
 }
 
 \examples{

@@ -1,7 +1,7 @@
 \name{scores}
 \alias{scores}
 \alias{scores.default}
-%- Also NEED an `\alias' for EACH other topic documented here.
+
 \title{ Get Species or Site Scores from an Ordination }
 \description{
   Function to access either species or site scores for specified axes in
@@ -10,7 +10,7 @@
 \usage{
 \method{scores}{default}(x, display=c("sites", "species"), choices, ...)
 }
-%- maybe also `usage' for other objects documented here.
+
 \arguments{
   \item{x}{ An ordination result. }
   \item{display}{ Partial match to access scores for \code{sites} or
@@ -22,7 +22,7 @@
   Functions \code{\link{cca}} and \code{\link{decorana}} have specific
   \code{scores} function to access their ordination scores.  Most
   standard ordination methods of libraries \code{mva}, \code{multiv} and
-  \code{MASS} do not have a \code{class}, and no specific method can be
+  \code{MASS} do not have a  specific\code{class}, and no specific method can be
   written for them.  However, \code{scores.default} guesses where
   some commonly used functions keep their site scores and possible
   species scores.  For site scores, the function seeks items in order

@@ -1,17 +1,21 @@
 \name{diversity}
 \alias{diversity}
 \alias{rarefy}
+\alias{renyi}
 \alias{fisher.alpha}
+\alias{specnumber}
 
 \title{ Ecological Diversity Indices and Rarefaction Species Richness }
 
-\description{ Shannon, Simpson and Fisher diversity indices and rarefied
-species richness for community ecologists.  }
+\description{ Shannon, Simpson, Rényi, Hill and Fisher diversity indices
+and rarefied species richness for community ecologists.  }
 
 \usage{
 diversity(x, index = "shannon", MARGIN = 1, base = exp(1))
-rarefy(x, sample, MARGIN = 1)
-fisher.alpha(x, MARGIN = 1, se = FALSE, ...) 
+rarefy(x, sample, se = FALSE, MARGIN = 1)
+renyi(x, scales=c(0,0.25,0.5,1,2,4,8,16,32,64,Inf), hill = FALSE)
+fisher.alpha(x, MARGIN = 1, se = FALSE, ...)
+specnumber(x, MARGIN = 1)
 }
 
 \arguments{
@@ -22,6 +26,8 @@ fisher.alpha(x, MARGIN = 1, se = FALSE, ...)
   \item{base}{ The logarithm \code{base} used in \code{shannon}.}
   \item{sample}{Subsample size for rarefying community.}
   \item{se}{Estimate standard errors.}
+  \item{scales}{Scales of Rényi diversity.}
+  \item{hill}{Calculate Hill numbers.}
   \item{...}{Parameters passed to \code{\link{nlm}}}
 }
 \details{
@@ -32,31 +38,48 @@ fisher.alpha(x, MARGIN = 1, se = FALSE, ...)
   logarithms, but some argue for base \eqn{b = 2} (which makes sense, but no
   real difference).
 
-  Both variants of Simpson's index are based on \eqn{S = \sum p_i^2}{S =
-    sum p_i^2}. Choice \code{simpson} returns \eqn{1-S} and
-  \code{invsimpson} returns \eqn{1/S}.
+  Both variants of Simpson's index are based on \eqn{D = \sum p_i^2}{D =
+    sum p_i^2}. Choice \code{simpson} returns \eqn{1-D} and
+  \code{invsimpson} returns \eqn{1/D}.
 
+  Shannon and Simpson indices are both special cases of Rényi
+  diversity
+  \deqn{H_a = \frac{1}{1-a} \log \sum p_i^a}{H.a = 1/(1-a) log
+    sum(p^a)}
+  where \eqn{a} is a scale parameter, and Hill (1975) suggested to
+  use so-called ``Hill numbers'' defined as \eqn{N_a = \exp(H_a)}{N.a =
+    exp(H.a)}.  Some Hill numbers are the number of species with
+  \eqn{a = 0}, \eqn{\exp(H')}{exp(H')} or the exponent of Shannon
+  diversity with \eqn{a = 1}, inverse Simpson with \eqn{a = 2} and
+  \eqn{1/ \max(p_i)}{1/max(p)} with \eqn{a = \infty}{a = Inf}. According
+  to the theory of diversity ordering, one community can be regarded as
+  more diverse than another only if its Rényi diversities are all higher 
+  (Tóthmérész 1995). 
+ 
   Function \code{rarefy} gives the expected species richness in random
-  subsamples of size \code{sample} from the community.  The maximum
-  permissible sample size is \eqn{N - \max(n_i)}, where \eqn{N} is the
-  total number of individuals and \eqn{n_i} are the abundances of
-  species. Please note that rarefaction can be done only
-  with genuine
+  subsamples of size \code{sample} from the community. The size of
+  \code{sample}
+  should be smaller than total community size, but the function will
+  silently work for larger \code{sample} as well and return non-rarefied
+  species richness (and standard error = 0).
+  Rarefaction can be performed only with genuine
   counts of individuals: the current function will silently truncate
   abundances to integers and give wrong results. The function
-  \code{rarefy} is based on Hurlbert's (1971) formulation.
+  \code{rarefy} is based on Hurlbert's (1971) formulation, and the
+  standard errors on Heck et al. (1975).  
 
   Function \code{fisher.alpha} estimates the \eqn{\alpha} parameter of
-  Fisher's logarithmic series where the expected
-  number of species \eqn{f} with \eqn{n} observed individuals is
-  \eqn{f_n = \alpha x^n / n} (Fisher et al. 1943). The estimation
-  follows Kempton & Taylor (1974) and uses function
-  \code{\link{nlm}}. The estimation is possible only for genuine
+  Fisher's logarithmic series (see \code{\link{fisherfit}}). 
+  The estimation is possible only for genuine
   counts of individuals. The function can optionally return standard
   errors of \eqn{\alpha}.  These should be regarded only as rough
   indicators of the accuracy: the confidence limits of \eqn{\alpha} are
   strongly
   non-symmetric and standard errors cannot be used in Normal inference.
+
+  Function \code{specnumber} finds the number of species. With
+  \code{MARGIN = 2}, it finds frequencies of species. The function is
+  extremely simple, and shortcuts are easy in plain \R.
   
   Better stories can be told about Simpson's index than about
   Shannon's index, and still more grandiose stories about
@@ -67,14 +90,18 @@ fisher.alpha(x, MARGIN = 1, se = FALSE, ...)
   index is linearly related to inverse Simpson (Hill 1973) although the
   former may be more sensitive to rare species. Moreover, inverse
   Simpson is asymptotically equal to rarefied species richness in sample
-  of two indivividuals, and Fisher's \eqn{\alpha} is very similar to
+  of two individuals, and Fisher's \eqn{\alpha} is very similar to
   inverse Simpson.
 }
 
 \value{
   Vector of diversity indices or rarefied species richness values. With
-  option \code{se = TRUE}, function \code{fisher.alpha} returns a data
-  frame with items for \eqn{\alpha} (\code{alpha}), its approximate
+  option \code{se = TRUE}, function \code{rarefy} returns a 2-row matrix
+  with rarefied richness (\code{S}) and its standard error
+  (\code{se}). Function \code{renyi} returns a data frame of selected
+  indices. 
+  With option \code{se = TRUE}, function \code{fisher.alpha} returns a
+  data frame with items for \eqn{\alpha} (\code{alpha}), its approximate
   standard errors (\code{se}), residual degrees of freedom
   (\code{df.residual}), and the \code{code} returned by
   \code{\link{nlm}} on the success of estimation. }
@@ -84,30 +111,39 @@ fisher.alpha(x, MARGIN = 1, se = FALSE, ...)
   Fisher, R.A., Corbet, A.S. & Williams, C.B. (1943). The relation
   between the number of species and the number of individuals in a
   random sample of animal population. \emph{Journal of Animal Ecology}
-  12: 42-58.
+  12, 42--58.
+
+  Heck, K.L., van Belle, G. & Simberloff, D. (1975). Explicit
+  calculation of the rarefaction diversity measurement and the
+  determination of sufficient sample size. \emph{Ecology} 56,
+  1459--1461.  
   
   Hill, M.O. (1973). Diversity and evenness: a unifying notation and its
-  consequences. \emph{Ecology} 54: 427-473.
+  consequences. \emph{Ecology} 54, 427--473.
   
   Hurlbert, S.H. (1971). The nonconcept of species diversity: a critique
-  and alternative parameters. \emph{Ecological Monographs} 54: 187-211.
+  and alternative parameters. \emph{Ecological Monographs} 54, 187--211.
+ 
+  Tóthmérész, B. (1995). Comparison of different methods for diversity
+  ordering. \emph{Journal of Vegetation Science} 6, 283--290.
+}
 
-  Kempton, R.A. & Taylor, L.R. (1974). Log-series and log-normal
-  parameters as diversity discriminators for Lepidoptera. \emph{Journal
-    of Animal Ecology} 43: 381-399.  
-  }
-
-\author{ Jari Oksanen and Bob O'Hara. }
-
+\author{ Jari Oksanen, Roeland Kindt \email{r.kindt@cgiar.org}
+  (\code{renyi}) and  Bob O'Hara \email{bob.ohara@helsinki.fi}
+    (\code{fisher.alpha}). }
 
 \examples{
-data(varespec)
-H <- diversity(varespec)
+data(BCI)
+H <- diversity(BCI)
+simp <- diversity(BCI, "simpson")
+invsimp <- diversity(BCI, "inv")
+r.2 <- rarefy(BCI, 2)
+alpha <- fisher.alpha(BCI)
+pairs(cbind(H, simp, invsimp, r.2, alpha), pch="+", col="blue")
 ## Species richness (S) and Pielou's evenness (J):
-S <- colSums(varespec>0)
+S <- specnumber(BCI) ## rowSums(BCI > 0) does the same...
 J <- H/log(S)
-## Other indices cannot be demonstrated because there are not yet
-## count data sets in vegan.
 }
-\keyword{ univar }%-- one or more ...
+\keyword{ univar }
+
 

@@ -1,7 +1,7 @@
 \name{dune}
 \alias{dune}
 \alias{dune.env}
-\non_function{}
+\docType{data}
 \title{Vegetation and Environment in Dutch Dune Meadows. }
 \usage{
   data(dune)

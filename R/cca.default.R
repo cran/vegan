@@ -1,5 +1,5 @@
 "cca.default" <-
-function (X, Y, Z, ...) 
+    function (X, Y, Z, ...) 
 {
     CCA <- NULL
     pCCA <- NULL
@@ -11,6 +11,8 @@ function (X, Y, Z, ...)
         x
     }
     X <- as.matrix(X)
+    if (any(rowSums(X) <= 0) || any(colSums(X) <= 0)) 
+        stop("All row and column sums must be >0 in the community matrix")
     gran.tot <- sum(X)
     X <- X/gran.tot
     rowsum <- apply(X, 1, sum)
@@ -38,6 +40,7 @@ function (X, Y, Z, ...)
         else rank <- Q$rank - pCCA$rank
         Y <- qr.fitted(Q, Xbar)
         sol <- svd(Y)
+        rank <- min(rank, length(sol$d))
         ax.names <- paste("CCA", 1:length(sol$d), sep = "")
         colnames(sol$u) <- ax.names
         colnames(sol$v) <- ax.names
@@ -45,16 +48,16 @@ function (X, Y, Z, ...)
         rownames(sol$u) <- rownames(X)
         rownames(sol$v) <- colnames(X)
         CCA <- list(eig = sol$d[1:rank]^2)
-        CCA$u <- sweep(as.matrix(sol$u[, 1:rank, drop=FALSE]), 1, 1/sqrt(rowsum), 
-                       "*")
-        CCA$v <- sweep(as.matrix(sol$v[, 1:rank, drop=FALSE]), 1, 1/sqrt(colsum), 
-                       "*")
+        CCA$u <- sweep(as.matrix(sol$u[, 1:rank, drop = FALSE]), 
+                       1, 1/sqrt(rowsum), "*")
+        CCA$v <- sweep(as.matrix(sol$v[, 1:rank, drop = FALSE]), 
+                       1, 1/sqrt(colsum), "*")
         CCA$u.eig <- sweep(CCA$u, 2, sol$d[1:rank], "*")
         CCA$v.eig <- sweep(CCA$v, 2, sol$d[1:rank], "*")
-        CCA$wa.eig <- sweep(Xbar %*% sol$v[, 1:rank, drop=FALSE], 1, 1/sqrt(rowsum), 
-                            "*")
+        CCA$wa.eig <- sweep(Xbar %*% sol$v[, 1:rank, drop = FALSE], 
+                            1, 1/sqrt(rowsum), "*")
         CCA$wa <- sweep(CCA$wa.eig, 2, 1/sol$d[1:rank], "*")
-        CCA$biplot <- cor(Y.r, sol$u[, 1:rank, drop=FALSE])
+        CCA$biplot <- cor(Y.r, sol$u[, 1:rank, drop = FALSE])
         CCA$rank <- rank
         CCA$tot.chi <- sum(CCA$eig)
         CCA$QR <- Q
@@ -71,10 +74,10 @@ function (X, Y, Z, ...)
         rownames(sol$u) <- rownames(X)
         rownames(sol$v) <- colnames(X)
         CA <- list(eig = sol$d[1:Q$rank]^2)
-        CA$u <- sweep(as.matrix(sol$u[, 1:Q$rank, drop=FALSE]), 1, 1/sqrt(rowsum), 
-                      "*")
-        CA$v <- sweep(as.matrix(sol$v[, 1:Q$rank, drop=FALSE]), 1, 1/sqrt(colsum), 
-                      "*")
+        CA$u <- sweep(as.matrix(sol$u[, 1:Q$rank, drop = FALSE]), 
+                      1, 1/sqrt(rowsum), "*")
+        CA$v <- sweep(as.matrix(sol$v[, 1:Q$rank, drop = FALSE]), 
+                      1, 1/sqrt(colsum), "*")
         CA$u.eig <- sweep(CA$u, 2, sol$d[1:Q$rank], "*")
         CA$v.eig <- sweep(CA$v, 2, sol$d[1:Q$rank], "*")
         CA$rank <- Q$rank
@@ -86,6 +89,8 @@ function (X, Y, Z, ...)
     sol <- list(call = call, grand.total = gran.tot, rowsum = rowsum, 
                 colsum = colsum, tot.chi = tot.chi, pCCA = pCCA, CCA = CCA, 
                 CA = CA)
+    sol$method <- "cca"
+    sol$inertia <- "mean squared contingency coefficient"
     class(sol) <- "cca"
     sol
 }

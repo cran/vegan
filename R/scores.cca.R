@@ -1,15 +1,15 @@
 "scores.cca" <-
-function (x, choices = c(1, 2), display = c("sp", "wa", "bp"), 
-    scaling = 2, ...) 
+    function (x, choices = c(1, 2), display = c("sp", "wa", "cn"), 
+              scaling = 2, ...) 
 {
     tabula <- c("species", "sites", "constraints", "biplot", 
-        "centroids")
+                "centroids")
     names(tabula) <- c("sp", "wa", "lc", "bp", "cn")
     if (is.null(x$CCA)) 
         tabula <- tabula[1:2]
     if (length(display) == 1) {
         display <- match.arg(display, c("sites", "species", "wa", 
-            "lc", "bp", "cn"))
+                                        "lc", "bp", "cn"))
         if (display == "sites") 
             display <- "wa"
         else if (display == "species") 

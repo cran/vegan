@@ -11,13 +11,18 @@
             P <- P[, !facts, drop=FALSE]
             if (length(P)) {
                 if (permutations) {
-                    runif(1)
-                    seed <- .Random.seed
+                    if(!exists(".Random.seed", envir=.GlobalEnv,
+                               inherits = FALSE)) { 
+                        runif(1)
+                    }
+                    seed <- get(".Random.seed", envir=.GlobalEnv,
+                                inherits = FALSE)
                 }
                 vectors <- vectorfit(X, P, permutations, strata, choices)
             }
-            if (!is.null(seed)) 
-                .Random.seed <- seed
+            if (!is.null(seed)) {
+                assign(".Random.seed",  seed, envir=.GlobalEnv)
+            }
             factors <- factorfit(X, Pfac, permutations, strata, choices)
             sol <- list(vector = vectors, factors = factors)
         }

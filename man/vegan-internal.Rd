@@ -13,11 +13,11 @@
 ordiParseFormula(formula, data)
 centroids.cca(x, mf, wt)
 permuted.index(n, strata)
-spider.cca{x, ...}
+spider.cca(x, ...)
 }
 
 \details{
-  These are not to be called by the user. Function \code{spider.cca} is
+  These are not to be called by the user. Function \code{spider.cca} was
   replaced with \code{\link{ordispider}} and will be removed in the
   future. 
 }

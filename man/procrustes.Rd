@@ -55,7 +55,7 @@ protest(X, Y, permutations = 1000, strata)
   rotation is typically used in comparison of ordination results.  It is
   particularly useful in comparing alternative solutions in
   multidimensional scaling.  If \code{scale=FALSE}, the function only
-  rotates matrix \code{Y}. If \code{scale=TRUE} , it scales linearly
+  rotates matrix \code{Y}. If \code{scale=TRUE}, it scales linearly
   configuration \code{Y} for maximum similarity.  Since \code{Y} is scaled
   to fit \code{X}, the scaling is non-symmetric. However, with
   \code{symmetric=TRUE}, the configurations are scaled to equal
@@ -63,7 +63,7 @@ protest(X, Y, permutations = 1000, strata)
   is computed.
 
   Instead of matrix, \code{X} and \code{Y} can be results from an
-  ordination form which \code{\link{scores}} can extract results.
+  ordination from which \code{\link{scores}} can extract results.
 
   Function \code{plot} plots a \code{procrustes}
   object and  returns invisibly an \code{ordiplot} object so that

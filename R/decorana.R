@@ -1,11 +1,13 @@
 "decorana" <-
-function (veg, iweigh = 0, iresc = 4, ira = 0, mk = 26, short = 0, 
-    before = NULL, after = NULL) 
+    function (veg, iweigh = 0, iresc = 4, ira = 0, mk = 26, short = 0, 
+              before = NULL, after = NULL) 
 {
     Const1 <- 1e-10
     Const2 <- 5
     Const3 <- 1e-11
     veg <- as.matrix(veg)
+    if (any(rowSums(veg) <= 0) || any(colSums(veg) <= 0))
+        stop("All row and column sums must be >0 in the community matrix")
     nr <- nrow(veg)
     nc <- ncol(veg)
     mk <- mk + 4
@@ -23,7 +25,7 @@ function (veg, iweigh = 0, iresc = 4, ira = 0, mk = 26, short = 0,
         for (i in 1:nr) {
             tmp <- veg[i, ] > 0
             veg[i, tmp] <- approx(before, after, veg[i, tmp], 
-                rule = 2)$y
+                                  rule = 2)$y
         }
     }
     if (iweigh) {
@@ -40,84 +42,84 @@ function (veg, iweigh = 0, iresc = 4, ira = 0, mk = 26, short = 0,
     eig <- 1
     nid <- sum(veg > 0)
     cep <- .C("data2hill", as.double(veg), mi = as.integer(nr), 
-        n = as.integer(nc), nid = as.integer(nid), ibegin = integer(nr), 
-        iend = integer(nr), idat = integer(nid), qidat = double(nid), 
-        PACKAGE = "vegan")[c("mi", "n", "nid", "ibegin", "iend", 
-        "idat", "qidat")]
+              n = as.integer(nc), nid = as.integer(nid), ibegin = integer(nr), 
+              iend = integer(nr), idat = integer(nid), qidat = double(nid), 
+              PACKAGE = "vegan")[c("mi", "n", "nid", "ibegin", "iend", 
+              "idat", "qidat")]
     ix1 <- ix2 <- ix3 <- rep(0, cep$mi)
     s1 <- .Fortran("eigy", x = as.double(xeig1), y = as.double(yeig1), 
-        eig = double(1), neig = as.integer(0), ira = as.integer(ira), 
-        iresc = as.integer(iresc), short = as.double(short), 
-        mi = as.integer(cep$mi), mk = as.integer(mk), n = as.integer(cep$n), 
-        nid = as.integer(cep$ni), ibegin = as.integer(cep$ibegin), 
-        iend = as.integer(cep$iend), idat = as.integer(cep$idat), 
-        qidat = as.double(cep$qidat), y2 = double(cep$n), y3 = double(cep$n), 
-        y4 = double(cep$n), y5 = double(cep$n), xeig1 = as.double(xeig1), 
-        xeig2 = double(cep$mi), xeig3 = double(cep$mi), ix1 = as.integer(ix1), 
-        ix2 = as.integer(ix2), ix3 = as.integer(ix3), aidot = as.double(aidot), 
-        adotj = as.double(adotj), PACKAGE = "vegan")[c("x", "y", 
-        "eig")]
+                   eig = double(1), neig = as.integer(0), ira = as.integer(ira), 
+                   iresc = as.integer(iresc), short = as.double(short), 
+                   mi = as.integer(cep$mi), mk = as.integer(mk), n = as.integer(cep$n), 
+                   nid = as.integer(cep$ni), ibegin = as.integer(cep$ibegin), 
+                   iend = as.integer(cep$iend), idat = as.integer(cep$idat), 
+                   qidat = as.double(cep$qidat), y2 = double(cep$n), y3 = double(cep$n), 
+                   y4 = double(cep$n), y5 = double(cep$n), xeig1 = as.double(xeig1), 
+                   xeig2 = double(cep$mi), xeig3 = double(cep$mi), ix1 = as.integer(ix1), 
+                   ix2 = as.integer(ix2), ix3 = as.integer(ix3), aidot = as.double(aidot), 
+                   adotj = as.double(adotj), PACKAGE = "vegan")[c("x", "y", 
+                                             "eig")]
     if (!ira) 
         ix1 <- .Fortran("cutup", x = as.double(s1$x), ix = as.integer(ix1), 
-            mi = as.integer(cep$mi), mk = as.integer(mk), PACKAGE = "vegan")$ix
+                        mi = as.integer(cep$mi), mk = as.integer(mk), PACKAGE = "vegan")$ix
     s2 <- .Fortran("eigy", x = as.double(xeig1), y = as.double(yeig1), 
-        eig = double(1), neig = as.integer(1), ira = as.integer(ira), 
-        iresc = as.integer(iresc), short = as.double(short), 
-        mi = as.integer(cep$mi), mk = as.integer(mk), n = as.integer(cep$n), 
-        nid = as.integer(cep$ni), ibegin = as.integer(cep$ibegin), 
-        iend = as.integer(cep$iend), idat = as.integer(cep$idat), 
-        qidat = as.double(cep$qidat), y2 = double(cep$n), y3 = double(cep$n), 
-        y4 = double(cep$n), y5 = double(cep$n), xeig1 = as.double(s1$x), 
-        xeig2 = double(cep$mi), xeig3 = double(cep$mi), ix1 = as.integer(ix1), 
-        ix2 = as.integer(ix2), ix3 = as.integer(ix3), aidot = as.double(aidot), 
-        adotj = as.double(adotj), PACKAGE = "vegan")[c("x", "y", 
-        "eig")]
+                   eig = double(1), neig = as.integer(1), ira = as.integer(ira), 
+                   iresc = as.integer(iresc), short = as.double(short), 
+                   mi = as.integer(cep$mi), mk = as.integer(mk), n = as.integer(cep$n), 
+                   nid = as.integer(cep$ni), ibegin = as.integer(cep$ibegin), 
+                   iend = as.integer(cep$iend), idat = as.integer(cep$idat), 
+                   qidat = as.double(cep$qidat), y2 = double(cep$n), y3 = double(cep$n), 
+                   y4 = double(cep$n), y5 = double(cep$n), xeig1 = as.double(s1$x), 
+                   xeig2 = double(cep$mi), xeig3 = double(cep$mi), ix1 = as.integer(ix1), 
+                   ix2 = as.integer(ix2), ix3 = as.integer(ix3), aidot = as.double(aidot), 
+                   adotj = as.double(adotj), PACKAGE = "vegan")[c("x", "y", 
+                                             "eig")]
     if (!ira) 
         ix2 <- .Fortran("cutup", x = as.double(s2$x), ix = as.integer(ix2), 
-            mi = as.integer(cep$mi), mk = as.integer(mk), PACKAGE = "vegan")$ix
+                        mi = as.integer(cep$mi), mk = as.integer(mk), PACKAGE = "vegan")$ix
     s3 <- .Fortran("eigy", x = as.double(xeig1), y = as.double(yeig1), 
-        eig = double(1), neig = as.integer(2), ira = as.integer(ira), 
-        iresc = as.integer(iresc), short = as.double(short), 
-        mi = as.integer(cep$mi), mk = as.integer(mk), n = as.integer(cep$n), 
-        nid = as.integer(cep$ni), ibegin = as.integer(cep$ibegin), 
-        iend = as.integer(cep$iend), idat = as.integer(cep$idat), 
-        qidat = as.double(cep$qidat), y2 = double(cep$n), y3 = double(cep$n), 
-        y4 = double(cep$n), y5 = double(cep$n), xeig1 = as.double(s1$x), 
-        xeig2 = as.double(s2$x), xeig3 = double(cep$mi), ix1 = as.integer(ix1), 
-        ix2 = as.integer(ix2), ix3 = as.integer(ix3), aidot = as.double(aidot), 
-        adotj = as.double(adotj), PACKAGE = "vegan")[c("x", "y", 
-        "eig")]
+                   eig = double(1), neig = as.integer(2), ira = as.integer(ira), 
+                   iresc = as.integer(iresc), short = as.double(short), 
+                   mi = as.integer(cep$mi), mk = as.integer(mk), n = as.integer(cep$n), 
+                   nid = as.integer(cep$ni), ibegin = as.integer(cep$ibegin), 
+                   iend = as.integer(cep$iend), idat = as.integer(cep$idat), 
+                   qidat = as.double(cep$qidat), y2 = double(cep$n), y3 = double(cep$n), 
+                   y4 = double(cep$n), y5 = double(cep$n), xeig1 = as.double(s1$x), 
+                   xeig2 = as.double(s2$x), xeig3 = double(cep$mi), ix1 = as.integer(ix1), 
+                   ix2 = as.integer(ix2), ix3 = as.integer(ix3), aidot = as.double(aidot), 
+                   adotj = as.double(adotj), PACKAGE = "vegan")[c("x", "y", 
+                                             "eig")]
     if (!ira) 
         ix3 <- .Fortran("cutup", x = as.double(s3$x), ix = as.integer(ix3), 
-            mi = as.integer(cep$mi), mk = as.integer(mk), PACKAGE = "vegan")$ix
+                        mi = as.integer(cep$mi), mk = as.integer(mk), PACKAGE = "vegan")$ix
     s4 <- .Fortran("eigy", x = as.double(xeig1), y = as.double(yeig1), 
-        eig = double(1), neig = as.integer(3), ira = as.integer(ira), 
-        iresc = as.integer(iresc), short = as.double(short), 
-        mi = as.integer(cep$mi), mk = as.integer(mk), n = as.integer(cep$n), 
-        nid = as.integer(cep$ni), ibegin = as.integer(cep$ibegin), 
-        iend = as.integer(cep$iend), idat = as.integer(cep$idat), 
-        qidat = as.double(cep$qidat), y2 = double(cep$n), y3 = double(cep$n), 
-        y4 = double(cep$n), y5 = double(cep$n), xeig1 = as.double(s1$x), 
-        xeig2 = as.double(s2$x), xeig3 = as.double(s3$x), ix1 = as.integer(ix1), 
-        ix2 = as.integer(ix2), ix3 = as.integer(ix3), aidot = as.double(aidot), 
-        adotj = as.double(adotj), PACKAGE = "vegan")[c("x", "y", 
-        "eig")]
+                   eig = double(1), neig = as.integer(3), ira = as.integer(ira), 
+                   iresc = as.integer(iresc), short = as.double(short), 
+                   mi = as.integer(cep$mi), mk = as.integer(mk), n = as.integer(cep$n), 
+                   nid = as.integer(cep$ni), ibegin = as.integer(cep$ibegin), 
+                   iend = as.integer(cep$iend), idat = as.integer(cep$idat), 
+                   qidat = as.double(cep$qidat), y2 = double(cep$n), y3 = double(cep$n), 
+                   y4 = double(cep$n), y5 = double(cep$n), xeig1 = as.double(s1$x), 
+                   xeig2 = as.double(s2$x), xeig3 = as.double(s3$x), ix1 = as.integer(ix1), 
+                   ix2 = as.integer(ix2), ix3 = as.integer(ix3), aidot = as.double(aidot), 
+                   adotj = as.double(adotj), PACKAGE = "vegan")[c("x", "y", 
+                                             "eig")]
     s1$x <- .Fortran("yxmult", y = as.double(s1$y), x = as.double(s1$x), 
-        as.integer(cep$mi), as.integer(cep$n), as.integer(cep$nid), 
-        as.integer(cep$ibegin), as.integer(cep$iend), as.integer(cep$idat), 
-        as.double(cep$qidat), PACKAGE = "vegan")$x/aidot
+                     as.integer(cep$mi), as.integer(cep$n), as.integer(cep$nid), 
+                     as.integer(cep$ibegin), as.integer(cep$iend), as.integer(cep$idat), 
+                     as.double(cep$qidat), PACKAGE = "vegan")$x/aidot
     s2$x <- .Fortran("yxmult", y = as.double(s2$y), x = as.double(s2$x), 
-        as.integer(cep$mi), as.integer(cep$n), as.integer(cep$nid), 
-        as.integer(cep$ibegin), as.integer(cep$iend), as.integer(cep$idat), 
-        as.double(cep$qidat), PACKAGE = "vegan")$x/aidot
+                     as.integer(cep$mi), as.integer(cep$n), as.integer(cep$nid), 
+                     as.integer(cep$ibegin), as.integer(cep$iend), as.integer(cep$idat), 
+                     as.double(cep$qidat), PACKAGE = "vegan")$x/aidot
     s3$x <- .Fortran("yxmult", y = as.double(s3$y), x = as.double(s3$x), 
-        as.integer(cep$mi), as.integer(cep$n), as.integer(cep$nid), 
-        as.integer(cep$ibegin), as.integer(cep$iend), as.integer(cep$idat), 
-        as.double(cep$qidat), PACKAGE = "vegan")$x/aidot
+                     as.integer(cep$mi), as.integer(cep$n), as.integer(cep$nid), 
+                     as.integer(cep$ibegin), as.integer(cep$iend), as.integer(cep$idat), 
+                     as.double(cep$qidat), PACKAGE = "vegan")$x/aidot
     s4$x <- .Fortran("yxmult", y = as.double(s4$y), x = as.double(s1$x), 
-        as.integer(cep$mi), as.integer(cep$n), as.integer(cep$nid), 
-        as.integer(cep$ibegin), as.integer(cep$iend), as.integer(cep$idat), 
-        as.double(cep$qidat), PACKAGE = "vegan")$x/aidot
+                     as.integer(cep$mi), as.integer(cep$n), as.integer(cep$nid), 
+                     as.integer(cep$ibegin), as.integer(cep$iend), as.integer(cep$idat), 
+                     as.double(cep$qidat), PACKAGE = "vegan")$x/aidot
     rproj <- cbind(s1$x, s2$x, s3$x, s4$x)
     cproj <- cbind(s1$y, s2$y, s3$y, s4$y)
     evals <- c(s1$eig, s2$eig, s3$eig, s4$eig)
@@ -142,10 +144,10 @@ function (veg, iweigh = 0, iresc = 4, ira = 0, mk = 26, short = 0,
         evals <- var.r/var.c
     }
     CA <- list(rproj = rproj, cproj = cproj, evals = evals, evals.decorana = evals.decorana, 
-        origin = origin, v = v, fraction=v.fraction,  adotj = adotj, aidot = aidot, 
-        iweigh = iweigh, iresc = iresc, ira = ira, mk = mk - 4, 
-        short = short, before = before, after = after, 
-        call = match.call())
+               origin = origin, v = v, fraction = v.fraction, adotj = adotj, 
+               aidot = aidot, iweigh = iweigh, iresc = iresc, ira = ira, 
+               mk = mk - 4, short = short, before = before, after = after, 
+               call = match.call())
     class(CA) <- "decorana"
     CA
 }

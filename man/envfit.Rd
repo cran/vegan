@@ -6,7 +6,7 @@
 \alias{print.envfit}
 \alias{print.factorfit}
 \alias{print.vectorfit}
-%- Also NEED an `\alias' for EACH other topic documented here.
+
 \title{Fits an Environmental Vector or Factor onto an Ordination }
 \description{
   The function fits environmental vectors or factors onto an
@@ -20,7 +20,7 @@ envfit(X, P, permutations = 0, strata, choices=c(1,2))
 vectorfit(X, P, permutations = 0, strata, choices=c(1,2))
 factorfit(X, P, permutations = 0, strata, choices=c(1,2))
 }
-%- maybe also `usage' for other objects documented here.
+
 \arguments{
   \item{X}{ Ordination configuration.}
   \item{P}{ Matrix or vector of environmental variable(s). }
@@ -91,7 +91,7 @@ factorfit(X, P, permutations = 0, strata, choices=c(1,2))
   methods than arrows may be more useful.  The simplest is to adjust the
   plotting symbol sizes (\code{cex}, \code{\link{symbols}}) by
   environmental variables.
-  More fancy methods involve smoothing and regression methods that
+  Fancier methods involve smoothing and regression methods that
   abound in \R, and \code{\link{ordisurf}} provides a wrapper for some.
   }
 
@@ -112,7 +112,7 @@ vare.fit
 plot(vare.mds$points, pch="+", asp=1, xlab="Dim1", ylab="Dim2")
 plot(vare.fit)
 }
-\keyword{multivariate }%-- one or more ...
+\keyword{multivariate }
 \keyword{aplot}
 \keyword{htest}
 

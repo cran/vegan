@@ -21,10 +21,9 @@
     nperm <- c(nperm, NA)
     table <- data.frame(df, chi, Fval, nperm, Pval)
     is.rda <- inherits(object, "rda")
-    dimnames(table) <- list(c("Model", "Residual"), c("Df", ifelse(is.rda, "Var","Chisq"), 
-                                                      "F", "N.Perm", "Pr(>F)"))
-    head <- paste("Permutation test for", ifelse(is.rda, "RDA", "CCA"),"under", tst$model, 
-                  "model\n")
+    dimnames(table) <- list(c("Model", "Residual"), c("Df", ifelse(is.rda, 
+                                                                   "Var", "Chisq"), "F", "N.Perm", "Pr(>F)"))
+    head <- paste("Permutation test for", tst$method, "under", tst$model, "model\n")
     if (!is.null(tst$strata)) 
         head <- paste(head, "Permutations stratified within `", 
                       tst$strata, "'\n", sep = "")

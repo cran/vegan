@@ -1,5 +1,77 @@
 VEGAN STABLE VERSIONS 
 
+Version 1.6-0 (Fisher)
+======================
+
+* Based on devel version 1.5-58. Passes checks with R-1.8.0 and
+  R-1.7.0 and compiles into a Windows binary. Many functions were
+  contributed by Roeland Kindt (Nairobi, Kenya). 
+
+* BCI: A new data set on tree counts on 1-ha plots in the Barro
+  Colorado Island. Thanks to Roeland Kindt and Richard S. Condit.
+
+* capscale: A new function for [partial] constrained analysis of
+  principal coordinates (CAP).
+
+* cca, rda: Can now handle cases where the number of constraints is
+  higher than the number of species.
+
+* cca, decorana: Find now if data have empty rows or columns.
+
+* decostand: Added Chi-square transformation.
+
+* distconnected: A new function to find if vegetation data are
+  disconnected below given threshold dissimilarity level. Utility
+  function no.shared gives a logical dissimilarity matrix with values
+  TRUE for cases with no shared species.
+
+* fisher.alpha: Should work with large sample sizes now (bug report
+  thanks to Ariel Bergamini). 
+
+* fisherfit, prestonfit, prestondistr: New functions to fit Fisher's
+  logarithmic series and Preston's log-normal model.
+
+* make.cepnames: New utility function to change Latin names into 4+4
+  character CEP names.
+
+* ordicluster, ordispantree: New functions in the ordihull family to
+  overlay a cluster dendrogram or a spanning tree onto an
+  ordination. Weights are now really used with cca and decorana
+  plots. 
+
+* radfit: New function to fit Ranked Abundance Dominance or Dominance/
+  Diversity models with maximum likelihood: Pre-emption, log-normal,
+  veiled log-normal, Zipf and Zipf--Mandelbrot models.
+
+* rankindex: Can now use stepacross and new dissimilarity indices of
+  vegdist. 
+
+* rarefy: Can now optionally find SE of rarefied richness.
+
+* renyi: A new function to find Rényi diversities or Hill numbers with
+  any scale (thanks to Roeland Kindt).
+
+* scores.ordiplot: should be more robust now. 
+
+* spantree: A new function to find a minimum spanning tree using only
+  dissimilarities below a threshold or disregarding NA
+  dissimilarities.
+
+* specaccum: A new function for species accumulation curves. Thanks to
+  Roeland Kindt.
+
+* specnumber: A very simple utility function to find species richness.
+
+* specpool: New function for extrapolated species richness in a
+  species pool, or for estimating the number of unseen species. 
+
+* stepacross: New function for estimation of dissimilarities between
+  sites that have no shared species. Implements both flexible shortest
+  paths and their approximation known as extended dissimilarities. 
+
+* vegdist: New dissimilarity indices Jaccard (finally), Morisita,
+  Horn--Morisita and Mountford. 
+
 Version 1.4-4
 =============
 

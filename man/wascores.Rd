@@ -20,7 +20,7 @@ eigengrad(x, w)
 }
 \details{
   Function \code{wascores} computes weighted averages. Weighted averages
-  `shrink': they cannot be more extreme than values usd for calculating
+  `shrink': they cannot be more extreme than values used for calculating
   the averages. With \code{expand = TRUE}, the function `dehsrinks' the
   weighted averages by making their biased weighted variance equal to
   the biased weighted variance of the corresponding environmental
@@ -61,6 +61,8 @@ plot(scores(vare.points), pch="+", asp=1)
 text(vare.wa[freq > 4,], rownames(vare.wa)[freq > 4],cex=0.8,col="blue")
 ## Works for environmental variables, too.
 wascores(varechem, varespec)
+## And the strength of these variables was:
+eigengrad(varechem, varespec)
 }
 
 }

@@ -1,5 +1,6 @@
 "permutest.cca" <-
-function (x, permutations = 100, model = c("reduced", "full"), strata) 
+    function (x, permutations = 100, model = c("reduced", "full"), 
+              strata) 
 {
     model <- match.arg(model)
     Chi.z <- x$CCA$tot.chi
@@ -29,9 +30,9 @@ function (x, permutations = 100, model = c("reduced", "full"), strata)
         F.perm[i] <- (cca.ev/q)/(ca.ev/r)
     }
     sol <- list(call = x$call, model = model, F.0 = F.0, F.perm = F.perm, 
-        nperm = permutations)
-    if(!missing(strata)) {
-        sol$strata <- deparse(substitute(strata)) 
+                nperm = permutations, method = x$method)
+    if (!missing(strata)) {
+        sol$strata <- deparse(substitute(strata))
         sol$stratum.values <- strata
     }
     class(sol) <- "permutest.cca"

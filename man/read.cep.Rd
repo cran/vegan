@@ -82,8 +82,6 @@ read.cep(file, maxdata=10000, positive=TRUE, trace=FALSE, force=FALSE)
     Save your session
     \item
     Run \code{read.cep()} with switch \code{force=TRUE}
-    \item
-    If successful, tell me.
   }
 }
 
