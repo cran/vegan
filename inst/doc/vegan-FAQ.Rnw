@@ -23,10 +23,8 @@
 
 \noindent 
 The document answers some frequently asked questions and explains some
-design decisions I have made in vegan.  The document was made with
-\texttt{vegan} version 
-\Sexpr{noquote(package.description("vegan",field="Version"))} 
-and \Sexpr{noquote(R.version.string)}.
+design decisions I have made in vegan.  
+
 \end{abstract}
 
 \tableofcontents

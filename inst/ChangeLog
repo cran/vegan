@@ -1,5 +1,27 @@
 VEGAN STABLE VERSIONS 
 
+Version 1.6-3 (Mar 22, 2004)
+
+	* Still based on 1.7-3, but ported some changes from version
+	1.7-7 (envfit, procrustes). This version was produced to prepare
+	for incompatible changes in coming R-1.9.0.
+
+	* vegan-FAQ: Does not show the vegan and R versions the
+	documentations were built, because of stupid incompatible change
+	in R-1.9.0 of the future.  package.description() function was
+	unnecessarily replaced with packageDescription, and to accomodate
+	recent, present and future versions of R seemed to be too much
+	hassle.
+ 
+        * plot.envfit: Added option ´p.max' to display only environmental
+        variables assessed to have P values less or equal to the given
+        limit.
+         
+        * plot.procrustes: added option kind = 0 to draw only axes and
+        functions points.procrustes and lines.procrustes to add points and
+        line segments or arrows to the plot.
+         
+	
 Version 1.6-2: Based on devel version 1.7-3.
 
 	* renyi: should work now (again?).

@@ -1,5 +1,5 @@
 "factorfit" <-
-    function (X, P, permutations = 0, strata, choices=c(1,2)) 
+    function (X, P, permutations = 0, strata, choices = c(1, 2)) 
 {
     GOF <- function(X, A) {
         n <- table(A)
@@ -14,12 +14,14 @@
     sol <- NULL
     r <- NULL
     pval <- NULL
+    var.id <- NULL
     X <- scores(X, display = "sites", choices)
     P <- as.data.frame(P)
     for (i in 1:length(P)) {
         tmp <- apply(X, 2, tapply, P[[i]], mean)
         nam <- rownames(tmp)
         nam <- paste(names(P)[i], nam, sep = "")
+        var.id <- c(var.id, rep(names(P)[i], length(nam)))
         rownames(tmp) <- nam
         sol <- rbind(sol, tmp)
         r.this <- GOF(X, P[[i]])
@@ -43,7 +45,7 @@
     if (!is.null(pval)) 
         names(pval) <- names(P)
     out <- list(centroids = sol, r = r, permutations = permutations, 
-                pvals = pval)
+                pvals = pval, var.id = var.id)
     if (!missing(strata)) {
         out$strata <- deparse(substitute(strata))
         out$stratum.values <- strata
