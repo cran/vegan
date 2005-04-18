@@ -14,7 +14,7 @@
   beta diversity, when there are many sites with no species in common.
 }
 \usage{
-stepacross(dis, path = "shortest", toolong = 1, trace = TRUE)
+stepacross(dis, path = "shortest", toolong = 1, trace = TRUE, ...)
 }
 \arguments{
   \item{dis}{Dissimilarity data inheriting from class \code{dist} or
@@ -30,6 +30,7 @@ stepacross(dis, path = "shortest", toolong = 1, trace = TRUE)
     The function uses a fuzz factor, so
     that dissimilarities close to the limit will be made \code{NA}, too. }
   \item{trace}{ Trace the calculations.}
+  \item{\dots}{Other parameters (ignored).}
 }
 \details{
   Williamson (1978) suggested using flexible shortest paths to estimate
@@ -83,7 +84,7 @@ stepacross(dis, path = "shortest", toolong = 1, trace = TRUE)
   finding flexible shortest paths, implemented as priority-first search
   for dense graphs (Sedgewick 1990). Alternative \code{path =
     "extended"} follows De'ath (1999), but implementation is simpler
-  than in his code in \code{\link[pcurve]{pcdists}}.
+  than in his code.
   
 }
 \value{
@@ -131,8 +132,6 @@ stepacross(dis, path = "shortest", toolong = 1, trace = TRUE)
   Function \code{\link{distconnected}} can find connected groups in
   disconnected data, and function \code{\link{no.shared}} can be used to
   set dissimilarities as \code{NA}. 
-  Function \code{\link[pcurve]{pcdists}} in library \code{pcurve}
-  contains an alternative implementation. 
  }
 \examples{
 # There are no data sets with high beta diversity in vegan, but this

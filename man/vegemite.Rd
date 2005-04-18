@@ -30,8 +30,8 @@ coverscale(x, scale=c("Braun.Blanquet", "Domin", "Hult", "Hill", "fix", "log"))
   can be used for abundance, and there are no spaces between columns.
 
   The parameter \code{use} can be a vector or an object from
-  \code{\link{hclust}} or any ordination result recognized by
-  \code{\link{scores}}. 
+  \code{\link{hclust}}, a \code{\link{dendrogram}} or any ordination
+  result recognized by \code{\link{scores}}. 
   If \code{use} is a vector, it is used
   for ordering sites.  If \code{use} is an object from ordination, both
   sites and species
@@ -92,7 +92,7 @@ coverscale(x, scale=c("Braun.Blanquet", "Domin", "Hult", "Hill", "fix", "log"))
 \note{ This function was called \code{vegetab} in older versions of
   \code{vegan}.  The new name was chosen  because the output is so
   compact (and to avoid confusion with the \code{vegtab} function in the
-  \code{labdsv} package).
+  \pkg{labdsv} package).
     }
 \examples{
 data(varespec)

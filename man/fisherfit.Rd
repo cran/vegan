@@ -72,7 +72,7 @@ as.fisher(x, ...)
   \eqn{\alpha}{alpha}. However, the confidence limits cannot be directly
   estimated from the standard error, but you should use function
   \code{confint} based on profile likelihood. Function \code{confint}
-  uses function \code{\link[MASS]{confint.glm}} of the \code{MASS}
+  uses function \code{\link[MASS]{confint.glm}} of the \pkg{MASS}
   package, using \code{profile.fisherfit} for the profile
   likelihood. Function \code{profile.fisherfit} follows
   \code{\link[MASS]{profile.glm}} and finds the \eqn{\tau}{tau} parameter or
@@ -160,7 +160,7 @@ as.fisher(x, ...)
 
 \seealso{\code{\link{diversity}}, \code{\link{fisher.alpha}},
   \code{\link{radfit}}, \code{\link{specpool}}. Function
-  \code{\link[MASS]{fitdistr}} of \code{MASS} package was used as the
+  \code{\link[MASS]{fitdistr}} of \pkg{MASS} package was used as the
   model for \code{prestondistr}. Function \code{\link{density}} can be used for
   smoothed ``non-parametric'' estimation of responses, and
   \code{\link{qqplot}} is an alternative, traditional and more effective

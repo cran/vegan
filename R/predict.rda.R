@@ -4,6 +4,8 @@
 {
     type <- match.arg(type)
     model <- match.arg(model)
+    if (model == "CCA" && is.null(object$CCA))
+        model <- "CA"
     take <- object[[model]]$rank
     if (rank != "full") 
         take <- min(take, rank)

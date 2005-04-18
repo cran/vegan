@@ -1,5 +1,5 @@
 "wascores" <-
-function (x, w, expand = FALSE) 
+    function (x, w, expand = FALSE) 
 {
     x <- as.matrix(x)
     w <- as.matrix(w)
@@ -23,6 +23,7 @@ function (x, w, expand = FALSE)
         wa <- sweep(wa, 2, mul, "*")
         wa <- sweep(wa, 2, wa.cov$center, "+")
         attr(wa, "shrinkage") <- 1/mul^2
+        attr(wa, "centre") <- wa.cov$center
     }
     wa
 }

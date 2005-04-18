@@ -26,6 +26,10 @@ envfit                  Fits an Environmental Vector or Factor onto an
                         Ordination
 fisherfit               Fit Fisher's Logseries and Preston's Lognormal
                         Model to Abundance Data
+goodness                Diagnostic Tools for [Constrained] Ordination
+                        (CCA, RDA, DCA, CA, PCA)
+goodness.metaMDS        Goodness of Fit and Shepard Plot for Nonmetric
+                        Multidimensional Scaling
 humpfit                 No-interaction Model for Hump-backed Species
                         Richness vs. Biomass
 make.cepnames           Abbreviates a Botanical or Zoological Latin
@@ -38,12 +42,14 @@ metaMDS                 Nonmetric Multidimensional Scaling with Stable
 ordihull                Add Graphical Items to Ordination Diagrams
 ordiplot                Alternative plot and identify Functions for
                         Ordination
+ordiplot3d              Three-Dimensional and Dynamic Ordination
+                        Graphics
 ordisurf                Smooths Variables and Plots Contours on
                         Ordination.
 plot.cca                Plot or Extract Results of Constrained
                         Correspondence Analysis or Redundancy Analysis
-predict.cca             Prediction and Diagnostic Tools for
-                        Constrained Ordination (CCA, RDA)
+predict.cca             Prediction Tools for [Constrained] Ordination
+                        (CCA, RDA, DCA, CA, PCA)
 procrustes              Procrustes Rotation of Two Configurations
 radfit                  Rank -- Abundance or Dominance / Diversity
                         Models

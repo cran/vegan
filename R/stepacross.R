@@ -1,5 +1,5 @@
 "stepacross" <-
-    function (dis, path = "shortest", toolong = 1, trace = TRUE) 
+    function (dis, path = "shortest", toolong = 1, trace = TRUE, ...) 
 {
     path <- match.arg(path, c("shortest", "extended"))
     if (!inherits(dis, "dist")) 
@@ -11,8 +11,7 @@
                   as.double(toolong), as.integer(trace), out = double(length(dis)), 
                   NAOK = TRUE, PACKAGE = "vegan")$out
     else dis <- .C("stepacross", dis = as.double(dis), as.integer(n), 
-                   as.double(toolong), as.integer(trace),
-                   NAOK = TRUE, PACKAGE = "vegan")$dis
+                   as.double(toolong), as.integer(trace), NAOK = TRUE, PACKAGE = "vegan")$dis
     attributes(dis) <- oldatt
     attr(dis, "method") <- paste(attr(dis, "method"), path)
     dis

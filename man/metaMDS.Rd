@@ -1,11 +1,15 @@
 \name{metaMDS}
 \alias{metaMDS}
+\alias{metaMDSdist}
+\alias{metaMDSiter}
+\alias{metaMDSredist}
 \alias{initMDS}
 \alias{postMDS}
 \alias{print.metaMDS}
 \alias{plot.metaMDS}
 \alias{points.metaMDS}
 \alias{text.metaMDS}
+\alias{scores.metaMDS}
 
 \title{Nonmetric Multidimensional Scaling with Stable Solution from
   Random Starts, Axis Scaling and Species Scores}
@@ -22,14 +26,22 @@
 metaMDS(comm, distance = "bray", k = 2, trymax = 20, autotransform =TRUE,
         noshare = 0.1, expand = TRUE, trace = 1, plot = FALSE,
         previous.best, ...)
-\method{plot}{metaMDS}(x, choices = c(1, 2), type = "p", ...)
+\method{plot}{metaMDS}(x, display = c("sites", "species"), choices = c(1, 2),
+     type = "p", shrink = FALSE,  ...)
 \method{points}{metaMDS}(x, display = c("sites", "species"),
-        choices = c(1,2), ...)
+        choices = c(1,2), shrink = FALSE, ...)
 \method{text}{metaMDS}(x, display = c("sites", "species"),
-        choices = c(1,2), ...)
+        choices = c(1,2), shrink = FALSE, ...)
+\method{scores}{metaMDS}(x, display = c("sites", "species"), shrink = FALSE, 
+        choices, ...)
+metaMDSdist(comm, distance = "bray", autotransform = TRUE, noshare = 0.1, 
+    trace = 1, commname, ...)
+metaMDSiter(dist, k = 2, trymax = 20, trace = 1, plot = FALSE, previous.best, 
+    ...)   
 initMDS(x, k=2)
 postMDS(X, dist, pc=TRUE, center=TRUE, halfchange=TRUE, threshold=0.8,
         nthreshold=10, plot=FALSE)
+metaMDSredist(object, ...)
 }
 
 \arguments{
@@ -58,13 +70,17 @@ postMDS(X, dist, pc=TRUE, center=TRUE, halfchange=TRUE, threshold=0.8,
   \item{type}{Plot type: \code{"p"} for points, \code{"t"} for text, and
    \code{"n"} for axes only.}
  \item{display}{Display \code{"sites"} or \code{"species"}.}
+ \item{shrink}{Shrink back species scores if they were expanded originally.}
  \item{X}{Configuration from multidimensional scaling. }
-  \item{dist}{Dissimilarity matrix used in multidimensional scaling. }
+ \item{commname}{The name of \code{comm}: should not be given if the
+  function is called directly.}
+ \item{dist}{Dissimilarity matrix used in multidimensional scaling. }
   \item{pc}{Rotate to principal components. }
   \item{center}{Centre the configuration. }
   \item{halfchange}{Scale axes to half-change units.}
   \item{threshold}{Largest dissimilarity used in half-change scaling. }
   \item{nthreshold}{ Minimum number of points in half-change scaling. }
+  \item{object}{A result object from \code{metaMDS}.}
   \item{...}{Other parameters passed to functions.}
 }
 \details{
@@ -154,20 +170,25 @@ postMDS(X, dist, pc=TRUE, center=TRUE, halfchange=TRUE, threshold=0.8,
     \item Species scores: Function adds the species scores to the final
     solution as weighted averages using function
     \code{\link{wascores}} with given value of parameter \code{expand}.
+    The expansion of  weighted averages can be undone with \code{shrink
+      = TRUE} in \code{plot} or \code{scores} functions. 
   }
 }
 
 \value{
-  Function \code{metaMDS} returns an object of class \code{metaMDS}. The
-  final site ordination is stored in the item \code{points}, and species
-  ordination in the item \code{species}. The other items store the
-  information on the steps taken by the function. The object has
-  \code{print}, \code{plot}, \code{points} and \code{text}  methods.
-  Function \code{initMDS} returns a random configuration which is
-  intended 
-  to be used within \code{\link[MASS]{isoMDS}} only.  Function
+  Function \code{metaMDS} returns an object of class
+  \code{metaMDS}. The final site ordination is stored in the item
+  \code{points}, and species ordination in the item \code{species}. The
+  other items store the information on the steps taken by the
+  function. The object has \code{print}, \code{plot}, \code{points} and
+  \code{text} methods.
+  Functions \code{metaMDSdist} and \code{metaMDSredist} return
+  \code{\link{vegdist}} objects.
+  Function \code{initMDS} returns a random
+  configuration which is intended to be used within
+  \code{\link[MASS]{isoMDS}} only.  Functions \code{metaMDSiter} and
   \code{postMDS} returns the result of \code{\link[MASS]{isoMDS}} with
-  updated configuration. 
+  updated configuration.
 }
 
 
@@ -186,12 +207,20 @@ postMDS(X, dist, pc=TRUE, center=TRUE, halfchange=TRUE, threshold=0.8,
 \note{
   Function \code{metaMDS} is a simple wrapper for
   \code{\link[MASS]{isoMDS}} and some support functions.
-  If you want to have a full control of your
-  analysis, you should use \code{initMDS} and \code{postMDS}
-  directly instead of the wrapper function \code{metaMDS}.  If you want
+  You can also call parts of the function separately for better control
+  of results.  Data transformation, dissmilarities and possible
+  \code{\link{stepacross}} are made in function \code{metaMDSdist}
+  which returns a dissimilarity result. Iterative search (with starting
+  values from \code{initMDS}) is made in \code{metaMDSiter}.
+  Processing of result configuration is done in \code{postMDS}, and
+  species scores added by \code{\link{wascores}}.
+  If you want
   to be more certain of reaching a global solution, you can compare
   results from several independent runs. You can also continue analysis
-  from previous results or from your own configuration.  .
+  from previous results or from your own configuration.  Function does
+  not save the used dissimilarity matrix, but \code{metaMDSredist}
+  tries to reconstruct the used dissimilarities with original data
+  transformation and possible \code{\link{stepacross}}.
 }
 
 \seealso{\code{\link[MASS]{isoMDS}}, \code{\link{decostand}},
@@ -211,4 +240,4 @@ sol <- metaMDS(dune)
 sol
 plot(sol, type="t")
 }
-\keyword{ multivariate }%-- one or more ...
+\keyword{ multivariate }

@@ -1,9 +1,9 @@
 "print.bioenv" <-
     function (x, ...) 
 {
+    cat("\nCall:\n")
+    cat(deparse(x$call), "\n")
     cat("\nSubset of environmental variables with best correlation to community data.\n\n")
-    cat("Community data:   ", x$comm, "\n")
-    cat("Environment data: ", x$env, "\n")
     cat("Correlations:     ", x$method, "\n")
     cat("Dissimilarities:  ", x$index, "\n\n")
     i <- which.max(lapply(x$models, function(tmp) tmp$est))

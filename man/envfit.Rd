@@ -8,6 +8,7 @@
 \alias{print.envfit}
 \alias{print.factorfit}
 \alias{print.vectorfit}
+\alias{scores.envfit}
 
 \title{Fits an Environmental Vector or Factor onto an Ordination }
 \description{
@@ -19,8 +20,9 @@
 \usage{
 \method{envfit}{default}(X, P, permutations = 0, strata, choices=c(1,2), ...)
 \method{envfit}{formula}(formula, data, ...)
-\method{plot}{envfit}(x, choices = c(1,2), arrow.mul = 1, at = c(0,0), axis = FALSE, 
+\method{plot}{envfit}(x, choices = c(1,2), arrow.mul, at = c(0,0), axis = FALSE, 
     p.max = NULL, col = "blue", add = TRUE, ...)
+\method{scores}{envfit}(x, display, choices, ...)
 vectorfit(X, P, permutations = 0, strata, choices=c(1,2),
       display = c("sites", "lc"), w = weights(X), ...)
 factorfit(X, P, permutations = 0, strata, choices=c(1,2)
@@ -35,8 +37,12 @@ factorfit(X, P, permutations = 0, strata, choices=c(1,2)
   \item{formula, data}{Model  \code{\link{formula}} and data.  }
   \item{x}{A result object from \code{envfit}.}
   \item{choices}{Axes to plotted.}
-  \item{arrow.mul}{Multiplier for vector lengths.}
-  \item{at}{The origin of fitted arrows in the plot.}
+  \item{arrow.mul}{Multiplier for vector lengths. The arrows are
+    automatically scaled similarly as in \code{\link{plot.cca}} if this
+    is not given and \code{add = TRUE}.}
+  \item{at}{The origin of fitted arrows in the plot.  If you plot arrows
+    in other places then origin, you probably have to specify
+    \code{arrrow.mul}.}
   \item{axis}{Plot axis showing the scaling of fitted arrows.}
   \item{p.max}{Maximum estimated \eqn{P} value for displayed
     variables.  You must calculate \eqn{P} values with setting
@@ -46,9 +52,12 @@ factorfit(X, P, permutations = 0, strata, choices=c(1,2)
   \item{strata}{An integer vector or factor specifying the strata for
     permutation. If supplied, observations are permuted only within the
     specified strata.}
-  \item{display}{Use ordinary site scores or linear combination scores
+  \item{display}{In fitting functions these are ordinary site scores or
+    linear combination scores 
     (\code{"lc"}) in constrained ordination (\code{\link{cca}},
-    \code{\link{rda}}, \code{\link{capscale}}).}
+    \code{\link{rda}}, \code{\link{capscale}}). In \code{scores}
+    function they are either \code{"vectors"} or \code{"factors"}
+    (with synonyms \code{"bp"} or \code{"cn"}, resp.).}
   \item{w}{Weights used in fitting (concerns mainly \code{\link{cca}}
     and \code{\link{decorana}} results which have nonconstant weights).}
   \item{...}{Parameters passed to \code{\link{scores}}.}
@@ -96,7 +105,11 @@ factorfit(X, P, permutations = 0, strata, choices=c(1,2)
   arrows and class centroids in \code{\link{cca}}.
   For complete
   similarity between fitted vectors and biplot arrows, you should set
-  \code{display = "lc"} (and possibly \code{scaling = 2}).   
+  \code{display = "lc"} (and possibly \code{scaling = 2}).
+
+  The results can be accessed with \code{scores.envfit} function which
+  returns either the fitted vectors scaled by correlation coefficient or
+  the centroids of the fitted environmental variables.
 }
 \value{
   Functions \code{vectorfit} and \code{factorfit} return lists of
@@ -144,16 +157,16 @@ data(varechem)
 library(MASS)
 ord <- metaMDS(varespec)
 (fit <- envfit(ord, varechem, perm = 1000))
+scores(fit, "vectors")
 plot(ord)
 plot(fit)
 plot(fit, p.max = 0.05, col = "red")
-## Adding fitted arrows to CCA. We use "lc" scores, and draw
-## arrows separately to control their lengths.
+## Adding fitted arrows to CCA. We use "lc" scores, and hope
+## that arrows are scaled similarly in cca and envfit plots
 ord <- cca(varespec ~ Al + P + K, varechem)
-plot(ord, display = c("sp", "lc"), type="p")
-text(ord, display = "bp", col = "red", arrow=2)
+plot(ord, type="p")
 fit <- envfit(ord, varechem, perm = 1000, display = "lc")
-plot(fit, arrow = 2, p.max = 0.05)
+plot(fit, p.max = 0.05, col = "red")
 ## Class variables, formula interface, and displaying the
 ## inter-class variability with `ordispider'
 data(dune)
@@ -164,7 +177,7 @@ fit <- envfit(ord ~ Moisture + A1, dune.env)
 plot(ord, type = "n")
 ordispider(ord, Moisture, col="skyblue")
 points(ord, display = "sites", col = as.numeric(Moisture), pch=16)
-plot(fit, arrow=2, cex=1.2)
+plot(fit, cex=1.2, axis=TRUE)
 }
 \keyword{multivariate }
 \keyword{aplot}

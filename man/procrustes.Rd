@@ -18,7 +18,7 @@
   non-randomness (`significance') between two configurations.
 }
 \usage{
-procrustes(X, Y, scale = TRUE, symmetric = FALSE)
+procrustes(X, Y, scale = TRUE, symmetric = FALSE, scores = "sites", ...)
 \method{summary}{procrustes}(object, ...)
 \method{plot}{procrustes}(x, kind=1, choices=c(1,2), xlab, ylab, main,
      ar.col = "blue", len=0.05, ...)
@@ -26,15 +26,19 @@ procrustes(X, Y, scale = TRUE, symmetric = FALSE)
 \method{lines}{procrustes}(x, type = c("segments", "arrows"), choices = c(1, 2), ...)  
 \method{residuals}{procrustes}(object, ...)
 \method{fitted}{procrustes}(object, truemean = TRUE, ...)
-protest(X, Y, permutations = 1000, strata)
+protest(X, Y, scores = "sites", permutations = 1000, strata, ...)
 }
-%- maybe also `usage' for other objects documented here.
+
 \arguments{
   \item{X}{Target matrix}
   \item{Y}{Matrix to be rotated.}
   \item{scale}{Allow scaling of axes of \code{Y}.}
   \item{symmetric}{Use symmetric Procrustes statistic (the rotation will
     still be non-symmetric).}
+  \item{scores}{Kind of scores used. This is the \code{display} argument
+  used with the corresponding \code{scores} function: see
+  \code{\link{scores}}, \code{\link{scores.cca}} and
+  \code{\link{scores.cca}} for alternatives.}
   \item{x, object}{An object of class \code{procrustes}.}
   \item{kind}{For \code{plot} function, the kind of plot produced:
     \code{kind = 1} plots shifts in two configurations, \code{kind = 0}
@@ -56,7 +60,9 @@ protest(X, Y, permutations = 1000, strata)
     specified strata.}
   \item{ar.col}{Arrow colour.}
   \item{len}{Width of the arrow head.}
-  \item{...}{Other parameters passed to functions.}
+  \item{...}{Other parameters passed to functions. In \code{procrustes}
+    and \code{protest} parameters are passed to \code{\link{scores}}, in
+    graphical functions to underlying graphical functions.}
 }
 \details{
   Procrustes rotation rotates a matrix to maximum similarity with a
@@ -73,6 +79,9 @@ protest(X, Y, permutations = 1000, strata)
 
   Instead of matrix, \code{X} and \code{Y} can be results from an
   ordination from which \code{\link{scores}} can extract results.
+  Function \code{procrustes} passes extra arguments to
+  \code{\link{scores}}, \code{\link{scores.cca}} etc. so that you can
+  specify arguments such as \code{scaling}. 
 
   Function \code{plot} plots a \code{procrustes}
   object and  returns invisibly an \code{ordiplot} object so that
@@ -81,7 +90,11 @@ protest(X, Y, permutations = 1000, strata)
   \code{heads} and \code{points} with \code{kind=1} (ordination diagram)
   and \code{sites} with \code{kind=2} (residuals).  In ordination
   diagrams, the arrow heads point to the target configuration, which may
-  be either logical or illogical.  Function \code{plot} passes
+  be either logical or illogical. Target and original rotated axes are
+  shown as cross hairs in two-dimensional Procrustes analysis, and with
+  a higher number of dimensions, the rotated axes are projected onto
+  plot with their scaled and centred range. Function
+  \code{plot} passes
   parameters to underlying plotting functions.  For full control of
   plots, you can draw the axes using \code{plot} with \code{kind = 0},
   and then add items with \code{points} or \code{lines}.  These
@@ -158,7 +171,7 @@ vare.dist <- vegdist(wisconsin(varespec))
 library(MASS)  ## isoMDS
 mds.null <- isoMDS(vare.dist, tol=1e-7)
 mds.alt <- isoMDS(vare.dist, initMDS(vare.dist), maxit=200, tol=1e-7)
-vare.proc <- procrustes(mds.alt$points, mds.null$points)
+vare.proc <- procrustes(mds.alt, mds.null)
 vare.proc
 summary(vare.proc)
 plot(vare.proc)

@@ -1,5 +1,12 @@
 "plot.metaMDS" <-
-    function (x, choices = c(1, 2), type = "p", ...)
+    function (x,  display = c("sites","species"), choices = c(1, 2), type = "p",
+              shrink = FALSE, ...) 
 {
-    ordiplot(x, choices = choices, type = type, ...)
+    if (length(display) == 1)
+        display <- match.arg(display)
+    if (shrink) {
+        x$species <- scores(x, display = "species", shrink = shrink,
+                            choices=1:x$dims)
+    }
+    ordiplot(x, choices = choices, type = type, display = display, ...)
 }

@@ -1,5 +1,104 @@
 VEGAN STABLE VERSIONS 
 
+Version 1.6-8 (April 18, 2005)
+
+	* Based on devel version 1.7-59.  Adapted to R 2.1.0 beta.
+
+	* DESCRIPTION: gives due credit to Roeland Kindt and Bob O'Hara as
+	co-authors. 
+
+	* documentation: updates in capscale, vegdist. vegan-FAQ adapted
+	to changes in Sweave in R 2.1.0.
+
+	* several methods assumed that input is count data, but silently
+	accepted floating point numbers and gave wrong results.  Now they
+	stop with error with non-integer input: fisherfit, prestonfit,
+	prestondistr, rarefy, fisher.alpha, estimateR.
+	
+	* bioenv: uses now 'cor' instead of 'cor.test', and does not give
+	so many superfluous warnings and is marginally faster.  Changed
+	printed output, so that gives 'call' instead of names of community
+	and environmental data, since bioenv.formula could not handle
+	these cleanly.
+
+	* capscale: has now argument 'add' to use an additive constant to
+	all dissimilarities so that all computed eigenvalues are
+	non-negative.  This is an argument of underlying 'cmdscale'
+	function, which implements the "Correction method 2" of Legendre &
+	Legendre (1998), p. 434.   
+
+	* decorana: checks now that there are no negative data entries.
+
+	* dune: cleaner site names.
+
+	* envfit: 'plot' now automatically scales arrows similarly as
+	'plot.cca' if 'arrow.mul' is not specified and arrows are added to
+	an old plot.  Has now a 'scores' function.
+	
+	* goodness.cca, predict.cca: documented separately.
+
+	* goodness.metaMDS: new function to assess pointwise goodness of
+	fit in metaMDS or isoMDS.
+
+	* humpfit: user can now give starting values of parameters.
+	'summary.humpfit' returns 'cov.unscaled' so that users can apply
+	'ellipse' function of 'ellipse' package to display approximate
+	confidence ellipses for pairs of parameters (with Normal
+	assumptions). 
+
+	* make.cepnames: No longer duplicates one component names, but
+	'abbreviate's them to eight characters.
+
+	* metaMDS: Split to independent metaunits 'metaMDSdist' and
+	'metaMDSiter'.  New function 'metaMDSredist' tries to reconstruct
+	dissimilarity matrices and transformations. 'postMDS' skips
+	halfchange scaling with too few points (with a warning) instead of
+	stopping with an error.  Prints now info about 'postMDS'
+	operations.  New 'scores' function.  Improved 'plot' function with
+	'display' argument and labelling of axes.  Argument 'shrink' to
+	undo expansion of species scores in plot or scores functions.
+	Workaround for a future bug in 'isoMDS' which drops names of
+	points in R 2.1.0.  Updates number of 'tries' with
+	'previous.best'.
+
+	* ordiplot: has now 'display' argument, so that only species or
+	sites can be plotted.
+
+	* ordiplot3d: a new function for 3D static ordination diagrams.
+
+	* ordirgl: new function for dynamic 3D graphics of ordination
+	results.  With support functions orglpoints, orgltext,
+	orglsegments and orglspider to add graphical items to dynamic
+	plots. Needs 'rgl' package.
+
+	* predict.cca, predict.rda: type = "wa" with 'newdata' works now
+	even when some species were removed from the original fit because
+	they were all-zero (missing).  Default now to 'model = "CA"' in
+	unconstrained analysis without "CCA" component.
+
+	* predict.decorana: a new function for 'decorana' results. Similar
+	to 'predict.cca' (but refuses to give impossible results).
+
+	* procrustes: obeys now 'choices' even when input is a matrix.
+	Plots now projections of rotated axes.  New argument 'scores' so
+	that can handle other than "site" scores.
+
+	* protest: passes now arguments to 'scores' so that now can handle
+	other than "site" scores on more than two dimensions.
+
+	* rda: handles now species with constant values (typically
+	missing or all zeros). 
+
+	* spenvcor:  new function to find the "species -- environment
+	correlation" in contrained ordination (cca, rda, capscale).
+
+	* stressplot: a new function to plot Shepard diagram for 'metaMDS'
+	or 'isoMDS'.
+
+	* summary.cca/summary.rda: print now call.
+
+	* vegemite: can now 'use' 'dendrogram' objects.
+	
 Version 1.6-7 (Jan 24, 2005)
 
 	* Based on devel version 1.7-42.

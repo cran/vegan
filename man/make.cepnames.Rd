@@ -6,7 +6,9 @@
   A standard CEP name has four first letters of the generic name and
   four first letters of the specific epithet of a Latin name. The last
   epithet, that may be a subspecific name, is used in the current
-  function. The returned names are made unique with function
+  function. If the name has only one component, it is abbreaviated to
+  eight characters (see \code{\link{abbreviate}})..
+  The returned names are made unique with function
   \code{\link{make.unique}} which adds numbers to the end of CEP names if needed.
 }
 \usage{
@@ -25,7 +27,7 @@ make.cepnames(names)
   popular computers could hold four characters. In modern times,
   there is no reason for this limitation, but ecologists are used to
   these names, and they may be practical to avoid congestion in
-  ordination plots.
+  ordination plots. 
 }
 \value{
   Function returns CEP names.
@@ -33,16 +35,16 @@ make.cepnames(names)
 \author{ Jari Oksanen }
 \note{
   The function is simpleminded and rigid. You must write a better one if
-  you need.
+  you need.  
 }
 \seealso{
   \code{\link{make.names}}, \code{\link{strsplit}},
-  \code{\link{substring}}, \code{\link{paste}}.
+  \code{\link{substring}}, \code{\link{paste}}, \code{\link{abbreviate}}.
   }
 \examples{
 make.cepnames(c("Aa maderoi", "Poa sp.", "Cladina rangiferina",
 "Cladonia cornuta", "Cladonia cornuta var. groenlandica",
-"Cladonia rangiformis"))
+"Cladonia rangiformis", "Bryoerythrophyllum"))
 data(BCI)
 colnames(BCI) <- make.cepnames(colnames(BCI))
 }

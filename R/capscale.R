@@ -1,6 +1,6 @@
 "capscale" <-
     function (formula, data, distance = "euclidean", comm = NULL, 
-              ...) 
+              add = FALSE, ...) 
 {
     if (!inherits(formula, "formula")) 
         stop("Needs a model formula")
@@ -17,6 +17,8 @@
     inertia <- paste(toupper(substr(inertia, 1, 1)), substr(inertia, 
                                                             2, 256), sep = "")
     inertia <- paste("squared", inertia, "distance")
+    if (add)
+        inertia <- paste(inertia, "(euclidified)")
     k <- attr(X, "Size") - 1
     if (max(X) >= 4 + .Machine$double.eps) {
         inertia <- paste("mean", inertia)
@@ -25,7 +27,7 @@
     else {
         adjust <- k
     }
-    X <- cmdscale(X, k = k, eig = TRUE)
+    X <- cmdscale(X, k = k, eig = TRUE, add = add)
     X$points <- adjust * X$points
     neig <- min(which(X$eig < 0) - 1, k)
     sol <- X$points[, 1:neig]
