@@ -2,6 +2,7 @@
     function (x, digits = x$digits, ...) 
 {
     cat("\nCall:\n")
+    cat(deparse(x$call), "\n")
     statnam <- if (x$method == "rda") 
         "sums"
     else "averages"

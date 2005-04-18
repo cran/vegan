@@ -4,6 +4,8 @@
 {
     type <- match.arg(type)
     model <- match.arg(model)
+    if (model == "CCA" && is.null(object$CCA))
+        model <- "CA"
     take <- object[[model]]$rank
     if (rank != "full") 
         take <- min(take, rank)
@@ -13,6 +15,7 @@
     u <- object[[model]]$u[, 1:take, drop = FALSE]
     v <- object[[model]]$v[, 1:take, drop = FALSE]
     w <- object[[model]]$wa[, 1:take, drop = FALSE]
+
     if (is.null(w)) 
         w <- u
     slam <- diag(sqrt(object[[model]]$eig[1:take]), nrow = take)
@@ -26,7 +29,7 @@
         out <- (Xbar + 1) * rc * gtot
     }
     else if (type == "lc") {
-        if (model == "CA")
+        if (model == "CA") 
             stop("'lc' scores not available for unconstrained ordination")
         if (!missing(newdata)) {
             d <- ordiParseFormula(formula(object), newdata, object$terminfo$xlev)
@@ -34,7 +37,8 @@
             E <- cbind(d$Z, d$Y)
             E <- sweep(E, 2, c(object$pCCA$envcentre, object$CCA$envcentre), 
                        "-")
-            u <- E[, p1, drop = FALSE] %*% coef(object)[p1, , drop = FALSE]
+            u <- E[, p1, drop = FALSE] %*% coef(object)[p1, , 
+                         drop = FALSE]
             u <- u[, 1:take, drop = FALSE]
         }
         out <- u
@@ -52,6 +56,9 @@
             if (!is.null(object$pCCA)) 
                 stop("No 'wa' scores available (yet) in partial CCA")
             Xbar <- as.matrix(newdata)
+            exclude.spec <- attr(object[[model]]$v, "na.action")
+            if (!is.null(exclude.spec))
+                Xbar <- Xbar[, -exclude.spec]
             rs <- rowSums(Xbar)
             Xbar <- (Xbar - outer(rs, cs))/sqrt(outer(rs, cs))
             v <- sweep(v, 1, sqrt(cs), "*")

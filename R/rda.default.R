@@ -8,6 +8,8 @@
     X <- as.matrix(X)
     NR <- nrow(X) - 1
     Xbar <- scale(X, center = TRUE, scale = scale)
+    if (scale)
+        Xbar[is.nan(Xbar)] <- 0
     tot.chi <- sum(svd(Xbar, nu = 0, nv = 0)$d^2)/NR
     if (!missing(Z) && !is.null(Z)) {
         Z <- as.matrix(Z)

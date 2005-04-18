@@ -97,7 +97,7 @@ downweight(veg, fraction = 5)
   values' in detrended analysis. These are the values that the legacy
   code of \code{decorana} returns as `eigenvalues'.
   They are estimated internally during
-  iteration, and it seems that detrending interferes the estimation 
+  iteration, and it seems that detrending interferes the estimation
   so that these values are generally too low and have unclear
   interpretation. Moreover, `decorana values' are estimated before
   rescaling which will change the eigenvalues. The
@@ -151,7 +151,10 @@ downweight(veg, fraction = 5)
    `canonical') correspondence analysis can be made with
    \code{\link{cca}}.  Orthogonal correspondence analysis can be
    made with \code{\link[multiv]{ca}}, or with \code{decorana} or
-   \code{\link{cca}}, but the scaling of results vary.  
+   \code{\link{cca}}, but the scaling of results vary (and the one in
+   \code{decorana} correspondes to \code{scaling = -1} in
+   \code{\link{cca}}.).
+   See \code{\link{predict.decorana}} for adding new points to ordination. 
  }
 
 \examples{

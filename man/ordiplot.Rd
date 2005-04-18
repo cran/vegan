@@ -16,7 +16,7 @@
   \code{\link{plot.rad}} as well.
 }
 \usage{
-ordiplot(ord, choices = c(1, 2), type="points", ...)
+ordiplot(ord, choices = c(1, 2), type="points", display, ...)
 \method{identify}{ordiplot}(x, what, ...)
 \method{points}{ordiplot}(x, what, ...)
 \method{text}{ordiplot}(x, what, ...)
@@ -26,11 +26,11 @@ ordiplot(ord, choices = c(1, 2), type="points", ...)
   \item{ord}{A result from an ordination.}
   \item{choices}{Axes shown. }
   \item{type}{The type of graph which may be \code{"points"},
-    \code{"text"} or
-    \code{"none"} for any ordination method, or any of the alternatives
-    in \code{\link{plot.cca}} or \code{\link{plot.decorana}} in
-    \code{\link{cca}}, \code{\link{rda}} or \code{\link{decorana}}
-    graphs.}
+    \code{"text"} or \code{"none"} for any ordination method.}
+  \item{display}{Display only "sites" or "species". The default for most
+    methods is to display both, but for \code{\link{cca}},
+    \code{\link{rda}} and \code{\link{capscale}} it is the same as in
+    \code{\link{plot.cca}}.  }
   \item{\dots}{Other graphical parameters. }
   \item{x}{A result object from \code{ordiplot}.}
   \item{what}{Items identified in the ordination plot. The types depend

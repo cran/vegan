@@ -83,6 +83,13 @@ read.cep(file, maxdata=10000, positive=TRUE, trace=FALSE, force=FALSE)
     \item
     Run \code{read.cep()} with switch \code{force=TRUE}
   }
+
+  If you transfer files between operating systems or platforms, you
+  should always check that your file is formatted to your current
+  platform. For instance, if you transfer files from Windows to Linux,
+  you should change the files to \code{unix} format, or your session may
+  crash when Fortran program tries to read the invisible characters that
+  Windows uses at the end of each line. 
 }
 
 

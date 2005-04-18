@@ -1,10 +1,12 @@
 "as.fisher" <-
-    function(x, ...)
+    function (x, ...) 
 {
-    if (inherits(x, "fisher"))
+    if (inherits(x, "fisher")) 
         return(x)
-    freq <- x[x>0]
-    freq <- table(freq, deparse.level=0)
+    if (!identical(all.equal(x, round(x)), TRUE))
+        stop("function accepts only integers (counts)")
+    freq <- x[x > 0]
+    freq <- table(freq, deparse.level = 0)
     class(freq) <- "fisher"
     freq
 }

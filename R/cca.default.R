@@ -15,8 +15,11 @@
     X <- as.matrix(X)
     if (any(rowSums(X) <= 0)) 
         stop("All row sums must be >0 in the community data matrix")
-    if (any(colSums(X) <= 0)) {
-        X <- X[, colSums(X) > 0]
+    if (any(tmp <- colSums(X) <= 0)) {
+        exclude.spec <- seq(along=tmp)[tmp]
+        names(exclude.spec) <- colnames(X)[tmp]
+        class(exclude.spec) <- "exclude"
+        X <- X[, !tmp, drop = FALSE]
         warning("Some species were removed because they were missing in the data")
     }
     gran.tot <- sum(X)
@@ -81,6 +84,10 @@
             CCA$envcentre <- attr(Y.r, "centre")
             CCA$Xbar <- Xbar
             Xbar <- qr.resid(Q, Xbar)
+            if (exists("exclude.spec")) {
+                attr(CCA$v, "na.action") <- exclude.spec
+                attr(CCA$v.eig, "na.action") <- exclude.spec
+            }
         }
     }
     Q <- qr(Xbar)
@@ -104,6 +111,10 @@
             CA$rank <- rank
             CA$tot.chi <- sum(CA$eig)
             CA$Xbar <- Xbar
+            if (exists("exclude.spec")) {
+                attr(CA$v, "na.action") <- exclude.spec
+                attr(CA$v.eig, "na.action") <- exclude.spec
+            }
         }
     }
     call <- match.call()

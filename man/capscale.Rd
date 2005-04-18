@@ -14,7 +14,8 @@
   \code{\link{rda}} are generally poor with community data
 }
 \usage{
-capscale(formula, data, distance = "euclidean", comm = NULL, ...)
+capscale(formula, data, distance = "euclidean", comm = NULL, add =
+FALSE,  ...)
 }
 
 \arguments{
@@ -41,7 +42,13 @@ capscale(formula, data, distance = "euclidean", comm = NULL, ...)
     species scores when the LHS of the \code{formula} was a
     dissimilarity matrix. This is not used if the LHS is a data
     frame. If this is not supplied, the ``species scores'' are the axes
-    of initial metric scaling (\code{\link{cmdscale}}) and may be confusing.}
+    of initial metric scaling (\code{\link{cmdscale}}) and may be
+    confusing.}
+  \item{add}{logical indicating if an additive constant should be
+     computed, and added to the non-diagonal dissimilarities  such
+     that all eigenvalues are non-negative in underlying
+     Principal Co-ordinates Analysis (see \code{\link{cmdscale}} 
+     for details). }
   \item{\dots}{Other parameters passed to \code{\link{rda}}. }
 }
 \details{
@@ -105,7 +112,16 @@ capscale(formula, data, distance = "euclidean", comm = NULL, ...)
   ecology. \emph{Ecology} 84, 511--525.
 }
 \author{ Jari Oksanen }
-\note{ 
+\note{
+  Warnings of negative eigenvalues are issued with most dissimilarity
+  indices.  These are harmless, and negative eigenvalues will be ignored
+  in the analysis.  If the warnings are disturbing, you can use argument
+  \code{add = TRUE} passed to \code{\link{cmdscale}}, or, preferably, a
+  distance measure that does not cause these warnings.  In
+  \code{\link{vegdist}}, \code{method = "jaccard"} gives such an index.
+  Alternatively, after square root transformation many indices do not
+  cause warnings.
+  
   Function \code{\link{rda}} usually divides the ordination scores by
   number of
   sites minus one. In this way, the inertia is variance instead of sum

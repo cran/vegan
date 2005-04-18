@@ -1,7 +1,7 @@
 "bioenv.formula" <-
     function (formula, data, ...) 
 {
-    if (missing(data))
+    if (missing(data)) 
         data <- parent.frame()
     fla <- formula
     comm <- formula[[2]]
@@ -16,5 +16,6 @@
     out <- bioenv(comm, env, ...)
     out$formula <- fla
     out$call <- match.call()
+    out$call[[1]] <- as.name("bioenv")
     out
 }

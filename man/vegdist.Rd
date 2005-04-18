@@ -13,7 +13,7 @@
   be able to handle unknown (and variable) sample sizes.
 }
 
-\usage{ vegdist(x, method="bray", binary=FALSE, diag=FALSE, upper=FALSE) } 
+\usage{ vegdist(x, method="bray", binary=FALSE, diag=FALSE, upper=FALSE, ...) } 
 \arguments{
   \item{x}{ Community data matrix.}
   \item{method}{Dissimilarity index, partial match to  \code{"manhattan"},
@@ -24,6 +24,7 @@
     using \code{\link{decostand}}.}
   \item{diag}{Compute diagonals. }
   \item{upper}{Return only the upper diagonal. }
+  \item{\dots}{Other parameters (ignored).}
 }
 \details{
   Jaccard and Mountford indices are discussed below.
@@ -106,12 +107,16 @@
   equalizing site totals with \code{\link{decostand}}.
 
   The naming conventions vary. The one adopted here is traditional
-  rather than truthful to priority. For instance, the Bray index is
-  known also as Steinhaus, Czekanowski and Sørensen index.  The
-  abbreviation \code{"horn"} for
-  the Horn--Morisita index is misleading, since there is a separate
-  Horn index. The abbreviation will be changed if that index is implemented in
-  \code{vegan}. 
+  rather than truthful to priority. The function finds either
+  quantitative or binary variants of the indices under the same name,
+  which correctly may refer only to one of these alternatives For
+  instance, the Bray
+  index is known also as Steinhaus, Czekanowski and Sørensen index.
+  The quantitive version of Jaccard should probably called
+  Ruzicka index (but spelled with characters that cannot be shown here).
+  The abbreviation \code{"horn"} for the Horn--Morisita index is
+  misleading, since there is a separate Horn index. The abbreviation
+  will be changed if that index is implemented in \code{vegan}. 
 }
 \value{
   Should provide a drop-in replacement for \code{\link{dist}} and
@@ -138,7 +143,10 @@
   some ecologically meaningful indices.  Both methods should produce
   similar types of objects which can be interchanged in any method
   accepting either.  Manhattan and Euclidean dissimilarities should be
-  identical in both methods, and Canberra dissimilarity may be similar.
+  identical in both methods. Canberra index is divided by the
+  number of variables in \code{vegdist}, but not in \code{\link{dist}}.
+  So these differ by a constant multiplier, and the alternative in
+  \code{vegdist} in range (0,1). 
 }
 
 \seealso{ \code{\link{decostand}}, \code{\link{dist}},

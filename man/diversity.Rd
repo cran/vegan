@@ -58,15 +58,12 @@ specnumber(x, MARGIN = 1)
  
   Function \code{rarefy} gives the expected species richness in random
   subsamples of size \code{sample} from the community. The size of
-  \code{sample}
-  should be smaller than total community size, but the function will
-  silently work for larger \code{sample} as well and return non-rarefied
-  species richness (and standard error = 0).
-  Rarefaction can be performed only with genuine
-  counts of individuals: the current function will silently truncate
-  abundances to integers and give wrong results. The function
-  \code{rarefy} is based on Hurlbert's (1971) formulation, and the
-  standard errors on Heck et al. (1975).  
+  \code{sample} should be smaller than total community size, but the
+  function will  silently work for larger \code{sample} as well and
+  return non-rarefied species richness (and standard error = 0).
+  Rarefaction can be performed only with genuine counts of individuals.
+  The function \code{rarefy} is based on Hurlbert's (1971) formulation,
+  and the standard errors on Heck et al. (1975).  
 
   Function \code{fisher.alpha} estimates the \eqn{\alpha} parameter of
   Fisher's logarithmic series (see \code{\link{fisherfit}}). 

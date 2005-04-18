@@ -3,6 +3,9 @@
 
 \documentclass[a4paper]{article}
 
+\usepackage{ucs}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
 \usepackage[sort&compress]{natbib}
 \usepackage{hyperref}
 \usepackage{graphics}
@@ -16,6 +19,7 @@
 \title{Frequently Asked Questions}
 
 \begin{document}
+\SweaveOpts{strip.white=TRUE}
 
 \maketitle
 

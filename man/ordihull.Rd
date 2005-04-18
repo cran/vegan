@@ -109,9 +109,9 @@ ordispantree(ord, tree, display = "sites", ...)
   \code{\link[ellipse]{ellipse}} using either standard deviation of
   point scores or standard error of the (weighted) average of
   scores, and the (weighted) correlation defines the direction of the
-  principal axis of the ellipse. The function requires library
-  \code{ellipse}. An ellipsoid hull can be drawn with function
-  \code{\link[cluster]{ellipsoidhull}} of package \code{cluster}.
+  principal axis of the ellipse. The function requires package
+  \pkg{ellipse}. An ellipsoid hull can be drawn with function
+  \code{\link[cluster]{ellipsoidhull}} of package \pkg{cluster}.
 
   Function \code{ordicluster} overlays a cluster dendrogram onto
   ordination. It needs the result from a hierarchic clustering such as
