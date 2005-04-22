@@ -8,6 +8,9 @@
     freq <- x[x > 0]
     freq <- ceiling(log2(freq))
     freq <- table(freq)
+    nm <- names(freq)
+    freq <- as.vector(freq)
+    names(freq) <- nm
     class(freq) <- "preston"
     freq
 }

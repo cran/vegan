@@ -1,6 +1,6 @@
 "vegdist" <-
     function (x, method = "bray", binary = FALSE, diag = FALSE, upper = FALSE,
-              ...) 
+              na.rm = FALSE, ...) 
 {
     if (!is.na(pmatch(method, "euclidian"))) 
         method <- "euclidean"
@@ -13,7 +13,7 @@
     if (method == -1) 
         stop("ambiguous distance method")
     if (method == 6) 
-        x <- decostand(x, "range", 2)
+        x <- decostand(x, "range", 2, na.rm = TRUE)
     if (binary) 
         x <- decostand(x, "pa")
     N <- nrow(x <- as.matrix(x))
@@ -22,9 +22,11 @@
         warning("Morisita index may give meaningless results with non-integer values\n")
     d <- .C("veg_distance", x = as.double(x), nr = N, nc = ncol(x), 
             d = double(N * (N - 1)/2), diag = as.integer(FALSE), 
-            method = as.integer(method), PACKAGE = "vegan")$d
+            method = as.integer(method), NAOK = na.rm, PACKAGE = "vegan")$d
     if (method == 10) 
         d <- 2 * d/(1 + d)
+    if (any(is.na(d)))
+        warning("missing values in results")
     attr(d, "Size") <- N
     attr(d, "Labels") <- dimnames(x)[[1]]
     attr(d, "Diag") <- diag

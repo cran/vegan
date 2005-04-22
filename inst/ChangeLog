@@ -1,5 +1,24 @@
 VEGAN STABLE VERSIONS 
 
+Version 1.6-9 (April 22, 2005)
+
+	* Maintenance release: 1.6-8 failed in R 2.1.0 patched and R 2.2.0
+	devel (works in R 2.1.0 release) due to problems in
+	as.preston. Based on devel version 1.7-62.
+
+	* as.fisher, as.preston: used table() in a way that failed in R
+	2.1.0 patched
+
+	* calibrate.cca: new function to predict or calibrate or
+	bioindicate the values of environmental constraints from
+	community composition (ordination).
+	
+	* decostand: new argument na.rm (defaults FALSE) for ignoring
+	missing values in row, column or matrix standardizations.
+
+	* vegdist: new argument na.rm (defaults FALSE) for pairwise
+	deletion of missing vaues in dissimilarity calculation.
+		
 Version 1.6-8 (April 18, 2005)
 
 	* Based on devel version 1.7-59.  Adapted to R 2.1.0 beta.
