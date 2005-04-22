@@ -8,7 +8,7 @@ The function provides some popular (and effective) standardization
 methods for community ecologists.
 }
 \usage{
-decostand(x, method, MARGIN)
+decostand(x, method, MARGIN, na.rm = FALSE)
 wisconsin(x)
 }
 
@@ -16,6 +16,7 @@ wisconsin(x)
   \item{x}{Community data matrix.}
   \item{method}{Standardization method.}
   \item{MARGIN}{Margin, if default is not acceptable.}
+  \item{na.rm}{Ignore missing values in row or column standardizations.}
 }
 \details{
   The function offers following standardization methods for community

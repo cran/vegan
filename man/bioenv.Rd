@@ -73,12 +73,10 @@
 }
 \author{ Jari Oksanen. The code for selecting all possible subsets was
   posted to the R mailing list by Prof. B. D. Ripley in 1999. }
-\note{
-  Function \code{\link{cor.test}} will give harmless warnings on ties.
-}
+
 
 \seealso{\code{\link{vegdist}},
-  \code{\link{dist}}, \code{\link{cor.test}} for underlying routines,
+  \code{\link{dist}}, \code{\link{cor}} for underlying routines,
   \code{\link[MASS]{isoMDS}} for ordination, \code{\link{procrustes}}
   for Procrustes analysis, \code{\link{protest}} for an alternative, and
   \code{\link{rankindex}} for studying alternatives to the default

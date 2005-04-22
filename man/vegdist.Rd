@@ -13,9 +13,10 @@
   be able to handle unknown (and variable) sample sizes.
 }
 
-\usage{ vegdist(x, method="bray", binary=FALSE, diag=FALSE, upper=FALSE, ...) } 
+\usage{vegdist(x, method="bray", binary=FALSE, diag=FALSE, upper=FALSE,
+        na.rm = FALSE, ...) } 
 \arguments{
-  \item{x}{ Community data matrix.}
+  \item{x}{Community data matrix.}
   \item{method}{Dissimilarity index, partial match to  \code{"manhattan"},
     \code{"euclidean"}, \code{"canberra"}, \code{"bray"}, \code{"kulczynski"},
      \code{"jaccard"}, \code{"gower"}, \code{"morisita"}, \code{"horn"} or
@@ -24,6 +25,8 @@
     using \code{\link{decostand}}.}
   \item{diag}{Compute diagonals. }
   \item{upper}{Return only the upper diagonal. }
+  \item{na.rm}{Pairwise deletion of missing observations when
+    computing dissimilarities.}
   \item{\dots}{Other parameters (ignored).}
 }
 \details{
@@ -146,11 +149,15 @@
   identical in both methods. Canberra index is divided by the
   number of variables in \code{vegdist}, but not in \code{\link{dist}}.
   So these differ by a constant multiplier, and the alternative in
-  \code{vegdist} in range (0,1). 
+  \code{vegdist} in range (0,1).  Function \code{\link[cluster]{daisy}}
+  (package \pkg{cluster}) provides alternative implentation of Gower
+  index for mixed data of numeric and class variables.
 }
 
 \seealso{ \code{\link{decostand}}, \code{\link{dist}},
-  \code{\link{rankindex}}, \code{\link[MASS]{isoMDS}}, \code{\link{stepacross}}. }
+  \code{\link{rankindex}}, \code{\link[MASS]{isoMDS}},
+  \code{\link{stepacross}}, \code{\link[cluster]{daisy}},
+  \code{\link[labdsv]{dsvdis}}.  }
 
 \examples{
 data(varespec)

@@ -8,6 +8,7 @@
 \alias{predict.decorana}
 \alias{coef.cca}
 \alias{coef.rda}
+\alias{calibrate.cca}
 
 \title{Prediction Tools for [Constrained] Ordination (CCA,
   RDA, DCA, CA, PCA) }
@@ -19,6 +20,7 @@
 \method{fitted}{cca}(object, model = c("CCA", "CA"), ...)
 \method{predict}{cca}(object, newdata, type = c("response", "wa", "sp", "lc"),
     rank = "full", model = c("CCA", "CA"), scaling = FALSE, ...)
+calibrate.cca(object, newdata, rank = "full", ...)
 \method{coef}{cca}(object, ...)
 \method{predict}{decorana}(object, newdata, type = c("response", "sites", "species"),
     rank = 4, ...)
@@ -30,11 +32,10 @@
   \item{model}{Show constrained (\code{"CCA"}) or unconstrained
     (\code{"CA"}) results. }
   \item{newdata}{New data frame to be used in
-    prediction of species and site scores.  For \code{type = "wa"} and
-    \code{type = "sp"} and in \code{predict.decorana} this must be the
-    community data, for \code{type =  "lc"} a data frame of
-    environmental data (constraints and
-    conditions), and with \code{type = "response"} this is ignored.}
+    prediction of species and site scores or for calibration.  Usually
+    this a new community data frame, but for \code{predict.cca}
+    \code{type = "lc"} it must be an environment data frame, and for
+    \code{type = "response"} this is ignored.}
   \item{type}{The type of prediction: \code{"response"} 
     gives an approximation of the original data matrix, \code{"wa"} the
     site scores as weighted averages of the community data, \code{"lc"}
@@ -53,9 +54,7 @@
   Function \code{fitted} gives the approximation of the original data
   matrix from the ordination result.  Function \code{residuals} gives
   the approximation of the original data from the unconstrained
-  ordination. 
-  The \code{fitted.cca} and
-  \code{residuals.cca} function
+  ordination.  The \code{fitted.cca} and \code{residuals.cca} function
   both have the same marginal totals as the original data matrix, and
   their entries do not add up to the original data. They are defined so
   that for model \code{mod <- cca(y ~ x)}, \code{cca(fitted(mod))} is equal
@@ -84,6 +83,19 @@
   extreme care is needed defining variables similarly as in the original
   model, in particular with (ordered) factors.
 
+  Function \code{calibrate.cca} finds estimates of constraints from
+  community ordination or \code{"wa"} scores from \code{\link{cca}},
+  \code{\link{rda}} and \code{\link{capscale}}. This is often known as
+  calibration, bioindication or environmental reconstruction.
+  Basically, the method is similar to projecting site scores onto biplot
+  arrows, but it uses regression coefficients.  The function can be called
+  with \code{newdata} so that cross-validation is possible.  The
+  \code{newdata} may contain new sites, but species must match in the
+  original and new data  The function
+  does not work with \sQuote{partial} models with \code{Condition} term,
+  and it cannot be used with \code{newdata} for \code{\link{capscale}}
+  results.  The results may only be interpretable for continuous variables.
+  
   Function \code{coef} will give the regression coefficients from centred
   environmental variables (constraints and conditions) to linear
   combination scores. The coefficients are for unstandardized environmental
@@ -129,6 +141,12 @@ mod <- cca(dune[, freq>1] ~ A1 + Management + Condition(Moisture), dune.env)
 predict(mod, type="sp", newdata=dune[, freq==1], scaling=2)
 # New sites
 predict(mod, type="lc", new=data.frame(A1 = 3, Management="NM", Moisture="2"), scal=2)
+# Calibration and residual plot
+mod <- cca(dune ~ A1 + Moisture, dune.env)
+pred <- calibrate.cca(mod)
+pred
+with(dune.env, plot(A1, pred[,"A1"] - A1, ylab="Prediction Error"))
+abline(h=0)
 }
 \keyword{ multivariate }
 

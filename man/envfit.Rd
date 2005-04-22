@@ -25,7 +25,7 @@
 \method{scores}{envfit}(x, display, choices, ...)
 vectorfit(X, P, permutations = 0, strata, choices=c(1,2),
       display = c("sites", "lc"), w = weights(X), ...)
-factorfit(X, P, permutations = 0, strata, choices=c(1,2)
+factorfit(X, P, permutations = 0, strata, choices=c(1,2),
       display = c("sites", "lc"), w = weights(X), ...)
 }
 
