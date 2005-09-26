@@ -1,24 +1,31 @@
 "decostand" <-
-    function (x, method, MARGIN, na.rm = FALSE) 
+    function (x, method, MARGIN, range.global, na.rm = FALSE) 
 {
     x <- as.matrix(x)
     METHODS <- c("total", "max", "frequency", "normalize", "range", 
-                 "standardize", "pa", "chi.square")
+                 "standardize", "pa", "chi.square", "hellinger")
     method <- match.arg(method, METHODS)
+    if (any(x < 0)) {
+        k <- min(x)
+        if (method %in% c("total","frequency","pa","chi.square")) {
+            warning("input data contains negative entries: result may be non-sense\n")
+        }
+    }
+    else k <- .Machine$double.eps
     switch(method, total = {
         if (missing(MARGIN)) 
             MARGIN <- 1
-        tmp <- apply(x, MARGIN, sum, na.rm = na.rm)
+        tmp <- pmax(k, apply(x, MARGIN, sum, na.rm = na.rm))
         x <- sweep(x, MARGIN, tmp, "/")
     }, max = {
         if (missing(MARGIN)) 
             MARGIN <- 2
-        tmp <- apply(x, MARGIN, max, na.rm = na.rm)
+        tmp <- pmax(k, apply(x, MARGIN, max, na.rm = na.rm))
         x <- sweep(x, MARGIN, tmp, "/")
     }, frequency = {
         if (missing(MARGIN)) 
             MARGIN <- 2
-        tmp <- apply(x, MARGIN, sum, na.rm = na.rm)
+        tmp <- pmax(k, apply(x, MARGIN, sum, na.rm = na.rm))
         fre <- apply(x > 0, MARGIN, sum, na.rm = na.rm)
         tmp <- fre/tmp
         x <- sweep(x, MARGIN, tmp, "*")
@@ -26,14 +33,22 @@
         if (missing(MARGIN)) 
             MARGIN <- 1
         tmp <- apply(x^2, MARGIN, sum, na.rm = na.rm)
-        tmp <- sqrt(tmp)
+        tmp <- pmax(k, sqrt(tmp))
         x <- sweep(x, MARGIN, tmp, "/")
     }, range = {
         if (missing(MARGIN)) 
             MARGIN <- 2
-        tmp <- apply(x, MARGIN, min, na.rm = na.rm)
-        ran <- apply(x, MARGIN, max, na.rm = na.rm)
+        if (missing(range.global)) 
+            xtmp <- x
+        else {
+            if (dim(range.global)[MARGIN] != dim(x)[MARGIN]) 
+                stop("range matrix doesn't match data matrix")
+            xtmp <- as.matrix(range.global)
+        }
+        tmp <- apply(xtmp, MARGIN, min, na.rm = na.rm)
+        ran <- apply(xtmp, MARGIN, max, na.rm = na.rm)
         ran <- ran - tmp
+        ran <- pmax(k, ran)
         x <- sweep(x, MARGIN, tmp, "-")
         x <- sweep(x, MARGIN, ran, "/")
     }, standardize = {
@@ -41,17 +56,17 @@
             x <- t(scale(t(x)))
         else x <- scale(x)
     }, pa = {
-        tmp <- dim(x)
-        nam <- dimnames(x)
-        x <- as.numeric(x > 0)
-        dim(x) <- tmp
-        dimnames(x) <- nam
+        x <- ifelse(x > 0, 1, 0)
     }, chi.square = {
         if (!missing(MARGIN) && MARGIN == 2) 
             x <- t(x)
-        x <- sqrt(sum(x, na.rm = na.rm)) * x/outer(rowSums(x, na.rm = na.rm),
-                         sqrt(colSums(x, na.rm = na.rm)))
-    })
+        x <- sqrt(sum(x, na.rm = na.rm)) *
+            x/outer(pmax(k, rowSums(x, na.rm = na.rm)), sqrt(colSums(x, na.rm = na.rm)))
+    }, hellinger = {
+        x <- sqrt(decostand(x, "total", MARGIN = MARGIN, na.rm = na.rm))
+    } )
+    if (any(is.nan(x)))
+        warning("result contains NaN, perhaps due to impossible mathematical operation\n")
     x <- as.data.frame(x)
     x
 }

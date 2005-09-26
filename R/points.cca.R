@@ -1,11 +1,13 @@
 "points.cca" <-
     function (x, display = "sites", choices = c(1, 2), scaling = 2, 
-              arrow.mul = 1, head.arrow = 0.05, ...) 
+              arrow.mul, head.arrow = 0.05, select, ...) 
 {
     formals(arrows) <- c(formals(arrows), alist(... = ))
     if (length(display) > 1) 
         stop("Only one `display' item can be added in one command.")
     pts <- scores(x, choices = choices, display = display, scaling = scaling)
+    if (!missing(select)) 
+        pts <- pts[select, , drop = FALSE]
     if (display == "cn") {
         cnam <- rownames(pts)
         points(pts, ...)
@@ -17,6 +19,11 @@
         else display <- "bp"
     }
     if (display == "bp") {
+    	if (missing(arrow.mul)) {
+            mul <- par("usr")/c(range(pts[,1]), range(pts[,2]))
+            mul <- mul[is.finite(mul) & mul > 0]
+            arrow.mul <- 0.75 * min(mul)
+    	}
         pts <- pts * arrow.mul
         arrows(0, 0, pts[, 1], pts[, 2], length = head.arrow, 
                ...)
@@ -30,3 +37,4 @@
     points(pts, ...)
     invisible()
 }
+

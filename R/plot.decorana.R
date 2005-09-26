@@ -1,6 +1,6 @@
 "plot.decorana" <-
     function (x, choices = c(1, 2), origin = TRUE, display = c("both", 
-                                                   "sites", "species", "none"), cex = 0.8, cols = c(1, 2), type, 
+                                                   "sites", "species", "none"), cex = 0.8, cols = c(1, 2), type, xlim, ylim, 
               ...) 
 {
     display <- match.arg(display)
@@ -31,17 +31,17 @@
     st.x <- range(sites[, 1])
     st.y <- range(sites[, 2])
     switch(display, both = {
-        xlim <- range(sp.x, st.x)
-        ylim <- range(sp.y, st.y)
+        if (missing(xlim)) xlim <- range(sp.x, st.x)
+        if (missing(ylim)) ylim <- range(sp.y, st.y)
     }, sites = {
-        xlim <- st.x
-        ylim <- st.y
+        if (missing(xlim)) xlim <- st.x
+        if (missing(ylim)) ylim <- st.y
     }, species = {
-        xlim <- sp.x
-        ylim <- sp.y
+        if (missing(xlim)) xlim <- sp.x
+        if (missing(ylim)) ylim <- sp.y
     }, none = {
-        xlim <- range(sp.x, st.x)
-        ylim <- range(sp.y, st.y)
+        if (missing(xlim)) xlim <- range(sp.x, st.x)
+        if (missing(ylim)) ylim <- range(sp.y, st.y)
     })
     plot(sites, type = "n", xlim = xlim, ylim = ylim, asp = 1, 
          ...)

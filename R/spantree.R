@@ -1,5 +1,5 @@
 "spantree" <-
-    function (dis, toolong = 1) 
+    function (dis, toolong = 0) 
 {
     dis <- as.dist(dis)
     n <- attr(dis, "Size")

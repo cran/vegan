@@ -21,7 +21,7 @@
 \usage{
 distconnected(dis, toolong = 1, trace = TRUE)
 no.shared(x)
-spantree(dis, toolong = 1)
+spantree(dis, toolong = 0)
 }
 
 \arguments{
@@ -32,7 +32,10 @@ spantree(dis, toolong = 1)
     dissimilarity data.}
   \item{toolong}{ Shortest dissimilarity regarded as \code{NA}.
     The function uses a fuzz factor, so
-    that dissimilarities close to the limit will be made \code{NA}, too. }
+    that dissimilarities close to the limit will be made \code{NA}, too.
+    If \code{toolong = 0} (or negative), no dissimmilarity is regarded
+    as too long.
+  }
   \item{trace}{Summarize results of \code{distconnected}}
   \item{x}{Community data.}
   
@@ -52,8 +55,7 @@ spantree(dis, toolong = 1)
   data. If data are connected, the result vector will be all
   \eqn{1}s. The connectedness between two points can be defined either
   by a threshold \code{toolong} or using input dissimilarities
-  with \code{NA}s. If \code{toolong} is zero or negative, no
-  threshold will be used.
+  with \code{NA}s.
 
   Function \code{no.shared} returns a \code{dist} structure having value
   \code{TRUE} when two sites have nothing in common, and value

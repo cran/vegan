@@ -14,7 +14,7 @@
 }
 \usage{
 \method{anova}{cca}(object, alpha=0.05, beta=0.01, step=100, perm.max=10000, ...)
-permutest.cca(x, permutations=100, model=c("reduced","full"), strata)
+permutest.cca(x, permutations=100, model=c("direct", "reduced","full"), strata)
 }
 
 \arguments{
@@ -52,14 +52,15 @@ permutest.cca(x, permutations=100, model=c("reduced","full"), strata)
   
   The function \code{permutest.cca} implements a permutation test for
   the ``significance'' of constraints in \code{\link{cca}},
-  \code{\link{rda}} or \code{\link{capscale}}.  Residuals after
-  partial CCA/RDA/CAP are permuted with choice \code{model = "reduced"},
+  \code{\link{rda}} or \code{\link{capscale}}.  Community data are
+  permuted with choice \code{model = "direct"}, residuals after
+  partial CCA/RDA/CAP with choice \code{model = "reduced"},
   and residuals after CCA/RDA/CAP under choice \code{model = "full"}.
-  If there is no partial CCA/RDA/CAP stage, the former simply permutes
+  If there is no partial CCA/RDA/CAP stage, \code{model = "reduced"}  simply permutes
   the data. The test statistic is ``pseudo-\eqn{F}'', which is the ratio
   of constrained and unconstrained total Inertia (Chi-squares, variances
-  or something similar), each divided by their respective ranks.  In plain
-  CCA/RDA/CAP under \code{reduced} model, the community data is permuted, and
+  or something similar), each divided by their respective ranks.  If
+  there are no conditions ("partial" terms), 
   the sum of all eigenvalues
   remains constant, so that pseudo-\eqn{F} and eigenvalues would give
   equal results.  In partial CCA/RDA/CAP, the effect of conditioning variables
@@ -67,7 +68,8 @@ permutest.cca(x, permutations=100, model=c("reduced","full"), strata)
   are added to the non-permuted fitted values of partial CCA (fitted
   values of \code{X ~ Z}).  Consequently, the total Chi-square is not
   fixed, and test based on pseudo-\eqn{F} would differ from the test based on
-  plain eigenvalues.
+  plain eigenvalues. CCA is a weighted method, and environmental data
+  are re-weighted at each permutation step.
 }
 \value{
   Function \code{permutest.cca} returns an object of class

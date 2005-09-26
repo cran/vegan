@@ -29,9 +29,9 @@ metaMDS(comm, distance = "bray", k = 2, trymax = 20, autotransform =TRUE,
 \method{plot}{metaMDS}(x, display = c("sites", "species"), choices = c(1, 2),
      type = "p", shrink = FALSE,  ...)
 \method{points}{metaMDS}(x, display = c("sites", "species"),
-        choices = c(1,2), shrink = FALSE, ...)
-\method{text}{metaMDS}(x, display = c("sites", "species"),
-        choices = c(1,2), shrink = FALSE, ...)
+        choices = c(1,2), shrink = FALSE, select, ...)
+\method{text}{metaMDS}(x, display = c("sites", "species"), labels, 
+        choices = c(1,2), shrink = FALSE, select, ...)
 \method{scores}{metaMDS}(x, display = c("sites", "species"), shrink = FALSE, 
         choices, ...)
 metaMDSdist(comm, distance = "bray", autotransform = TRUE, noshare = 0.1, 
@@ -70,7 +70,12 @@ metaMDSredist(object, ...)
   \item{type}{Plot type: \code{"p"} for points, \code{"t"} for text, and
    \code{"n"} for axes only.}
  \item{display}{Display \code{"sites"} or \code{"species"}.}
- \item{shrink}{Shrink back species scores if they were expanded originally.}
+ \item{shrink}{Shrink back species scores if they were expanded
+   originally.}
+ \item{labels}{Optional test to be used instead of row names.}
+ \item{select}{Items to be displayed.  This can either be a logical
+   vector which is \code{TRUE} for displayed items or a vector of indices
+   of displayed items.}
  \item{X}{Configuration from multidimensional scaling. }
  \item{commname}{The name of \code{comm}: should not be given if the
   function is called directly.}

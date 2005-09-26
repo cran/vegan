@@ -8,7 +8,7 @@ The function provides some popular (and effective) standardization
 methods for community ecologists.
 }
 \usage{
-decostand(x, method, MARGIN, na.rm = FALSE)
+decostand(x, method, MARGIN, range.global, na.rm = FALSE)
 wisconsin(x)
 }
 
@@ -16,6 +16,10 @@ wisconsin(x)
   \item{x}{Community data matrix.}
   \item{method}{Standardization method.}
   \item{MARGIN}{Margin, if default is not acceptable.}
+  \item{range.global}{Matrix from which the range is found in
+    \code{method = "range"}.  This allows using same ranges across
+    subsets of data.  The dimensions of \code{MARGIN} must match with
+    \code{x}. }
   \item{na.rm}{Ignore missing values in row or column standardizations.}
 }
 \details{
@@ -30,7 +34,8 @@ wisconsin(x)
     \item \code{normalize}: make margin sum of squares equal to one (default
     \code{MARGIN = 1}).
     \item \code{range}: standardize values into range 0 \dots 1 (default
-    \code{MARGIN = 2}).
+    \code{MARGIN = 2}).  If all values are constant, they will be
+    transformed to 0.
     \item \code{standardize}: scale into zero mean and unit variance
     (default \code{MARGIN = 2}).
     \item \code{pa}: scale into presence/absence scale (0/1).
@@ -42,6 +47,8 @@ wisconsin(x)
     results from \code{\link{cmdscale}} would still differ, since
     CA is a weighted ordination method (default \code{MARGIN =
       1}).
+    \item \code{hellinger}: square root of \code{method = "total"}
+    (Legendre & Gallagher 2001).
   }
   Standardization, as contrasted to transformation, means that the
   entries are transformed relative to other entries.
@@ -54,10 +61,16 @@ wisconsin(x)
   Command \code{wisconsin} is a shortcut to common Wisconsin double
   standardization where species (\code{MARGIN=2}) are first standardized
   by maxima (\code{max}) and then sites (\code{MARGIN=1}) by
-  site totals (\code{tot}). 
+  site totals (\code{tot}).
+
+  Most  standardization methods will give non-sense results with
+  negative data entries that normally should not occur in the community
+  data.  If there are empty sites  or species (or constant with
+  \code{method =  "range"}), many standardization will change these into
+  \code{NaN}.  
 }
 \value{
-  Returns the standardized data frame.
+  Returns the standardized data frame. 
 }
 \author{Jari Oksanen}
 \note{Common transformations can be made with standard \R functions.}
@@ -80,8 +93,6 @@ sptrans <- wisconsin(varespec)
 # Chi-square: Similar but not identical to Correspondence Analysis.
 sptrans <- decostand(varespec, "chi.square")
 plot(procrustes(rda(sptrans), cca(varespec)))
-# Hellinger transformation (Legendre & Callagher 2001):
-sptrans <- sqrt(decostand(varespec, "total"))
 }
 \keyword{ multivariate}%-- one or more ...
 \keyword{ manip }

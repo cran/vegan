@@ -24,7 +24,7 @@
     species <- object$CCA$v[, 1:cc.dim, drop = FALSE]
     sites <- object$CCA$wa[, 1:cc.dim, drop = FALSE]
     centroids <- NA
-    if (!is.null(object$CCA$centroids) && !is.na(object$CCA$centroids)[1]) 
+    if (!is.null(object$CCA$centroids) && !is.na(object$CCA$centroids[1])) 
         centroids <- object$CCA$centroids[, 1:cc.dim, drop = FALSE]
     site.constr <- object$CCA$u[, 1:cc.dim, drop = FALSE]
     sum.ev <- object$tot.chi
@@ -33,7 +33,7 @@
     else nr <- nrow(object$CCA$u)
     const <- sqrt(sqrt((nr - 1) * sum.ev))
     evscale <- sqrt(summ$ev.con[1:cc.dim]/sum.ev)
-    if (scaling == 2) {
+    if (abs(scaling) == 2) {
         if (cc.dim) {
             species <- sweep(species, 2, evscale, "*")
         }
@@ -45,7 +45,7 @@
             sites <- cbind(sites, object$CA$u[, 1:add.dim, drop = FALSE])
         }
     }
-    if (scaling == 1) {
+    if (abs(scaling) == 1) {
         if (cc.dim) {
             site.constr <- sweep(site.constr, 2, evscale, "*")
             sites <- sweep(sites, 2, evscale, "*")
@@ -61,7 +61,7 @@
             sites <- cbind(sites, tmp)
         }
     }
-    if (scaling == 3) {
+    if (abs(scaling) == 3) {
         if (cc.dim) {
             species <- sweep(species, 2, sqrt(evscale), "*")
             sites <- sweep(sites, 2, sqrt(evscale), "*")

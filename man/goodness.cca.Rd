@@ -1,4 +1,4 @@
-\name{goondess.cca}
+\name{goodness.cca}
 \alias{goodness}
 \alias{goodness.rda}
 \alias{goodness.cca}

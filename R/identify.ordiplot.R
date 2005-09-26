@@ -1,7 +1,9 @@
 "identify.ordiplot" <-
-function (x, what, ...) 
+    function (x, what, labels, ...) 
 {
     x <- scores(x, what)
-    out <- identify(x, labels = rownames(x), ...)
+    if (missing(labels))
+        labels <- rownames(x)
+    out <- identify(x, labels = labels, ...)
     out
 }

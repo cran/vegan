@@ -75,16 +75,17 @@ ordisurf(x, y, choices=c(1, 2), knots=10, family="gaussian", col="red",
 \examples{
 ## The examples are not run by `example(ordisurf)' because they need
 ## libraries `mgcv' and `akima' which may not exist in every system.
-\dontrun{data(varespec)}
-\dontrun{data(varechem)}
-\dontrun{library(MASS)}
-\dontrun{vare.dist <- vegdist(varespec)}
-\dontrun{vare.mds <- isoMDS(vare.dist)}
-\dontrun{attach(varespec)}
-\dontrun{attach(varechem)}
-\dontrun{ordisurf(vare.mds, Baresoil, xlab="Dim1", ylab="Dim2")}
+\dontrun{
+data(varespec)
+data(varechem)
+library(MASS)
+vare.dist <- vegdist(varespec)
+vare.mds <- isoMDS(vare.dist)
+attach(varespec)
+attach(varechem)
+ordisurf(vare.mds, Baresoil, xlab="Dim1", ylab="Dim2")
 ## Total cover of reindeer lichens
-\dontrun{ordisurf(vare.mds, Cla.ste+Cla.arb+Cla.ran, xlab="Dim1", ylab="Dim2")} 
+ordisurf(vare.mds, Cla.ste+Cla.arb+Cla.ran, xlab="Dim1", ylab="Dim2")} 
 }
 \keyword{ multivariate }
 \keyword{ aplot }

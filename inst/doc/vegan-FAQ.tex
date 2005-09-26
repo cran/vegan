@@ -4,7 +4,7 @@
 \documentclass[a4paper]{article}
 
 \usepackage{ucs}
-\usepackage[utf8]{inputenc}
+\usepackage[utf8x]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[sort&compress]{natbib}
 \usepackage{hyperref}
@@ -90,7 +90,9 @@ wider dispersion.
   scores in terms of orthonormal species ($u_{ik}$) and site scores
   ($v_{jk}$), eigenvalues ($\lambda_k$), number of sites  ($n$) and
   species standard deviations ($s_j$). In \texttt{rda}, 
-  $\mathrm{const} = \sqrt[4]{(n-1) \sum \lambda_k}$.  }
+  $\mathrm{const} = \sqrt[4]{(n-1) \sum \lambda_k}$.  Correspoding
+  negative scaling in \texttt{vegan} and corresponding positive
+  scaling in \texttt{Canoco} divides each species by its standard deviation.  }
 \begin{tabular}{lcc}
 & \textbf{Site scores} $u_{ik}^*$ & 
 \textbf{Species scores} $v_{jk}^*$ \\
@@ -117,17 +119,6 @@ $v_{jk} \sqrt{n} \sqrt{\lambda_k / \sum \lambda_k}$
 \texttt{Canoco, scaling=-3} &
 $u_{ik} \sqrt{n} \sqrt[4]{\lambda_k / \sum \lambda_k}$ &
 $v_{jk} \sqrt{n} \sqrt[4]{\lambda_k / \sum \lambda_k}$ 
-\\
-\texttt{Canoco, scaling=1} &
-$u_{ik} \sqrt{n} \sqrt{\lambda_k / \sum \lambda_k} $ &
-$v_{jk} \sqrt{n} /s_j$ \\
-\texttt{Canoco, scaling=2} &
-$u_{ik} \sqrt{n} $ &
-$v_{jk} \sqrt{n} \sqrt{\lambda_k / \sum \lambda_k} / s_j$ 
-\\
-\texttt{Canoco, scaling=3} &
-$u_{ik} \sqrt{n} \sqrt[4]{\lambda_k / \sum \lambda_k} $ &
-$v_{jk} \sqrt{n} \sqrt[4]{\lambda_k / \sum \lambda_k} / s_j $ 
 \end{tabular} 
 \end{table}
 
@@ -143,10 +134,10 @@ sites, and species are left unscaled.  For \texttt{Canoco} $c = n^{-1}
 \sqrt{n-1} \sqrt{\sum \lambda_k}$ with positive \texttt{Canoco}
 scaling values. All these $c$ are constants for a matrix, so these are
 all biplots with different internal scaling of species and site scores
-with respect to each other.  For \texttt{Canoco} with negative scaling
-values, no constant $c$ can be found, but the correction is dependent
-on species standard deviations $s_j$, so this alternative does not
-define a biplot.
+with respect to each other.  For \texttt{Canoco} with postive scaling
+values and \texttt{vegan} with negative scaling values, no constant
+$c$ can be found, but the correction is dependent on species standard
+deviations $s_j$, so this alternative does not define a biplot.
 
 There is no natural way of scaling species and site scores to each
 other, but all functions and programs above selected different
@@ -362,17 +353,17 @@ cca(formula = varespec[i, ] ~ Al + K, data = varechem)
 
               Inertia Rank
 Total          2.0832     
-Constrained    0.1662    2
-Unconstrained  1.9170   21
+Constrained    0.2514    2
+Unconstrained  1.8318   21
 Inertia is mean squared contingency coefficient 
 
 Eigenvalues for constrained axes:
-   CCA1    CCA2 
-0.10412 0.06212 
+  CCA1   CCA2 
+0.1346 0.1168 
 
 Eigenvalues for unconstrained axes:
     CA1     CA2     CA3     CA4     CA5     CA6     CA7     CA8 
-0.46855 0.34760 0.23394 0.17707 0.17077 0.11622 0.10160 0.07979 
+0.49889 0.31147 0.19838 0.17323 0.15853 0.11644 0.09503 0.07083 
 (Showed only 8 of all 21 unconstrained eigenvalues)
 \end{Soutput}
 \end{Schunk}
@@ -430,11 +421,11 @@ Eigenvalues for unconstrained axes:
 > max(residuals(proc))
 \end{Sinput}
 \begin{Soutput}
-[1] 2.753734e-14
+[1] 2.959031e-14
 \end{Soutput}
 \end{Schunk}
 In \texttt{cca} the difference would be somewhat larger than now
-observed 2.7537e-14 because site
+observed 2.9590e-14 because site
 weights used for environmental variables are shuffled with the species
 data.
 

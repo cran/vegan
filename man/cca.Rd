@@ -46,10 +46,14 @@
     the other set of scores is left unscaled, or with \code{3} both are
     scaled symmetrically by square root of eigenvalues.  Corresponding
     negative values can be used in \code{cca} to additionally multiply
-    results with \eqn{\sqrt(1/(1-\lambda))}.  This scaling is known with
-    a misleading name of Hill scaling (although it has nothing to do
-    with Hill's rescaling of \code{\link{decorana}}).  Negative values
-    are not recognized for results of \code{rda}.
+    results with \eqn{\sqrt(1/(1-\lambda))}.  This scaling is know as
+    Hill scaling
+    (although it has nothing to do
+    with Hill's rescaling of \code{\link{decorana}}). With corresponding
+    negative values in\code{rda},
+    species scores are divided by standard deviation of each species.
+    Unscaled raw scores stored in the result can be accessed with
+    \code{scaling = 0}. 
   }
   \item{axes}{Number of axes in summaries.}
   \item{digits}{Number of digits in output.}
@@ -165,44 +169,13 @@
   (\code{\link[MASS]{lda}}, \code{\link{cancor}}).
 }
 \value{
-  Function \code{cca} returns a big object of class \code{cca}.  It has
-  as elements
-  separate lists for pCCA, CCA and CA.  These lists have information on
-  total Chi-square and estimated rank of the stage.  Lists \code{CCA}
-  and \code{CA} contain scores for species (\code{v}) and sites
-  (\code{u}).  These site scores are linear constraints in \code{CCA} and
-  weighted averages in \code{CA}.  In addition, list \code{CCA} has
-  item \code{wa} for site scores and \code{biplot} for endpoints of
-  biplot arrows.  All these scores are unscaled (actually, their
-  weighted sum of squares is one). The result object can be
-  accessed with functions \code{summary} and \code{\link{scores.cca}}
-  which
-  know how to scale the results for display.  The traditional 
-  alternative in correspondence analysis (see \code{\link{decorana}})
-  was to scale sites by
-  eigenvalues and leave species unscaled (\code{scaling=1}),
-  so that configuration of sites
-  would reflect the real structure in data (longer axes for higher
-  eigenvalues).  Species scores would not reflect axis lengths, and they
-  would have larger variation than species scores, which was motivated
-  by some species having their optima outside studied range.  Later the
-  common practice was to leave sites unscaled (\code{scaling=2}),
-  so that they would have a better relation with biplot arrows.
+  Function \code{cca} returns a huge object of class \code{cca}, which
+  is described separately in \code{\link{cca.object}}.
 
   Function \code{rda} returns an object of class \code{rda} which
-  inherits from class \code{cca}.  Function \code{rda} is really only a
-  spin-off from \code{cca}, and the object uses the same item names as
-  \code{cca}, which are misleading in this case. The only specific
-  function is \code{summary.rda}, but otherwise the object \code{rda} is
-  accessed with \code{cca} methods (\code{print}, \code{\link{plot.cca}},
-  \code{\link{scores.cca}}, \code{\link{anova.cca}}). The analysis
-  stores unscaled
-  results names similarly as in \code{cca}, but \code{summary.rda} (and
-  hence \code{plot} and \code{scores} functions) scales these so that
-  site and species scores are similarly scaled to each other as in
-  \code{Canoco}. However, the \code{summary.rda} scores differ from
-  \code{Canoco} by a constant multiplier so that they define a real
-  biplot or an approximation of the data.
+  inherits from class \code{cca} and is described in \code{\link{cca.object}}.
+  The scaling used in \code{rda} scores is desribed in a separate
+  vignette with this package.
 }
 \references{ The original method was by ter Braak, but the current
   implementations follows Legendre and Legendre.

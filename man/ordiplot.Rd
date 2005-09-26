@@ -16,10 +16,10 @@
   \code{\link{plot.rad}} as well.
 }
 \usage{
-ordiplot(ord, choices = c(1, 2), type="points", display, ...)
-\method{identify}{ordiplot}(x, what, ...)
-\method{points}{ordiplot}(x, what, ...)
-\method{text}{ordiplot}(x, what, ...)
+ordiplot(ord, choices = c(1, 2), type="points", display, xlim, ylim, ...)
+\method{identify}{ordiplot}(x, what, labels,  ...)
+\method{points}{ordiplot}(x, what, select, ...)
+\method{text}{ordiplot}(x, what, labels, select, ...)
 }
 
 \arguments{
@@ -31,6 +31,7 @@ ordiplot(ord, choices = c(1, 2), type="points", display, ...)
     methods is to display both, but for \code{\link{cca}},
     \code{\link{rda}} and \code{\link{capscale}} it is the same as in
     \code{\link{plot.cca}}.  }
+  \item{xlim, ylim}{the x and y limits (min,max) of the plot.}
   \item{\dots}{Other graphical parameters. }
   \item{x}{A result object from \code{ordiplot}.}
   \item{what}{Items identified in the ordination plot. The types depend
@@ -40,6 +41,12 @@ ordiplot(ord, choices = c(1, 2), type="points", display, ...)
     \code{constraints} (for `LC' scores), \code{centroids} and
     \code{biplot}, and \code{\link{plot.procrustes}} ordination plot has
     \code{heads} and \code{points}.}
+  \item{labels}{Optional text used for labels. Row names will be used if
+  this is missing.}
+  \item{select}{Items to be displayed.  This can either be a logical
+    vector which is \code{TRUE} for displayed items or a vector of indices
+    of displayed items.}
+
 }
 \details{
   Function \code{ordiplot} draws an ordination diagram using black circles for
@@ -60,7 +67,7 @@ ordiplot(ord, choices = c(1, 2), type="points", display, ...)
   with \code{type = "none"} and save the result, and then add sites and
   species using \code{points.ordiplot} or \code{text.ordiplot} which
   both pass all their arguments to the corresponding default graphical
-  functions. 
+  functions.
 }
 \value{
   Function \code{ordiplot} returns invisibly an object of class
@@ -100,10 +107,11 @@ dune.mds$species <- wascores(dune.mds$points, dune, expand = TRUE)
 fig <- ordiplot(dune.mds, type = "none")
 points(fig, "sites", pch=21, col="red", bg="yellow")
 text(fig, "species", col="blue", cex=0.9)
-# A quick plot of the previous.
-# identify is not run automatically because it needs user interaction:
-\dontrun{fig <- ordiplot(dune.mds)}
-\dontrun{identify(fig, "spec")}
+# Default plot of the previous using identify to label selected points
+\dontrun{
+fig <- ordiplot(dune.mds)
+identify(fig, "spec")}
+
 }
 \keyword{ hplot }
 \keyword{ iplot }
