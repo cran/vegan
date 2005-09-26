@@ -8,7 +8,8 @@
     X <- as.matrix(X)
     NR <- nrow(X) - 1
     Xbar <- scale(X, center = TRUE, scale = scale)
-    if (scale)
+    SD <- sd(Xbar)
+    if (scale) 
         Xbar[is.nan(Xbar)] <- 0
     tot.chi <- sum(svd(Xbar, nu = 0, nv = 0)$d^2)/NR
     if (!missing(Z) && !is.null(Z)) {
@@ -95,7 +96,7 @@
     }
     call <- match.call()
     call[[1]] <- as.name("rda")
-    sol <- list(call = call, grand.total = NA, rowsum = NA, colsum = NA, 
+    sol <- list(call = call, grand.total = NA, rowsum = NA, colsum = SD, 
                 tot.chi = tot.chi, pCCA = pCCA, CCA = CCA, CA = CA)
     sol$method <- "rda"
     sol$inertia <- if (scale) 

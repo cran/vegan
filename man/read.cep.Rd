@@ -89,13 +89,19 @@ read.cep(file, maxdata=10000, positive=TRUE, trace=FALSE, force=FALSE)
   platform. For instance, if you transfer files from Windows to Linux,
   you should change the files to \code{unix} format, or your session may
   crash when Fortran program tries to read the invisible characters that
-  Windows uses at the end of each line. 
+  Windows uses at the end of each line.
+
+  If you compiled \code{vegan} using \code{gfortran}, the input is
+  probably corrupted.  You either should compile \code{vegan} with other
+  FORTRAN compilers or not to use \code{read.cep}.  The problems still
+  persist in \code{gfortran 4.01}.
 }
 
 
 \examples{
 ## Provided that you have the file `dune.spe'
-\dontrun{theclassic <- read.cep("dune.spe", force=T)}
+\dontrun{
+theclassic <- read.cep("dune.spe", force=T)}
 }
 \keyword{ IO }
 \keyword{ file }

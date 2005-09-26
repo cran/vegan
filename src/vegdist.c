@@ -11,9 +11,11 @@
  * Number "99" is an extra case: It is not for vegdist.R, but for
  * something simpler.
  *
- * (C) 2001, Jari Oksanen, Your are free to use this code if you accept GPL2.
+ * (C) 2001-2005, Jari Oksanen. You are free to use this code if you
+ * accept GPL2.
  *
  * Oct 2003: Added Morisita, Horn-Morisita, "Jaccard", and Mountford.
+ * May 2005: Added Raup-Crick.
  */
 
 
@@ -36,10 +38,13 @@
 #define HORN 8
 #define MOUNTFORD 9
 #define JACCARD 10
-#define MILLAR 11
+#define RAUP 11
+#define MILLAR 12
 #define NOSHARED 99
 
 /* Distance functions */
+
+/* Manhattan distance: duplicates base R */
 
 double veg_manhattan(double *x, int nr, int nc, int i1, int i2)
 {
@@ -62,7 +67,10 @@ double veg_manhattan(double *x, int nr, int nc, int i1, int i2)
 
 /* Gower is like Manhattan, but data were standardized to range 0..1
  * for rows before call and dist is divided by the number of non-zero
- * pairs.
+ * pairs.  There is an alternative implementation in cluster package.
+ * That can handle mixed data with factors, but won't handle mere
+ * numeric variables.  Some extra manipulations are needed in the
+ * calling R function.
  */
 
 double veg_gower(double *x, int nr, int nc, int i1, int i2)
@@ -85,6 +93,8 @@ double veg_gower(double *x, int nr, int nc, int i1, int i2)
      return dist;
 }
 
+/* Euclidean distance: duplicates base R */
+
 double veg_euclidean(double *x, int nr, int nc, int i1, int i2)
 {
      double dist, dev;
@@ -104,6 +114,10 @@ double veg_euclidean(double *x, int nr, int nc, int i1, int i2)
      if (count == 0) return NA_REAL;
      return sqrt(dist);
 }
+
+/* Canberra distance: duplicates R base, but is scaled into range
+ * 0...1  
+*/
 
 double veg_canberra(double *x, int nr, int nc, int i1, int i2)
 {
@@ -134,7 +148,9 @@ double veg_canberra(double *x, int nr, int nc, int i1, int i2)
      return dist;
 }
 
-/* Jaccard = (2 * Bray)/(1 + Bray). If Jaccard is requested, Bray is
+/*  Bray-Curtis and Jaccard indices:
+ *
+ * Jaccard = (2 * Bray)/(1 + Bray). If Jaccard is requested, Bray is
  * calculated in this function and it is left as the task of the
  * caller to translate this into Jaccard. Actually, Jaccard is
  * redundant, but since people ask for Jaccard, they get it.
@@ -162,6 +178,8 @@ double veg_bray(double *x, int nr, int nc, int i1, int i2)
      return dist;
 }
 
+/* Kulczynski index */
+
 double veg_kulczynski(double *x, int nr, int nc, int i1, int i2)
 {
      double sim, dist, t1, t2;
@@ -187,6 +205,10 @@ double veg_kulczynski(double *x, int nr, int nc, int i1, int i2)
 	  dist = 0;
      return dist;
 }
+
+/* Morisita index.  Can only be used with integer data, and may still
+ * fail with unfortunate pairs of species occurring only once.
+ */
 
 double veg_morisita(double *x, int nr, int nc, int i1, int i2)
 {
@@ -217,6 +239,8 @@ double veg_morisita(double *x, int nr, int nc, int i1, int i2)
 	  dist = 0;
      return dist;
 }
+
+/* Horn-Morisita index */
 
 double veg_horn(double *x, int nr, int nc, int i1, int i2)
 {
@@ -293,7 +317,9 @@ double veg_mountford(double *x, int nr, int nc, int i1, int i2)
 	  i2 += nr;
      }
      if (count == 0) return NA_REAL;
-     if (sim == 0)
+     if (t1 == 0 || t2 == 0)
+	  dist = NA_REAL;
+     else if (sim == 0)
 	  dist = 0;
      else if (sim == t1 || sim == t2)
 	  dist = M_LN2;
@@ -316,12 +342,62 @@ double veg_mountford(double *x, int nr, int nc, int i1, int i2)
 #undef EPS
 #undef TOL
 
+/* Raup-Crick dissimilarity: R code supplied by 
+ * Michael.Bedward@environment.nsw.gov.au.  
+ *
+ * Here his original comments:
+ *
+ * "Attached is a little function to calculate the probabilistic
+ * Raup-Crick dissimilarity metric for presence-absence data.  Rather
+ * than the permutation procedure used in the original reference (Raup
+ * & Crick 1979 Paleontology, as related by Legendre and Legendre in
+ * Numerical Ecology), this function uses phyper() for a faster and
+ * more precise calculcation.  I subsequently found that the same
+ * (obvious) idea is in the literature under a variety of other names
+ * (or sometimes no name).
+ *
+ * Compared to other metrics for p/a data, Raup-Crick seems to be very
+ * robust for small samples."
+ *
+ * This is a direct port from Bedward's R to C (Jari Oksanen, May 2005).
+ */
+
+double veg_raup(double *x, int nr, int nc, int i1, int i2)
+{
+     double dist, J, A, B;
+     int sim, t1, t2, j, count;
+     
+     sim = 0;
+     t1 = 0;
+     t2 = 0;
+     count = 0;
+     for (j = 0; j < nc; j++) {
+	  if (R_FINITE(x[i1]) && R_FINITE(x[i2])) {
+	       if (x[i1] > 0.0 && x[i2] > 0.0)
+		    sim++;
+	       if (x[i1] > 0)
+		    t1++;
+	       if (x[i2] > 0)
+		    t2++;
+	       count++;
+	  }
+	  i1 += nr;
+	  i2 += nr;
+     }
+     if (count == 0) return NA_REAL; 
+     J = (double) (sim - 1);
+     A = (t1 < t2) ? (double) t1 : (double) t2;
+     B = (t1 < t2) ? (double) t2 : (double) t1;
+     dist = 1 - phyper(J, A, (double) count - A, B, 1, 0);
+     return dist;
+}
+
 /* "Millar dissimilarity" is unpublished.  I found this in the lecture
  * notes of Marti Anderson over the internet, and she attributes this
  * idea to her colleague Russell Millar.  The index is basically
  * binomial deviance under H0 that species are equally common in the
  * two compared communities.  This could be easily generalized over
- * to, say, Poisson case. 
+ * to, say, Poisson case.
  */
 
 double veg_millar(double *x, int nr, int nc, int i1, int i2)
@@ -349,7 +425,9 @@ double veg_millar(double *x, int nr, int nc, int i1, int i2)
 
 /* veg_noshared is not a proper dissimilarity index, but a pretty
  * useless helper function. It returns 1 when there are no shared
- * species, and 0 if two sites have at least one shared species.
+ * species, and 0 if two sites have at least one shared species, and
+ * it stops looping after finding the first shared species (hence it
+ * should be fast).
  */
 
 double veg_noshared(double *x, int nr, int nc, int i1, int i2)
@@ -408,6 +486,9 @@ void veg_distance(double *x, int *nr, int *nc, double *d, int *diag, int *method
 	  break;
      case MOUNTFORD:
 	  distfun = veg_mountford;
+	  break;
+     case RAUP:
+	  distfun = veg_raup;
 	  break;
      case MILLAR:
 	  distfun = veg_millar;

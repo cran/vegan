@@ -27,7 +27,10 @@
     else {
         adjust <- k
     }
+    nm <- attr(X, "Labels")
     X <- cmdscale(X, k = k, eig = TRUE, add = add)
+    if (is.null(rownames(X$points)))
+        rownames(X$points) <- nm 
     X$points <- adjust * X$points
     neig <- min(which(X$eig < 0) - 1, k)
     sol <- X$points[, 1:neig]
@@ -36,8 +39,13 @@
     sol <- rda.default(d$X, d$Y, d$Z, ...)
     sol$tot.chi <- sol$tot.chi
     if (!is.null(sol$CCA)) {
-        colnames(sol$CCA$u) <- colnames(sol$CCA$biplot) <- names(sol$CCA$eig) <- colnames(sol$CCA$wa) <- colnames(sol$CCA$v) <- paste("CAP", 
-                                                                                                                                      1:ncol(sol$CCA$u), sep = "")
+        colnames(sol$CCA$u) <- colnames(sol$CCA$biplot) <-
+            names(sol$CCA$eig) <- colnames(sol$CCA$wa) <-
+                colnames(sol$CCA$v) <- paste("CAP", 1:ncol(sol$CCA$u), sep = "")
+    }
+    if (!is.null(sol$CA)) {
+        colnames(sol$CA$u) <- names(sol$CA$eig) <- colnames(sol$CA$v) <-
+            paste("MDS", 1:ncol(sol$CA$u), sep="")
     }
     if (!is.null(comm)) {
         comm <- scale(comm, center = TRUE, scale = FALSE)

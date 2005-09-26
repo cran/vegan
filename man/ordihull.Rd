@@ -155,7 +155,8 @@ plot(mod, type = "p", display="sites")
 ordicluster(mod, hclust(vegdist(dune)), prune=3, col = "blue")
 # The following is not executed automatically because it needs
 # a non-standard library `ellipse'. 
-\dontrun{ordiellipse(mod, Moisture, kind="se", level=0.95, lwd=2, col="blue")}
+\dontrun{
+ordiellipse(mod, Moisture, kind="se", level=0.95, lwd=2, col="blue")}
 }
 \keyword{aplot }
 

@@ -5,6 +5,8 @@
   if (!force) {
     stop("R may crash: if you want to try, save your session and use `force=T'")
   }
+  if (is.loaded("_gfortran_ioparm"))
+      warning("It seems that you have used gfortran: the input may be corrupted\n")
   ftypes <- c("free", "open", "condensed")
   file <- path.expand(file)
   if (trace) 

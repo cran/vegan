@@ -13,11 +13,11 @@
 }
 \usage{
 \method{plot}{cca}(x, choices = c(1, 2), display = c("sp", "wa", "cn"),
-         scaling = 2, type, ...)
-\method{text}{cca}(x, display = "sites", choices = c(1, 2), scaling = 2,
-    arrow.mul = 1, head.arrow = 0.05, ...)
+         scaling = 2, type, xlim, ylim, ...)
+\method{text}{cca}(x, display = "sites", labels, choices = c(1, 2), scaling = 2,
+    arrow.mul, head.arrow = 0.05, select, ...)
 \method{points}{cca}(x, display = "sites", choices = c(1, 2), scaling = 2,
-    arrow.mul = 1, head.arrow = 0.05, ...)
+    arrow.mul, head.arrow = 0.05, select, ...)
 \method{scores}{cca}(x, choices=c(1,2), display=c("sp","wa","cn"),scaling=2, ...)
 }
 
@@ -37,8 +37,14 @@
     (\code{2}) or site (\code{1}) scores are scaled by eigenvalues, and
     the other set of scores is left unscaled, or with \code{3} both are
     scaled symmetrically by square root of eigenvalues. }
-  \item{arrow.mul}{Factor to expand arrows in the graph.}
+  \item{xlim, ylim}{the x and y limits (min,max) of the plot.}
+  \item{labels}{Optional text to be used instead of row names.}
+  \item{arrow.mul}{Factor to expand arrows in the graph.  Arrows will be
+    scaled automatically to fit the graph if this is missing.}
   \item{head.arrow}{Default length of arrow heads.}
+  \item{select}{Items to be displayed.  This can either be a logical
+    vector which is \code{TRUE} for displayed items or a vector of indices
+    of displayed items.}
   \item{...}{Other parameters for plotting functions.}
 }
 
@@ -99,7 +105,7 @@ data(dune)
 data(dune.env)
 mod <- cca(dune ~ A1 + Moisture + Management, dune.env)
 plot(mod, type="n")
-text(mod, dis="cn", arrow = 2)
+text(mod, dis="cn")
 points(mod, pch=21, col="red", bg="yellow", cex=1.2)
 text(mod, "species", col="blue", cex=0.8)
 }

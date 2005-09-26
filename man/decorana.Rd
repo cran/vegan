@@ -6,6 +6,8 @@
 \alias{plot.decorana}
 \alias{downweight}
 \alias{scores.decorana}
+\alias{points.decorana}
+\alias{text.decorana}
 
 \title{Detrended Correspondence Analysis and Basic Reciprocal Averaging }
 \description{
@@ -15,8 +17,13 @@
 \usage{
 decorana(veg, iweigh=0, iresc=4, ira=0, mk=26, short=0, before=NULL,
          after=NULL)
-\method{plot}{decorana}(x, choices=c(1,2), origin=TRUE, display=c("both","sites","species","none"),
-     cex = 0.8, cols = c(1,2), type, ...)
+\method{plot}{decorana}(x, choices=c(1,2), origin=TRUE,
+     display=c("both","sites","species","none"),
+     cex = 0.8, cols = c(1,2), type, xlim, ylim,...)
+\method{text}{decorana}(x, display = c("sites", "species"), labels, choices = 1:2, 
+     origin = TRUE, select,  ...)  
+\method{points}{decorana}(x, display = c("sites", "species"), choices = 1:2, 
+     origin = TRUE, select, ...)  
 \method{summary}{decorana}(object, digits=3, origin=TRUE,
      display=c("both", "species","sites","none"), ...)
 downweight(veg, fraction = 5)
@@ -40,7 +47,12 @@ downweight(veg, fraction = 5)
   \item{cex}{Plot character size.}
   \item{cols}{Colours used for sites and species.}
   \item{type}{Type of plots, partial match to \code{"text"},
-    \code{"points"} or \code{"none"}.} 
+    \code{"points"} or \code{"none"}.}
+  \item{labels}{Optional text to be used instead of row names.}
+  \item{select}{Items to be displayed.  This can either be a logical
+    vector which is \code{TRUE} for displayed items or a vector of indices
+    of displayed items.}
+  \item{xlim, ylim}{the x and y limits (min,max) of the plot.}
   \item{digits}{Number of digits in summary output.}
   \item{fraction}{Abundance fraction where downweighting begins.}
   \item{...}{Other parameters for \code{plot} function.}

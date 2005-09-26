@@ -1,5 +1,76 @@
 VEGAN STABLE VERSIONS 
 
+Version 1.6-10 (September 26, 2005)
+
+	* Based on devel version 1.7-77.  Checked with R 2.1.1 (stable)
+	and R 2.2.0 (alpha).
+ 	
+	* rda: negative scalings explicitly ignored and treated as
+	corresponding positive values.  Function summary.rda used to fail
+	with NA centroids.
+
+	* permutest.cca & anova.cca: permutation of 'cca' result now
+	re-weights environmental data properly with permuted community
+	weights (this breaks compliance with popular proprietary
+	software).  New default method 'direct' that always permutes the
+	data instead of residuals.  Now clearly faster basic routines, but
+	re-weighting in 'cca' is costly, and permutations may even be
+	slower than earlier in small data sets.  The permutest.cca returns
+	more data: constrained and residual total inertia, degrees of
+	freedom in the input model, and .Random.seed used in iterations.
+	Thanks to Pierre Legendre for pushing me to make this faster.
+
+	* ordination plot functions: obey now xlim and ylim.
+
+	* ordination text and points functions: a new argument 'select'
+	that can be used to select a subset of items, and a new argument
+	'labels' for text used instead of the default row names.
+
+	* points.cca, text.cca: biplot arrows will be scaled automatically
+	to fit the current graph if 'arrow.mul' is not given.  The new
+	behaviour is similar to the default in plot.cca and in
+	plot.envfit.
+	
+	* orditorp: a new "ordination text or points" function to add text
+	or points to an existing plot: adds text if this can be done
+	without overwriting other text labels, and points otherwise.
+
+	* linestack: a new function to draw labelled one-dimensional
+	diagrams without overwriting the labels (a primitive one, and
+	could easily be improved: submissions are welcome).
+
+	* ordirgl, orgltext: adapted to changes in rgl package version
+	0.65.  Workaround for older rgl packages, too.
+	
+	* decostand: Added Hellinger transformation. Empty columns and
+	rows become now 0 instead of NaN in most methods, except when the
+	input data contains negative values. Warns on input with negative
+	entries or on output containing NaN.  Has now argument
+	'range.global' for method 'range' based on the code supplied by
+	Tyler Smith.
+
+	* plot.radfit: puts now legend "topright" in R >= 2.1.0 (which has
+	this keyword).
+	
+	* read.cep: issues a warning if vegan was compiled with gfortran,
+	which has a bug that may corrupt the result.  The bug concerns
+	multiline input with T format modifier, and it was corrected in
+	http://gcc.gnu.org/ml/gcc-patches/2005-09/msg00126.html, but still
+	bugs most released versions of gcc.
+
+	* vegdist: new indices 'raup' and 'binomial'. Method 'raup'
+	implements probabilistic Raup-Crick index and is based on the code
+	submitted by Michael Bedward.  Method 'binomial' implements
+	Millar's index, officially published as "Binomial deviance as a
+	dissimilarity measure" (the C code has been in vegan for about two
+	years, but now I tell about it and add the public interface).
+	Method 'mountford' will give NA for any comparison involving an
+	empty site.  Warns about empty sites or negative entries with all
+	methods except 'euclidean' and 'manhattan'.
+	
+	* Documentation: added documentation of the cca/rda/capscale
+	result object. Dontruns used more neatly.
+	
 Version 1.6-9 (April 22, 2005)
 
 	* Maintenance release: 1.6-8 failed in R 2.1.0 patched and R 2.2.0
@@ -305,7 +376,7 @@ Version 1.6-3 (Mar 22, 2004)
 	recent, present and future versions of R seemed to be too much
 	hassle.
  
-        * plot.envfit: Added option ´p.max' to display only environmental
+        * plot.envfit: Added option 'p.max' to display only environmental
         variables assessed to have P values less or equal to the given
         limit.
          
