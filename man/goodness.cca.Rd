@@ -4,6 +4,7 @@
 \alias{goodness.cca}
 \alias{inertcomp}
 \alias{spenvcor}
+\alias{intersetcor}
 \alias{vif.cca}
 \alias{alias.cca}
 
@@ -24,6 +25,7 @@
 inertcomp(object, display = c("species", "sites"),
     statistic = c("explained", "distance"), proportional = FALSE)
 spenvcor(object)
+intersetcor(object)
 vif.cca(object)
 \method{alias}{cca}(object, ...)
 }
@@ -46,7 +48,7 @@ vif.cca(object)
 \details{
   Function \code{goodness} gives the diagnostic statistics for species
   or sites. The alternative statistics are the cumulative proportion of
-  inertia accounted for by the axes, or the residual distance left
+  inertia accounted for by the axes, and the residual distance left
   unaccounted for.  The conditional (``partialled out'') constraints are
   always regarded as explained and included in the statistics.
 
@@ -56,13 +58,24 @@ vif.cca(object)
   dispersion or distances from the centroid for each component.
 
   Function \code{spenvcor} finds the so-called \dQuote{species --
-    environment correlation} or (weighted) correlation of site
+    environment correlation} or (weighted) correlation of 
   weighted average scores and linear combination scores.  This is a bad
   measure of goodness of ordination, because it is sensitive to extreme
   scores (like correlations are), and very sensitive to overfitting or
   using too many constraints. Better models often have poorer
   correlations. Function \code{\link{ordispider}} can show the same
-  graphically. 
+  graphically.
+
+  Function \code{intersetcor} finds the so-called \dQuote{interset
+    correlation} or (weighted) correlation of weighted averages scores
+  and constraints.  The defined contrasts are used for factor
+  variables.  This is a bad measure since it is a correlation.  Further,
+  it focuses on correlations between single contrasts and single axes
+  instead of looking at the multivariate relationship.  Fitted vectors
+  (\code{\link{envfit}}) provide a better alternative.  Biplot scores
+  (see \code{\link{scores.cca}}) are a multivariate alternative for
+  (weighted) correlation between linear combination scores and
+  constraints. 
   
   Function \code{vif.cca} gives the variance inflation factors for each
   constraint or contrast in factor constraints. In partial ordination,
@@ -125,6 +138,9 @@ mod
 vif.cca(mod)
 alias(mod)
 with(dune.env, table(Management, Manure))
+# The standard correlations (not recommended)
+spenvcor(mod)
+intersetcor(mod)
 }
 \keyword{ multivariate }
 

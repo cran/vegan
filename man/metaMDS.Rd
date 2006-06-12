@@ -35,12 +35,12 @@ metaMDS(comm, distance = "bray", k = 2, trymax = 20, autotransform =TRUE,
 \method{scores}{metaMDS}(x, display = c("sites", "species"), shrink = FALSE, 
         choices, ...)
 metaMDSdist(comm, distance = "bray", autotransform = TRUE, noshare = 0.1, 
-    trace = 1, commname, ...)
+    trace = 1, commname, zerodist = "fail", ...)
 metaMDSiter(dist, k = 2, trymax = 20, trace = 1, plot = FALSE, previous.best, 
     ...)   
 initMDS(x, k=2)
 postMDS(X, dist, pc=TRUE, center=TRUE, halfchange=TRUE, threshold=0.8,
-        nthreshold=10, plot=FALSE)
+        nthreshold=10, plot=FALSE, ...)
 metaMDSredist(object, ...)
 }
 
@@ -78,7 +78,9 @@ metaMDSredist(object, ...)
    of displayed items.}
  \item{X}{Configuration from multidimensional scaling. }
  \item{commname}{The name of \code{comm}: should not be given if the
-  function is called directly.}
+   function is called directly.}
+ \item{zerodist}{Handling of zero dissimilarities: either \code{"fail"}
+   or \code{"add"} a small positive value.}
  \item{dist}{Dissimilarity matrix used in multidimensional scaling. }
   \item{pc}{Rotate to principal components. }
   \item{center}{Centre the configuration. }
@@ -212,7 +214,7 @@ metaMDSredist(object, ...)
 \note{
   Function \code{metaMDS} is a simple wrapper for
   \code{\link[MASS]{isoMDS}} and some support functions.
-  You can also call parts of the function separately for better control
+  You can call these support functions separately for better control
   of results.  Data transformation, dissmilarities and possible
   \code{\link{stepacross}} are made in function \code{metaMDSdist}
   which returns a dissimilarity result. Iterative search (with starting

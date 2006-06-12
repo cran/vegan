@@ -29,7 +29,10 @@ rankindex(grad, veg, indices = c("euc", "man", "gow", "bra", "kul"),
   should have a high rank-order similarity with gradient separation.
   The function compares most indices in \code{\link{vegdist}} against
   gradient separation using rank correlation coefficients in
-  \code{\link[ctest]{cor.test}}.
+  \code{\link[ctest]{cor.test}}.  The gradient separation between each
+  point is assessed as Euclidean distance for continuous variables, and
+  as Gower metric for mixed data using function
+  \code{\link[cluster]{daisy}} when \code{grad} has factors.
 }
 \value{
   Returns a named vector of rank correlations.
@@ -72,4 +75,4 @@ data(varechem)
 rankindex(scale(varechem), varespec)
 rankindex(scale(varechem), wisconsin(varespec))
 }
-\keyword{ multivariate }%-- one or more ...
+\keyword{ multivariate }

@@ -21,8 +21,8 @@
 \details{
   Functions \code{\link{cca}} and \code{\link{decorana}} have specific
   \code{scores} function to access their ordination scores.  Most
-  standard ordination methods of libraries \code{mva}, \code{multiv} and
-  \code{MASS} do not have a  specific\code{class}, and no specific method can be
+  standard ordination methods of libraries \pkg{mva}, \pkg{multiv} and
+  \pkg{MASS} do not have a  specific \code{class}, and no specific method can be
   written for them.  However, \code{scores.default} guesses where
   some commonly used functions keep their site scores and possible
   species scores.  For site scores, the function seeks items in order

@@ -70,7 +70,9 @@ wisconsin(x)
   \code{NaN}.  
 }
 \value{
-  Returns the standardized data frame. 
+  Returns the standardized data frame, and adds an attribute
+  \code{"decostand"} giving the name of applied standardization
+  \code{"method"}.
 }
 \author{Jari Oksanen}
 \note{Common transformations can be made with standard \R functions.}

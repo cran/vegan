@@ -1,6 +1,6 @@
 "postMDS" <-
     function (X, dist, pc = TRUE, center = TRUE, halfchange = TRUE, 
-              threshold = 0.8, nthreshold = 10, plot = FALSE) 
+              threshold = 0.8, nthreshold = 10, plot = FALSE, ...) 
 {
     Size <- attributes(dist)$Size
     if (any(attributes(X)$names == "points")) 
@@ -17,10 +17,11 @@
         dist <- as.vector(dist)
         ordi <- as.vector(vegdist(x, "euclidean"))
         take <- dist < threshold
-        if (sum(take) < nthreshold) { 
+        if (sum(take) < nthreshold) {
             warning("skipping half-change scaling: too few points below threshold")
             halfchange <- FALSE
-        } else {
+        }
+        else {
             k <- coef(lm(dist[take] ~ ordi[take]))
             names(k) <- NULL
             hc <- (1 - k[1])/2/k[2]
@@ -52,11 +53,11 @@
         text(0 + j, hclevel + j, "Half-change", adj = c(0, 0))
         abline(k, col = "blue", lwd = 2)
     }
+    attr(x, "centre") <- center
+    attr(x, "pc") <- pc
+    attr(x, "halfchange") <- halfchange
     if (any(attributes(X)$names == "points")) 
         X$points <- x
     else X <- x
-    attr(X, "centre") <- center
-    attr(X, "pc") <- pc
-    attr(X, "halfchange") <- halfchange
     X
 }

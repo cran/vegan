@@ -16,41 +16,72 @@
             display <- "sp"
     }
     take <- tabula[display]
-    max.ax <- max(choices)
-    sol <- summary(x, max.ax, scaling = scaling)[take]
-    if ("species" %in% take && any(choices != 1)) 
-        sol$species <- sol$species[, choices]
-    if ("sites" %in% take && any(choices != 1)) 
-        sol$sites <- sol$sites[, choices]
-    if ("constraints" %in% take && any(choices != 1)) {
-        sol$constraints <- as.matrix(sol$constraints)
-        nc <- ncol(sol$constraints)
-        nr <- nrow(sol$constraints)
-        if (nc < max.ax) {
-            tmp <- matrix(0, nrow = nr, ncol = (max.ax - nc))
-            sol$constraints <- cbind(sol$constraints, tmp)
+    slam <- sqrt(c(x$CCA$eig, x$CA$eig)[choices])
+    rnk <- x$CCA$rank
+    sol <- list()
+    if ("species" %in% take) {
+        v <- cbind(x$CCA$v, x$CA$v)[, choices, drop = FALSE]
+        if (scaling) {
+            scal <- list(1, slam, sqrt(slam))[[abs(scaling)]]
+            v <- sweep(v, 2, scal, "*")
+            if (scaling < 0) {
+                scal <- sqrt(1/(1 - slam^2))
+                v <- sweep(v, 2, scal, "*")
+            }
         }
-        sol$constraints <- sol$constraints[, choices]
+        sol$species <- v
     }
-    if ("biplot" %in% take && any(choices != 1)) {
-        sol$biplot <- as.matrix(sol$biplot)
-        nc <- ncol(sol$biplot)
-        nr <- nrow(sol$biplot)
-        if (nc < max.ax) {
-            tmp <- matrix(0, nrow = nr, ncol = (max.ax - nc))
-            sol$biplot <- cbind(sol$biplot, tmp)
+    if ("sites" %in% take) {
+        wa <- cbind(x$CCA$wa, x$CA$u)[, choices, drop = FALSE]
+        if (scaling) {
+            scal <- list(slam, 1, sqrt(slam))[[abs(scaling)]]
+            wa <- sweep(wa, 2, scal, "*")
+            if (scaling < 0) {
+                scal <- sqrt(1/(1 - slam^2))
+                wa <- sweep(wa, 2, scal, "*")
+            }
         }
-        sol$biplot <- sol$biplot[, choices, drop = FALSE]
+        sol$sites <- wa
     }
-    if ("centroids" %in% take && any(choices != 1) && !is.na(sol$centroids)) {
-        sol$centroids <- as.matrix(sol$centroids)
-        nc <- ncol(sol$centroids)
-        nr <- nrow(sol$centroids)
-        if (nc < max.ax) {
-            tmp <- matrix(0, nrow = nr, ncol = (max.ax - nc))
-            sol$centroids <- cbind(sol$centroids, tmp)
+    if ("constraints" %in% take) {
+        u <- cbind(x$CCA$u, x$CA$u)[, choices, drop = FALSE]
+        if (scaling) {
+            scal <- list(slam, 1, sqrt(slam))[[abs(scaling)]]
+            u <- sweep(u, 2, scal, "*")
+            if (scaling < 0) {
+                scal <- sqrt(1/(1 - slam^2))
+                u <- sweep(u, 2, scal, "*")
+            }
         }
-        sol$centroids <- sol$centroids[, choices, drop = FALSE]
+        sol$constraints <- u
+    }
+    if ("biplot" %in% take && !is.null(x$CCA$biplot)) {
+        b <- matrix(0, nrow(x$CCA$biplot), length(choices))
+        b[, choices <= rnk] <- x$CCA$biplot[, choices[choices <= 
+            rnk]]
+        colnames(b) <- c(colnames(x$CCA$u), colnames(x$CA$u))[choices]
+        rownames(b) <- rownames(x$CCA$biplot)
+        sol$biplot <- b
+    }
+    if ("centroids" %in% take) {
+        if (is.null(x$CCA$centroids)) 
+            sol$centroids <- NA
+        else {
+            cn <- matrix(0, nrow(x$CCA$centroids), length(choices))
+            cn[, choices <= rnk] <- x$CCA$centroids[, choices[choices <= 
+                 rnk]]
+            colnames(cn) <- c(colnames(x$CCA$u), colnames(x$CA$u))[choices]
+            rownames(cn) <- rownames(x$CCA$centroids)
+            if (scaling) {
+                scal <- list(slam, 1, sqrt(slam))[[abs(scaling)]]
+                cn <- sweep(cn, 2, scal, "*")
+                if (scaling < 0) {
+                    scal <- sqrt(1/(1 - slam^2))
+                    cn <- sweep(cn, 2, scal, "*")
+                }
+            }
+            sol$centroids <- cn
+        }
     }
     if (length(sol) == 1) 
         sol <- sol[[1]]

@@ -1,12 +1,13 @@
 "plot.specaccum" <-
     function(x, add = FALSE, ci = 2, ci.type = c("bar","line","polygon"), 
              col = par("fg"), ci.col = col, ci.lty = 1, xlab = "Sites",
-             ylab = x$method, ...)
+             ylab = x$method, ylim, ...)
 {
     ci.type <- match.arg(ci.type)
     if (!add) {
-        ymax <- max(x$richness, x$richness + ci*x$sd)
-        plot(x$sites, x$richness, xlab=xlab, ylab=ylab, ylim=c(1,ymax),
+        if (missing(ylim))
+            ylim<- c(1, max(x$richness, x$richness + ci*x$sd))
+        plot(x$sites, x$richness, xlab=xlab, ylab=ylab, ylim=ylim,
              type="n", ...)
     }
     if (!is.null(x$sd) && ci)

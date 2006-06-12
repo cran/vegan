@@ -4,14 +4,15 @@ citEntry(entry="Manual",
 	title ="vegan: Community Ecology Package",
 	author = personList(as.person("J. Oksanen"),
 	                    as.person("R. Kindt"),
+			    as.person("P. Legendre"),
                             as.person("R. B. O'Hara")),
-	year = 2005,
+	year = 2006,
 	note = paste("R package version", packageDescription("vegan")$Version),
-	url = "http://cc.oulu.fi/~jarioksa/",
+	url = "http://cran.r-project.org/",
 	textVersion =
-	paste("Oksanen, J., Kindt, R. & O'Hara, R.B. (2005). ", 
+	paste("Oksanen, J., Kindt, R., Legendre, P. & O'Hara, R.B. (2006). ", 
 	"vegan: Community Ecology Package version ",
 	packageDescription("vegan")$Version, 
- 	". http://cc.oulu.fi/~jarioksa/.", sep="")
+ 	". http://cran.r-project.org/", sep="")
 )
  

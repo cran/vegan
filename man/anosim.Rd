@@ -81,7 +81,9 @@ anosim(dis, grouping, permutations=1000, strata)
 
 }
 
-\seealso{\code{\link{dist}} and \code{\link{vegdist}} for obtaining
+\seealso{\code{\link{mrpp}} for a similar function using original
+dissimilarities instead of their ranks. 
+\code{\link{dist}} and \code{\link{vegdist}} for obtaining
   dissimilarities, and \code{\link{rank}} for ranking real values.  For
   comparing dissimilarities against continuous variables, see
   \code{\link{mantel}}.  }

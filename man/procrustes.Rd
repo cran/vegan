@@ -19,7 +19,7 @@
 }
 \usage{
 procrustes(X, Y, scale = TRUE, symmetric = FALSE, scores = "sites", ...)
-\method{summary}{procrustes}(object, ...)
+\method{summary}{procrustes}(object, digits = getOption("digits"), ...)
 \method{plot}{procrustes}(x, kind=1, choices=c(1,2), xlab, ylab, main,
      ar.col = "blue", len=0.05, ...)
 \method{points}{procrustes}(x, display = c("target", "rotated"), ...)
@@ -40,6 +40,7 @@ protest(X, Y, scores = "sites", permutations = 1000, strata, ...)
   \code{\link{scores}}, \code{\link{scores.cca}} and
   \code{\link{scores.cca}} for alternatives.}
   \item{x, object}{An object of class \code{procrustes}.}
+  \item{digits}{Number of digits in the output.}
   \item{kind}{For \code{plot} function, the kind of plot produced:
     \code{kind = 1} plots shifts in two configurations, \code{kind = 0}
     draws a corresponding empty plot, and \code{kind = 2}

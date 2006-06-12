@@ -8,9 +8,12 @@
         pick <- pmatch(model, modnam, nomatch = FALSE)
     else pick <- FALSE
     pickmod <- function(x, pick, BIC) {
-        if (pick) return(pick)
+        if (pick) 
+            return(pick)
         else {
-            k <- if (BIC) log(length(x$y)) else 2
+            k <- if (BIC) 
+                log(length(x$y))
+            else 2
             which.min(AIC(x, k))
         }
     }
@@ -25,11 +28,12 @@
         order.by <- 1:Nhm
     else order.by <- order(order.by)
     Site <- factor(Site, levels = sitenames[order.by])
-    fit <- unlist(lapply(x, function(x) fitted(x)[, pickmod(x, pick, BIC)]))
+    fit <- unlist(lapply(x, function(x) fitted(x)[, pickmod(x, 
+                                                            pick, BIC)]))
     take <- sapply(x, function(x) pickmod(x, pick, BIC))
     take <- rep(take, N)
     cols <- trellis.par.get("superpose.line")$col
-    cols <- cols[2:length(cols)]
+    cols <- cols[1:length(cols)]
     if (legend) {
         mykey <- list(text = list(text = modnam), lines = list(lty = 1, 
                                                   col = cols[1:length(modnam)], lwd = 2), columns = 3)
@@ -55,3 +59,4 @@
                                                                   }, ...)
     out
 }
+

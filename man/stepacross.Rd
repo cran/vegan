@@ -61,7 +61,7 @@ stepacross(dis, path = "shortest", toolong = 1, trace = TRUE, ...)
   although some of these could be replaced with a shorter path in
   semi-metric indices, and used as a part of other paths. In optimal
   cases, the extended dissimilarities are equal to shortest paths, but
-  in several cases they are longer.  
+  they may be longer.  
 
   As an alternative to defining too long dissimilarities with parameter
   \code{toolong}, the input dissimilarities can contain \code{NA}s. If

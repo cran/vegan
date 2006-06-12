@@ -1,17 +1,23 @@
 "bioenv.default" <-
     function (comm, env, method = "spearman", index = "bray", upto = ncol(env), 
-              ...) 
+              trace = FALSE, ...) 
 {
     n <- ncol(env)
-    if (n > 8) {
+    ntake <- 2^n - 1
+    ndone <- 0
+    if (n > 8 || trace) {
         if (upto < n) 
-            cat("Studying", sum(choose(n, 1:upto)), "of ")
-        cat(2^n - 1, "possible subsets (this may take time...)\n")
+            cat("Studying", nall <- sum(choose(n, 1:upto)), "of ")
+        cat(ntake, "possible subsets (this may take time...)\n")
     }
     x <- scale(env)
     best <- list()
     comdis <- vegdist(comm, method = index)
     for (i in 1:upto) {
+        if (trace) {
+            nvar <- choose(n, i)
+            cat("No. of variables ", i, ", No. of sets ", nvar, "...", sep="")
+        }
         sets <- ripley.subs(i, 1:n)
         if (!is.matrix(sets)) 
             sets <- as.matrix(t(sets))
@@ -19,6 +25,10 @@
         for (j in 1:nrow(sets)) est[j] <- cor(comdis, dist(x[, 
                                                              sets[j, ]]), method = method)
         best[[i]] <- list(best = sets[which.max(est), ], est = max(est))
+        if (trace) {
+            ndone <- ndone + nvar
+            cat(" done (", round(100*ndone/ntake, 1),"%)\n", sep="")
+        }
     }
     out <- list(names = colnames(env), method = method, index = index, 
                 upto = upto, models = best)

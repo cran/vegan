@@ -96,7 +96,7 @@ ordiplot(ord, choices = c(1, 2), type="points", display, xlim, ylim, ...)
 }
 
 \examples{
-# Draw a cute NMDS plot from a non-vegan ordinatin (isoMDS).
+# Draw a cute NMDS plot from a non-vegan ordination (isoMDS).
 # Function metaMDS would be an easier alternative.
 data(dune)
 dune.dis <- vegdist(wisconsin(dune))

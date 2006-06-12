@@ -7,9 +7,10 @@
         "sums"
     else "averages"
     cat("\nPartitioning of ", x$inertia, ":\n", sep = "")
-    out <- rbind(Total = x$tot.chi, "Conditioned out" = x$partial.chi, 
+    out <- c(Total = x$tot.chi, Conditioned = x$partial.chi, 
                  Constrained = x$constr.chi, Unconstrained = x$unconst.chi)
-    colnames(out) <- ""
+    out <- cbind(Inertia = out, Proportion = out/out[1])
+
     print(out, digits = digits, ...)
     cat("\nEigenvalues, and their contribution to the", x$inertia, 
         "\n")
@@ -21,26 +22,42 @@
                                                    x$ev.uncon.account))
     print(out, digits = digits, ...)
     cat("\nScaling", x$scaling, "for species and site scores\n")
-    if (x$scaling == 2) {
+    if (abs(x$scaling) == 2) {
         ev.ent <- "Species"
         other.ent <- "Sites"
     }
-    else if (x$scaling == 1) {
+    else if (abs(x$scaling) == 1) {
         ev.ent <- "Sites"
         other.ent <- "Species"
     }
-    else {
+    else if (abs(x$scaling) == 3){
         ev.ent <- "Both sites and species"
         other.ent <- NULL
     }
-    cat("--", ev.ent, "are scaled proportional to eigenvalues\n")
-    if (!is.null(other.ent)) 
-        cat("--", other.ent, "are unscaled: weighted dispersion equal")
-    cat(" on all dimensions\n")
-    cat("\n\nSpecies scores\n\n")
-    print(x$species, digits = digits, ...)
-    cat("\n\nSite scores (weighted", statnam, "of species scores)\n\n")
-    print(x$sites, digits = digits, ...)
+    if (x$scaling) {
+        cat("*", ev.ent, "are scaled proportional to eigenvalues\n")
+        if (!is.null(other.ent)) 
+            cat("*", other.ent, "are unscaled: weighted dispersion equal")
+        cat(" on all dimensions\n")
+    }
+    if (!x$scaling) {
+        cat("* Both are 'unscaled' or as they are in the result\n")
+    }
+    if (x$scaling < 0) {
+        if (x$method == "cca")
+            cat("* Hill scaling performed on both scores\n")
+        if (x$method == "rda")
+            cat("* Species scores divided by species standard deviations\n")
+        cat("  so that they no longer are biplot scores\n")
+    }
+    if (!is.null(x$species)) {
+        cat("\n\nSpecies scores\n\n")
+        print(x$species, digits = digits, ...)
+    }
+    if (!is.null(x$sites)) {
+        cat("\n\nSite scores (weighted", statnam, "of species scores)\n\n")
+        print(x$sites, digits = digits, ...)
+    }
     if (!is.null(x$constraints)) {
         cat("\n\nSite constraints (linear combinations of constraining variables)\n\n")
         print(x$constraints, digits = digits, ...)
@@ -49,7 +66,7 @@
         cat("\n\nBiplot scores for constraining variables\n\n")
         print(x$biplot, digits = digits, ...)
     }
-    if (!is.na(x$centroids[1])) {
+    if (!is.null(x$centroids) && !is.na(x$centroids[1])) {
         cat("\n\nCentroids for factor constraints\n\n")
         print(x$centroids, digits = digits, ...)
     }

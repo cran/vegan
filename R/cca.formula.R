@@ -7,7 +7,7 @@
     d <- ordiParseFormula(formula, data)
     sol <- cca.default(d$X, d$Y, d$Z)
     if (!is.null(sol$CCA)) 
-        sol$CCA$centroids <- centroids.cca(sol$CCA$wa.eig, d$modelframe, 
+        sol$CCA$centroids <- centroids.cca(sol$CCA$wa, d$modelframe, 
                                            sol$rowsum)
     if (!is.null(sol$CCA$alias)) 
         sol$CCA$centroids <- unique(sol$CCA$centroids)

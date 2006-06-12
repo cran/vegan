@@ -1,5 +1,138 @@
 VEGAN STABLE VERSIONS 
 
+Version 1.8-1 (June 12, 2006)
+
+	* Based on devel version 1.7-96. 
+
+	* Pierre Legendre joined the vegan team.
+
+	* beals: a new function for Beals smoothing.
+
+	* bioenv: added 'trace' argument.
+
+	* cca/rda/capscale: accept several 'Condition' elements in the
+	formula. 
+
+	* capscale: capscale(y ~ ., data=...) or expansion of "." on the
+	rhs works now. Documentation recognizes now db-RDA as the real
+	mother method.
+
+	* scores.cca, summary.cca etc: rewrite so that is cleaner and
+	easier to maintain. User visible changes are scaling by species
+	standard deviation (negative scaling) for 'rda', scaling=0
+        (no scaling) for all methods and slightly changed output and
+	improved user control in summary. These scalings actually were
+	documented in 1.6-10, although I dropped them just before the
+	release. predict.cca, predict.rda: work now with 'newdata' even
+	when not called with formula.
+
+	* anova.cca: new argument 'by' for tests of single terms or axes:
+	with by = "terms" performs individual test for constraints, and
+	with by = "axis" a separate sequential test for each axis. New
+	argument 'first' to analyse only the first axis instead of all
+	constrained variation.
+	
+	* intersetcor: new function for the interset correlation or the
+	(weighted) correlation between individual constraints (contrasts)
+	and invidual axes in cca/rda/capscale. (Not recommended.)
+
+	* decostand: does not automatically convert matrix to a
+	data.frame. NA handling more consistent now (thanks to Tyler Smith
+	for diagnosis). Adds attribute 'decostand' giving the "method".
+
+	* linestack: now really uses median as the midpoint with the odd
+	number of cases, and does not give superfluous warnings with three
+	or less items.  New argument 'labels' to replace the default text
+	in plot. The old argument 'label' renamed to 'side'.  However, the
+	function still works with the old syntax, but gives a warning if
+	the old argument 'label' is used for 'side'. Returns invisibly the
+	shifted positions of labels.
+
+	* metaMDS: 'postMDS' sets now attributes similarly when called
+        independently or within 'metaMDS'.  'metaMDS' forwards arguments
+        to 'postMDS' except 'halfchange'.  Change of phrasing in
+        'print'. Added handling of zero dissimilarities into
+        'metaMDSdist': either "fail" or "add" 1E-4 into zeros.
+	
+	* mrpp: new function for the multiresponse permutation procedure
+	(MRPP). Code by Henry Stevens (Miami Univ, Oxford, Ohio).
+
+	* ordiarrows: draws arrowhead only in the last segment. New
+        argument 'startmark' for marking the starting point of the arrow. 
+
+	* ordisurf: new arguments 'main' for the title and 'nlevels' and
+	'levels' for the number of contour or their values.
+
+	* orditorp: arguments for text colour and text character expansion
+	changed to standard 'col' and 'cex' from previous 'tcol' and
+	'tcex'. 
+
+	* procrustes: 'summary' prints now rotation matrix, translation
+        and scale, and honours 'digits'.
+
+	* prc: new functions for Principal Response Curves (PRC) of van
+        den Brink and ter Braak (Envir. Toxicol. Chem, 18, 138-148; 1999).
+        This is a special rda() model with dedicated summary and plot
+        functions. New data set 'pyrifos' to demonstrate 'prc'.
+
+	* radfit: added brokenstick as a null model (rad.null), removed
+	rad.veil (as it was a bad idea originally), corrected minor bugs
+	in rad.preempt (which did not fail gracefully).  Line colours
+	start from the point colour in plot.radfit.frame.  'print' uses
+	"g" format for coefficients and adds 'digits' argument. Added
+	'summary.radfit.frame' that simply prints each model.
+
+	* rankindex: uses now cluster:::daisy when 'grad' includes
+        factors.
+	
+	* spantree: now a method function with 'plot', 'lines' and
+	'cophenetic' methods. 'lines' replaces 'ordispantree'.  The plot
+	has a weird, new way of finding configuration for a spanning tree
+	from cophenetic distances (unpublished). Documented separately.
+
+	* specaccum: 'plot' honours now 'ylim'.
+
+	* specpool: Chao richness was wrongly defined, but now uses the
+	biased formula (error introduced in 1.6-5, correct earlier).
+	Failed with zero species or if there were no species that occurred
+	exactly one in the 'pool' (thanks to Emmanuel Castella, Geneve CH,
+	for the bug report).
+
+	* varpart: new functions for unbiased partitioning of variation by
+	two to four explanatory tables in RDA or linear regression.  The
+	author of these functions is Pierre Legendre & co (Univ
+	Montreal). New data sets 'mite', 'mite.env' and 'mite.pcnm' to
+	demonstrate the functions.
+
+	* vegandocs: new function to display *all* pdf documentation and
+	ChangeLog. This really should be in base R -- this is a kluge to
+	fill the hole.
+
+	* vegemite: added argument to 'select' a subset of sites. Drops
+        missing species from the table. Prints number of species and
+        number of sites and the used cover scale at the end of the table.
+        Passes arguments (i.e., 'maxabund') to coverscale().
+
+	* coverscale: added argument 'maxabund' to 'scale = "log"'.
+	Returns the name of the cover scale as an attribute for vegemite()
+	to print.
+
+	* vegdist: now first checks input and then transforms (if
+	needed). Thanks to Tyler Smith,
+
+	* Internal changes: permuted.index acceptes NULL strata as an
+	alternative to missing strata. ordispantreee deprecated.
+	spider.cca removed.
+
+	* Documentation: general cleanup in help files. New chapter on
+	t-values in cca/rda/capscale in vegan-FAQ. New pdf document on
+	partioning with varpart by Pierre Legendre & co. Non-latin
+	characters now use UTF-8 in documentation.  R manual says that you
+	should not use non-latin characters in help files, but that was
+	written by Englishmen. However, this seems to cause distress to
+	some users of a US West Coast OS (Windows), but OK with mainstream
+	OS's (Linux, MacOS). .
+	
 Version 1.6-10 (September 26, 2005)
 
 	* Based on devel version 1.7-77.  Checked with R 2.1.1 (stable)

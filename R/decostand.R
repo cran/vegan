@@ -1,13 +1,14 @@
 "decostand" <-
     function (x, method, MARGIN, range.global, na.rm = FALSE) 
 {
+    wasDataFrame <- is.data.frame(x)
     x <- as.matrix(x)
     METHODS <- c("total", "max", "frequency", "normalize", "range", 
                  "standardize", "pa", "chi.square", "hellinger")
     method <- match.arg(method, METHODS)
-    if (any(x < 0)) {
-        k <- min(x)
-        if (method %in% c("total","frequency","pa","chi.square")) {
+    if (any(x < 0, na.rm = na.rm)) {
+        k <- min(x, na.rm = na.rm)
+        if (method %in% c("total", "frequency", "pa", "chi.square")) {
             warning("input data contains negative entries: result may be non-sense\n")
         }
     }
@@ -48,7 +49,7 @@
         tmp <- apply(xtmp, MARGIN, min, na.rm = na.rm)
         ran <- apply(xtmp, MARGIN, max, na.rm = na.rm)
         ran <- ran - tmp
-        ran <- pmax(k, ran)
+        ran <- pmax(k, ran, na.rm = na.rm)
         x <- sweep(x, MARGIN, tmp, "-")
         x <- sweep(x, MARGIN, ran, "/")
     }, standardize = {
@@ -60,13 +61,15 @@
     }, chi.square = {
         if (!missing(MARGIN) && MARGIN == 2) 
             x <- t(x)
-        x <- sqrt(sum(x, na.rm = na.rm)) *
-            x/outer(pmax(k, rowSums(x, na.rm = na.rm)), sqrt(colSums(x, na.rm = na.rm)))
+        x <- sqrt(sum(x, na.rm = na.rm)) * x/outer(pmax(k, rowSums(x, 
+                         na.rm = na.rm)), sqrt(colSums(x, na.rm = na.rm)))
     }, hellinger = {
         x <- sqrt(decostand(x, "total", MARGIN = MARGIN, na.rm = na.rm))
-    } )
-    if (any(is.nan(x)))
+    })
+    if (any(is.nan(x))) 
         warning("result contains NaN, perhaps due to impossible mathematical operation\n")
-    x <- as.data.frame(x)
+    if (wasDataFrame)
+        x <- as.data.frame(x)
+    attr(x, "decostand") <- method
     x
 }

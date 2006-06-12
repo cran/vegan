@@ -6,7 +6,6 @@
 \alias{ordispider}
 \alias{ordiellipse}
 \alias{ordicluster}
-\alias{ordispantree}
 \alias{weights.cca}
 \alias{weights.rda}
 \alias{weights.decorana}
@@ -14,8 +13,8 @@
 \title{Add Graphical Items to Ordination Diagrams}
 \description{
   Functions to add convex hulls, arrows, line segments, regular grids of
-  points, `spider' graphs, ellipses, cluster dendrogram or spanning
- trees to ordination diagrams. The
+  points, `spider' graphs, ellipses or cluster dendrogram 
+  to ordination diagrams. The
   ordination diagrams can be produced by \code{vegan}
   \code{\link{plot.cca}}, \code{\link{plot.decorana}} or
   \code{\link{ordiplot}}.
@@ -24,7 +23,7 @@
 ordihull(ord, groups, display = "sites", draw = c("lines","polygon"),
          show.groups, ...)
 ordiarrows(ord, groups, levels, replicates, display = "sites",
-         show.groups, ...)
+         show.groups, startmark, ...)
 ordisegments(ord, groups, levels, replicates, display = "sites",
          show.groups, ...)
 ordigrid(ord, levels, replicates, display = "sites",  ...)
@@ -35,7 +34,6 @@ ordiellipse(ord, groups, display="sites", kind = c("sd","se"), conf,
          show.groups, ...)
 ordicluster(ord, cluster, prune = 0, display = "sites",
          w = weights(ord, display), ...)
-ordispantree(ord, tree, display = "sites", ...)
 }
 
 \arguments{
@@ -55,7 +53,12 @@ ordispantree(ord, tree, display = "sites", ...)
   \item{show.groups}{Show only given groups. This can be a vector, or
     \code{TRUE} if you want to show items for which condition is
     \code{TRUE}. This argument makes it possible to use different
-    colours and line types for groups. The default is to show all groups. }
+    colours and line types for groups. The default is to show all
+    groups. }
+  \item{startmark}{plotting characer used to mark the first
+    item. The default is to use no mark, and for instance, 
+    \code{startmark = 1} will draw a circle.  For other plotting characters,
+    see \code{pch} in \code{\link{points}}. }
   \item{w}{Weights used to find the average within group. Weights are
     used automatically for \code{\link{cca}}
     and \code{\link{decorana}} results, unless undone by the
@@ -72,11 +75,7 @@ ordispantree(ord, tree, display = "sites", ...)
   \item{prune}{Number of upper level hierarchies removed from the
     dendrogram. If \code{prune} \eqn{>0}, dendrogram will be
     disconnected.}
-  \item{tree}{Structure defining a spanning tree. This can be a result
-    of \code{\link{spantree}} or a vector giving the child node of each
-    parent omitting the first point. Values \code{NA} means that there
-    is no link from the corresponding parent.}
-  \item{\dots}{Parameters passed to graphical functions such
+   \item{\dots}{Parameters passed to graphical functions such
     as \code{\link{lines}}, \code{\link{segments}},
     \code{\link{arrows}}, \code{\link{polygon}} or to
     \code{\link{scores}} to select axes and
@@ -120,13 +119,6 @@ ordispantree(ord, tree, display = "sites", ...)
   cluster centroids to each other with line
   \code{\link{segments}}. Function uses centroids of all points in the 
   clusters, and is therefore similar to average linkage methods.
-
-  Function \code{ordispantree} overlays a (minimum) spanning tree onto
-  ordination. It needs a result from \code{\link{spantree}} or a
-  vector listing children of each parent, starting from second (i.e.,
-  omitting the first: the number of links is one less number of
-  points). Missing links are denoted as \code{NA}. For an example, see
-  \code{\link{spantree}}. 
 }
 
 \note{These functions add graphical items to ordination graph: You must
@@ -134,7 +126,7 @@ ordispantree(ord, tree, display = "sites", ...)
   }
 \author{ Jari Oksanen }
 
-\seealso{The function pass parameters to basic graphical functions, and
+\seealso{The functions pass parameters to basic graphical functions, and
   you may wish to change the default values in \code{\link{arrows}},
   \code{\link{lines}}, \code{\link{segments}} and
   \code{\link{polygon}}. You can pass
