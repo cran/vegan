@@ -1,10 +1,12 @@
 "metaMDSdist" <-
-    function (comm, distance = "bray", autotransform = TRUE, 
-              noshare = 0.1, trace = 1, commname, ...) 
+    function (comm, distance = "bray", autotransform = TRUE, noshare = 0.1, 
+              trace = 1, commname, zerodist = "fail", ...) 
 {
+    zerodist <- match.arg(zerodist, c("fail", "add"))
+    ZERO <- 1e-4
     formals(vegdist) <- c(formals(vegdist), alist(... = ))
-    formals(stepacross) <- c(formals(stepacross), alist(...=))
-    if (missing(commname))
+    formals(stepacross) <- c(formals(stepacross), alist(... = ))
+    if (missing(commname)) 
         commname <- deparse(substitute(comm))
     xam <- max(comm)
     if (autotransform && xam > 50) {
@@ -20,6 +22,14 @@
             cat("Wisconsin double standardization\n")
     }
     dis <- vegdist(comm, method = distance, ...)
+    if (any(dis <= 0)) {
+        if(zerodist == "fail")
+            stop("Zero dissimilarities are not allowed")
+        else if(zerodist == "add") {
+            dis[dis <= 0] <- ZERO
+            warning("Zero dissimilarities changed into ", ZERO)
+        }
+    }
     maxdis <- max(dis)
     if (sum(no.shared(comm))/length(dis) > noshare) {
         if (trace) 
@@ -30,4 +40,3 @@
     attr(dis, "commname") <- commname
     dis
 }
-

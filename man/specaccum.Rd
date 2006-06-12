@@ -15,7 +15,7 @@
 specaccum(comm, method = "exact", permutations = 100, ...)
 \method{plot}{specaccum}(x, add = FALSE, ci = 2, ci.type = c("bar", "line", "polygon"), 
     col = par("fg"), ci.col = col, ci.lty = 1, xlab = "Sites", 
-    ylab = x$method, ...)
+    ylab = x$method, ylim, ...)
 \method{boxplot}{specaccum}(x, add = FALSE, ...)
 }
 
@@ -45,6 +45,7 @@ specaccum(comm, method = "exact", permutations = 100, ...)
   \item{ci.lty}{Line type for confidence intervals or border of the
     \code{"polygon"}.}
   \item{xlab,ylab}{Labels for \code{x} and \code{y} axis.}
+  \item{ylim}{the y limits of the plot.}
   \item{...}{Other parameters to functions.}
 }
 \details{

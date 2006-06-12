@@ -3,12 +3,10 @@
 \alias{cca.default}
 \alias{cca.formula}
 \alias{print.cca}
-\alias{summary.cca}
-\alias{print.summary.cca}
 \alias{rda}
 \alias{rda.default}
 \alias{rda.formula}
-\alias{summary.rda}
+
 
 \title{ [Partial] [Constrained] Correspondence Analysis and Redundancy
   Analysis } 
@@ -25,7 +23,6 @@
 \method{cca}{default}(X, Y, Z, ...)
 \method{rda}{formula}(formula, data, scale=FALSE)
 \method{rda}{default}(X, Y, Z, scale=FALSE, ...)
-\method{summary}{cca}(object, scaling=2, axes=6, digits, ...)
 }
 
 \arguments{
@@ -40,23 +37,6 @@
     Can be missing. }
   \item{Z}{ Conditioning matrix, the effect of which is removed
     (`partialled out') before next step. Can be missing.}
-  \item{object}{A \code{cca} result object.}
-  \item{scaling}{Scaling for species and site scores. Either species
-    (\code{2}) or site (\code{1}) scores are scaled by eigenvalues, and
-    the other set of scores is left unscaled, or with \code{3} both are
-    scaled symmetrically by square root of eigenvalues.  Corresponding
-    negative values can be used in \code{cca} to additionally multiply
-    results with \eqn{\sqrt(1/(1-\lambda))}.  This scaling is know as
-    Hill scaling
-    (although it has nothing to do
-    with Hill's rescaling of \code{\link{decorana}}). With corresponding
-    negative values in\code{rda},
-    species scores are divided by standard deviation of each species.
-    Unscaled raw scores stored in the result can be accessed with
-    \code{scaling = 0}. 
-  }
-  \item{axes}{Number of axes in summaries.}
-  \item{digits}{Number of digits in output.}
   \item{scale}{Scale species to unit variance (like correlations do).}
   \item{...}{Other parameters for \code{print} or \code{plot} functions.}
 }
@@ -139,7 +119,9 @@
   According to folklore, \code{rda} should be used with ``short
   gradients'' rather than \code{cca}. However, this is not based
   on research which finds methods based on Euclidean metric as uniformly
-  weaker than those based on Chi-squared metric.
+  weaker than those based on Chi-squared metric.  However, standardized
+  Euclidean distance may be an appropriate measures (see Hellinger
+  standardization in \code{\link{decostand}} in particular).
   
   Partial CCA (pCCA; or alternatively partial RDA) can be used to remove
   the effect of some
@@ -155,18 +137,9 @@
   such components of ``variance'' are not to be trusted due to
   interactions between two sets of variables.
   
-  The functions have \code{summary} and \code{plot} methods.  The
-  \code{summary} method lists all species and site scores, and results
-  may be very long.  Palmer (1993) suggested using linear constraints
-  (``LC scores'') in ordination diagrams, because these gave better
-  results in simulations and site scores (``WA scores'') are a step from
-  constrained to unconstrained analysis.  However, McCune (1997) showed
-  that noisy environmental variables (and all environmental
-  measurements are noisy) destroy ``LC scores'' whereas ``WA scores''
-  were little affected.  Therefore the \code{plot} function uses site
-  scores (``WA scores'') as the default. This is consistent with the
-  usage in statistics and other functions in \R
-  (\code{\link[MASS]{lda}}, \code{\link{cancor}}).
+  The functions have \code{summary} and \code{plot} methods which are
+  documented separately (see \code{\link{plot.cca}}, \code{\link{summary.cca}}).
+
 }
 \value{
   Function \code{cca} returns a huge object of class \code{cca}, which
@@ -201,19 +174,22 @@
 }
 
 \seealso{
-  There is a special documentation for \code{\link{plot.cca}} function
-  with its helper functions (\code{\link{text.cca}},
+  There is a special documentation for \code{\link{plot.cca}} and
+  \code{\link{summary.cca}} functions
+  with their helper functions (\code{\link{text.cca}},
   \code{\link{points.cca}}, \code{\link{scores.cca}}).
   Function \code{\link{anova.cca}} provides an ANOVA like permutation
   test for the ``significance'' of constraints. Automatic model building
   (dangerous!) is discussed in \code{\link{deviance.cca}}.  Diagnostic
   tools, prediction and adding new points in ordination are discussed in
   \code{\link{goodness.cca}} and \code{\link{predict.cca}}.
-  Functions \code{\link[CoCoAn]{CAIV}} (library \code{CoCoAn}) and
-  \code{\link[ade4]{cca}} (library \code{ade4}) provide alternative
+  Function  \code{\link[ade4]{cca}} (library \pkg{ade4}) provide alternative
   implementations of CCA (these are internally quite
   different). Function \code{\link{capscale}} is a non-Euclidean generalization of
-  \code{rda}.
+  \code{rda}. The result object is described in
+  \code{\link{cca.object}}. Design decisions are explained in
+  \code{\link{vignette}} \file{vegan-FAQ} which also can be accessed
+  with \code{\link{vegandocs}}.
 }
 
 \examples{
@@ -236,6 +212,10 @@ data(dune)
 data(dune.env)
 dune.Manure <- rda(dune ~ Manure, dune.env)
 plot(dune.Manure) 
+## For further documentation:
+\dontrun{
+vegandocs("vegan-FAQ")
+}
 }
 \keyword{ multivariate }
 

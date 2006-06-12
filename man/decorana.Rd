@@ -60,8 +60,8 @@ downweight(veg, fraction = 5)
 }
 \details{
   In late 1970s, correspondence analysis became the method of choice for
-  ordination in vegetation science, since it seemed to be able to cope
-  with non-linear species responses better than principal components
+  ordination in vegetation science, since it seemed to be able to better cope
+  with non-linear species responses  than principal components
   analysis.  However, even correspondence analysis produced arc-shaped
   configuration of a single gradient.  Mark Hill developed
   detrended correspondence analysis to correct two assumed `faults' in
@@ -83,7 +83,7 @@ downweight(veg, fraction = 5)
   downweighting of rare species which were regarded to have an
   unduly high influence on ordination axes.  
 
-  It seems that detrending works actually by twisting the ordination
+  It seems that detrending actually works by twisting the ordination
   space, so that the results look non-curved in two-dimensional projections
   (`lolly paper effect').  As a result, the points have usually an
   easily recognized triangle or diamond shaped pattern, obviously as a
@@ -114,7 +114,7 @@ downweight(veg, fraction = 5)
   interpretation. Moreover, `decorana values' are estimated before
   rescaling which will change the eigenvalues. The
   proper eigenvalues are estimated after extraction of the axes and
-  they are always the ratio of biased weighted variances of site and
+  they are the ratio of biased weighted variances of site and
   species scores even in detrended and rescaled solutions. The
   `decorana values' are provided only for the the compatibility with
   legacy software, and they should not be used.
@@ -150,8 +150,7 @@ downweight(veg, fraction = 5)
   abundance is needed in downweighting, function \code{downweight} must
   be applied before \code{decorana}.  Function \code{downweight} 
   indeed can be applied prior to correspondence analysis, and so it can be
-  used together with \code{\link{cca}}, \code{\link[CoCoAn]{CAIV}} and
-  \code{\link[multiv]{ca}} as well.
+  used together with \code{\link{cca}}, too.
 
   The function finds only four axes: this is not easily changed.
 }
@@ -159,7 +158,8 @@ downweight(veg, fraction = 5)
 
  \seealso{
    For unconstrained ordination, non-metric multidimensional scaling in
-   \code{\link[MASS]{isoMDS}} may be more robust.  Constrained (or
+   \code{\link[MASS]{isoMDS}} may be more robust (see also
+   \code{\link{metaMDS}}).  Constrained (or
    `canonical') correspondence analysis can be made with
    \code{\link{cca}}.  Orthogonal correspondence analysis can be
    made with \code{\link[multiv]{ca}}, or with \code{decorana} or

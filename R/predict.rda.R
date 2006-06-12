@@ -4,7 +4,7 @@
 {
     type <- match.arg(type)
     model <- match.arg(model)
-    if (model == "CCA" && is.null(object$CCA))
+    if (model == "CCA" && is.null(object$CCA)) 
         model <- "CA"
     take <- object[[model]]$rank
     if (rank != "full") 
@@ -38,15 +38,20 @@
         out <- sweep(out, 2, cent, "+")
     }
     else if (type == "lc") {
-        if (model == "CA")
+        if (model == "CA") 
             stop("'lc' scores not available for unconstrained ordination")
         if (!missing(newdata)) {
-            d <- ordiParseFormula(formula(object), newdata, object$terminfo$xlev)
+            if (is.null(object$terminfo))
+                E <- as.matrix(newdata)
+            else {
+                d <- ordiParseFormula(formula(object), newdata, object$terminfo$xlev)
+                E <- cbind(d$Z, d$Y)
+            }
             p1 <- object[[model]]$QR$pivot[1:object[[model]]$rank]
-            E <- cbind(d$Z, d$Y)
             E <- sweep(E, 2, c(object$pCCA$envcentre, object$CCA$envcentre), 
                        "-")
-            u <- E[, p1, drop = FALSE] %*% coef(object)[p1, , drop =FALSE]
+            u <- E[, p1, drop = FALSE] %*% coef(object)[p1, , 
+                         drop = FALSE]
             u <- u[, 1:take, drop = FALSE]
         }
         out <- u

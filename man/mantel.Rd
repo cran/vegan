@@ -78,8 +78,8 @@ mantel.partial(xdis, ydis, zdis, method = "pearson", permutations = 1000,
 
 \seealso{\code{\link{cor}} for correlation coefficients,
   \code{\link{protest}} (``Procrustes test'') for an alternative with
-  ordination diagrams,
-  and \code{\link{anosim}} for comparing dissimilarities against
+  ordination diagrams, \code{\link{anosim}}  and \code{\link{mrpp}}
+  for comparing dissimilarities against 
   classification.  For dissimilarity matrices, see \code{\link{vegdist}}
   or \code{\link{dist}}.  See \code{\link{bioenv}} for selecting
   environmental variables. }

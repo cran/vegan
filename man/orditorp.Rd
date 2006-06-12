@@ -10,8 +10,8 @@
   manual editing may still be necessary.
 }
 \usage{
-orditorp(x, display, labels, choices = c(1, 2), priority, tcex = 0.7,
-    pcex, tcol = par("col"), pcol, pch = par("pch"), air = 1, ...)
+orditorp(x, display, labels, choices = c(1, 2), priority, cex = 0.7,
+    pcex, col = par("col"), pcol, pch = par("pch"), air = 1, ...)
 }
 
 \arguments{
@@ -26,8 +26,8 @@ orditorp(x, display, labels, choices = c(1, 2), priority, tcex = 0.7,
   \item{priority}{ Text will be used for items with higher priority
     if labels overlap.  This should be vector of the same
     length as the number of items plotted.}
-    \item{tcex, pcex}{Text and point sizes, see \code{\link{plot.default}}..}
-  \item{tcol, pcol}{Text and point colours, see \code{\link{plot.default}}.}
+    \item{cex, pcex}{Text and point sizes, see \code{\link{plot.default}}..}
+  \item{col, pcol}{Text and point colours, see \code{\link{plot.default}}.}
   \item{pch}{Plotting character, see \code{\link{points}}.}
   \item{air}{Amount of empty space between text labels. Values <1 allow
     overlapping text.}

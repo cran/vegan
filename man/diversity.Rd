@@ -1,3 +1,4 @@
+\encoding{UTF-8}
 \name{diversity}
 \alias{diversity}
 \alias{rarefy}
@@ -7,7 +8,7 @@
 
 \title{ Ecological Diversity Indices and Rarefaction Species Richness }
 
-\description{ Shannon, Simpson, Rényi, Hill and Fisher diversity indices
+\description{ Shannon, Simpson, RÃ©nyi, Hill and Fisher diversity indices
 and rarefied species richness for community ecologists.  }
 
 \usage{
@@ -26,7 +27,7 @@ specnumber(x, MARGIN = 1)
   \item{base}{ The logarithm \code{base} used in \code{shannon}.}
   \item{sample}{Subsample size for rarefying community.}
   \item{se}{Estimate standard errors.}
-  \item{scales}{Scales of Rényi diversity.}
+  \item{scales}{Scales of RÃ©nyi diversity.}
   \item{hill}{Calculate Hill numbers.}
   \item{...}{Parameters passed to \code{\link{nlm}}}
 }
@@ -42,7 +43,7 @@ specnumber(x, MARGIN = 1)
     sum p_i^2}. Choice \code{simpson} returns \eqn{1-D} and
   \code{invsimpson} returns \eqn{1/D}.
 
-  Shannon and Simpson indices are both special cases of Rényi
+  Shannon and Simpson indices are both special cases of RÃ©nyi
   diversity
   \deqn{H_a = \frac{1}{1-a} \log \sum p_i^a}{H.a = 1/(1-a) log
     sum(p^a)}
@@ -53,8 +54,8 @@ specnumber(x, MARGIN = 1)
   diversity with \eqn{a = 1}, inverse Simpson with \eqn{a = 2} and
   \eqn{1/ \max(p_i)}{1/max(p)} with \eqn{a = \infty}{a = Inf}. According
   to the theory of diversity ordering, one community can be regarded as
-  more diverse than another only if its Rényi diversities are all higher 
-  (Tóthmérész 1995). 
+  more diverse than another only if its RÃ©nyi diversities are all higher 
+  (TÃ³thmÃ©rÃ©sz  1995). 
  
   Function \code{rarefy} gives the expected species richness in random
   subsamples of size \code{sample} from the community. The size of
@@ -79,7 +80,7 @@ specnumber(x, MARGIN = 1)
   extremely simple, and shortcuts are easy in plain \R.
   
   Better stories can be told about Simpson's index than about
-  Shannon's index, and still more grandiose stories about
+  Shannon's index, and still more grander narratives about
   rarefaction (Hurlbert 1971).  However, these indices are all very
   closely related (Hill 1973), and there is no reason to despise one more than
   others (but if you are a graduate student, don't drag me in, but obey
@@ -121,7 +122,7 @@ specnumber(x, MARGIN = 1)
   Hurlbert, S.H. (1971). The nonconcept of species diversity: a critique
   and alternative parameters. \emph{Ecological Monographs} 54, 187--211.
  
-  Tóthmérész, B. (1995). Comparison of different methods for diversity
+  TÃ³thmÃ©rÃ©sz, B. (1995). Comparison of different methods for diversity
   ordering. \emph{Journal of Vegetation Science} 6, 283--290.
 }
 

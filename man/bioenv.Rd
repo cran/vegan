@@ -17,18 +17,19 @@
 }
 \usage{
 \method{bioenv}{default}(comm, env, method = "spearman", index = "bray",
-       upto = ncol(env), ...)
+       upto = ncol(env), trace = FALSE, ...)
 \method{bioenv}{formula}(formula, data, ...)
 }
 
 \arguments{
   \item{comm}{Community data frame. }
   \item{env}{Data frame of continuous environmental variables. }
-  \item{method}{The correlation method used in \code{\link{cor.test}}.}
+  \item{method}{The correlation method used in \code{\link{cor}}.}
   \item{index}{The dissimilarity index used for community data in
     \code{\link{vegdist}}. }
   \item{upto}{Maximum number of parameters in studied subsets.}
   \item{formula, data}{Model \code{\link{formula}} and data.}
+  \item{trace}{Trace the advance of calculations }
   \item{...}{Other parameters passed to function.}
 }
 \details{
@@ -39,7 +40,7 @@
   \code{\link{dist}}.  Then it finds the correlation between community
   dissimilarities and environmental distances, and for each size of
   subsets, saves the best result. 
-  There are \eqn{2^p-1} subsets of \eqn{p} variables, and exhaustive
+  There are \eqn{2^p-1} subsets of \eqn{p} variables, and an exhaustive
   search may take a very, very, very long time (parameter \code{upto} offers a
   partial relief). 
 

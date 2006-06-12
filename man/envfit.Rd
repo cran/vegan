@@ -13,8 +13,8 @@
 \title{Fits an Environmental Vector or Factor onto an Ordination }
 \description{
   The function fits environmental vectors or factors onto an
-  ordination. The projection of points onto vectors have
-  maximum correlations with corresponding environmental variables, and
+  ordination. The projections of points onto vectors have
+  maximum correlation with corresponding environmental variables, and
   the factors show the averages of factor levels.
 }
 \usage{
@@ -96,10 +96,8 @@ factorfit(X, P, permutations = 0, strata, choices=c(1,2),
   User can supply a vector of prior  weights \code{w}. If the ordination
   object has weights, these will be used. In practise this means that
   the row totals are used as weights with
-  \code{\link{cca}} or
-  \code{\link{decorana}} results. This means that sites with lower
-  totals will
-  have lower weights. If you do not like this, but want to give
+  \code{\link{cca}} or \code{\link{decorana}} results. If you do not
+  like this, but want to give 
   equal weights to all sites, you should set \code{w = NULL}.
   The weighted fitting gives similar results to biplot
   arrows and class centroids in \code{\link{cca}}.

@@ -44,8 +44,7 @@ estimateR(x, ...)
   \code{specpool} are:
   \tabular{ll}{
     Chao
-    \tab \eqn{S_P = S_0 + \frac{a_1^2}{ (a_2 + 1)} + \frac{a_1
-	a_2}{2(a_2+1)^2}}{S_P = S_0 + a1^2/2/(a2+1) + a1*a2/2/(a2+1)^2}
+    \tab \eqn{S_P = S_0 + a1^2/(2*a2)}
     \cr
     First order jackknife
     \tab \eqn{S_P = S_0 + a_1 \frac{N-1}{N}}{S_P = S_0 + a1*(N-1)/N}
@@ -63,10 +62,14 @@ estimateR(x, ...)
     species in a single site. If called for a matrix or data frame, the
     function will give separate estimates for each site.  The two
     variants of extrapolated richness in \code{estimateR} are Chao and
-    ACE.  The Chao estimator is identical to the one above, except that
+    ACE.  In the Chao estimate
     \eqn{a_i} refers to number of species with abundance \eqn{i} instead
-    of incidence.  The ACE is defined as: 
+    of incidence: 
     \tabular{ll}{
+    Chao
+    \tab \eqn{S_P = S_0 + \frac{a_1^2}{ (a_2 + 1)} + \frac{a_1
+	a_2}{2(a_2+1)^2}}{S_P = S_0 + a1^2/2/(a2+1) + a1*a2/2/(a2+1)^2}
+    \cr
     ACE
     \tab \eqn{S_P = S_{abund} + \frac{S_{rare}}{C_{ace}}+ \frac{a_1}{C_{ace}}
       \gamma^2_{ace}}{S_P = S_abund + S_rare/C_ace + a1/C_ace * gamma^2}
@@ -134,7 +137,7 @@ estimateR(x, ...)
   See \url{http://viceroy.eeb.uconn.edu/EstimateS} for a more complete
   (and positive) discussion and alternative software for some platforms.
 }
-\seealso{\code{\link{veiledspec}}, \code{\link{diversity}}. }
+\seealso{\code{\link{veiledspec}}, \code{\link{diversity}}, \code{\link{beals}}. }
 \examples{
 data(dune)
 data(dune.env)

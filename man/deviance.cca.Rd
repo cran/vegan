@@ -1,3 +1,4 @@
+\encoding{UTF-8}
 \name{deviance.cca}
 \alias{deviance.cca}
 \alias{deviance.rda}
@@ -67,7 +68,7 @@
   \code{extractAIC} returns effective degrees of freedom and ``AIC''. 
 }
 \references{
-  Godínez-Domínguez, E.  & Freire, J. (2003) Information-theoretic
+  GodÃ­nez-DomÃ­nguez, E. & Freire, J. (2003) Information-theoretic
   approach for selection of spatial and temporal models of community
   organization. \emph{Marine Ecology Progress Series} 253, 17--24.
 }
@@ -93,10 +94,8 @@ ord
 step(ord)
 # Stepwise selection (forward from an empty model "dune ~ 1")
 step(cca(dune ~ 1, dune.env), scope = formula(ord))
-# ANOVA for the added variable
-anova(cca(dune ~ Moisture, dune.env))
-# ANOVA for the next candidate variable that was not added
-anova(cca(dune ~ Condition(Moisture) + Management, dune.env), perm.max=1000)
+# ANOVA: added variable + the first left out
+anova(cca(dune ~ Moisture + Management, dune.env), permut=200, by = "terms")
 }
 \keyword{ multivariate }
 \keyword{ models }

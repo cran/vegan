@@ -9,27 +9,31 @@
     indPartial <- attr(Terms, "specials")$Condition
     mf <- Z <- NULL
     if (!is.null(indPartial)) {
-        partterm <- attr(Terms, "variables")[[1 + indPartial]]
-        Pterm <- deparse(partterm[[2]])
+        partterm <- attr(Terms, "variables")[1 + indPartial]
+        Pterm <- sapply(partterm, function(x) deparse(x[[2]]))
+        Pterm <- paste(Pterm, collapse = "+")
         P.formula <- as.formula(paste("~", Pterm))
         zlev <- xlev[names(xlev) %in% Pterm]
-        mf <- model.frame(P.formula, data, na.action = na.fail, xlev = zlev)
+        mf <- model.frame(P.formula, data, na.action = na.fail, 
+                          xlev = zlev)
         Z <- model.matrix(P.formula, mf)
         if (any(colnames(Z) == "(Intercept)")) {
             xint <- which(colnames(Z) == "(Intercept)")
             Z <- Z[, -xint, drop = FALSE]
         }
-        formula <- update(formula, paste(".~.-", deparse(partterm, 
-                                                         width.cutoff = 500)))
+        partterm <- sapply(partterm, function(x) deparse(x))
+        formula <- update(formula, paste(".~.-",
+                                         paste(partterm, collapse = "-")))
         flapart <- update(formula, paste(". ~ . +", Pterm))
     }
     formula[[2]] <- NULL
     if (formula[[2]] == "1" || formula[[2]] == "0") 
         Y <- NULL
     else {
-        if (exists("Pterm"))
+        if (exists("Pterm")) 
             xlev <- xlev[!(names(xlev) %in% Pterm)]
-        mf <- model.frame(formula, data, na.action = na.fail, xlev = xlev)
+        mf <- model.frame(formula, data, na.action = na.fail, 
+                          xlev = xlev)
         Y <- model.matrix(formula, mf)
         if (any(colnames(Y) == "(Intercept)")) {
             xint <- which(colnames(Y) == "(Intercept)")

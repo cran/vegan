@@ -1,5 +1,7 @@
 \name{anova.cca}
 \alias{anova.cca}
+\alias{anova.ccabyaxis}
+\alias{anova.ccabyterm}
 \alias{permutest.cca}
 \alias{print.permutest.cca}
 \alias{print.anova.cca}
@@ -13,8 +15,10 @@
   (\code{\link{capscale}}) to assess the significance of constraints.
 }
 \usage{
-\method{anova}{cca}(object, alpha=0.05, beta=0.01, step=100, perm.max=10000, ...)
-permutest.cca(x, permutations=100, model=c("direct", "reduced","full"), strata)
+\method{anova}{cca}(object, alpha=0.05, beta=0.01, step=100, perm.max=10000,
+      by = NULL, ...)
+permutest.cca(x, permutations=100, model=c("direct", "reduced","full"),
+      first = FALSE, strata, ...)
 }
 
 \arguments{
@@ -23,10 +27,15 @@ permutest.cca(x, permutations=100, model=c("direct", "reduced","full"), strata)
   \item{beta}{Accepted Type II error rate. }
   \item{step}{Number of permutations during one step. }
   \item{perm.max}{Maximum number of permutations. }
+  \item{by}{Setting \code{by = "axis"} will assess significance for each
+    constrained axis, and setting \code{by = "terms"} will asses
+    significance for each term (sequentially from first to last).}
   \item{\dots}{Parameters to permutest.cca. }
   \item{permutations}{Number of permutations for assessing significance
     of constraints.}
   \item{model}{Permutation model (partial match).}
+  \item{first}{Assess only the significance of the first constrained
+    eigenvalue; will be passed from \code{anova.cca}. }
   \item{strata}{An integer vector or factor specifying the strata for
     permutation. If supplied, observations are permuted only within the
     specified strata.}
@@ -48,7 +57,10 @@ permutest.cca(x, permutations=100, model=c("direct", "reduced","full"), strata)
   terminated.  If the current estimate of \eqn{P} does not
   differ significantly from \code{alpha} of the alternative hypothesis,
   the permutations are
-  continued with \code{step} new permutations.  
+  continued with \code{step} new permutations.  However, with \code{by =
+    "terms"} a fixed number of permutations will be used, and this 
+  is given by argument \code{permutations}, or if this is missing,
+  by \code{step}.  
   
   The function \code{permutest.cca} implements a permutation test for
   the ``significance'' of constraints in \code{\link{cca}},
@@ -69,7 +81,27 @@ permutest.cca(x, permutations=100, model=c("direct", "reduced","full"), strata)
   values of \code{X ~ Z}).  Consequently, the total Chi-square is not
   fixed, and test based on pseudo-\eqn{F} would differ from the test based on
   plain eigenvalues. CCA is a weighted method, and environmental data
-  are re-weighted at each permutation step.
+  are re-weighted at each permutation step using permuted weights.
+
+  Default test will be for the sum of all constrained eigenvalues.
+  Setting \code{first = TRUE} will perform a test for the first
+  constrained eigenvalue.  Argument \code{first} can be set either in
+  \code{anova.cca} or in \code{permutest.cca}.  It is also possible to
+  perform significance tests for each axis or for each term (constraining
+  variable) using argument \code{by} in \code{anova.cca}. 
+  Setting \code{by = "axis"} will perform separate significance tests
+  for each constrained axis.  All previous constrained axes will be used
+  as conditions (\dQuote{partialled out}) and a test for the first
+  constrained eigenvalues is performed. Setting \code{by = "terms"} will
+  perform separate
+  significance test for each term (constraining variable). The terms are
+  assessed sequentially from first to last, and the order of the terms
+  will influence their significances. In calculating pseudo-\eqn{F}, all
+  terms are compared to the same residual of the full model.
+  Permutations for all axes or terms will
+  start from the same \code{\link{.Random.seed}}, and the seed will be
+  advanced to the value after longest permutation at the exit from the
+  function.
 }
 \value{
   Function \code{permutest.cca} returns an object of class
@@ -89,9 +121,8 @@ data(varespec)
 data(varechem)
 vare.cca <- cca(varespec ~ Al + P + K, varechem)
 anova(vare.cca)
-permutest.cca(vare.cca)
-## Test for adding variable N to the previous model:
-anova(cca(varespec ~ N + Condition(Al + P + K), varechem), step=40)
+anova(vare.cca, by="axis", perm.max=500)
+anova(vare.cca, by="terms", permu=200)
 }
 \keyword{ multivariate }
 \keyword{ htest }

@@ -1,7 +1,8 @@
 \name{capscale}
 \alias{capscale}
 
-\title{[Partial] Constrained Analysis of Principal Coordinates }
+\title{[Partial] Constrained Analysis of Principal Coordinates or
+  distance-based RDA }
 \description{
   Constrained Analysis of Principal Coordinates (CAP) is an ordination method
   similar to Redundancy Analysis (\code{\link{rda}}), but it allows
@@ -9,9 +10,10 @@
   Bray--Curtis distance. Despite this non-Euclidean feature, the analysis
   is strictly linear and metric. If called with Euclidean distance,
   the results are identical to \code{\link{rda}}, but \code{capscale}
-  will be much more inefficient. Function \code{capscale} may be useful
-  with other  dissimilarity measures, since Euclidean distances inherent in
-  \code{\link{rda}} are generally poor with community data
+  will be much more inefficient. Function \code{capscale} is a
+  constrained version of metric scaling, a.k.a. principal coordintates
+  analysis, which also is based on Euclidean distance but still is more
+  useful with other dissimilarity measures. 
 }
 \usage{
 capscale(formula, data, distance = "euclidean", comm = NULL, add =
@@ -70,7 +72,9 @@ FALSE,  ...)
   so that ``partial'' CAP can be performed.
 
   The current implementation  differs from the method suggested by
-  Anderson & Willis (2003) in three major points:
+  Anderson & Willis (2003) in three major points which actually make it
+  similar to distance-based redundancy analysis (Legendre & Anderson
+  1999):
   \enumerate{
     \item Anderson & Willis used orthonormal solution of
     \code{\link{cmdscale}}, whereas \code{capscale} uses axes
@@ -94,7 +98,9 @@ FALSE,  ...)
   However, it makes no sense to use \code{capscale} with
   Euclidean distances, since direct use of \code{\link{rda}} is much more
   efficient. Even with non-Euclidean dissimilarities, the
-  rest of the analysis will be metric and linear.
+  rest of the analysis will be metric and linear.  The test for all axes
+  is available only for ordinations defined with \code{formula}
+  interface. 
   
 }
 \value{
@@ -102,7 +108,8 @@ FALSE,  ...)
   identical to the result of \code{\link{rda}}. At the moment,
   \code{capscale} does not have specific methods, but it uses
   \code{\link{cca}} and \code{\link{rda}} methods
-  \code{\link{plot.cca}}, \code{\link{summary.rda}} etc. Moreover, you
+  \code{\link{plot.cca}},
+  \code{\link{scores.rda}}  etc. Moreover, you
   can use \code{\link{anova.cca}} for permutation tests of
   ``significance'' of the results.
 }
@@ -110,6 +117,10 @@ FALSE,  ...)
   Anderson, M.J. & Willis, T.J. (2003). Canonical analysis of principal
   coordinates: a useful method of constrained ordination for
   ecology. \emph{Ecology} 84, 511--525.
+
+  Legendre, P. & Anderson, M. J. (1999). Distance-based redundancy
+  analysis: testing multispecies responses in multifactorial ecological
+  experiments. \emph{Ecological Monographs} 69, 1--24.
 }
 \author{ Jari Oksanen }
 \note{

@@ -81,7 +81,10 @@ calibrate.cca(object, newdata, rank = "full", ...)
   new data frame must contain all constraining and conditioning environmental
   variables of the model formula. If a completely new data frame is created,
   extreme care is needed defining variables similarly as in the original
-  model, in particular with (ordered) factors.
+  model, in particular with (ordered) factors. If ordination was
+  performed with the formula interface, the \code{newdata} also can be a
+  data frame or matrix, but extreme care is needed that the columns
+  match in the original and \code{newdata}.
 
   Function \code{calibrate.cca} finds estimates of constraints from
   community ordination or \code{"wa"} scores from \code{\link{cca}},
@@ -116,9 +119,6 @@ calibrate.cca(object, newdata, rank = "full", ...)
 \references{
   Greenacre, M. J. (1984). Theory and applications of correspondence
   analysis. Academic Press, London.
-
-  Gross, J. (2003). Variance inflation factors. \emph{R News} 3(1),
-  13--15. 
 }
 \author{Jari Oksanen.}
 

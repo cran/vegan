@@ -64,13 +64,13 @@ as.fisher(x, ...)
   diversity index, and \eqn{\alpha} and its standard error can be
   estimated with a separate function \code{\link{fisher.alpha}}. The
   parameter \eqn{x} is taken as a nuisance parameter which is not
-  estimated separately but taken to be \eqn{N/(N+\alpha)}. Helper
+  estimated separately but taken to be \eqn{n/(n+\alpha)}. Helper
   function \code{as.fisher} transforms abundance data into Fisher
   frequency table.
 
   Function  \code{fisherfit} estimates the standard error of
   \eqn{\alpha}{alpha}. However, the confidence limits cannot be directly
-  estimated from the standard error, but you should use function
+  estimated from the standard errors, but you should use function
   \code{confint} based on profile likelihood. Function \code{confint}
   uses function \code{\link[MASS]{confint.glm}} of the \pkg{MASS}
   package, using \code{profile.fisherfit} for the profile
@@ -98,7 +98,7 @@ as.fisher(x, ...)
   \code{prestonfit} fits the truncated lognormal model as a second
   degree log-polynomial to the octave pooled data using Poisson
   error. Function \code{prestondistr} fits left-truncated Normal distribution to
-  \eqn{log_2}{log2} transformed non-pooled observations with direct
+  \eqn{\log_2}{log2} transformed non-pooled observations with direct
   maximization of log-likelihood. Function \code{prestondistr} is
   modelled after function \code{\link[MASS]{fitdistr}} which can be used
   for alternative distribution models. The functions have common \code{print},
@@ -116,7 +116,7 @@ as.fisher(x, ...)
   Preston's lognormal model seems to be truncated at both ends, and this
   may be the main reason why its result differ from lognormal models
   fitted in Rank--Abundance diagrams with functions
-  \code{\link{rad.lognormal}} or \code{\link{rad.veil}}. 
+  \code{\link{rad.lognormal}}. 
 }
 \value{
   The function \code{prestonfit} returns an object with fitted
@@ -135,14 +135,18 @@ as.fisher(x, ...)
   Fisher, R.A., Corbet, A.S. & Williams, C.B. (1943). The relation
   between the number of species and the number of individuals in a
   random sample of animal population. \emph{Journal of Animal Ecology}
-  12: 42-58.
+  12: 42--58.
 
   Kempton, R.A. & Taylor, L.R. (1974). Log-series and log-normal
   parameters as diversity discriminators for Lepidoptera. \emph{Journal
-    of Animal Ecology} 43: 381-399.
+    of Animal Ecology} 43: 381--399.
 
   Preston, F.W. (1948) The commonness and rarity of
   species. \emph{Ecology} 29, 254--283.
+
+  Williamson, M. & Gaston, K.J. (2005). The lognormal distribution is
+  not an appropriate null hypothesis for the species--abundance
+  distribution. \emph{Journal of Animal Ecology} 74, 409--422.
 }
 \author{Bob O'Hara \email{bob.ohara@helsinki.fi} (\code{fisherfit}) and Jari Oksanen. }
 
@@ -155,7 +159,9 @@ as.fisher(x, ...)
   lognormal by reducing the usually high lowest octaves, but is too
   unfair to be followed. Therefore the octaves used in this function
   include the upper limit. If you do not accept this, you must change
-  the function yourself.
+  the function yourself. Williamson & Gaston (2005) discuss alternative
+  definitions in detail, and they should be consulted for a
+  critical review of log-Normal model.
 }
 
 \seealso{\code{\link{diversity}}, \code{\link{fisher.alpha}},

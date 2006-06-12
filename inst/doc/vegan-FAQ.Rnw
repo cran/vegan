@@ -64,7 +64,7 @@ singular values by $\lambda_k = \sigma_k^2 /(n-1)$.  With classical
 definitions, the sum of all eigenvalues equals the sum of variances of
 species, or $\sum_k \lambda_k = \sum_j s_j^2$, and it is often said
 that first axes explain a certain maximized proportion of total
-varinace in the data.  The other orthonormal matrix $\mathbf{V}$ can
+variance in the data.  The other orthonormal matrix $\mathbf{V}$ can
 be found indirectly as well, so that we have the same components in
 both methods.
 
@@ -82,16 +82,18 @@ linear combination scores; weighted averaging scores have somewhat
 wider dispersion.
 
 \begin{table}
-\caption{\label{tab:scales} Alternative scalings for \textsc{rda} used
-  in the functions \texttt{prcomp} and \texttt{princomp} (package
-  \texttt{mva}), and the one used in the \texttt{vegan} function \texttt{rda}
-  and the proprietary software \texttt{Canoco}
-  scores in terms of orthonormal species ($u_{ik}$) and site scores
-  ($v_{jk}$), eigenvalues ($\lambda_k$), number of sites  ($n$) and
-  species standard deviations ($s_j$). In \texttt{rda}, 
-  $\mathrm{const} = \sqrt[4]{(n-1) \sum \lambda_k}$.  Correspoding
-  negative scaling in \texttt{vegan} and corresponding positive
-  scaling in \texttt{Canoco} divides each species by its standard deviation.  }
+  \caption{\label{tab:scales} Alternative scalings for \textsc{rda} used
+    in the functions \texttt{prcomp} and \texttt{princomp} (package
+    \texttt{mva}), and the one used in the \texttt{vegan} function \texttt{rda}
+    and the proprietary software \texttt{Canoco}
+    scores in terms of orthonormal species ($u_{ik}$) and site scores
+    ($v_{jk}$), eigenvalues ($\lambda_k$), number of sites  ($n$) and
+    species standard deviations ($s_j$). In \texttt{rda}, 
+    $\mathrm{const} = \sqrt[4]{(n-1) \sum \lambda_k}$.  Corresponding
+    negative scaling in \texttt{vegan} 
+    and corresponding positive scaling in \texttt{Canoco} is derived
+    dividing each  species by its standard deviation $s_j$ (possibly
+    with some additional constant multiplier).  } 
 \begin{tabular}{lcc}
 & \textbf{Site scores} $u_{ik}^*$ & 
 \textbf{Species scores} $v_{jk}^*$ \\
@@ -108,6 +110,10 @@ $v_{jk} \sqrt{\lambda_k/ \sum \lambda_k} \times \mathrm{const}$  \\
 \texttt{rda, scaling=3} &
 $u_{ik} \sqrt[4]{\lambda_k/ \sum \lambda_k} \times \mathrm{const}$ &
 $v_{jk} \sqrt[4]{\lambda_k/ \sum \lambda_k} \times \mathrm{const}$ \\
+\texttt{rda, scaling < 0} &
+$u_{ik}^*$ &
+$\sqrt{\sum \lambda_k /(n-1)} s_j^{-1} v_{jk}^*$
+\\
 \texttt{Canoco, scaling=-1} &
 $u_{ik} \sqrt{n} \sqrt{\lambda_k / \sum \lambda_k}$ &
 $v_{jk} \sqrt{n}$ \\
@@ -402,8 +408,72 @@ possible. Therefore \texttt{vegan} calls LC scores as
 primarily WA scores in plotting.  However, the user makes the ultimate
 choice, since both scores are available.
 
+\section{\protect{$t$}-values in constrained ordination}
+
+
+\texttt{Vegan} does not report $t$-values for constrained ordination
+methods.  The reason for this omission is that the suggested
+$t$-values are wrong and misleading.  This section first explains the
+arguments against $t$-values and then shows how you can get them if
+you really want to do so.
+
+The $t$-values are based on the multivariate regression model where
+the weight\-ed averages (WA) scores are dependent variables and
+environmental variables (constraints) are independent variables. That
+is, we try to explain the ordination scores by constraints.  The
+$t$-values are based on the standard errors of the coefficients of
+this regression model.  The regression model only uses the constrained
+ordination and ignores the residual variation
+in the data, and gives much too narrow confidence intervals.
+
+The easiest way of obtaining the $t$-values is to refit the
+constrained ordination model as a multivariate linear model
+(\texttt{mlm}) which automatically is fitted with the standard
+\texttt{lm} function when the response is multivariate.  The following
+implements a similar model as in \textsc{Canoco}\footnote{It seems
+  that in more correctly weighted model you should multiply WA scores with
+row weights $w_i$ and constraints with $\sqrt{w_i}$.} \cite{CANOCO4}:
+<<>>=
+as.mlm.cca <- function(x)
+{
+  w <- weights(x)
+  wa <- sweep(x$CCA$wa, 1, sqrt(w), "*")
+  X <- qr.X(x$CCA$QR)
+  lm(wa ~ . , data = as.data.frame(X))
+}
+@ 
+Essentially, this is nothing but a multiple linear model weighted with
+row totals $w_i$.  The weights appear to be different for WA scores
+and constraints, but the latter are extracted by \texttt{qr.X}
+function and already were weighted by $\sqrt{w_i}$, but WA scores are
+unweighted.  The same function also works with \texttt{rda} and
+\texttt{capscale}, but these have constant weights $w_i = 1$ and the
+function can be simplified.
+
+The $t$-values can be found in the \texttt{summary} of this model:
+<<>>=
+mod <- cca(varespec ~ pH + Ca, varechem)
+mlmod <- as.mlm.cca(mod)
+summary(mlmod)
+@ 
+The weighted data are centred, and the intercept should be zero (and
+it would be with alternative weighting scheme) Would these $t$-values
+be correct, we also could use the standard \texttt{anova} of the
+refitted model to test the significance of the constraints:
+<<>>=
+anova(mlmod)
+@ 
+It is easy to see that $P$-values of the anova are much better
+(smaller) than from the permutation tests:
+<<>>=
+anova(mod, by="terms", permut=200)
+@
+This also means that the $t$-values have the same bias.
+
 \bibliographystyle{plain}
 \bibliography{vegan}
 
 \end{document}
+
+
 

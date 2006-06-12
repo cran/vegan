@@ -2,8 +2,8 @@
 \alias{ordiParseFormula}
 \alias{permuted.index}
 \alias{centroids.cca}
-\alias{spider.cca}
 \alias{ordiTerminfo}
+\alias{ordispantree}
 
 \title{Internal vegan functions}
 
@@ -15,13 +15,12 @@ ordiParseFormula(formula, data, xlev = NULL)
 ordiTerminfo(d, data)
 centroids.cca(x, mf, wt)
 permuted.index(n, strata)
-spider.cca(x, ...)
+ordispantree(ord, tree, display = "sites", ...)
 }
 
 \details{
-  These are not to be called by the user. Function \code{spider.cca} was
-  replaced with \code{\link{ordispider}} and will be removed in the
-  future. 
+  These are not to be called by the user. Function \code{ordispantree}
+  is deprecated: use \code{\link{lines.spantree}} instead.
 }
 
 \keyword{internal }

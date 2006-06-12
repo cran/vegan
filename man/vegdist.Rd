@@ -1,3 +1,4 @@
+\encoding{UTF-8}
 \name{vegdist}
 \alias{vegdist}
 \title{Dissimilarity Indices for Community Ecologists }
@@ -153,7 +154,7 @@
   quantitative or binary variants of the indices under the same name,
   which correctly may refer only to one of these alternatives For
   instance, the Bray
-  index is known also as Steinhaus, Czekanowski and Sørensen index.
+  index is known also as Steinhaus, Czekanowski and SÃ¸rensen index.
   The quantitive version of Jaccard should probably called
   Ruzicka index (but spelled with characters that cannot be shown here).
   The abbreviation \code{"horn"} for the Horn--Morisita index is
@@ -219,7 +220,7 @@
 \examples{
 data(varespec)
 vare.dist <- vegdist(varespec)
-# Orlóci's Chord distance: range 0 .. sqrt(2)
+# OrlÃ³ci's Chord distance: range 0 .. sqrt(2)
 vare.dist <- vegdist(decostand(varespec, "norm"), "euclidean")
 }
 \keyword{ multivariate }

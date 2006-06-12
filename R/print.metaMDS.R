@@ -1,5 +1,5 @@
 "print.metaMDS" <-
-    function (x, ...) 
+function (x, ...) 
 {
     cat("\nCall:\n")
     cat(deparse(x$call), "\n\n")
@@ -12,11 +12,14 @@
         cat("Two convergent solutions found after", x$tries, 
             "tries\n")
     else cat("No convergent solutions - best solution after", 
-             x$tries, "tries\n")
+        x$tries, "tries\n")
     z <- x$points
-    scal <- c(if(attr(z, "centre")) "centring", if (attr(z, "pc")) "PC rotation",
-              if (attr(z, "halfchange")) "halfchange scaling") 
-    cat("Score scaling:", paste(scal, collapse = ", "), "\n")
+    scal <- c(if (attr(z, "centre")) "centring", if (attr(z, 
+        "pc")) "PC rotation", if (attr(z, "halfchange")) "halfchange scaling")
+    if(!length(scal))
+        scal <- "as is"
+    cat("Scaling:", paste(scal, collapse = ", "), "\n")
     cat("\n")
     invisible(x)
 }
+
