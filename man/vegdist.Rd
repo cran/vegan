@@ -154,7 +154,7 @@
   quantitative or binary variants of the indices under the same name,
   which correctly may refer only to one of these alternatives For
   instance, the Bray
-  index is known also as Steinhaus, Czekanowski and Sørensen index.
+  index is known also as Steinhaus, Czekanowski and \enc{Sørensen}{Sorensen} index.
   The quantitive version of Jaccard should probably called
   Ruzicka index (but spelled with characters that cannot be shown here).
   The abbreviation \code{"horn"} for the Horn--Morisita index is
@@ -220,7 +220,7 @@
 \examples{
 data(varespec)
 vare.dist <- vegdist(varespec)
-# Orlóci's Chord distance: range 0 .. sqrt(2)
+# \end{Orlóci's}{Orloci's} Chord distance: range 0 .. sqrt(2)
 vare.dist <- vegdist(decostand(varespec, "norm"), "euclidean")
 }
 \keyword{ multivariate }

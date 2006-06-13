@@ -24,7 +24,7 @@ the thickness of the humus layer.
 
 }
 \references{
-Väre, H., Ohtonen, R. and Oksanen, J. (1995) Effects of reindeer
+\enc{Väre}{Vare}, H., Ohtonen, R. and Oksanen, J. (1995) Effects of reindeer
 grazing on understorey vegetation in dry Pinus sylvestris
 forests. \emph{Journal of Vegetation Science} 6, 523--530.  
 }

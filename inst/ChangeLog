@@ -1,5 +1,13 @@
 VEGAN STABLE VERSIONS 
 
+Version 1.8-2 (June 13, 2006)
+
+	* version 1.8-1 failed test in Windows because of a wrong encoding
+	name.  Explicit \enc added for non-ascii words.  Kurt Hornik and
+	Uwe Ligges diagnosed this and led me to see the light.
+
+	* similar to devel version 1.7-97.
+	
 Version 1.8-1 (June 12, 2006)
 
 	* Based on devel version 1.7-96. 
