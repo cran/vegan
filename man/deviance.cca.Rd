@@ -68,7 +68,7 @@
   \code{extractAIC} returns effective degrees of freedom and ``AIC''. 
 }
 \references{
-  Godínez-Domínguez, E. & Freire, J. (2003) Information-theoretic
+  \enc{Godínez-Domínguez}{Godinez-Dominguez}, E. & Freire, J. (2003) Information-theoretic
   approach for selection of spatial and temporal models of community
   organization. \emph{Marine Ecology Progress Series} 253, 17--24.
 }

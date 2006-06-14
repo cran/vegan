@@ -8,7 +8,7 @@
 
 \title{ Ecological Diversity Indices and Rarefaction Species Richness }
 
-\description{ Shannon, Simpson, Rényi, Hill and Fisher diversity indices
+\description{ Shannon, Simpson, \enc{Rényi}{Renyi}, Hill and Fisher diversity indices
 and rarefied species richness for community ecologists.  }
 
 \usage{
@@ -27,7 +27,7 @@ specnumber(x, MARGIN = 1)
   \item{base}{ The logarithm \code{base} used in \code{shannon}.}
   \item{sample}{Subsample size for rarefying community.}
   \item{se}{Estimate standard errors.}
-  \item{scales}{Scales of Rényi diversity.}
+  \item{scales}{Scales of \enc{Rényi}{Renyi} diversity.}
   \item{hill}{Calculate Hill numbers.}
   \item{...}{Parameters passed to \code{\link{nlm}}}
 }
@@ -43,7 +43,7 @@ specnumber(x, MARGIN = 1)
     sum p_i^2}. Choice \code{simpson} returns \eqn{1-D} and
   \code{invsimpson} returns \eqn{1/D}.
 
-  Shannon and Simpson indices are both special cases of Rényi
+  Shannon and Simpson indices are both special cases of \enc{Rényi}{Renyi}
   diversity
   \deqn{H_a = \frac{1}{1-a} \log \sum p_i^a}{H.a = 1/(1-a) log
     sum(p^a)}
@@ -54,8 +54,8 @@ specnumber(x, MARGIN = 1)
   diversity with \eqn{a = 1}, inverse Simpson with \eqn{a = 2} and
   \eqn{1/ \max(p_i)}{1/max(p)} with \eqn{a = \infty}{a = Inf}. According
   to the theory of diversity ordering, one community can be regarded as
-  more diverse than another only if its Rényi diversities are all higher 
-  (Tóthmérész  1995). 
+  more diverse than another only if its \enc{Rényi}{Renyi} diversities are all higher 
+  (\enc{Tóthmérész}{Tothmeresz}  1995). 
  
   Function \code{rarefy} gives the expected species richness in random
   subsamples of size \code{sample} from the community. The size of
@@ -122,7 +122,7 @@ specnumber(x, MARGIN = 1)
   Hurlbert, S.H. (1971). The nonconcept of species diversity: a critique
   and alternative parameters. \emph{Ecological Monographs} 54, 187--211.
  
-  Tóthmérész, B. (1995). Comparison of different methods for diversity
+  \enc{Tóthmérész}{Tothmeresz}, B. (1995). Comparison of different methods for diversity
   ordering. \emph{Journal of Vegetation Science} 6, 283--290.
 }
 
