@@ -26,7 +26,7 @@
                                                                                                           .expr25 * .expr4) * .expr15 + .expr14)/.expr35)))
         return(Grad)
     }
-    if (!identical(all.equal(x, round(x)), TRUE))
+    if (!identical(all.equal(x, round(x)), TRUE)) 
         stop("function accepts only integers (counts)")
     freq <- x[x > 0]
     X <- x[x > 0]
@@ -41,8 +41,7 @@
     }
     a <- sapply(i, COUNT, X)
     G <- a[1]/a[2]
-    S.Chao1 <- S.obs + (a[1]^2)/(2 * (a[2] + 1)) - a[1] * a[2]/(2 * 
-                                                                (a[2] + 1)^2)
+    S.Chao1 <- S.obs + a[1] * (a[1] - 1) / (a[2] + 1)/ 2
     Deriv.Ch1 <- gradF(a, i)
     sd.Chao1 <- sqrt(a[2] * ((G^4)/4 + G^3 + (G^2)/2))
     C.ace <- 1 - a[1]/N.rare

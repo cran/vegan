@@ -17,10 +17,8 @@ function (x, scales = c(0, 0.25, 0.5, 1, 2, 4, 8, 16, 32, 64,
     for (a in 1:m) {
         if (scales[a] != 0 && scales[a] != 1 && scales[a] != 
             Inf) {
-            for (i in 1:n) {
-                result[i, a] <- log(apply(x[i, ]^scales[a], 
-                  1, sum))/(1 - scales[a])
-            }
+            result[, a] <- log(apply(x^scales[a], 1, 
+                  sum))/(1 - scales[a])
         }
         else {
             if (scales[a] == 0) {
@@ -41,3 +39,4 @@ function (x, scales = c(0, 0.25, 0.5, 1, 2, 4, 8, 16, 32, 64,
         result <- unlist(result, use.names = FALSE)
     result
 }
+

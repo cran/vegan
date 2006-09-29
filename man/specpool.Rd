@@ -61,14 +61,14 @@ estimateR(x, ...)
     The abundance-based estimates in \code{estimateR} use counts (frequencies) of
     species in a single site. If called for a matrix or data frame, the
     function will give separate estimates for each site.  The two
-    variants of extrapolated richness in \code{estimateR} are Chao and
-    ACE.  In the Chao estimate
+    variants of extrapolated richness in \code{estimateR} are Chao
+    (unbiased variant) and ACE.  In the Chao estimate
     \eqn{a_i} refers to number of species with abundance \eqn{i} instead
     of incidence: 
     \tabular{ll}{
     Chao
-    \tab \eqn{S_P = S_0 + \frac{a_1^2}{ (a_2 + 1)} + \frac{a_1
-	a_2}{2(a_2+1)^2}}{S_P = S_0 + a1^2/2/(a2+1) + a1*a2/2/(a2+1)^2}
+    \tab \eqn{S_P = S_0 + \frac{a_1 (a_1 -1)}{2 (a_2 + 1)}}{S_P = S_0 +
+      a1*(a1-1)/(2*(a2+1))}
     \cr
     ACE
     \tab \eqn{S_P = S_{abund} + \frac{S_{rare}}{C_{ace}}+ \frac{a_1}{C_{ace}}
