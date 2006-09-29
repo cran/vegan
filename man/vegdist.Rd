@@ -7,7 +7,8 @@
   popular with community ecologists.
   Gower, Bray--Curtis, Jaccard and
   Kulczynski indices are good in detecting underlying
-  ecological gradients (Faith et al. 1987). Morisita, Horn--Morisita and Binomial
+  ecological gradients (Faith et al. 1987). Morisita, Horn--Morisita,
+  Binomial and Chao
   indices should be able to handle different sample sizes (Wolda 1981,
   Krebs 1999, Anderson & Millar 2004),
   and Mountford (1962) and Raup-Crick indices for presence--absence data should
@@ -21,7 +22,7 @@
   \item{method}{Dissimilarity index, partial match to  \code{"manhattan"},
     \code{"euclidean"}, \code{"canberra"}, \code{"bray"}, \code{"kulczynski"},
      \code{"jaccard"}, \code{"gower"}, \code{"morisita"}, \code{"horn"},
-     \code{"mountford"}, \code{"raup"} or \code{"binomial"}.}
+     \code{"mountford"}, \code{"raup"} , \code{"binomial"} or \code{"chao"}.}
   \item{binary}{Perform presence/absence standardization before analysis
     using \code{\link{decostand}}.}
   \item{diag}{Compute diagonals. }
@@ -34,7 +35,7 @@
 }
 \details{
   Jaccard (\code{"jaccard"}), Mountford (\code{"mountford"}),
-  Raup--Crick (\code{"raup"}) and Binomial indices are discussed below.
+  Raup--Crick (\code{"raup"}), Binomial and Chao indices are discussed below.
   The other indices are defined as:
   \tabular{ll}{
     \code{euclidean}
@@ -135,6 +136,18 @@
   below one, and two identical communities may have dissimilarity
   slightly above zero.
   
+  Chao index tries to take into account the number of unseen species
+  pairs, similarly as Chao's method in
+  \code{\link{specpool}}. Function \code{vegdist} implements a Jaccard
+  type index defined as \eqn{d_{jk} = U_j U_k/(U_j + U_k - U_j U_k)}, where
+  \eqn{U_j = C_j/N_j + (N_k - 1)/N_k \times a_1/(2 a_2) \times S_j/N_j}. Here
+  \eqn{C_j} is the total number of individuals in species shared with
+  site \eqn{k}, \eqn{N} is the total number of individuals, \eqn{a_1}
+  and \eqn{a_2} are number of species occurring only with one or two
+  individuals in another site, and \eqn{S_j} is the number of
+  individuals in species that occur only with one individual in
+  another site (Chao et al. 2005).  
+
   Morisita index can be used with genuine count data (integers) only. Its
   Horn--Morisita variant is able to handle any abundance data.
 
@@ -170,6 +183,11 @@
   of habitat on temperate reef fish assemblages in northeastern New
   Zealand.  \emph{Journal of Experimental Marine Biology and Ecology}
   305, 191--221.
+
+  Chao, A., Chazdon, R. L., Colwell, R. K. and Shen, T. (2005). A new
+  statistical approach for assessing similarity of species composition
+  with incidence and abundance data. \emph{Ecology Letters} 8, 148--159.
+ 
   
   Faith, D. P, Minchin, P. R. and Belbin, L. (1987).
   Compositional dissimilarity as a robust measure of ecological

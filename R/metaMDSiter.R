@@ -49,7 +49,7 @@
             break
         tries <- tries + 1
     }
-    if (!missing(previous.best) && !is.null(previous.best)) 
+    if (!missing(previous.best) && !is.null(previous.best$tries)) 
         tries <- tries + previous.best$tries
     out <- list(points = s0$points, dims = k, stress = s0$stress,
                 data = attr(dist, "commname"), distance = attr(dist, "method"),

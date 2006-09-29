@@ -40,6 +40,7 @@
 #define JACCARD 10
 #define RAUP 11
 #define MILLAR 12
+#define CHAO 13
 #define NOSHARED 99
 
 /* Distance functions */
@@ -268,7 +269,7 @@ double veg_horn(double *x, int nr, int nc, int i1, int i2)
      if (count==0) return NA_REAL;
      dist = 1 - 2*sim/(sq1/t1/t1 + sq2/t2/t2)/t1/t2;
      if (dist < 0)
-	  dist = 0;
+	 dist = 0;
      return dist;
 }
 
@@ -364,32 +365,32 @@ double veg_mountford(double *x, int nr, int nc, int i1, int i2)
 
 double veg_raup(double *x, int nr, int nc, int i1, int i2)
 {
-     double dist, J, A, B;
-     int sim, t1, t2, j, count;
-     
-     sim = 0;
-     t1 = 0;
-     t2 = 0;
-     count = 0;
-     for (j = 0; j < nc; j++) {
-	  if (R_FINITE(x[i1]) && R_FINITE(x[i2])) {
-	       if (x[i1] > 0.0 && x[i2] > 0.0)
-		    sim++;
-	       if (x[i1] > 0)
-		    t1++;
-	       if (x[i2] > 0)
-		    t2++;
-	       count++;
-	  }
-	  i1 += nr;
-	  i2 += nr;
-     }
-     if (count == 0) return NA_REAL; 
-     J = (double) (sim - 1);
-     A = (t1 < t2) ? (double) t1 : (double) t2;
-     B = (t1 < t2) ? (double) t2 : (double) t1;
-     dist = 1 - phyper(J, A, (double) count - A, B, 1, 0);
-     return dist;
+	double dist, J, A, B;
+	int sim, t1, t2, j, count;
+	
+	sim = 0;
+	t1 = 0;
+	t2 = 0;
+	count = 0;
+	for (j = 0; j < nc; j++) {
+		if (R_FINITE(x[i1]) && R_FINITE(x[i2])) {
+			if (x[i1] > 0.0 && x[i2] > 0.0)
+				sim++;
+			if (x[i1] > 0)
+				t1++;
+			if (x[i2] > 0)
+				t2++;
+			count++;
+		}
+		i1 += nr;
+		i2 += nr;
+	}
+	if (count == 0) return NA_REAL; 
+	J = (double) (sim - 1);
+	A = (t1 < t2) ? (double) t1 : (double) t2;
+	B = (t1 < t2) ? (double) t2 : (double) t1;
+	dist = 1 - phyper(J, A, (double) count - A, B, 1, 0);
+	return dist;
 }
 
 /* "Millar dissimilarity" is unpublished.  I found this in the lecture
@@ -419,9 +420,81 @@ double veg_millar(double *x, int nr, int nc, int i1, int i2)
 	  }
      }
      if (count==0) return NA_REAL;
+     if (dist < 0)
+	 dist = 0;
      return dist;
 }
 
+/* Chao's index (Ecol. Lett. 8, 148-159; 2005) tries to take into
+ * account the number of unseen shared species using Chao's method for
+ * estimating the number of unseen species. June 2006.
+ */
+
+double veg_chao(double *x, int nr, int nc, int i1, int i2)
+{
+    double ionce, itwice, jonce, jtwice, itot, jtot, ishare, jshare, ishar1, jshar1;
+    double dist, U, V;
+    int count, j;
+  
+    itot = 0;
+    jtot = 0;
+    ionce = 0;
+    jonce = 0;
+    itwice = 0;
+    jtwice = 0;
+    ishare = 0;
+    jshare = 0;
+    ishar1 = 0;
+    jshar1 = 0;
+    count = 0;
+    for (j=0; j<nc; j++) {
+	if (R_FINITE(x[i1]) && R_FINITE(x[i2])) {
+	    count++;
+	    itot += x[i1];
+	    jtot += x[i2];
+	    if (x[i1] > 0 && x[i2] > 0) {
+		ishare += x[i1];
+		jshare += x[i2];
+		if (fabs(x[i2] - 1) < 0.01) {
+		    ishar1 += x[i1];
+		    jonce += 1;
+		} else if (fabs(x[i2] - 2) < 0.01) {
+		    jtwice += 1;
+		}
+		if (fabs(x[i1] - 1) < 0.01) { 
+		    jshar1 += x[i2];
+		    ionce += 1;
+		} else if (fabs(x[i1] - 2) < 0.01) {
+		    itwice += 1;
+		}
+	    }
+	}
+	i1 += nr;
+	i2 += nr;
+    }
+    if (count==0) return NA_REAL;
+    U = ishare/itot;
+    if (ishar1 > 0) {
+	if (jonce < 1) jonce = 1; /* Never true if got here? */
+	if (jtwice < 1) jtwice = 1;
+	U += (jtot - 1)/jtot * jonce/jtwice/2.0 * ishar1/itot;
+    }
+    if (U > 1) U = 1;
+    V = jshare/jtot;
+    if (jshar1 > 0) {
+	if (ionce < 1) ionce = 1; /* This never true? */
+	if (itwice < 1) itwice = 1;
+	V += (itot - 1)/itot * ionce/itwice/2.0 * jshar1/jtot;
+    }
+    if (V > 1) V = 1;
+    if (U <= 0 || V <= 0)
+	dist = 1;
+    else
+	dist = 1 - U*V/(U + V - U*V);
+    if (dist < 0)
+	dist = 0;
+    return dist;
+}
 
 /* veg_noshared is not a proper dissimilarity index, but a pretty
  * useless helper function. It returns 1 when there are no shared
@@ -457,55 +530,58 @@ static double (*distfun)(double*, int, int, int, int);
 
 void veg_distance(double *x, int *nr, int *nc, double *d, int *diag, int *method)
 {
-     int dc, i, j, ij;
-     switch(*method) {
-     case MANHATTAN:
-	  distfun = veg_manhattan;
-	  break;
-     case EUCLIDEAN:
-	  distfun = veg_euclidean;
-	  break;
-     case CANBERRA:
-	  distfun = veg_canberra;
-	  break;
-     case BRAY:
-     case JACCARD:
-	  distfun = veg_bray;
-	  break;
-     case KULCZYNSKI:
-	  distfun = veg_kulczynski;
-	  break;
-     case GOWER:
-	  distfun = veg_gower;
-	  break;
-     case MORISITA:
-	  distfun = veg_morisita;
-	  break;
-     case HORN:
-	  distfun = veg_horn;
-	  break;
-     case MOUNTFORD:
-	  distfun = veg_mountford;
-	  break;
-     case RAUP:
-	  distfun = veg_raup;
-	  break;
-     case MILLAR:
-	  distfun = veg_millar;
-	  break;
-     case NOSHARED:
-	  distfun = veg_noshared;
-	  break;	 
-     default:
-	  error("Unknown distance in the internal C function");
-     }
+    int dc, i, j, ij;
+    switch(*method) {
+    case MANHATTAN:
+	distfun = veg_manhattan;
+	break;
+    case EUCLIDEAN:
+	distfun = veg_euclidean;
+	break;
+    case CANBERRA:
+	distfun = veg_canberra;
+	break;
+    case BRAY:
+    case JACCARD:
+	distfun = veg_bray;
+	break;
+    case KULCZYNSKI:
+	distfun = veg_kulczynski;
+	break;
+    case GOWER:
+	distfun = veg_gower;
+	break;
+    case MORISITA:
+	distfun = veg_morisita;
+	break;
+    case HORN:
+	distfun = veg_horn;
+	break;
+    case MOUNTFORD:
+	distfun = veg_mountford;
+	break;
+    case RAUP:
+	distfun = veg_raup;
+	break;
+    case MILLAR:
+	distfun = veg_millar;
+	break;
+    case CHAO:
+	distfun = veg_chao;
+	break;
+    case NOSHARED:
+	distfun = veg_noshared;
+	break;	 
+    default:
+	error("Unknown distance in the internal C function");
+    }
 
-     dc = (*diag) ? 0 : 1;
-     ij = 0;
-     for (j=0; j <= *nr; j++)
-	  for (i=j+dc; i < *nr; i++) {
-	       d[ij++] = distfun(x, *nr, *nc, i, j);
-	  }
+    dc = (*diag) ? 0 : 1;
+    ij = 0;
+    for (j=0; j <= *nr; j++)
+	for (i=j+dc; i < *nr; i++) {
+	    d[ij++] = distfun(x, *nr, *nc, i, j);
+	}
 }
 
 

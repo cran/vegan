@@ -3,7 +3,6 @@
               trace = 1, commname, zerodist = "fail", ...) 
 {
     zerodist <- match.arg(zerodist, c("fail", "add"))
-    ZERO <- 1e-4
     formals(vegdist) <- c(formals(vegdist), alist(... = ))
     formals(stepacross) <- c(formals(stepacross), alist(... = ))
     if (missing(commname)) 
@@ -26,8 +25,9 @@
         if(zerodist == "fail")
             stop("Zero dissimilarities are not allowed")
         else if(zerodist == "add") {
-            dis[dis <= 0] <- ZERO
-            warning("Zero dissimilarities changed into ", ZERO)
+            zero <- min(dis[dis>0])/2
+            dis[dis <= 0] <- zero
+            warning("Zero dissimilarities changed into ", zero)
         }
     }
     maxdis <- max(dis)

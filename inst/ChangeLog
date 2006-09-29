@@ -1,5 +1,26 @@
 VEGAN STABLE VERSIONS 
 
+Version 1.8-3 (Sept 29, 2006)
+
+	* Based on devel version 1.9-2.
+
+	* varespec.rda, varechem.rda: saved in binary form, because old
+	ascii form gave warning in R-2.4.0-rc.
+
+	* vegdist: added Chao index (of Jaccard type) that should take
+        into account missing pairs of species.  Checks that Binomial index
+        is non-negative.  Identical sites could have dissimilarity of
+        magnitude 1e-17 after some standardizations, but now values <1e-15
+        are zapped to zero.
+
+	* estimateR: uses now standard unbiased formulation of Chao. 
+
+	* renyi: should work now (really!).
+
+	* metaMDS: with zero = "add", zeros now replaced with
+	min(dis[dis>0])/2 (used to be 1E-4) (metaMDSdist).  Sets number of
+	tries also when this was not set previously (metaMDSiter)
+
 Version 1.8-2 (June 13, 2006)
 
 	* version 1.8-1 failed test in Windows because of a wrong encoding
