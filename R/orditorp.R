@@ -1,4 +1,4 @@
-"orditorp" <-
+`orditorp` <-
     function (x, display, labels, choices = c(1, 2), priority, cex = 0.7, 
               pcex, col = par("col"), pcol, pch = par("pch"), air = 1, 
               ...) 
@@ -29,9 +29,20 @@
         tt[i] <- all(xx[i, 1] > xx[j, 2] | xx[j, 1] > xx[i, 2] | 
                      xx[i, 3] > xx[j, 4] | xx[j, 3] > xx[i, 4])
     }
-    if (sum(!tt)) 
+    if (sum(!tt)) {
+        if (length(pch) > 1) 
+            pch <- (pch[ord])[!tt]
+        if (length(pcex) > 1) 
+            pcex <- (pcex[ord])[!tt]
+        if (length(pcol) > 1) 
+            pcol <- (pcol[ord])[!tt]
         points(x[!tt, , drop = FALSE], pch = pch, cex = pcex, 
                col = pcol, ...)
+    }
+    if (length(cex) > 1) 
+        cex <- (cex[ord])[tt]
+    if (length(col) > 1) 
+        col <- (col[ord])[tt]
     text(x[tt, , drop = FALSE], labels[tt], cex = cex, col = col, 
          ...)
     names(tt) <- labels

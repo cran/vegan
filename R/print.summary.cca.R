@@ -1,6 +1,11 @@
-"print.summary.cca" <-
-    function (x, digits = x$digits, ...) 
+`print.summary.cca` <-
+    function (x, digits = x$digits, head=NA, tail=head, ...) 
 {
+    hcat <- function(x, head=head, tail=tail, ...) {
+        if (!is.na(head) && !is.na(tail) && head+tail+4 < nrow(x))
+            x <- rbind(head(x, n=head), "...." = NA, tail(x, n=tail))
+        print(x, na.print = "", ...)
+    }
     cat("\nCall:\n")
     cat(deparse(x$call), "\n")
     statnam <- if (x$method == "rda") 
@@ -8,9 +13,8 @@
     else "averages"
     cat("\nPartitioning of ", x$inertia, ":\n", sep = "")
     out <- c(Total = x$tot.chi, Conditioned = x$partial.chi, 
-                 Constrained = x$constr.chi, Unconstrained = x$unconst.chi)
+             Constrained = x$constr.chi, Unconstrained = x$unconst.chi)
     out <- cbind(Inertia = out, Proportion = out/out[1])
-
     print(out, digits = digits, ...)
     cat("\nEigenvalues, and their contribution to the", x$inertia, 
         "\n")
@@ -30,7 +34,7 @@
         ev.ent <- "Sites"
         other.ent <- "Species"
     }
-    else if (abs(x$scaling) == 3){
+    else if (abs(x$scaling) == 3) {
         ev.ent <- "Both sites and species"
         other.ent <- NULL
     }
@@ -44,23 +48,23 @@
         cat("* Both are 'unscaled' or as they are in the result\n")
     }
     if (x$scaling < 0) {
-        if (x$method == "cca")
+        if (x$method == "cca") 
             cat("* Hill scaling performed on both scores\n")
-        if (x$method == "rda")
+        if (x$method == "rda") 
             cat("* Species scores divided by species standard deviations\n")
         cat("  so that they no longer are biplot scores\n")
     }
     if (!is.null(x$species)) {
         cat("\n\nSpecies scores\n\n")
-        print(x$species, digits = digits, ...)
+        hcat(x$species, head=head, tail=tail, digits = digits, ...)
     }
     if (!is.null(x$sites)) {
         cat("\n\nSite scores (weighted", statnam, "of species scores)\n\n")
-        print(x$sites, digits = digits, ...)
+        hcat(x$sites, head=head, tail=tail, digits = digits, ...)
     }
     if (!is.null(x$constraints)) {
         cat("\n\nSite constraints (linear combinations of constraining variables)\n\n")
-        print(x$constraints, digits = digits, ...)
+        hcat(x$constraints, head=head, tail=tail, digits = digits, ...)
     }
     if (!is.null(x$biplot)) {
         cat("\n\nBiplot scores for constraining variables\n\n")

@@ -23,7 +23,8 @@
     arrow.mul, head.arrow = 0.05, select, ...)
 \method{scores}{cca}(x, choices=c(1,2), display=c("sp","wa","cn"),scaling=2, ...)
 \method{summary}{cca}(object, scaling = 2, axes = 6, display = c("sp", "wa", 
-    "lc", "bp", "cn"), digits = max(3, getOption("digits") - 3), ...)  
+    "lc", "bp", "cn"), digits = max(3, getOption("digits") - 3), ...)
+\method{print}{summary.cca}(x, digits = x$digits, head = NA, tail = head, ...)
 }
 
 \arguments{
@@ -63,6 +64,8 @@
     of displayed items.}
   \item{axes}{Number of axes in summaries.}
   \item{digits}{Number of digits in output.}
+  \item{head, tail}{Number of rows printed from the head and tail of
+    species and site scores.  Default \code{NA} prints all.}
   \item{...}{Other parameters for plotting functions.}
 }
 

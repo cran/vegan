@@ -6,11 +6,11 @@ citEntry(entry="Manual",
 	                    as.person("R. Kindt"),
 			    as.person("P. Legendre"),
                             as.person("R. B. O'Hara")),
-	year = 2006,
+	year = 2007,
 	note = paste("R package version", packageDescription("vegan")$Version),
 	url = "http://cran.r-project.org/",
 	textVersion =
-	paste("Oksanen, J., Kindt, R., Legendre, P. & O'Hara, R.B. (2006). ", 
+	paste("Oksanen, J., Kindt, R., Legendre, P. & O'Hara, R.B. (2007). ", 
 	"vegan: Community Ecology Package version ",
 	packageDescription("vegan")$Version, 
  	". http://cran.r-project.org/", sep="")

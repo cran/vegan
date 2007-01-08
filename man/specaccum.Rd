@@ -12,7 +12,8 @@
   individuals. 
 }
 \usage{
-specaccum(comm, method = "exact", permutations = 100, ...)
+specaccum(comm, method = "exact", permutations = 100,
+          conditioned =TRUE, gamma = "Jack.1",  ...)
 \method{plot}{specaccum}(x, add = FALSE, ci = 2, ci.type = c("bar", "line", "polygon"), 
     col = par("fg"), ci.col = col, ci.lty = 1, xlab = "Sites", 
     ylab = x$method, ylim, ...)
@@ -31,6 +32,10 @@ specaccum(comm, method = "exact", permutations = 100, ...)
     accumulating individuals instead of sites.  }
   \item{permutations}{Number of permutations with \code{method =
       "random"}.}
+  \item{conditioned}{ Estimation of standard deviation is conditional on
+    the empirical dataset for the exact SAC}
+  \item{gamma}{Method for estimating the total extrapolated number of species in the
+    survey area by function \code{\link{specpool}}} 
   \item{x}{A \code{specaccum} result object}
   \item{add}{Add to an existing graph.}
   \item{ci}{Multiplier used to get confidence intervals from standard
@@ -55,7 +60,16 @@ specaccum(comm, method = "exact", permutations = 100, ...)
   standard deviation from random permutations of the data, or
   subsampling without replacement (Gotelli & Colwell 2001).
   The \code{"exact"} method finds the
-  expected SAC using the method of Kindt (2003), and its standard deviation.
+  expected SAC using the method that was independently developed by
+  Ugland et al. (2003), Colwell et al. (2004) and Kindt et al. (2006). 
+  The unconditional standard deviation for the exact SAC represents a
+  moment-based estimation that is not conditioned on the empirical data
+  set (sd for all samples > 0), unlike the conditional standard deviation
+  that was developed by Jari Oksanen (not published, sd=0 for all
+  samples). The unconditional standard deviation is based on an estimation
+  of the total extrapolated number of species in the survey area
+  (a.k.a. gamma diversity), as estimated by
+  function \code{\link{specpool}}.
   Method \code{"coleman"} finds the expected SAC and its standard
   deviation following Coleman et al. (1982).  All these methods are
   based on sampling sites without replacement. In contrast, the
@@ -90,13 +104,27 @@ specaccum(comm, method = "exact", permutations = 100, ...)
   Coleman, B.D, Mares, M.A., Willis, M.R. & Hsieh,
   Y. (1982). Randomness, area and species richness. \emph{Ecology} 63:
   1121--1133. 
-  
+
+  Colwell, R.K., Mao, C.X. & Chang, J. (2004). Interpolating,
+  extrapolating, and comparing incidence-based species accumulation
+  curves. \emph{Ecology} 85: 2717--2727.  
+
   Gotellli, N.J. & Colwell, R.K. (2001). Quantifying biodiversity:
   procedures and pitfalls in measurement and comparison of species
   richness. \emph{Ecol. Lett.} 4, 379--391.
 
   Kindt, R. (2003). Exact species richness for sample-based accumulation
   curves. \emph{Manuscript.}
+  
+  Kindt R., Van Damme, P. & Simons, A.J. (2006) Patterns of species
+  richness at varying scales in western Kenya: planning for
+  agroecosystem diversification. \emph{Biodiversity and Conservation}, online
+  first: DOI 10.1007/s10531-005-0311-9 
+
+  Ugland, K.I., Gray, J.S. & Ellingsen, K.E. (2003). The
+  species-accumulation curve and estimation of species richness. \emph{Journal
+  of Animal Ecology} 72: 888--897.
+  
 }
 \author{Roeland Kindt \email{r.kindt@cgiar.org} and Jari Oksanen.}
 \note{
@@ -107,7 +135,8 @@ specaccum(comm, method = "exact", permutations = 100, ...)
   without replacement.  Further, its standard deviation does not take
   into account species correlations, and is generally too low. }
 
-\seealso{\code{\link{rarefy}}. Underlying graphical functions are
+\seealso{\code{\link{rarefy}} and \code{\link{renyiaccum}}.
+  Underlying graphical functions are
   \code{\link{boxplot}}, \code{\link{matlines}}, \code{\link{segments}}
     and \code{\link{polygon}}. }
 \examples{

@@ -30,7 +30,7 @@
   \item{upto}{Maximum number of parameters in studied subsets.}
   \item{formula, data}{Model \code{\link{formula}} and data.}
   \item{trace}{Trace the advance of calculations }
-  \item{...}{Other parameters passed to function.}
+  \item{...}{Other arguments passed to \code{\link{cor}}.}
 }
 \details{
   The function calculates a community dissimilarity matrix using
