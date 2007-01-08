@@ -1,4 +1,5 @@
 \name{vegan-internal}
+\alias{ordiGetData}
 \alias{ordiParseFormula}
 \alias{permuted.index}
 \alias{centroids.cca}
@@ -11,6 +12,7 @@
   Internal vegan functions.
 }
 \usage{
+ordiGetData(call, env)
 ordiParseFormula(formula, data, xlev = NULL)
 ordiTerminfo(d, data)
 centroids.cca(x, mf, wt)

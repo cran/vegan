@@ -359,17 +359,17 @@ cca(formula = varespec[i, ] ~ Al + K, data = varechem)
 
               Inertia Rank
 Total          2.0832     
-Constrained    0.1318    2
-Unconstrained  1.9514   21
+Constrained    0.1742    2
+Unconstrained  1.9090   21
 Inertia is mean squared contingency coefficient 
 
 Eigenvalues for constrained axes:
    CCA1    CCA2 
-0.08360 0.04817 
+0.12086 0.05339 
 
 Eigenvalues for unconstrained axes:
     CA1     CA2     CA3     CA4     CA5     CA6     CA7     CA8 
-0.49754 0.34621 0.22347 0.17739 0.17209 0.11982 0.09662 0.08465 
+0.51940 0.31250 0.21739 0.18294 0.15801 0.11650 0.10338 0.07194 
 (Showed only 8 of all 21 unconstrained eigenvalues)
 \end{Soutput}
 \end{Schunk}
@@ -427,11 +427,11 @@ Eigenvalues for unconstrained axes:
 > max(residuals(proc))
 \end{Sinput}
 \begin{Soutput}
-[1] 2.313684e-14
+[1] 1.722312e-14
 \end{Soutput}
 \end{Schunk}
 In \texttt{cca} the difference would be somewhat larger than now
-observed 2.3137e-14 because site
+observed 1.7223e-14 because site
 weights used for environmental variables are shuffled with the species
 data.
 
@@ -664,8 +664,8 @@ Terms added sequentially (first to last)
 
 Model: cca(formula = varespec ~ pH + Ca, data = varechem)
          Df  Chisq      F N.Perm Pr(>F)  
-pH        1 0.1458 1.7453    200   0.07 .
-Ca        1 0.1827 2.1864    200   0.03 *
+pH        1 0.1458 1.7453    200   0.06 .
+Ca        1 0.1827 2.1864    200   0.02 *
 Residual 21 1.7547                       
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 

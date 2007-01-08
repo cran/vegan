@@ -9,24 +9,25 @@
                  "kulczynski", "gower", "morisita", "horn", "mountford", 
                  "jaccard", "raup", "binomial", "chao")
     method <- pmatch(method, METHODS)
+    inm <- METHODS[method]
     if (is.na(method)) 
         stop("invalid distance method")
     if (method == -1) 
         stop("ambiguous distance method")
     if (method > 2 && any(rowSums(x, na.rm = TRUE) == 0)) 
-        warning("you have empty rows: their dissimilarities may be meaningless\n")
+        warning("you have empty rows: their dissimilarities may be meaningless in method ", inm,"\n")
     if (method > 2 && any(x < 0, na.rm = TRUE)) 
-        warning("results may be meaningless because input data have negative entries\n")
+        warning("results may be meaningless because data have negative entries in method ", inm,"\n")
     if (method == 11 && any(colSums(x) == 0)) 
-        warning("data includes empty species which influence the results")
+        warning("data have empty species which influence the results im method ", inm, "\n")
     if (method == 6) 
         x <- decostand(x, "range", 2, na.rm = TRUE, ...)
     if (binary) 
         x <- decostand(x, "pa")
     N <- nrow(x <- as.matrix(x))
-    if (method %in% c(7, 13) && !identical(all.equal(as.integer(x), as.vector(x)), 
-        TRUE)) 
-        warning("index may give meaningless results with non-integer values\n")
+    if (method %in% c(7, 13) && !identical(all.equal(as.integer(x), 
+                                                     as.vector(x)), TRUE)) 
+        warning("results may be meaningless with non-integer data in method ", inm, "\n")
     d <- .C("veg_distance", x = as.double(x), nr = N, nc = ncol(x), 
             d = double(N * (N - 1)/2), diag = as.integer(FALSE), 
             method = as.integer(method), NAOK = na.rm, PACKAGE = "vegan")$d

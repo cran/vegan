@@ -19,9 +19,9 @@
   These are all very popular ordination techniques in community ecology.
 }
 \usage{
-\method{cca}{formula}(formula, data)
+\method{cca}{formula}(formula, data, ...)
 \method{cca}{default}(X, Y, Z, ...)
-\method{rda}{formula}(formula, data, scale=FALSE)
+\method{rda}{formula}(formula, data, scale=FALSE, ...)
 \method{rda}{default}(X, Y, Z, scale=FALSE, ...)
 }
 
@@ -38,7 +38,8 @@
   \item{Z}{ Conditioning matrix, the effect of which is removed
     (`partialled out') before next step. Can be missing.}
   \item{scale}{Scale species to unit variance (like correlations do).}
-  \item{...}{Other parameters for \code{print} or \code{plot} functions.}
+  \item{...}{Other parameters for \code{print} or \code{plot} functions
+    (ignored in other functions).}
 }
 \details{
   Since their introduction (ter Braak 1986), constrained or canonical

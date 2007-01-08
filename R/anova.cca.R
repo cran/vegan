@@ -1,20 +1,23 @@
-"anova.cca" <-
+`anova.cca` <-
     function (object, alpha = 0.05, beta = 0.01, step = 100, perm.max = 10000, 
               by = NULL, ...) 
 {
-    ## 'by' forks to the analysis by axis or by terms
+    if (is.null(object$CA))
+        stop("Impossible analysis: no residual unconstrained component")
+    if (is.null(object$CCA))
+        stop("Nothing to analyse: no constrained component")
     if (!is.null(by)) {
         by <- match.arg(by, c("axis", "terms"))
-        if (by == "axis")
+        if (by == "axis") 
             sol <- anova.ccabyaxis(object, alpha = alpha, beta = beta, 
-                               step = step, perm.max = perm.max, by = NULL, ...)
+                                   step = step, perm.max = perm.max, by = NULL, 
+                                   ...)
         else {
-            ## No. permuations is 'step' unless '...' contains 'permutations'
-            mf <- match.call(expand.dots=FALSE)
-            if(!is.null(mf$...) && any(k <- pmatch(names(mf$...), "permutations",
-                                                   nomatch=FALSE)))
-                step <- unlist(mf$...[k==1])
-            sol <- anova.ccabyterm(object, step=step, ...)
+            mf <- match.call(expand.dots = FALSE)
+            if (!is.null(mf$...) && any(k <- pmatch(names(mf$...), 
+                                                    "permutations", nomatch = FALSE))) 
+                step <- unlist(mf$...[k == 1])
+            sol <- anova.ccabyterm(object, step = step, ...)
         }
         return(sol)
     }
@@ -49,4 +52,3 @@
     structure(table, heading = c(head, mod), Random.seed = seed, 
               class = c("anova.cca", "anova", "data.frame"))
 }
-

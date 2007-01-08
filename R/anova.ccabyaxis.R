@@ -1,7 +1,5 @@
-### anova by constrained axis: put previous axes as conditions and assess
-### the significance of first constrained eigenvalue.
 "anova.ccabyaxis" <-
-    function (object, ...) 
+function (object, ...) 
 {
     rnk <- object$CCA$rank
     if (!max(rnk, 0)) 
@@ -9,8 +7,7 @@
     if (is.null(object$terms)) 
         stop("Analysis is only possible for models fitted using formula")
     lc <- object$CCA$u
-    newdata <- model.frame(object$terminfo, 
-                           data = eval(as.list(object$call)$data))
+    newdata <- model.frame(object$terminfo, data = eval(as.list(object$call)$data))
     newdata <- cbind(lc, newdata)
     axnam <- colnames(lc)
     df <- c(rep(1, rnk), object$CA$rank)
@@ -25,23 +22,23 @@
     attr(out, "names") <- attr(sol, "names")
     attr(out, "heading") <- attr(sol, "heading")
     attr(out, "Random.seed") <- seed
-    ## RNG handling: save the seed after longest iteration in 'bigseed'
-    ## and reset to that seed before exit
     bigseed <- get(".Random.seed", envir = .GlobalEnv, inherits = FALSE)
     bigperm <- out$N.Perm[1]
+    environment(object$terms) <- environment()
     if (rnk > 1) {
         for (i in 2:rnk) {
             zz <- paste(paste("Condition(", axnam[1:(i - 1)], 
-                              ")"), collapse = "+")
+                ")"), collapse = "+")
             fla <- update(formula(object), paste(". ~ . +", zz))
             sol <- update(object, fla, data = newdata)
             assign(".Random.seed", seed, envir = .GlobalEnv)
-            out[i, ] <- as.matrix(anova(sol, first = TRUE, ...))[1,]
+            out[i, ] <- as.matrix(anova(sol, first = TRUE, ...))[1, 
+                ]
             if (out[i, "N.Perm"] > bigperm) {
                 bigperm <- out[i, "N.Perm"]
                 bigseed <- get(".Random.seed", envir = .GlobalEnv, 
-                               inherits=FALSE)
-            } 
+                  inherits = FALSE)
+            }
         }
     }
     assign(".Random.seed", bigseed, envir = .GlobalEnv)

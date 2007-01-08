@@ -238,7 +238,7 @@
 \examples{
 data(varespec)
 vare.dist <- vegdist(varespec)
-# \end{Orlóci's}{Orloci's} Chord distance: range 0 .. sqrt(2)
+# \enc{Orlóci's}{Orloci's} Chord distance: range 0 .. sqrt(2)
 vare.dist <- vegdist(decostand(varespec, "norm"), "euclidean")
 }
 \keyword{ multivariate }

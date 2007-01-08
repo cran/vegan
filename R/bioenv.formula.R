@@ -1,4 +1,4 @@
-"bioenv.formula" <-
+`bioenv.formula` <-
     function (formula, data, ...) 
 {
     if (missing(data)) 
@@ -7,7 +7,7 @@
     comm <- formula[[2]]
     comm <- eval(comm, data, parent.frame())
     formula[[2]] <- NULL
-    mf <- model.frame(formula, data, na.action = na.fail)
+    mf <- model.frame(formula, data, na.action = NULL)
     if (any(sapply(mf, function(x) is.factor(x) || !is.numeric(x)))) 
         stop("bioenv applies only to numeric variables")
     env <- attr(mf, "terms")

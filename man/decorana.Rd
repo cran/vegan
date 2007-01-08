@@ -26,6 +26,7 @@ decorana(veg, iweigh=0, iresc=4, ira=0, mk=26, short=0, before=NULL,
      origin = TRUE, select, ...)  
 \method{summary}{decorana}(object, digits=3, origin=TRUE,
      display=c("both", "species","sites","none"), ...)
+\method{print}{summary.decorana}(x, head = NA, tail = head, ...)
 downweight(veg, fraction = 5)
 \method{scores}{decorana}(x, display=c("sites","species"), choices =1:4, origin=TRUE, ...)
 }
@@ -54,6 +55,8 @@ downweight(veg, fraction = 5)
     of displayed items.}
   \item{xlim, ylim}{the x and y limits (min,max) of the plot.}
   \item{digits}{Number of digits in summary output.}
+  \item{head, tail}{Number of rows printed from the head and tail of
+    species and site scores. Default \code{NA} prints all.}
   \item{fraction}{Abundance fraction where downweighting begins.}
   \item{...}{Other parameters for \code{plot} function.}
   }

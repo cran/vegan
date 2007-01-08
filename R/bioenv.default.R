@@ -1,4 +1,4 @@
-"bioenv.default" <-
+`bioenv.default` <-
     function (comm, env, method = "spearman", index = "bray", upto = ncol(env), 
               trace = FALSE, ...) 
 {
@@ -16,18 +16,20 @@
     for (i in 1:upto) {
         if (trace) {
             nvar <- choose(n, i)
-            cat("No. of variables ", i, ", No. of sets ", nvar, "...", sep="")
+            cat("No. of variables ", i, ", No. of sets ", nvar, 
+                "...", sep = "")
         }
         sets <- ripley.subs(i, 1:n)
         if (!is.matrix(sets)) 
             sets <- as.matrix(t(sets))
         est <- numeric(nrow(sets))
         for (j in 1:nrow(sets)) est[j] <- cor(comdis, dist(x[, 
-                                                             sets[j, ]]), method = method)
+                                                             sets[j, ]]), method = method, ...)
         best[[i]] <- list(best = sets[which.max(est), ], est = max(est))
         if (trace) {
             ndone <- ndone + nvar
-            cat(" done (", round(100*ndone/ntake, 1),"%)\n", sep="")
+            cat(" done (", round(100 * ndone/ntake, 1), "%)\n", 
+                sep = "")
         }
     }
     out <- list(names = colnames(env), method = method, index = index, 

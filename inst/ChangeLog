@@ -1,5 +1,70 @@
 VEGAN STABLE VERSIONS 
 
+Version 1.8-4 (January 8, 2007)
+
+	* Based on devel version 1.9-10.
+
+	* cascadeKM: a new function to wrap kmeans and optimality criteria
+	for classification (Sebastien Durand, Pierre Legendre & Marie
+	Helene Ouellette).
+
+	* renyiaccum: a new function for Renyi (and Hill) accumulation
+        curves (Roeland Kindt).
+
+	* bioenv: bioenv.formula uses now "na.action = NULL" in
+        'model.frame', and bioenv.default passes arguments to 'cor' which
+        means that you can set NA treatment in 'cor' using argument "use".
+
+	* cca, rda: added "..." to formula versions to satisfy tests in
+        R-DEVEL. 
+
+	* cca, rda, capscale: used to fail if called within other
+	functions.  Now data always evaluated in the environment of
+	formula using new internal function ordiGetData.
+	
+	* anova.cca: checks that the model has both residual and
+        constrained components or stops with understandable error message
+        (used to stop with incomprehensible error message). 
+
+	* print.summary.cca, print.summary.decorana: have now arguments
+        'head' and 'tail' to print only a part of species and site
+        scores. Suggested by Gavin Simpson.
+
+	* metaMDS: checks now that the input data ('comm') is not a 'dist'
+        object (like many users have had).
+
+	* ordisurf: Does not depend on package 'akima' any longer, but
+	directly finds fitted values in a regular grid using
+	'predict.gam'.  Added pnpoly.c to find which of these values are
+	within the convex hull defined by data.  Results also look neater
+	with sparse data now.  Added argument 'labcex' passed to 'contour'
+	for changing size of contour labels.  Setting 'labcex = 0' will
+	suppress drawing labels (by setting drawlabels = FALSE in
+	'contour()').
+
+	* orditorp: handles now vector arguments of 'col', 'pcol', 'cex',
+        and 'pch'.
+
+	* rad.zipfbrot: less likely to overflow to NA coefficients during
+        iteration. 
+
+	* renyi: added a plot function, and documented together with
+        renyiaccum() instead of diversity().
+
+	* scores.default: Knows now about ade4 objects.  Primarily looks
+	for scores scaled by eigenvalues both for sites and species.
+
+	* specaccum: Added new conditioned method of Colwell et
+        al. with estimated sd based on extrapolated richness (Roeland
+        Kindt). 
+
+	* vegdist.c: More informative warnings with 'method' name (useful
+	with rankindex).
+
+	* DESCRIPTION: listed 'require()d' packages in the "Suggests:"
+	field to satisfy more anal tests in R-DEVEL.  Mention diversity
+	analysis in the "Description:".
+	
 Version 1.8-3 (Sept 29, 2006)
 
 	* Based on devel version 1.9-2.

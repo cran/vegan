@@ -14,6 +14,10 @@
             X <- x$scores
         else if ("sites" %in% att)
             X <- x$sites
+        else if("li" %in% att)
+            X <- x$li
+        else if("l1" %in% att)
+            X <- x$l1
         else stop("Can't find scores")
     }
     else if (is.list(x) && display == "species") {
@@ -25,6 +29,10 @@
             X <- x$rotation
         else if ("loadings" %in% att) 
             X <- x$loadings
+        else if ("co" %in% att)
+            X <- x$co
+        else if ("c1" %in% att)
+            X <- x$c1
         else stop("Can't find scores")
     }
     else if (is.matrix(x)) 

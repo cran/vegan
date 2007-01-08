@@ -2,19 +2,17 @@
 \name{diversity}
 \alias{diversity}
 \alias{rarefy}
-\alias{renyi}
 \alias{fisher.alpha}
 \alias{specnumber}
 
 \title{ Ecological Diversity Indices and Rarefaction Species Richness }
 
-\description{ Shannon, Simpson, \enc{Rényi}{Renyi}, Hill and Fisher diversity indices
+\description{ Shannon, Simpson, and Fisher diversity indices
 and rarefied species richness for community ecologists.  }
 
 \usage{
 diversity(x, index = "shannon", MARGIN = 1, base = exp(1))
 rarefy(x, sample, se = FALSE, MARGIN = 1)
-renyi(x, scales=c(0,0.25,0.5,1,2,4,8,16,32,64,Inf), hill = FALSE)
 fisher.alpha(x, MARGIN = 1, se = FALSE, ...)
 specnumber(x, MARGIN = 1)
 }
@@ -27,8 +25,6 @@ specnumber(x, MARGIN = 1)
   \item{base}{ The logarithm \code{base} used in \code{shannon}.}
   \item{sample}{Subsample size for rarefying community.}
   \item{se}{Estimate standard errors.}
-  \item{scales}{Scales of \enc{Rényi}{Renyi} diversity.}
-  \item{hill}{Calculate Hill numbers.}
   \item{...}{Parameters passed to \code{\link{nlm}}}
 }
 \details{
@@ -42,20 +38,6 @@ specnumber(x, MARGIN = 1)
   Both variants of Simpson's index are based on \eqn{D = \sum p_i^2}{D =
     sum p_i^2}. Choice \code{simpson} returns \eqn{1-D} and
   \code{invsimpson} returns \eqn{1/D}.
-
-  Shannon and Simpson indices are both special cases of \enc{Rényi}{Renyi}
-  diversity
-  \deqn{H_a = \frac{1}{1-a} \log \sum p_i^a}{H.a = 1/(1-a) log
-    sum(p^a)}
-  where \eqn{a} is a scale parameter, and Hill (1975) suggested to
-  use so-called ``Hill numbers'' defined as \eqn{N_a = \exp(H_a)}{N.a =
-    exp(H.a)}.  Some Hill numbers are the number of species with
-  \eqn{a = 0}, \eqn{\exp(H')}{exp(H')} or the exponent of Shannon
-  diversity with \eqn{a = 1}, inverse Simpson with \eqn{a = 2} and
-  \eqn{1/ \max(p_i)}{1/max(p)} with \eqn{a = \infty}{a = Inf}. According
-  to the theory of diversity ordering, one community can be regarded as
-  more diverse than another only if its \enc{Rényi}{Renyi} diversities are all higher 
-  (\enc{Tóthmérész}{Tothmeresz}  1995). 
  
   Function \code{rarefy} gives the expected species richness in random
   subsamples of size \code{sample} from the community. The size of
@@ -96,8 +78,7 @@ specnumber(x, MARGIN = 1)
   Vector of diversity indices or rarefied species richness values. With
   option \code{se = TRUE}, function \code{rarefy} returns a 2-row matrix
   with rarefied richness (\code{S}) and its standard error
-  (\code{se}). Function \code{renyi} returns a data frame of selected
-  indices. 
+  (\code{se}).
   With option \code{se = TRUE}, function \code{fisher.alpha} returns a
   data frame with items for \eqn{\alpha} (\code{alpha}), its approximate
   standard errors (\code{se}), residual degrees of freedom
@@ -116,18 +97,15 @@ specnumber(x, MARGIN = 1)
   determination of sufficient sample size. \emph{Ecology} 56,
   1459--1461.  
   
-  Hill, M.O. (1973). Diversity and evenness: a unifying notation and its
-  consequences. \emph{Ecology} 54, 427--473.
-  
   Hurlbert, S.H. (1971). The nonconcept of species diversity: a critique
   and alternative parameters. \emph{Ecological Monographs} 54, 187--211.
  
-  \enc{Tóthmérész}{Tothmeresz}, B. (1995). Comparison of different methods for diversity
-  ordering. \emph{Journal of Vegetation Science} 6, 283--290.
 }
 
-\author{ Jari Oksanen, Roeland Kindt \email{r.kindt@cgiar.org}
-  (\code{renyi}) and  Bob O'Hara \email{bob.ohara@helsinki.fi}
+\seealso{Function \code{renyi} for generalized \enc{Rényi}{Renyi}
+  diversity and Hill numbers.}
+
+\author{ Jari Oksanen  and  Bob O'Hara \email{bob.ohara@helsinki.fi}
     (\code{fisher.alpha}). }
 
 \examples{
@@ -141,6 +119,7 @@ pairs(cbind(H, simp, invsimp, r.2, alpha), pch="+", col="blue")
 ## Species richness (S) and Pielou's evenness (J):
 S <- specnumber(BCI) ## rowSums(BCI > 0) does the same...
 J <- H/log(S)
+
 }
 \keyword{ univar }
 

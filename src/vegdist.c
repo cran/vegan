@@ -41,6 +41,7 @@
 #define RAUP 11
 #define MILLAR 12
 #define CHAO 13
+#define MATCHING 50
 #define NOSHARED 99
 
 /* Distance functions */
@@ -507,6 +508,7 @@ double veg_noshared(double *x, int nr, int nc, int i1, int i2)
 {
      double dist;
      int j, count;
+     Rprintf("Index no-shared\n");
      dist = 1;
      count = 0;
      for (j = 0; j<nc; j++) {
@@ -521,6 +523,30 @@ double veg_noshared(double *x, int nr, int nc, int i1, int i2)
 	  i2 += nr;
      }
      if (count == 0) return NA_REAL;
+     return(dist);
+}
+
+/* Simple matching coefficient.  This is not to be called from
+ * vegdist, but must be called separately.
+ */
+
+double veg_matching(double *x, int nr, int nc, int i1, int i2)
+{
+     double dist;
+     int j, count, matches;
+     matches = 0;
+     count = 0;
+     for (j = 0; j<nc; j++) {
+	  if (R_FINITE(x[i1]) && R_FINITE(x[i2])) {
+	       count++;
+	       if (x[i1] == x[i2])
+		    matches++;
+	  }
+	  i1 += nr;
+	  i2 += nr; 
+     }
+     if (count == 0) return NA_REAL;
+     dist = 1.0 - (double) matches / (double) count;
      return(dist);
 }
 
@@ -569,6 +595,9 @@ void veg_distance(double *x, int *nr, int *nc, double *d, int *diag, int *method
     case CHAO:
 	distfun = veg_chao;
 	break;
+    case MATCHING:
+	 distfun = veg_matching;
+	 break;
     case NOSHARED:
 	distfun = veg_noshared;
 	break;	 
