@@ -1,5 +1,18 @@
 VEGAN STABLE VERSIONS 
 
+Version 1.8-5 (January 11, 2007)
+
+	* Based on devel version 1.9-12.
+	
+	* no.shared (manifest in metaMDS): prints thousands of lines of
+	debugging info that I forgot to deactive in release. Not fatal,
+	but extremely annoying.
+
+	* capscale: inertia name as "unknown" if the dissimilarity object
+	does not have a "method" name. Suggested by Roeland Kindt.
+
+	* DESCRIPTION: icense is now explicitly GPL v2 (but not later).
+
 Version 1.8-4 (January 8, 2007)
 
 	* Based on devel version 1.9-10.

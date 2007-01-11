@@ -508,7 +508,6 @@ double veg_noshared(double *x, int nr, int nc, int i1, int i2)
 {
      double dist;
      int j, count;
-     Rprintf("Index no-shared\n");
      dist = 1;
      count = 0;
      for (j = 0; j<nc; j++) {
