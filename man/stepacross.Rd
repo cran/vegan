@@ -49,7 +49,7 @@ stepacross(dis, path = "shortest", toolong = 1, trace = TRUE, ...)
   dissimilarities, which are calculated with \code{path =
     "extended"}. In this method, dissimilarities that are
   \code{toolong} or longer are first made \code{NA}, and then the function
-  tries replace these \code{NA} dissimilarities with a path through
+  tries to replace these \code{NA} dissimilarities with a path through
   single stepping stone points. If not all \code{NA} could be 
   replaced with one pass, the function will make new passes with updated
   dissimilarities as long as
@@ -131,7 +131,9 @@ stepacross(dis, path = "shortest", toolong = 1, trace = TRUE, ...)
 \seealso{
   Function \code{\link{distconnected}} can find connected groups in
   disconnected data, and function \code{\link{no.shared}} can be used to
-  set dissimilarities as \code{NA}. 
+  set dissimilarities as \code{NA}.  See \code{\link{swan}} for an
+  alternative approach. Function \code{stepacross} is an essential
+  component in \code{\link{isomap}} and \code{\link{cophenetic.spantree}}.
  }
 \examples{
 # There are no data sets with high beta diversity in vegan, but this

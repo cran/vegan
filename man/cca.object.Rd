@@ -113,7 +113,12 @@
   \code{\link{scores.cca}}, 
   \code{\link{summary.cca}},  \code{\link{vif.cca}},
   \code{\link{weights.cca}}, \code{\link{spenvcor}} or \code{rda}
-  variants of these functions. 
+  variants of these functions.
+  You can use \code{\link{as.mlm}} to cast a \code{cca.object} into
+  result of multiple response
+  linear model (\code{\link{lm}}) in order to more easily find some
+  statistics (which in principle could be directly found from the
+  \code{cca.object} as well). 
 }
 \references{
   Legendre, P. and Legendre, L. (1998) \emph{Numerical Ecology}. 2nd English

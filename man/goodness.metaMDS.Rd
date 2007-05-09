@@ -34,8 +34,8 @@ stressplot(object, dis, pch, p.col = "blue", l.col = "red", lwd = 2,
   Function \code{stressplot} is a wrapper to \code{\link[MASS]{Shepard}}
   function in \pkg{MASS} package.  It plots ordination distances
   against original dissimilarities, and draws a step line of the
-  nonlinear fit.  In addition, it adds to the graph two correlation like
-  statistics on the goodness of fit.  The correlation based on stress \eqn{S} is
+  nonlinear fit.  In addition, it adds to the graph two correlation-like
+  statistics on the goodness of fit.  The nonmetric fit is based on stress \eqn{S} and
   defined as \eqn{\sqrt{1-S^2}}{sqrt(1-S^2)}.  The \dQuote{linear fit}
   is the correlation between fitted values and ordination distances.
 

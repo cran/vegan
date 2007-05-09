@@ -122,7 +122,7 @@
   Raup--Crick dissimilarity (\code{method = "raup"}) is a probabilistic
   index based on presensec/absence data.  It is defined as \eqn{1 - prob(j)},
   or based on the probability of observing at least \eqn{j} 
-  species in shared in compared communities.  Legendre & Legendre (1978)
+  species in shared in compared communities.  Legendre & Legendre (1998)
   suggest
   using simulations to assess the probability, but the current function
   uses analytic result from hypergeometric distribution
@@ -169,7 +169,7 @@
   instance, the Bray
   index is known also as Steinhaus, Czekanowski and \enc{Sørensen}{Sorensen} index.
   The quantitive version of Jaccard should probably called
-  Ruzicka index (but spelled with characters that cannot be shown here).
+  \enc{Ružička}{Ruzicka} index.
   The abbreviation \code{"horn"} for the Horn--Morisita index is
   misleading, since there is a separate Horn index. The abbreviation
   will be changed if that index is implemented in \code{vegan}. 
@@ -230,15 +230,17 @@
   empty sites from community data.
 }
 
-\seealso{ \code{\link{decostand}}, \code{\link{dist}},
-  \code{\link{rankindex}}, \code{\link[MASS]{isoMDS}},
-  \code{\link{stepacross}}, \code{\link[cluster]{daisy}},
-  \code{\link[labdsv]{dsvdis}}.  }
+\seealso{
+ Function \code{\link{designdist}} can be used for defining your own
+ dissimilarity index. Alternative dissimilarity functions include
+ \code{\link{dist}} in base \R,
+  \code{\link[cluster]{daisy}} (package \pkg{cluster}), and
+  \code{\link[labdsv]{dsvdis}} (package \pkg{labdsv}).  }
 
 \examples{
 data(varespec)
 vare.dist <- vegdist(varespec)
-# \enc{Orlóci's}{Orloci's} Chord distance: range 0 .. sqrt(2)
+# Orlóci's Chord distance: range 0 .. sqrt(2)
 vare.dist <- vegdist(decostand(varespec, "norm"), "euclidean")
 }
 \keyword{ multivariate }

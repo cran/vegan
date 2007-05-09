@@ -4,6 +4,8 @@
 \alias{plot.renyi}
 \alias{renyiaccum}
 \alias{plot.renyiaccum}
+\alias{persp.renyiaccum}
+\alias{rgl.renyiaccum}
 
 \title{Renyi and Hill Diversities and Corresponding Accumulation Curves }
 \description{
@@ -17,7 +19,9 @@ renyi(x, scales = c(0, 0.25, 0.5, 1, 2, 4, 8, 16, 32, 64, Inf), hill = FALSE)
 renyiaccum(x, scales = c(0, 0.5, 1, 2, 4, Inf), permutations = 100, 
     raw = FALSE, ...)
 \method{plot}{renyiaccum} (x, what = c("mean", "Qnt 0.025", "Qnt 0.975"), type = "l", 
-    ...) 
+    ...)
+\method{persp}{renyiaccum} (x, theta = 220, col = heat.colors(100), zlim, ...)
+rgl.renyiaccum(x, rgl.height = 0.2, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -31,8 +35,15 @@ renyiaccum(x, scales = c(0, 0.5, 1, 2, 4, Inf), permutations = 100,
     permutations.}
   \item{what}{Items to be plotted.}
   \item{type}{Type of plot, where \code{type = "l"} means lines.}
+  \item{theta}{Angle defining the viewing direction (azimuthal) in
+    \code{\link{persp}}.}
+  \item{col}{Colours used for surface. Single colour will be passed on,
+    and vector colours will be
+    selected by the midpoint of a rectangle in \code{\link{persp}}. }
+  \item{zlim}{Limits of vertical axis.}
+  \item{rgl.height}{Scaling of vertical axis.}
   \item{\dots}{Other arguments which are passed to \code{renyi} and
-    \code{\link[lattice]{xyplot}} in graphical functions.}
+    to graphical functions.}
 
 }
 \details{
@@ -60,7 +71,10 @@ renyiaccum(x, scales = c(0, 0.5, 1, 2, 4, Inf), permutations = 100,
   for random permutations of accumulated sites.  Its \code{plot}
   function uses \pkg{lattice} function \code{\link[lattice]{xyplot}} to
   display the accumulation curves for each value of \code{scales} in a
-  separate panel.
+  separate panel.  In addition, it has a \code{persp} method to plot the
+  diversity surface against scale and number and sites. Dynamic graphics
+  with \code{rgl.renyiaccum} use \pkg{rgl} package, and produces similar
+  surface as \code{persp} with a mesh showing the empirical confidence levels.
 }
 \value{
   Function \code{renyi} returns a data frame of selected
@@ -73,9 +87,15 @@ renyiaccum(x, scales = c(0, 0.5, 1, 2, 4, Inf), permutations = 100,
   replaced with individual permutation results. 
 }
 \references{
-   Hill, M.O. (1973). Diversity and evenness: a unifying notation and its
+  \url{http://www.worldagroforestry.org/treesandmarkets/tree_diversity_analysis.asp}
+
+  Hill, M.O. (1973). Diversity and evenness: a unifying notation and its
    consequences. \emph{Ecology} 54, 427--473.
 
+   Kindt R, Van Damme P, Simons AJ. 2006. Tree diversity in western
+   Kenya: using profiles to characterise richness and 
+   evenness. \emph{Biodiversity and Conservation} 15: 1253-1270.
+   
    \enc{Tóthmérész}{Tothmeresz}, B. (1995). Comparison of different methods for diversity
    ordering. \emph{Journal of Vegetation Science} 6, 283--290.
 }
@@ -83,7 +103,8 @@ renyiaccum(x, scales = c(0, 0.5, 1, 2, 4, Inf), permutations = 100,
 
 \seealso{\code{\link{diversity}} for diversity indices, and
   \code{\link{specaccum}} for ordinaty species accumulation curves, and
-  \code{\link[lattice]{xyplot}} for controlling graphics. }
+  \code{\link[lattice]{xyplot}}, \code{\link{persp}} and
+  \code{\link[rgl]{rgl}} for controlling graphics. } 
 \examples{
 data(BCI)
 i <- sample(nrow(BCI), 12)
@@ -91,6 +112,7 @@ mod <- renyi(BCI[i,])
 plot(mod)
 mod <- renyiaccum(BCI[i,])
 plot(mod, as.table=TRUE, col = c(1, 2, 2))
+persp(mod)
 } 
 \keyword{univar }
 

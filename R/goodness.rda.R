@@ -1,11 +1,11 @@
-"goodness.rda" <-
+`goodness.rda` <-
     function (object, display = c("species", "sites"), choices, model = c("CCA", 
                                                                 "CA"), statistic = c("explained", "distance"), summarize = FALSE, 
               ...) 
 {
     model <- match.arg(model)
     display <- match.arg(display)
-    if (inherits(object, "capscale") && display == "species")
+    if (inherits(object, "capscale") && display == "species") 
         stop("display = \"species\" not available for 'capscale'")
     if (is.null(object$CCA)) 
         model <- "CA"
@@ -49,7 +49,9 @@
         vexp <- sweep(vexp, 1, tot, "/")
     }
     else {
-        vexp <- sweep(-(vexp^2), 1, tot^2, "+")
+        if (display == "sites" && (!is.null(object$CCA) || !is.null(object$pCCA)))
+            stop("statistic 'distance' not available for sites in constrained analysis")
+        vexp <- sweep(-(vexp), 1, tot, "+")
         vexp[vexp < 0] <- 0
         vexp <- sweep(sqrt(vexp), 1, cs, "/")
     }
@@ -57,3 +59,4 @@
         vexp <- vexp[, ncol(vexp)]
     vexp
 }
+

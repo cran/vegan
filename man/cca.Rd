@@ -188,9 +188,12 @@
   implementations of CCA (these are internally quite
   different). Function \code{\link{capscale}} is a non-Euclidean generalization of
   \code{rda}. The result object is described in
-  \code{\link{cca.object}}. Design decisions are explained in
+  \code{\link{cca.object}}.
+  You can use \code{\link{as.mlm}} to refit ordination result as a
+  multiple response linear model to find some descriptive statistics.
+  Design decisions are explained in
   \code{\link{vignette}} \file{vegan-FAQ} which also can be accessed
-  with \code{\link{vegandocs}}.
+  with \code{\link{vegandocs}}.  
 }
 
 \examples{

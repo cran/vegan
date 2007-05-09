@@ -18,9 +18,8 @@
     plot(shep, pch = pch, col = p.col, xlab = "Observed Dissimilarity",
          ylab = "Ordination Distance", ...)
     lines(shep$x, shep$yf, type = "S", col = l.col, lwd = lwd, ...)
-    lab <- paste("Stress based R2 =", format(rstress, digits=3),
-               "\nFit based R2 =", format(ralscal, digits=3))
+    lab <- paste("Non-metric fit, R2 =", format(rstress, digits=3),
+               "\nLinear fit, R2 =", format(ralscal, digits=3))
     text(min(shep$x), 0.95*max(shep$y), lab, pos=4)
     invisible(shep)
 }
-

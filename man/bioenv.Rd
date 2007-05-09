@@ -17,7 +17,7 @@
 }
 \usage{
 \method{bioenv}{default}(comm, env, method = "spearman", index = "bray",
-       upto = ncol(env), trace = FALSE, ...)
+       upto = ncol(env), trace = FALSE, partial = NULL, ...)
 \method{bioenv}{formula}(formula, data, ...)
 }
 
@@ -30,6 +30,8 @@
   \item{upto}{Maximum number of parameters in studied subsets.}
   \item{formula, data}{Model \code{\link{formula}} and data.}
   \item{trace}{Trace the advance of calculations }
+  \item{partial}{Dissimilarities partialled out when inspecting
+    variables in \code{env}.}
   \item{...}{Other arguments passed to \code{\link{cor}}.}
 }
 \details{
@@ -49,6 +51,12 @@
   The formula interface is practical in selecting or transforming
   environmental variables.
 
+  With argument \code{partial} you can perform \dQuote{partial}
+  analysis. The partializing item must be a dissimilarity object of
+  class \code{\link{dist}}. The
+  \code{partial} item can be used with any correlation \code{method},
+  but it is strictly correct only for Pearson.
+  
   Clarke & Ainsworth (1993) suggested this method to be used for
   selecting the best subset of environmental variables in interpreting
   results of nonmetric multidimensional scaling (NMDS). They recommended a
@@ -74,7 +82,17 @@
 }
 \author{ Jari Oksanen. The code for selecting all possible subsets was
   posted to the R mailing list by Prof. B. D. Ripley in 1999. }
-
+\note{
+  If you want to study the \sQuote{significance} of \code{bioenv}
+  results, you can use function \code{\link{mantel}} or
+  \code{\link{mantel.partial}} which use the same definition of
+  correlation. 
+  However, \code{bioenv} standardizes environmental variables to unit standard
+  deviation using function \code{\link{scale}} and you must to the same
+  in \code{\link{mantel}} for comparable results. Further, \code{bioenv}
+  selects variables to maximize the Mantel correlation, and significance
+  tests based on \emph{a priori} selection of variables are biased. 
+  }
 
 \seealso{\code{\link{vegdist}},
   \code{\link{dist}}, \code{\link{cor}} for underlying routines,
