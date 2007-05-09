@@ -156,9 +156,9 @@ cIndexKM (y, x, index = "all")
   \url{http://www.wu-wien.ac.at/am/wp99.htm#29}
 }
 
-\author{ Marie-Helene Ouellette <Marie-Helene.Ouellette@UMontreal.ca>,
-Sebastien Durand <Sebastien.Durand@UMontreal.ca> and
-Pierre Legendre <Pierre.Legendre@UMontreal.ca>.  Edited for \pkg{vegan}
+\author{ Marie-Helene Ouellette \email{Marie-Helene.Ouellette@UMontreal.ca},
+Sebastien Durand \email{Sebastien.Durand@UMontreal.ca} and
+Pierre Legendre \email{Pierre.Legendre@UMontreal.ca}.  Edited for \pkg{vegan}
 by Jari Oksanen.
 }
 

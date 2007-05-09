@@ -39,7 +39,8 @@ vif.cca(object)
     (\code{"CA"}) results. }
   \item{statistic}{Stastic used: \code{"explained"} gives the cumulative
   percentage accounted for, \code{"distance"} shows the residual
-  distances. }
+  distances. Distances are not available for sites in constrained or
+  partial analyses. }
   \item{summarize}{Show only the accumulated total. }
   \item{proportional}{Give the inertia components as proportional for
     the corresponding total.}

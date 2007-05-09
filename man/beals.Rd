@@ -1,16 +1,20 @@
 \encoding{UTF-8}
 \name{beals}
 \alias{beals}
+\alias{swan}
 
-\title{Beals Smoothing of Community Data }
+\title{Beals Smoothing and Degree of Absence }
 \description{
   Beals smoothing replaces each entry in the community data with a
   probability of target species occurring in that particular site, based
   on the joint occurrences of target species with the species that
-  actually occur in the site.
+  actually occur in the site.  Swan's (1970) degree of absence applies
+  Beals smoothing to zero items so long that all zeros are replaced
+  with smoothed values. 
 }
 \usage{
 beals(x)
+swan(x)
 }
 \arguments{
   \item{x}{Community data frame or matrix }
@@ -37,13 +41,22 @@ beals(x)
   unoccupied patches in metapopulation analysis
   (\enc{Münzbergová}{Munzbergova} & Herben 
   2004).  The function is provided here for the brave.
+
+  Swan (1970) suggested replacing zero values with degrees of absence of
+  a species in a community data matrix. Swan expressed the method in
+  terms of similarity matrix, but it is equivalent to applying Beals
+  smoothing to zero values, at each step shifting smallest initially
+  non-zero item to value one, and repeating this so many times that
+  there are no zeros left in the data. This actually is very similar to
+  extended dissimilarities (implemented in function
+  \code{\link{stepacross}}), but very rarely used. 
 }
 \value{
   The function returns a transformed data matrix.
 }
 \references{
   
-Beals, E.W. (1984): Bray-Curtis-ordination: an effective strategy for
+Beals, E.W. 1984. Bray-Curtis-ordination: an effective strategy for
 analysis of multivariate ecological data.  \emph{Adv. Ecol. Res.} 14: 1-55.
   
 Ewald, J. 2002. A probabilistic approach to estimating species pools
@@ -56,6 +69,9 @@ function. \emph{Ecoscience} 1: 82-86.
 suitable unoccupied 
 habitats in metapopulation studies using co-occurrence of species. \emph{Oikos}
 105: 408-414.
+
+Swan, J.M.A. (1970) An examination of some ordination problems by use of
+simulated vegetational data. \emph{Ecology} 51, 89--102. 
 
 }
 \author{Jari Oksanen}

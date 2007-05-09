@@ -11,7 +11,7 @@
 \alias{protest}
 \alias{print.protest}
 
-\title{Procrustes Rotation of Two Configurations }
+\title{Procrustes Rotation of Two Configurations and PROTEST }
 \description{
  Function \code{procrustes} rotates a configuration to maximum similarity
   with another configuration. Function \code{protest} tests the

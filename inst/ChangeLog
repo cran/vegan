@@ -1,5 +1,63 @@
 VEGAN STABLE VERSIONS 
 
+Version 1.8-6 (May 9, 2007)
+
+	* Based on devel version 1.9-23.
+
+	* as.mlm.cca, as.mlm.rda: new functions to refit constrained
+	ordination result (cca, rda, capscale) as a multiple response
+	linear model. You can find influence statistics (Cook's distance,
+	hat values) from the refitted model. You also can find t-values
+	etc., but these have the same bias as in other software and should
+	not be used.
+
+	* bgdispersal: a new function for dispersal direction in
+	biogeography (Legendre & Legendre 1998, section 13.3.4). Author
+	Pierre Legendre.
+
+	* designdist: a new function for defining your own dissimilarity
+	index or for estimating beta diversity (Koleff et al.,
+	J. Ecol. 72, 367-382; 2003).
+
+	* isomap: a new function for isometric feature mapping of
+	Tenenbaum et al. (Science 290, 2319-2323; 2000).
+
+	* screeplot, bstick: new functions to draw screeplots of vegan
+	ordination results with brokenstick lines, and alternative
+	screeplot functions for prcomp and princomp with brokenstick.
+	Author Gavin L. Simpson.
+
+	* swan: a new function for the degree of absence (Swan 1970,
+	Ecology 51, 89-102).
+
+	* anova.cca: now refuses to do 'by = "terms"' if the rank of
+	constraints is higher than the rank of the community matrix.
+	
+	* bioenv: gains argument 'partial' to perform partial bioenv.
+
+	* cca, rda, capscale: can now handle longer expression within
+	'Condition()' (ordiParseFormula). Used to drop observations with
+	missing values in unused variables (ordiGetData).
+
+	* goodness.cca, goodness.rda. 'statistic = "distance"' was wrongly
+	implemented. Now refuses to find "distance" in constrained
+	analysis: distances of constrained and unconstrained components do
+	not add up to to distances in unconstrained ordination.
+
+	* metaMDS (metaMDSdist): gains argument 'distfun' to use another
+	dissimilarity functions than vegdist.
+
+	* renyiaccum: used a variable that was not defined as an argument.
+	Added support functions persp.renyiaccum and rgl.renyiaccum
+	(Roeland Kindt).
+
+	* stressplot: R2's renamed to 'non-metric fit' and 'linear fit'.
+
+	* Doc: Corrected reference to Hurlbert in diversity (thanks to
+	Ralph Grundel). Updated references (varpart, renyiaccum). Removed
+	discussion on t-values in cca from vignettes, because as.mlm.cca
+	now implements those. General cleanup and better utf-8 encoding.
+	
 Version 1.8-5 (January 11, 2007)
 
 	* Based on devel version 1.9-12.
@@ -11,7 +69,7 @@ Version 1.8-5 (January 11, 2007)
 	* capscale: inertia name as "unknown" if the dissimilarity object
 	does not have a "method" name. Suggested by Roeland Kindt.
 
-	* DESCRIPTION: icense is now explicitly GPL v2 (but not later).
+	* DESCRIPTION: license is now explicitly GPL v2 (but not later).
 
 Version 1.8-4 (January 8, 2007)
 

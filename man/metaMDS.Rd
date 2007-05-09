@@ -35,7 +35,7 @@ metaMDS(comm, distance = "bray", k = 2, trymax = 20, autotransform =TRUE,
 \method{scores}{metaMDS}(x, display = c("sites", "species"), shrink = FALSE, 
         choices, ...)
 metaMDSdist(comm, distance = "bray", autotransform = TRUE, noshare = 0.1, 
-    trace = 1, commname, zerodist = "fail", ...)
+    trace = 1, commname, zerodist = "fail", distfun = vegdist, ...)
 metaMDSiter(dist, k = 2, trymax = 20, trace = 1, plot = FALSE, previous.best, 
     ...)   
 initMDS(x, k=2)
@@ -81,6 +81,9 @@ metaMDSredist(object, ...)
    function is called directly.}
  \item{zerodist}{Handling of zero dissimilarities: either \code{"fail"}
    or \code{"add"} a small positive value.}
+ \item{distfun}{Dissimilarity function. Any function returning a
+   \code{dist} object and accepting argument \code{method} can be used
+   (but some extra arguments may cause name conflicts).}
  \item{dist}{Dissimilarity matrix used in multidimensional scaling. }
   \item{pc}{Rotate to principal components. }
   \item{center}{Centre the configuration. }

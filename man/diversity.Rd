@@ -62,7 +62,7 @@ specnumber(x, MARGIN = 1)
   extremely simple, and shortcuts are easy in plain \R.
   
   Better stories can be told about Simpson's index than about
-  Shannon's index, and still more grander narratives about
+  Shannon's index, and still grander narratives about
   rarefaction (Hurlbert 1971).  However, these indices are all very
   closely related (Hill 1973), and there is no reason to despise one more than
   others (but if you are a graduate student, don't drag me in, but obey
@@ -98,7 +98,7 @@ specnumber(x, MARGIN = 1)
   1459--1461.  
   
   Hurlbert, S.H. (1971). The nonconcept of species diversity: a critique
-  and alternative parameters. \emph{Ecological Monographs} 54, 187--211.
+  and alternative parameters. \emph{Ecology} 52, 577--586.
  
 }
 

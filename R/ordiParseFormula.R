@@ -10,7 +10,7 @@ function (formula, data, xlev = NULL)
     mf <- Z <- NULL
     if (!is.null(indPartial)) {
         partterm <- attr(Terms, "variables")[1 + indPartial]
-        Pterm <- sapply(partterm, function(x) deparse(x[[2]]))
+        Pterm <- sapply(partterm, function(x) deparse(x[[2]], width.cutoff=500))
         Pterm <- paste(Pterm, collapse = "+")
         P.formula <- as.formula(paste("~", Pterm))
         zlev <- xlev[names(xlev) %in% Pterm]
@@ -21,7 +21,7 @@ function (formula, data, xlev = NULL)
             xint <- which(colnames(Z) == "(Intercept)")
             Z <- Z[, -xint, drop = FALSE]
         }
-        partterm <- sapply(partterm, function(x) deparse(x))
+        partterm <- sapply(partterm, function(x) deparse(x, width.cutoff=500))
         formula <- update(formula, paste(".~.-", paste(partterm, 
             collapse = "-")))
         flapart <- update(formula, paste(". ~ . +", Pterm))

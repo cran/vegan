@@ -170,7 +170,7 @@ table. }
 (a) References on variation partioning
 
 Borcard, D., P. Legendre & P. Drapeau. 1992. Partialling out the spatial
-component of ecological variation. Ecology 73: 1045-1055.
+component of ecological variation. Ecology 73: 1045--1055.
 
 Legendre, P. & L. Legendre. 1998. Numerical ecology, 2nd English edition.
 Elsevier Science BV, Amsterdam.
@@ -178,13 +178,13 @@ Elsevier Science BV, Amsterdam.
 (b) Reference on transformations for species data
 
 Legendre, P. and E. D. Gallagher. 2001. Ecologically meaningful
-transformations for ordination of species data. Oecologia 129: 271-280.
+transformations for ordination of species data. Oecologia 129: 271--280.
 
 (c) Reference on adjustment of the bimultivariate redundancy statistic
 
-Peres-Neto, P., P. Legendre, S. Dray and D. Borcard. Variation partioning
+Peres-Neto, P., P. Legendre, S. Dray and D. Borcard. 2006. Variation partioning
 of species data matrices: estimation and comparison of fractions.
-(Submitted).
+Ecology 87: 2614--2625.
  }
 
 \author{ Pierre Legendre, Departement de Sciences Biologiques, Universite de
