@@ -1,6 +1,6 @@
-"metaMDSiter" <-
-    function (dist, k = 2, trymax = 20, trace = 1, plot = FALSE, previous.best, 
-              ...) 
+`metaMDSiter` <-
+    function (dist, k = 2, trymax = 20, trace = 1, plot = FALSE, 
+              previous.best, ...) 
 {
     if (!require(MASS)) 
         stop("Needs package MASS (function isoMDS): not found")
@@ -18,8 +18,9 @@
     else s0 <- isoMDS(dist, k = k, trace = isotrace)
     if (trace) 
         cat("Run 0 stress", s0$stress, "\n")
-    tries <- 1
-    repeat {
+    tries <- 0
+    while(tries < trymax) {
+        tries <- tries + 1
         stry <- isoMDS(dist, initMDS(dist, k = k), k = k, maxit = 200, 
                        tol = 1e-07, trace = isotrace)
         if (trace) {
@@ -45,15 +46,11 @@
                 break
             }
         }
-        if (tries >= trymax) 
-            break
-        tries <- tries + 1
     }
     if (!missing(previous.best) && !is.null(previous.best$tries)) 
         tries <- tries + previous.best$tries
-    out <- list(points = s0$points, dims = k, stress = s0$stress,
-                data = attr(dist, "commname"), distance = attr(dist, "method"),
-                converged = converged, tries = tries)
+    out <- list(points = s0$points, dims = k, stress = s0$stress, 
+                data = attr(dist, "commname"), distance = attr(dist, 
+                                               "method"), converged = converged, tries = tries)
     out
 }
-

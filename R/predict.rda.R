@@ -1,4 +1,4 @@
-"predict.rda" <-
+`predict.rda` <-
     function (object, newdata, type = c("response", "wa", "sp", "lc"), 
               rank = "full", model = c("CCA", "CA"), scaling = FALSE, ...) 
 {
@@ -25,12 +25,8 @@
     if (type == "response") {
         if (inherits(object, "capscale")) 
             stop("Prediction of 'response' not available in capscale")
-        Xbar <- 0
-        if (take > 0) 
-            Xbar <- u %*% slam %*% t(v)
         if (!is.null(object$pCCA)) 
             warning("Conditional ('partial') component ignored")
-        Xbar <- 0
         if (take > 0) 
             out <- u %*% slam %*% t(v)
         if (!is.null(scal)) 
@@ -41,10 +37,11 @@
         if (model == "CA") 
             stop("'lc' scores not available for unconstrained ordination")
         if (!missing(newdata)) {
-            if (is.null(object$terminfo))
+            if (is.null(object$terminfo)) 
                 E <- as.matrix(newdata)
             else {
-                d <- ordiParseFormula(formula(object), newdata, object$terminfo$xlev)
+                d <- ordiParseFormula(formula(object), newdata, 
+                                      object$terminfo$xlev)
                 E <- cbind(d$Z, d$Y)
             }
             p1 <- object[[model]]$QR$pivot[1:object[[model]]$rank]

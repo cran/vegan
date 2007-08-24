@@ -77,7 +77,8 @@ anosim(dis, grouping, permutations=1000, strata)
 \note{
   I don't quite trust this method.  Somebody should study its
   performance carefully.  The function returns a lot of information 
-  to ease further scrutiny.
+  to ease further scrutiny. Most \code{anosim} models could be analysed
+  with \code{\link{adonis}} which seems to be a more robust alternative.
 
 }
 
@@ -86,7 +87,8 @@ dissimilarities instead of their ranks.
 \code{\link{dist}} and \code{\link{vegdist}} for obtaining
   dissimilarities, and \code{\link{rank}} for ranking real values.  For
   comparing dissimilarities against continuous variables, see
-  \code{\link{mantel}}.  }
+  \code{\link{mantel}}. Function \code{\link{adonis}} is a more robust
+  alternative that should preferred. }
 
 \examples{
 data(dune)

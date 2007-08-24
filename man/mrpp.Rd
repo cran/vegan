@@ -97,19 +97,23 @@ B. McCune and J. B. Grace. 2002. \emph{Analysis of Ecological
 
 }
 \author{
-Hank Stevens \email{HStevens@muohio.edu} and Jari Oksanen.
+M. Herny H. Stevens \email{HStevens@muohio.edu} and Jari Oksanen.
 }
 \note{ 
 This difference may be one of location (differences in mean) or one of
 spread (differences in within-group distance). That is, it may find a
 significant difference between two groups simply because one of those
-groups has a greater dissimilarities among its sampling units. 
+groups has a greater dissimilarities among its sampling units. Most
+\code{mrpp} models can be analysed with \code{\link{adonis}} which seems
+not suffer from the same problems as \code{mrpp} and is a more robust
+alternative. 
 }
 \seealso{
   \code{\link{anosim}} for a similar test based on ranks, and
   \code{\link{mantel}} for comparing dissimilarities against continuous
   variables, and
-  \code{\link{vegdist}} for obtaining dissimilarities, 
+  \code{\link{vegdist}} for obtaining dissimilarities,
+  \code{\link{adonis}} is a more robust alternative in most cases.
 }
 \examples{
 data(dune)
