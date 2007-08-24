@@ -10,7 +10,7 @@
 \title{Renyi and Hill Diversities and Corresponding Accumulation Curves }
 \description{
   Function \code{renyi}  find \enc{Rényi}{Renyi} diversities with any
-  scale or the corresponding Hill number (Hill 1975).  Function
+  scale or the corresponding Hill number (Hill 1973).  Function
   \code{renyiaccum} finds these statistics with accumulating sites.
 }
 \usage{

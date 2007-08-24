@@ -19,49 +19,50 @@ bgdispersal(mat, PAonly = FALSE)
 \item{PAonly}{ \code{FALSE} if the four types of coefficients, DD1 to
   DD4, are requested; \code{TRUE} if DD1 and DD2 only are sought (see Details). }
 }
+\details{
+The signs of the DD coefficients indicate the 
+direction of dispersal, provided that the 
+asymmetry is significant. A positive sign 
+indicates dispersal from the first (row in DD 
+tables) to the second region (column); a negative 
+sign indicates the opposite. A McNemar test of 
+asymmetry is computed from the presence-absence 
+data to test the hypothesis of a significant 
+asymmetry between the two areas under comparison.
 
-\details{ The signs of the DD coefficients indicate the direction of
-dispersal, provided that the asymmetry is significant. A positive sign
-indicates dispersal from the first (row in DD tables) to the second
-region (column); a negative sign indicates the opposite.  Coefficients
-DD1 and DD2 are computed from presence-absence data. The function
-converts abundance data to presence-absence if necessary. Coefficients
-DD3 and DD4 are computed on abundance data if available.  A McNemar
-test of asymmetry is computed from the presence-absence data to test the
-hypothesis of a significant asymmetry between the two areas under
-comparison.
+In the input data table, the rows are sites or 
+areas, the columns are taxa. Most often, the taxa 
+are species, but the coefficients can be computed 
+from genera or families as well. DD1 and DD2 only 
+are computed for presence-absence data. The four 
+types of coefficients are computed for 
+quantitative data, which are converted to 
+presence-absence for the computation of DD1 and 
+DD2. \code{PAonly = FALSE} indicates that the four types 
+of coefficients are requested. \code{PAonly = TRUE} if DD1 
+and DD2 only are sought. }
 
-In the input data table, the rows are sites or areas, the columns are
-taxa. Most often, the taxa are species, but the coefficients can be
-computed from genera or families as well.  DD1 and DD2 only are computed
-for presence-absence data. The four types of coefficients are computed
-for quantitative data, which are converted to presence-absence for the
-computation of DD1 and DD2.  \code{PAonly = FALSE} indicates that the four types
-of coefficients are requested. \code{PAonly = TRUE} if DD1 and DD2 only are
-sought. }
 
 \value{
-Function \code{dispersion} returns a list containing the following matrices:
-
+Function \code{bgdispersal} returns a list containing the following matrices:
 \item{ DD1 }{ \eqn{DD1[j,k] = (a * (b - c))/((a + b + c)^2)} }
-
 \item{ DD2 }{ \eqn{DD2[j,k] = (2*a * (b - c))/((2*a + b + c) * (a + b +
-c))} where \eqn{a}, \eqn{b}, and \eqn{c} have the same meaning as in the
-same meaning as in the computation of binary similarity coefficients. }
-
-\item{ DD3 }{ \eqn{DD3[j,k] = W*(A-B) / ((A+B-W)^2)} }
-
-\item{ DD4 }{ \eqn{DD4[j,k] = 2*W*(A-B) / ((A+B)*(A+B-W))}
-  where \code{W = sum(pmin(vector1, vector2))}, \code{A = sum(vector1)}, \code{B =
-  sum(vector2)} }
-
-\item{ McNemar }{ McNemar chi-square statistic of asymmetry with
-correction for continuity (Siegel and Castellan 1988): \eqn{(abs(b - c) -
-1)^2 / (b + c)} }
-
-\item{ prob.McNemar }{ probabilities associated with McNemar statistics,
-  chi-square test. H0: no asymmetry in \eqn{(b-c)}. }
+    c))}
+  where \eqn{a}, \eqn{b}, and \eqn{c} have the 
+same meaning as in the computation of binary 
+similarity coefficients. }
+\item{ DD3 }{ DD3[j,k] = \eqn{W*(A-B) / ((A+B-W)^2)} }
+\item{ DD4 }{ DD4[j,k] = \eqn{2*W*(A-B) / ((A+B)*(A+B-W)})
+where \code{W = sum(pmin(vector1, vector2))}, \code{A = sum(vector1)}, \code{B = sum(vector2)} }
+\item{ McNemar }{ McNemar chi-square statistic of 
+asymmetry with correction for continuity (Siegel 
+and Castellan 1988): \eqn{(abs(b - c) - 1)^2 / (b + c)} 
 }
+\item{ prob.McNemar }{ probabilities associated 
+with McNemar statistics, chi-square test. H0: no 
+asymmetry in \eqn{(b-c)}. }
+}
+
 
 \references{ 
   Legendre, P. and V. Legendre. 1984. Postglacial dispersal of

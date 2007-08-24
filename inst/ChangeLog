@@ -1,5 +1,48 @@
 VEGAN STABLE VERSIONS 
 
+Version 1.8-7 (August 24, 2007)
+
+	* Based on devel version 1.9-34.
+
+	* DESCRIPTION: M. Henry H. Stevens (Miami University, Oxford,
+	Ohio) joined the vegan team.
+	
+	* adonis: new function for nonparametric MANOVA that is
+	appropriate for even extremely wide matrices sometimes associated
+	with gene data and with diverse ecological communities. Author
+	Hank Stevens.
+
+	* taxondive: a new function for indices of taxonomic diversity and
+	distinctness after Clarke & Warwick (Mar Ecol Prog Ser 216,
+	265--278, 2001 and other papers). With a helper function
+	'taxa2dist' to turn taxonomies into distances with an option for
+	variable step length (Clarke & Warwick, Mar Ecol Prog Ser 184,
+	21--29, 1999), and a toy data set on the taxonomy of dune meadow
+	species ('dune.taxon'). With a help, testing and pressure from
+	Mike Cappo, James Cook Uni, Qld.
+
+	* bgdispersal: previous version was partly garbled (by me), and
+	P. Legendre provided a corrected one.
+
+	* designdist: keeps 'dist' attributes even when the 'method'
+	function drops them. Swapped the order to (terms, methods) in the
+	default name. 
+
+	* metaMDS: issues a warning if data are disconnected. Passes extra
+	arguments to other 'distfun' than 'vegdist' so that you can set
+	'terms' in 'designdist' etc (metaMDSdist). Can now do trymax=0 or
+	skip random starts and give you enhanced 'isoMDS' result
+	(metaMDSiter).
+
+	* ordiplot: failed if number of species was equal to number of
+	sites (and so did plot.metaMDS and plot.isomap using this).
+
+	* plot.profile.fisherfit: corrected a harmless error detected by
+	checkUsagePackage().
+
+	* predict.rda: removed some dead (but heavy) code from type =
+        "response".
+
 Version 1.8-6 (May 9, 2007)
 
 	* Based on devel version 1.9-23.
@@ -44,7 +87,7 @@ Version 1.8-6 (May 9, 2007)
 	analysis: distances of constrained and unconstrained components do
 	not add up to to distances in unconstrained ordination.
 
-	* metaMDS (metaMDSdist): gains argument 'distfun' to use another
+	* metaMDS (metaMDSdist): gains argument 'distfun' to use other
 	dissimilarity functions than vegdist.
 
 	* renyiaccum: used a variable that was not defined as an argument.

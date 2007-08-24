@@ -56,9 +56,9 @@ designdist(x, method = "(A+B-2*J)/(A+B)",
 
   The function \code{designdist} can implement most dissimilarity
   indices in \code{\link{vegdist}} or elsewhere, and it also can be
-  used to implement many other indices (some of the examples above are
-  not available in \code{\link{vegdist}}). It also can used to implement
-  indices of beta diversity.
+  used to implement many other indices, among them (most of) those in
+  Legendre & Legendre (1998). It also can used to implement all indices
+  of beta diversity of Koleff et al. (2003).
 
   If you want to implement binary dissimilarities based on 2x2
   contingency table notation, then \eqn{a =} \code{J}, \eqn{b =}
@@ -68,6 +68,14 @@ designdist(x, method = "(A+B-2*J)/(A+B)",
 \value{
   Function returns an object of class \code{\link{dist}}.
 }
+\references{
+  Koleff, P., Gaston, K.J. and Lennon, J.J. (2003) Measuring beta
+  diversity for presence--absence data. \emph{J. Animal Ecol.} 72,
+  367--382. 
+  
+  Legendre, P. and Legendre, L. (1998) \emph{Numerical Ecology}. 2nd English
+  ed. Elsevier
+  }
 \author{ Jari Oksanen }
 \note{  
   Function does not use compiled code, and may be slow or use plenty of

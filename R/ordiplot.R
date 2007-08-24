@@ -1,13 +1,14 @@
-"ordiplot" <-
+`ordiplot` <-
     function (ord, choices = c(1, 2), type = "points", display, xlim, 
               ylim, ...) 
 {
     if (!is.null(attr(ord, "class")) && (class(ord) == "decorana" || 
                                          any(class(ord) == "cca"))) {
         if (missing(display)) 
-            out <- plot(ord, choices, type = type, xlim = xlim, ylim = ylim, ...)
+            out <- plot(ord, choices, type = type, xlim = xlim, 
+                        ylim = ylim, ...)
         else out <- plot(ord, choices, type = type, display = display, 
-                         xlim = xlim, ylim = ylim,  ...)
+                         xlim = xlim, ylim = ylim, ...)
     }
     else {
         type <- match.arg(type, c("points", "text", "none"))
@@ -22,8 +23,8 @@
                 warning("Species scores not available")
                 Y <- NULL
             }
-            else if (!is.null(X) && nrow(X) == nrow(Y) && all.equal.numeric(X, 
-                                        Y)) {
+            else if (!is.null(X) && nrow(X) == nrow(Y) &&
+                     identical(all.equal.numeric(X, Y), TRUE)) {
                 Y <- NULL
                 warning("Species scores not available")
             }

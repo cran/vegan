@@ -60,7 +60,7 @@ downweight(veg, fraction = 5)
   \item{fraction}{Abundance fraction where downweighting begins.}
   \item{...}{Other parameters for \code{plot} function.}
   }
-}
+
 \details{
   In late 1970s, correspondence analysis became the method of choice for
   ordination in vegetation science, since it seemed to be able to better cope

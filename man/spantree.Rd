@@ -102,7 +102,7 @@ spantree(dis, toolong = 0)
   (the ``single link'') cannot be recovered from the result. The
   graphical output of a single linkage clustering plotted with
   \code{\link{ordicluster}} will look very different from an equivalent
-  spanning tree plotted with \code{\link{ordispantree}}.
+  spanning tree plotted with \code{lines.spantree}.
 }
 
 

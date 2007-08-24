@@ -1,11 +1,12 @@
 `metaMDSdist` <-
     function (comm, distance = "bray", autotransform = TRUE, noshare = 0.1, 
-              trace = 1, commname, zerodist = "fail", distfun = vegdist, ...) 
+              trace = 1, commname, zerodist = "fail", distfun = vegdist, 
+              ...) 
 {
     distname <- deparse(substitute(distfun))
     distfun <- match.fun(distfun)
     zerodist <- match.arg(zerodist, c("fail", "add"))
-    formals(vegdist) <- c(formals(vegdist), alist(... = ))
+    formals(distfun) <- c(formals(distfun), alist(... = ))
     formals(stepacross) <- c(formals(stepacross), alist(... = ))
     if (missing(commname)) 
         commname <- deparse(substitute(comm))
@@ -36,11 +37,13 @@
         }
     }
     maxdis <- max(dis)
-    if (sum(no.shared(comm))/length(dis) > noshare) {
+    if (sum(tmp <- no.shared(comm))/length(dis) > noshare && noshare > 0) {
         if (trace) 
             cat("Using step-across dissimilarities:\n")
         dis <- stepacross(dis, trace = trace, ...)
     }
+    if (length(unique(distconnected(tmp, trace = trace > 1))) > 1) 
+        warning("Data are disconnected, results may be meaningless")
     attr(dis, "maxdis") <- maxdis
     attr(dis, "commname") <- commname
     attr(dis, "function") <- distname

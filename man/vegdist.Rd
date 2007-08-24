@@ -4,7 +4,9 @@
 \title{Dissimilarity Indices for Community Ecologists }
 \description{
   The function computes dissimilarity indices that are useful for or
-  popular with community ecologists.
+  popular with community ecologists. If you do not find your favourite
+  index here, you can see if it can be implemented using
+  \code{\link{designdist}}. 
   Gower, Bray--Curtis, Jaccard and
   Kulczynski indices are good in detecting underlying
   ecological gradients (Faith et al. 1987). Morisita, Horn--Morisita,
