@@ -1,5 +1,37 @@
 VEGAN STABLE VERSIONS 
+$Date: 2007-10-03 10:10:09 +0300 (Wed, 03 Oct 2007) $
+	
+Version 1.8-8 (Oct 2, 2007)
 
+	* Minor bugfix release for upcoming R-2.6.0. Based on the
+	http://r-forge.r-project.org/projects/vegan/ revision 17 (= 1.8-7)
+	with ported bug fix revisions (see below for revision numbers).
+
+	* anova.cca: by = "term" failed in partial model. This was broken
+	in 1.8-6 by introducing a test against deficit rank models (r47). 
+	
+	* cascadeKM: Calinski index works now when the input data is a
+	data.frame (r57:58).
+
+	* flush.console: metaMDSiter and bioenv use now flush.console()
+	so that Windows people also see the trace (r56).
+
+	* ordispantree: made defunct, was deprecated in 1.8-1 (r38). 
+
+	* scores: handles now numeric data frames (r25).
+
+	* summary.cca: failed if only one type of scores was requested
+	(r50, 52).
+
+	* taxondive: Fixed dim checking and matching species names in
+	community data and taxonomic distance data (r21).
+
+	* tweaks to pass --pedantic R CMD check, mainly in formatting
+	source files, unused variables in source files and superfluous
+	braces in help files (r39, r46, r62).
+
+	* Updated FAQ-vegan.pdf to the current version at R-Forge.
+	
 Version 1.8-7 (August 24, 2007)
 
 	* Based on devel version 1.9-34.

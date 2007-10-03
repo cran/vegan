@@ -75,8 +75,9 @@ no.shared(x)
 
 \seealso{\code{\link{vegdist}} or \code{\link{dist}} for getting
   dissimilarities, \code{\link{stepacross}} for a case where you may need
-  \code{distconnected}, and for connecting points \code{\link{spantree}}.}
+  \code{distconnected}, and for connecting points \code{\link{spantree}}.
 }
+
 \examples{
 ## There are no disconnected data in vegan, and the following uses an
 ## extremely low threshold limit for connectedness. This is for

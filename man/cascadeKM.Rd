@@ -116,9 +116,7 @@ cIndexKM (y, x, index = "all")
   storing it when the number of objects is large. Distance values are
   computed as they are needed by the algorithm.  
 }
-}
 
-}
 \value{ Function \code{cascadeKM} returns an object of class
   \code{cascadeKM} with items:
   \item{ partition }{ Table with the partitions found for different numbers 
@@ -163,7 +161,7 @@ by Jari Oksanen.
 }
 
 \seealso{\code{\link{kmeans}}}
-}
+
 \examples{
  # Partitioning a (10 x 10) data matrix of random numbers
  mat <- matrix(runif(100),10,10)

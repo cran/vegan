@@ -46,7 +46,6 @@ orditorp(x, display, labels, choices = c(1, 2), priority, cex = 0.7,
   (\code{\link{plot.cca}}, \code{\link{plot.decorana}},
   \code{\link{plot.metaMDS}}). 
 }
-}
 \value{
   The function returns invisibly a logical vector where \code{TRUE}
   means that item was labelled with text and \code{FALSE} means that it

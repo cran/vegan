@@ -83,7 +83,7 @@ specnumber(x, MARGIN = 1)
   data frame with items for \eqn{\alpha} (\code{alpha}), its approximate
   standard errors (\code{se}), residual degrees of freedom
   (\code{df.residual}), and the \code{code} returned by
-  \code{\link{nlm}} on the success of estimation. }
+  \code{\link{nlm}} on the success of estimation. 
 }
 
 \references{
