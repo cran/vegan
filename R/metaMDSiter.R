@@ -37,7 +37,7 @@
             }
             summ <- summary(pro)
             if (trace) 
-                cat("... rmse", summ$rmse, "  max residual", 
+                cat("... procrustes: rmse", summ$rmse, " max resid", 
                     max(summ$resid), "\n")
             if (summ$rmse < RMSELIM && max(summ$resid) < RESLIM) {
                 if (trace) 
@@ -46,6 +46,7 @@
                 break
             }
         }
+        flush.console()
     }
     if (!missing(previous.best) && !is.null(previous.best$tries)) 
         tries <- tries + previous.best$tries

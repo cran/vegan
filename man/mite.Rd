@@ -33,7 +33,6 @@ data(mite.pcnm)
     \item{Topo}{Microtopograhy, a factor with levels \code{Blanket} and \code{Hummock}}
   }
 }
-}
 \source{
   Pierre Legendre
 }

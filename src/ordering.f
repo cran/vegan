@@ -70,7 +70,7 @@ C
       Integer n, niter
       Real sumrow(n),sumtot,d
       Real*8 rowscore(n),colscore(n),epsilon,oldS,newS,toler,
-     +       temp,oldrowsc(n)
+     +       oldrowsc(n)
       niter=1000
 C      Step 2: Take the column order as arbitrary initial site scores
       do 4 i=1,n
@@ -124,7 +124,7 @@ C     +       ' Increase NITER or lower TOLER')
 C  102 format(' N. iterations to reach convergence for axis',i3,' =',i4)
   103 format(' There are',i4,' eigenvalues different from 0')
 C  104 format(' Eigenvector',i3,' is complex [multiply values*Sqrt(-1)]')
-  105 format(" Tolerance is: ", F12.8, "  NIter is: ", i4)
+C  105 format(" Tolerance is: ", F12.8, "  NIter is: ", i4)
 
 C  150 format(1x,1hR,2i3,6f10.5)
 C  151 format(1x,1hC,2i3,10x,6f10.5)

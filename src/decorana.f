@@ -406,6 +406,8 @@ c deviation all the way along the axis and not only on average.
       double precision x(mi),y(n),aidot(mi),qidat(nid)
       double precision zn(50),zv(50)
       integer ibegin(mi),iend(mi),idat(nid)
+c Use monit so that gfortran -Wall does not warn for it being unused
+      monit = 0
 c---common block added by p.minchin feb 1988
 c      common /lunits/ iuinp1,iuinp2,iuout1,iuout2,iuout3
       do 200 icount=1,2

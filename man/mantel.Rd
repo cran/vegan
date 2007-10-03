@@ -57,8 +57,6 @@ mantel.partial(xdis, ydis, zdis, method = "pearson", permutations = 1000,
   \item{signif}{Empirical significance level from permutations.}
   \item{perm}{A vector of permuted values.}
   \item{permutations}{Number of permutations.}
-  }
-  
 }
 \references{ The test is due to Mantel, of course, but the
   current implementation is based on Legendre and Legendre.

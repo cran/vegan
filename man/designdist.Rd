@@ -97,7 +97,6 @@ ordiplot(cmdscale(dis))
 ## ... or in analysing beta diversity (without gradients)
 summary(dis)
   }
-}
 
 \keyword{multivariate }
 

@@ -13,14 +13,18 @@
   the community (Clarke & Warwick 1998, 2001)
 }
 \usage{
-taxondive(comm, dis)
-taxa2dist(x, varstep = FALSE, check = TRUE)
+taxondive(comm, dis, match.force = FALSE)
+taxa2dist(x, varstep = FALSE, check = TRUE, labels)
 }
 
 \arguments{
   \item{comm}{Community data. }
   \item{dis}{Taxonomic distances among taxa in \code{comm}. This should
     be a \code{\link{dist}} object or a symmetric square matrix. }
+  \item{match.force}{Force matching of column names in \code{comm} and
+    labels in \code{dis}. If \code{FALSE}, matching only happens when
+    dimensions differ, and in that case the species must be in identical
+    order in both.}
   \item{x}{Classification table with a row for each species or other
     basic taxon, and columns
     for identifiers of its classication at higher levels.}
@@ -28,7 +32,11 @@ taxa2dist(x, varstep = FALSE, check = TRUE)
     relative to proportional loss of the number of distinct classes.}
   \item{check}{If \code{TRUE}, remove all redundant levels which are
     different for all rows or constant for all rows. If \code{FALSE} all
-  levels are retained and speciec (basic taxon) also must be coded.}
+    levels are retained and speciec (basic taxon) also must be coded.}
+  \item{labels}{The \code{labels} attribute of taxonomic distances. Row
+    names will be used if this is not given. Species will be matched by
+    these labels in \code{comm} and \code{dis} in \code{taxondive} if
+    these have different dimensions. }
 }
 \details{
   Clarke & Warwick (1998, 2001) suggested several alternative indices of

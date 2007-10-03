@@ -18,10 +18,6 @@ soil characteristics of the very same sites as in the \code{varespec}
 data frame. The chemical measurements have obvious names.
 \code{Baresoil} gives the estimated cover of bare soil, \code{Humpdepth}
 the thickness of the humus layer.
-
-}
-
-
 }
 \references{
 \enc{Väre}{Vare}, H., Ohtonen, R. and Oksanen, J. (1995) Effects of reindeer

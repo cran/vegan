@@ -2,7 +2,9 @@
     function (x, display = c("sites", "species"), choices, ...) 
 {
     display <- match.arg(display)
-    att <- attributes(x)$names
+    att <- names(x)
+    if (is.data.frame(x) && all(sapply(x, is.numeric)))
+        x <- as.matrix(x)
     if (is.list(x) && display == "sites") {
         if ("points" %in% att) 
             X <- x$points

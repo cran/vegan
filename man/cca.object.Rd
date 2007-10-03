@@ -102,10 +102,9 @@
       standardization is Chi-square, and in \code{\link{rda}} centring
       and optional scaling by species standard deviations using function
       \code{\link{scale}}. }
-    }
-    }
   }
 }
+  
 \seealso{The description here provides a hacker's interface.  For more
   user friendly acces to the \code{cca} object see
   \code{\link{alias.cca}}, \code{\link{coef.cca}},

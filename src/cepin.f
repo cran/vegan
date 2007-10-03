@@ -39,7 +39,7 @@ C
  101  format (a80)
       read (1,101) fmt
       do i=1,80
-	if (fmt(i:i) .eq. 'I' .or. fmt(i:i) .eq. 'i') ni=ni+1
+         if (fmt(i:i) .eq. 'I' .or. fmt(i:i) .eq. 'i') ni=ni+1
       end do
       kind = ni+1
       if (kind .eq. 1) then
@@ -48,20 +48,20 @@ C
       endif
       nbrac=0
       do i=1,80
-	if (fmt(i:i) .eq. '(' ) nbrac=nbrac+1
-	if (fmt(i:i) .eq. ')' ) then
-	  nbrac=nbrac-1
-	  if (nbrac .le. 0) goto 6
-	end if
-	goto 8
- 6      ii=i+2
-	if (ii .le. 69) read(fmt,'(t69,i2)') nitem
-	if (nitem .eq. 0) then
-	     read (1,*) nitem
-	else
-	     fmt(ii:80)=' '
-	endif
- 8      continue
+         if (fmt(i:i) .eq. '(' ) nbrac=nbrac+1
+         if (fmt(i:i) .eq. ')' ) then
+            nbrac=nbrac-1
+            if (nbrac .le. 0) goto 6
+         end if
+         goto 8
+ 6       ii=i+2
+         if (ii .le. 69) read(fmt,'(t69,i2)') nitem
+         if (nitem .eq. 0) then
+            read (1,*) nitem
+         else
+            fmt(ii:80)=' '
+         endif
+ 8       continue
       enddo
       return
       end

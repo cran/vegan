@@ -63,8 +63,6 @@ wascores(varechem, varespec)
 ## And the strengths of these variables are:
 eigengrad(varechem, varespec)
 }
-
-}
 \keyword{ multivariate }
 \keyword{ univar }
 

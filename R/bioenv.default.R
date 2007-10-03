@@ -29,6 +29,7 @@ function (comm, env, method = "spearman", index = "bray", upto = ncol(env),
         if (upto < n) 
             cat("Studying", nall <- sum(choose(n, 1:upto)), "of ")
         cat(ntake, "possible subsets (this may take time...)\n")
+        flush.console()
     }
     x <- scale(env)
     best <- list()
@@ -38,6 +39,7 @@ function (comm, env, method = "spearman", index = "bray", upto = ncol(env),
             nvar <- choose(n, i)
             cat("No. of variables ", i, ", No. of sets ", nvar, 
                 "...", sep = "")
+            flush.console()
         }
         sets <- ripley.subs(i, 1:n)
         if (!is.matrix(sets)) 
@@ -50,6 +52,7 @@ function (comm, env, method = "spearman", index = "bray", upto = ncol(env),
             ndone <- ndone + nvar
             cat(" done (", round(100 * ndone/ntake, 1), "%)\n", 
                 sep = "")
+            flush.console()
         }
     }
     out <- list(names = colnames(env), method = method, index = index, 

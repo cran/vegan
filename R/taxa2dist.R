@@ -1,9 +1,9 @@
 `taxa2dist` <-
-    function (x, varstep = FALSE, check = TRUE) 
+    function (x, varstep = FALSE, check = TRUE, labels) 
 {
     rich <- apply(x, 2, function(taxa) length(unique(taxa)))
     S <- nrow(x)
-    if (check) { 
+    if (check) {
         keep <- rich < S & rich > 1
         rich <- rich[keep]
         x <- x[, keep]
@@ -21,7 +21,7 @@
     }
     if (!is.null(names(add))) 
         names(add) <- c("Base", names(add)[-length(add)])
-    if (!check)
+    if (!check) 
         add <- c(0, add)
     out <- matrix(add[1], nrow(x), nrow(x))
     for (i in 1:ncol(x)) {
@@ -29,6 +29,12 @@
     }
     out <- as.dist(out)
     attr(out, "steps") <- add
-    attr(out, "Labels") <- rownames(x)
+    if (missing(labels)) {
+        attr(out, "Labels") <- rownames(x)
+    } else {
+        if (length(labels) != nrow(x))
+            warning("Labels are wrong: needed ", nrow(x), " got ", length(labels))
+        attr(out, "Labels") <- as.character(labels)
+    }
     out
 }

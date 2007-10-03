@@ -76,13 +76,8 @@
     {
         n <- sum(clsize)
         k <- length(clsize)
-        if(is.matrix(x)){
-            allmean <- apply(x, 2, mean)
-            dmean <- sweep(x, 2, allmean, "-")
-        }else{
-            allmean <- mean(x)
-            dmean <- x-allmean
-        }
+        allmean <- colMeans(x)
+        dmean <- sweep(x, 2, allmean, "-")
         allmeandist <- sum(dmean^2)
         wgss <- sum(withins)
         bgss <- allmeandist - wgss

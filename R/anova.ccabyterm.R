@@ -1,8 +1,8 @@
 `anova.ccabyterm` <-
     function (object, step = 10, ...) 
 {
-    if (object$CCA$rank < object$CCA$QR$rank)
-        stop("cannot analyse single terms: their rank is higher than the rank of CCA")
+    #if (object$CCA$rank < object$CCA$QR$rank) 
+    #    warning("cannot analyse single terms: their rank is higher than the rank of CCA")
     trm <- terms(object)
     call <- paste("Model:", c(object$call))
     trmlab <- attr(trm, "term.labels")
@@ -58,3 +58,4 @@
     structure(out, heading = c(head, call), Random.seed = sim$Random.seed, 
               class = c("anova.cca", "anova", "data.frame"))
 }
+

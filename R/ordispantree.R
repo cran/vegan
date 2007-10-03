@@ -1,7 +1,7 @@
 "ordispantree" <-
     function(ord, tree, display = "sites",  ...)
 {
-    warning("'ordispantree' is deprecated: use 'lines.spantree'")
+    stop("'ordispantree' is deprecated: use 'lines.spantree'")
     ord <- scores(ord, display = display)
     if (is.list(tree) && !is.null(tree$kid))
         tree <- tree$kid

@@ -32,6 +32,7 @@ function(data, inf.gr, sup.gr, iter = 100, criterion="calinski")
 ###
 
 ### Main function
+    data <- as.matrix(data)
     SCE<-list()
     resultat<-list()
     index<-list()

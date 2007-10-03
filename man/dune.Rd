@@ -28,12 +28,10 @@ species on 20 sites. The corresponding environmental data frame
     \item{Manure}{\code{0} < \code{1} < \code{2} < \code{3} < \code{4}}
   }
 }
-}
 \source{
   Jongman, R.H.G, ter Braak, C.J.F & van Tongeren,
   O.F.R. (1987). \emph{Data Analysis in Community and Landscape
     Ecology}. Pudog, Wageningen.
-}
 }
 \examples{
 data(dune)

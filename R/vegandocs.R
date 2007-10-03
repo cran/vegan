@@ -1,5 +1,5 @@
 "vegandocs" <-
-    function (doc = c("ChangeLog", "vegan-FAQ.pdf", "partitioning.pdf")) 
+    function (doc = c("ChangeLog", "FAQ-vegan.pdf", "vegan-FAQ.pdf", "partitioning.pdf")) 
 {
     doc <- match.arg(doc)
     if (length(grep(".pdf", doc)) > 0) {
@@ -12,4 +12,3 @@
         file.show(system.file(package="vegan", doc))
     } 
 }
-

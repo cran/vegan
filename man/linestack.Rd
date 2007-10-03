@@ -26,7 +26,6 @@ linestack(x, labels, cex = 0.8, side = "right", hoff = 2, air = 1.1,
   \item{axis}{Add axis to the plot. }
   \item{\dots}{Other graphical parameters to labels.}
 }
-}
 \value{
   The function returns invisibly the shifted positions of labels in
   user coordinates.

@@ -9,7 +9,6 @@
 \format{
   A data frame with 30 species (rows) classified into five taxonomic
   levels (columns).
-  }
 }
 \details{
   The classification of vascular plants is adapted from AGP (2003), and
