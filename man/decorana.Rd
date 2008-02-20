@@ -8,6 +8,7 @@
 \alias{scores.decorana}
 \alias{points.decorana}
 \alias{text.decorana}
+\concept{ordination}
 
 \title{Detrended Correspondence Analysis and Basic Reciprocal Averaging }
 \description{
@@ -15,24 +16,32 @@
   averaging or orthogonal correspondence analysis.
 }
 \usage{
-decorana(veg, iweigh=0, iresc=4, ira=0, mk=26, short=0, before=NULL,
-         after=NULL)
+decorana(veg, iweigh=0, iresc=4, ira=0, mk=26, short=0,
+         before=NULL, after=NULL)
+
 \method{plot}{decorana}(x, choices=c(1,2), origin=TRUE,
      display=c("both","sites","species","none"),
-     cex = 0.8, cols = c(1,2), type, xlim, ylim,...)
-\method{text}{decorana}(x, display = c("sites", "species"), labels, choices = 1:2, 
-     origin = TRUE, select,  ...)  
-\method{points}{decorana}(x, display = c("sites", "species"), choices = 1:2, 
-     origin = TRUE, select, ...)  
+     cex = 0.8, cols = c(1,2), type, xlim, ylim, ...)
+
+\method{text}{decorana}(x, display = c("sites", "species"), labels,
+     choices = 1:2, origin = TRUE, select,  ...)
+
+\method{points}{decorana}(x, display = c("sites", "species"),
+       choices=1:2, origin = TRUE, select, ...)
+
 \method{summary}{decorana}(object, digits=3, origin=TRUE,
-     display=c("both", "species","sites","none"), ...)
+        display=c("both", "species","sites","none"), ...)
+
 \method{print}{summary.decorana}(x, head = NA, tail = head, ...)
+
 downweight(veg, fraction = 5)
-\method{scores}{decorana}(x, display=c("sites","species"), choices =1:4, origin=TRUE, ...)
+
+\method{scores}{decorana}(x, display=c("sites","species"), choices=1:4,
+       origin=TRUE, ...)
 }
 
 \arguments{
-  \item{veg}{Community data matrix. }
+  \item{veg}{Community data, a matrix-like object. }
   \item{iweigh}{Downweighting of rare species (0: no). }
   \item{iresc}{Number of rescaling cycles (0: no rescaling). }
   \item{ira}{Type of analysis (0: detrended, 1: basic reciprocal averaging). }
@@ -58,40 +67,39 @@ downweight(veg, fraction = 5)
   \item{head, tail}{Number of rows printed from the head and tail of
     species and site scores. Default \code{NA} prints all.}
   \item{fraction}{Abundance fraction where downweighting begins.}
-  \item{...}{Other parameters for \code{plot} function.}
+  \item{...}{Other arguments for \code{plot} function.}
   }
 
 \details{
   In late 1970s, correspondence analysis became the method of choice for
-  ordination in vegetation science, since it seemed to be able to better cope
-  with non-linear species responses  than principal components
-  analysis.  However, even correspondence analysis produced arc-shaped
-  configuration of a single gradient.  Mark Hill developed
-  detrended correspondence analysis to correct two assumed `faults' in
+  ordination in vegetation science, since it seemed better able to cope 
+  with non-linear species responses than principal components
+  analysis. However, even correspondence analysis can produce an arc-shaped
+  configuration of a single gradient. Mark Hill developed detrended
+  correspondence analysis to correct two assumed `faults' in 
   correspondence analysis: curvature of straight gradients and packing
   of sites at the ends of the gradient.  
 
   The curvature is removed by replacing the orthogonalization of axes
-  with detrending.  In orthogonalization the successive axes are made
+  with detrending.  In orthogonalization successive axes are made
   non-correlated, but detrending should remove all systematic dependence
-  between axes.  Detrending is made using a five-segment smoothing
-  window with weights (1,2,3,2,1) on \code{mk} segments -- which indeed
+  between axes.  Detrending is performed using a five-segment smoothing
+  window with weights (1,2,3,2,1) on \code{mk} segments --- which indeed
   is more robust than the suggested alternative of detrending by
-  polynomials. The
-  packing of sites at the ends of the gradient is undone by rescaling
-  the axes after extraction.  After rescaling, the axis is supposed to be
-  scaled by `SD' units, so that the average width of Gaussian species
-  responses is supposed to be one over whole axis.  Other innovations
-  were the piecewise linear transformation of species abundances and
-  downweighting of rare species which were regarded to have an
-  unduly high influence on ordination axes.  
+  polynomials. The packing of sites at the ends of the gradient is
+  undone by rescaling the axes after extraction.  After rescaling, the
+  axis is supposed to be scaled by `SD' units, so that the average width
+  of Gaussian species responses is supposed to be one over whole axis.
+  Other innovations were the piecewise linear transformation of species
+  abundances and downweighting of rare species which were regarded to
+  have an unduly high influence on ordination axes.
 
   It seems that detrending actually works by twisting the ordination
   space, so that the results look non-curved in two-dimensional projections
-  (`lolly paper effect').  As a result, the points have usually an
-  easily recognized triangle or diamond shaped pattern, obviously as a
-  detrending artefact.  Rescaling works differently than commonly
-  presented, too.  \code{Decorana} does not use, or even evaluate, the
+  (`lolly paper effect').  As a result, the points usually have an
+  easily recognized triangular or diamond shaped pattern, obviously an
+  artefact of detrendingt.  Rescaling works differently than commonly
+  presented, too. \code{decorana} does not use, or even evaluate, the
   widths of species responses.  Instead, it tries to equalize the
   weighted variance of species scores on axis segments (parameter
   \code{mk} has only a small effect, since \code{decorana} finds the
@@ -100,77 +108,76 @@ downweight(veg, fraction = 5)
   model, where all species initially have unit width responses and
   equally spaced modes.
 
-  Function \code{summary} prints the ordination scores,
+  The \code{summary} method prints the ordination scores,
   possible prior weights used in downweighting, and the marginal totals
-  after applying these weights. Function \code{plot} plots
+  after applying these weights. The \code{plot} method plots
   species and site scores.  Classical \code{decorana} scaled the axes
   so that smallest site score was 0 (and smallest species score was
   negative), but \code{summary}, \code{plot} and
-  \code{scores}  use the true origin, unless \code{origin = FALSE}.
+  \code{scores} use the true origin, unless \code{origin = FALSE}.
 
   In addition to proper eigenvalues, the function also reports `decorana
-  values' in detrended analysis. These are the values that the legacy
-  code of \code{decorana} returns as `eigenvalues'.
-  They are estimated internally during
-  iteration, and it seems that detrending interferes the estimation
-  so that these values are generally too low and have unclear
-  interpretation. Moreover, `decorana values' are estimated before
-  rescaling which will change the eigenvalues. The
-  proper eigenvalues are estimated after extraction of the axes and
-  they are the ratio of biased weighted variances of site and
-  species scores even in detrended and rescaled solutions. The
+  values' in detrended analysis. These `decorana values' are the values
+  that the legacy code of \code{decorana} returns as `eigenvalues'.
+  They are estimated internally during iteration, and it seems that
+  detrending interferes the estimation so that these values are
+  generally too low and have unclear interpretation. Moreover, `decorana
+  values' are estimated before rescaling which will change the
+  eigenvalues. The proper eigenvalues are estimated after extraction of
+  the axes and they are the ratio of biased weighted variances of site
+  and species scores even in detrended and rescaled solutions. The
   `decorana values' are provided only for the the compatibility with
   legacy software, and they should not be used.
 }
 \value{
-  Function returns an object of class \code{decorana}, which has
+  \code{decorana} returns an object of class \code{"decorana"}, which has
   \code{print}, \code{summary} and \code{plot} methods.
 }
 \references{
   Hill, M.O. and Gauch, H.G. (1980). Detrended correspondence analysis:
-  an improved ordination technique. \emph{Vegetatio} 42, 47--58.
+  an improved ordination technique. \emph{Vegetatio} \strong{42},
+  47--58.
 
   Oksanen, J. and Minchin, P.R. (1997). Instability of ordination
   results under changes in input data order: explanations and
-  remedies. \emph{Journal of Vegetation Science} 8, 447--454.
+  remedies. \emph{Journal of Vegetation Science} \strong{8}, 447--454.
 }
-\author{Mark O. Hill wrote the original Fortran code, \R port was by Jari
-  Oksanen.  }
+\author{Mark O. Hill wrote the original Fortran code, the \R port was by
+  Jari Oksanen. }
 \note{
-  Function \code{decorana} uses the central numerical engine of the
-  original Fortran code (which is in public domain), or about 1/3 of the
-  original program.  I have tried to implement the original behaviour,
-  although a great part of preparatory steps were written in \R
-  language, and may differ somewhat from the original code. However,
+  \code{decorana} uses the central numerical engine of the
+  original Fortran code (which is in the public domain), or about 1/3 of
+  the original program.  I have tried to implement the original
+  behaviour, although a great part of preparatory steps were written in
+  \R language, and may differ somewhat from the original code. However,
   well-known bugs are corrected and strict criteria used (Oksanen &
-  Minchin 1997).
+  Minchin 1997). 
 
-  Please
-  note that there really is no need for piecewise transformation or even
-  downweighting within \code{decorana}, since there are more powerful
-  and extensive alternatives in \R, but these options are included for
-  compliance with the original software.  If different fraction of
-  abundance is needed in downweighting, function \code{downweight} must
-  be applied before \code{decorana}.  Function \code{downweight} 
-  indeed can be applied prior to correspondence analysis, and so it can be
-  used together with \code{\link{cca}}, too.
+  Please note that there really is no need for piecewise transformation
+  or even downweighting within \code{decorana}, since there are more
+  powerful and extensive alternatives in \R, but these options are
+  included for compliance with the original software.  If a different
+  fraction of abundance is needed in downweighting, function
+  \code{downweight} must be applied before \code{decorana}.  Function
+  \code{downweight} indeed can be applied prior to correspondence
+  analysis, and so it can be used together with \code{\link{cca}}, too.
 
   The function finds only four axes: this is not easily changed.
 }
 
-
- \seealso{
-   For unconstrained ordination, non-metric multidimensional scaling in
-   \code{\link[MASS]{isoMDS}} may be more robust (see also
-   \code{\link{metaMDS}}).  Constrained (or
-   `canonical') correspondence analysis can be made with
-   \code{\link{cca}}.  Orthogonal correspondence analysis can be
-   made with \code{\link[multiv]{ca}}, or with \code{decorana} or
-   \code{\link{cca}}, but the scaling of results vary (and the one in
-   \code{decorana} correspondes to \code{scaling = -1} in
-   \code{\link{cca}}.).
-   See \code{\link{predict.decorana}} for adding new points to ordination. 
- }
+\seealso{
+  For unconstrained ordination, non-metric multidimensional scaling in
+  \code{\link[MASS]{isoMDS}} may be more robust (see also
+  \code{\link{metaMDS}}).  Constrained (or
+  `canonical') correspondence analysis can be made with
+  \code{\link{cca}}.  Orthogonal correspondence analysis can be
+  made with \code{\link[multiv]{ca}}, or with \code{decorana} or
+  \code{\link{cca}}, but the scaling of results vary (and the one in
+  \code{decorana} correspondes to \code{scaling = -1} in
+  \code{\link{cca}}.).
+  See \code{\link{predict.decorana}} for adding new points to an
+  ordination.
+}
 
 \examples{
 data(varespec)
@@ -178,6 +185,7 @@ vare.dca <- decorana(varespec)
 vare.dca
 summary(vare.dca)
 plot(vare.dca)
+
 ### the detrending rationale:
 gaussresp <- function(x,u) exp(-(x-u)^2/2)
 x <- seq(0,6,length=15) ## The gradient
@@ -189,6 +197,7 @@ plot(scores(prcomp(pack)), asp=1, type="b", main="PCA")
 plot(scores(decorana(pack, ira=1)), asp=1, type="b", main="CA")
 plot(scores(decorana(pack)), asp=1, type="b", main="DCA")
 plot(scores(cca(pack ~ x), dis="sites"), asp=1, type="b", main="CCA")
+
 ### Let's add some noise:
 noisy <- (0.5 + runif(length(pack)))*pack
 par(mfrow=c(2,1))
@@ -200,6 +209,6 @@ plot(scores(decorana(noisy, ira=1)), type="b", main="CA", asp=1)
 plot(scores(decorana(noisy)), type="b", main="DCA", asp=1)
 plot(scores(cca(noisy ~ x), dis="sites"), asp=1, type="b", main="CCA")
 par(opar)
-  }
+}
 \keyword{ multivariate }
 

@@ -1,4 +1,4 @@
-"permutest.cca" <-
+`permutest.cca` <-
     function (x, permutations = 100, model = c("direct", "reduced", 
                                      "full"), first = FALSE, strata, ...) 
 {
@@ -29,7 +29,7 @@
     Q <- x$CCA$QR
     if (isCCA) {
         w <- weights(x, "sites")
-        X <- qr.X(Q)
+        X <- qr.X(Q, ncol=length(Q$pivot))
         X <- sweep(X, 1, sqrt(w), "/")
     }
     if (isPartial) {
@@ -90,3 +90,4 @@
     class(sol) <- "permutest.cca"
     sol
 }
+

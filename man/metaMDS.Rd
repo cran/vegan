@@ -24,8 +24,8 @@
 }
 \usage{
 metaMDS(comm, distance = "bray", k = 2, trymax = 20, autotransform =TRUE,
-        noshare = 0.1, expand = TRUE, trace = 1, plot = FALSE,
-        previous.best, ...)
+        noshare = 0.1, wascores = TRUE, expand = TRUE, trace = 1,
+        plot = FALSE, previous.best, ...)
 \method{plot}{metaMDS}(x, display = c("sites", "species"), choices = c(1, 2),
      type = "p", shrink = FALSE,  ...)
 \method{points}{metaMDS}(x, display = c("sites", "species"),
@@ -55,6 +55,8 @@ metaMDSredist(object, ...)
   \item{noshare}{Proportion of site pairs with no shared species to
     trigger \code{\link{stepacross}} to find flexible shortest paths
     among dissimilarities.}
+  \item{wascores}{Calculate species scores using function
+    \code{\link{wascores}}.}
   \item{expand}{Expand weighted averages of species in
     \code{\link{wascores}}.}
   \item{trace}{Trace the function; \code{trace = 2} or higher will be
@@ -181,7 +183,9 @@ metaMDSredist(object, ...)
     solution as weighted averages using function
     \code{\link{wascores}} with given value of parameter \code{expand}.
     The expansion of  weighted averages can be undone with \code{shrink
-      = TRUE} in \code{plot} or \code{scores} functions. 
+      = TRUE} in \code{plot} or \code{scores} functions, and the
+    calculation of species scores can be suppressed with \code{wascores
+    = FALSE}. 
   }
 }
 

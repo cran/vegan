@@ -1,7 +1,5 @@
-### Driver routine for variation partioning
-### Handles input and calls varpart[234]
-"varpart" <-
-function (Y, X, ..., data, transfo, scale = FALSE) 
+`varpart` <-
+    function (Y, X, ..., data, transfo, scale = FALSE) 
 {
     if (missing(data)) 
         data <- parent.frame()
@@ -20,7 +18,8 @@ function (Y, X, ..., data, transfo, scale = FALSE)
     Sets <- list()
     for (i in 1:length(X)) {
         if (inherits(X[[i]], "formula")) {
-            mf <- model.frame(X[[i]], data, na.action = na.fail)
+            mf <- model.frame(X[[i]], data, na.action = na.fail,
+                              drop.unused.levels = TRUE)
             trms <- attr(mf, "terms")
             Sets[[i]] <- model.matrix(trms, mf)
             if (any(colnames(Sets[[i]]) == "(Intercept)")) {
@@ -32,9 +31,10 @@ function (Y, X, ..., data, transfo, scale = FALSE)
         Sets[[i]] <- scale(Sets[[i]], center = TRUE, scale = TRUE)
     }
     out <- list()
-    out$part <- switch(length(Sets), NULL, varpart2(Y, Sets[[1]], 
-        Sets[[2]]), varpart3(Y, Sets[[1]], Sets[[2]], Sets[[3]]), 
-        varpart4(Y, Sets[[1]], Sets[[2]], Sets[[3]], Sets[[4]]))
+    out$part <- switch(length(Sets), NULL,
+                       varpart2(Y, Sets[[1]], Sets[[2]]),
+                       varpart3(Y, Sets[[1]], Sets[[2]], Sets[[3]]), 
+                       varpart4(Y, Sets[[1]], Sets[[2]], Sets[[3]], Sets[[4]]))
     out$scale <- scale
     if (!missing(transfo)) 
         out$transfo <- transfo

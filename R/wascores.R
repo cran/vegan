@@ -1,4 +1,4 @@
-"wascores" <-
+`wascores` <-
     function (x, w, expand = FALSE) 
 {
     x <- as.matrix(x)
@@ -12,16 +12,19 @@
         wa[i, ] <- apply(x, 2, weighted.mean, w = w[, i])
     }
     if (expand) {
+        i <- complete.cases(wa)
         x.w <- rowSums(w)
-        wa.w <- colSums(w)
+        ewa.w <- colSums(w[,i, drop=FALSE])
+        ewa <- wa[i,, drop=FALSE]
         x.cov <- cov.wt(x, x.w)
-        wa.cov <- cov.wt(wa, wa.w)
+        wa.cov <- cov.wt(ewa, ewa.w)
         x.cov$cov <- x.cov$cov * (1 - sum(x.cov$wt^2))
         wa.cov$cov <- wa.cov$cov * (1 - sum(wa.cov$wt^2))
         mul <- sqrt(diag(x.cov$cov)/diag(wa.cov$cov))
-        wa <- sweep(wa, 2, wa.cov$center, "-")
-        wa <- sweep(wa, 2, mul, "*")
-        wa <- sweep(wa, 2, wa.cov$center, "+")
+        ewa <- sweep(ewa, 2, wa.cov$center, "-")
+        ewa <- sweep(ewa, 2, mul, "*")
+        ewa <- sweep(ewa, 2, wa.cov$center, "+")
+        wa[i,] <- ewa
         attr(wa, "shrinkage") <- 1/mul^2
         attr(wa, "centre") <- wa.cov$center
     }

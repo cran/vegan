@@ -1,6 +1,6 @@
-"predict.decorana" <-
-function (object, newdata, type = c("response", "sites", "species"), 
-    rank = 4, ...) 
+`predict.decorana` <-
+    function (object, newdata, type = c("response", "sites", "species"), 
+              rank = 4, ...) 
 {
     type <- match.arg(type)
     u <- object$rproj[, 1:rank, drop = FALSE]
@@ -19,12 +19,12 @@ function (object, newdata, type = c("response", "sites", "species"),
             stop("Prediction is unavailable in detrended CA beyond first axis\n")
         Xbar <- 0
         if (rank > 0) {
-        	if (!object$ira) {
-        		tmp <- sweep(v, 1, sqrt(cs), "*")
-        		tmp <- rbind(tmp, sweep(u, 1, sqrt(rs), "*"))
-        		rot <- svd(tmp)$v
-        		v <- v %*% rot
-        		u <- u %*% rot
+            if (!object$ira) {
+                tmp <- sweep(v, 1, sqrt(cs), "*")
+                tmp <- rbind(tmp, sweep(u, 1, sqrt(rs), "*"))
+                rot <- svd(tmp)$v
+                v <- v %*% rot
+                u <- u %*% rot
                 fac <- colSums(sweep(v^2, 1, cs, "*"))
                 lam <- (fac - 1)/fac
             }
@@ -35,6 +35,8 @@ function (object, newdata, type = c("response", "sites", "species"),
     else if (type == "sites") {
         if (!missing(newdata)) {
             Xbar <- as.matrix(newdata)
+            if (!is.null(object$v))
+                Xbar <- sweep(Xbar, 2, object$v, "*")
             rs <- rowSums(Xbar)
             Xbar <- (Xbar - outer(rs, cs))/sqrt(outer(rs, cs))
             v <- sweep(v, 1, sqrt(cs), "*")
@@ -59,4 +61,3 @@ function (object, newdata, type = c("response", "sites", "species"),
     }
     out
 }
-

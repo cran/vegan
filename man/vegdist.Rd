@@ -4,7 +4,10 @@
 \title{Dissimilarity Indices for Community Ecologists }
 \description{
   The function computes dissimilarity indices that are useful for or
-  popular with community ecologists. If you do not find your favourite
+  popular with community ecologists. All indices use quantitative data,
+  although they would be named by the corresponding binary index, but you
+  can calculate the binary index using an appropriate argument.
+  If you do not find your favourite
   index here, you can see if it can be implemented using
   \code{\link{designdist}}. 
   Gower, Bray--Curtis, Jaccard and
@@ -48,7 +51,11 @@
       x[ik]))}
     \cr
     \code{gower}
-    \tab \eqn{d_{jk} = \sum_i \frac{|x_{ij}-x_{ik}|}{\max x_i-\min x_i}}{d[jk] = sum (abs(x[ij]-x[ik])/(max(x[i])-min(x[i]))}
+    \tab \eqn{d_{jk} = (1/M) \sum_i \frac{|x_{ij}-x_{ik}|}{\max x_i-\min
+	x_i}}{d[jk] = (1/M) sum (abs(x[ij]-x[ik])/(max(x[i])-min(x[i]))}
+    \cr
+    \tab where \eqn{M} is the number of columns (excluding missing
+    values)
     \cr
     \code{canberra}
     \tab \eqn{d_{jk}=\frac{1}{NZ} \sum_i
@@ -170,7 +177,7 @@
   which correctly may refer only to one of these alternatives For
   instance, the Bray
   index is known also as Steinhaus, Czekanowski and \enc{Sørensen}{Sorensen} index.
-  The quantitive version of Jaccard should probably called
+  The quantitative version of Jaccard should probably called
   \enc{Ružička}{Ruzicka} index.
   The abbreviation \code{"horn"} for the Horn--Morisita index is
   misleading, since there is a separate Horn index. The abbreviation

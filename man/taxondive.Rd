@@ -31,19 +31,22 @@ taxa2dist(x, varstep = FALSE, check = TRUE, labels)
   \item{varstep}{Vary step lengths between successive levels
     relative to proportional loss of the number of distinct classes.}
   \item{check}{If \code{TRUE}, remove all redundant levels which are
-    different for all rows or constant for all rows. If \code{FALSE} all
-    levels are retained and speciec (basic taxon) also must be coded.}
+    different for all rows or constant for all rows and regard each row
+    as a different basal taxon (species). If \code{FALSE} all
+    levels are retained and basal taxa (species) also must be coded as
+    variables (columns). You will get a warning if species are not
+    coded, but you can ignore this if that was your intention.}
   \item{labels}{The \code{labels} attribute of taxonomic distances. Row
     names will be used if this is not given. Species will be matched by
     these labels in \code{comm} and \code{dis} in \code{taxondive} if
-    these have different dimensions. }
+    these have different dimensions.}
 }
 \details{
   Clarke & Warwick (1998, 2001) suggested several alternative indices of
   taxonomic diversity or distinctness. Two basic indices are called
   taxonomic diversity (\eqn{\Delta}) and distinctness (\eqn{\Delta^*}):
   \tabular{c}{
-    \eqn{\Delta = (\sum \sum_{i<j} \omega_{ij} x_i x_j)/(n (n-1) 2)} \cr
+    \eqn{\Delta = (\sum \sum_{i<j} \omega_{ij} x_i x_j)/(n (n-1) / 2)} \cr
     \eqn{\Delta^* = (\sum \sum_{i<j} \omega_{ij} x_i x_j)/(\sum \sum_{i<j} x_i x_j) }
   }
   The equations give the index value for a single site, and summation
@@ -57,7 +60,7 @@ taxa2dist(x, varstep = FALSE, check = TRUE, labels)
   richness and \eqn{\Delta^+}, and index of variation in
   taxonomic distinctness (\eqn{\Lambda^+}) defined as
   \tabular{c}{
-    \eqn{(\sum \sum_{i<j} \omega_{ij}^2)/(n (n-1) 2) - (\Delta^+)^2}
+    \eqn{\Lambda^+ = (\sum \sum_{i<j} \omega_{ij}^2)/(n (n-1) / 2) - (\Delta^+)^2}
   }
 
   The \code{dis} argument must be species dissimilarities. These must be

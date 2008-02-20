@@ -17,7 +17,8 @@
   with new data sets.  
 }
 \usage{
-\method{fitted}{cca}(object, model = c("CCA", "CA"), ...)
+\method{fitted}{cca}(object, model = c("CCA", "CA"),
+    type =  c("response", "working"), ...)
 \method{predict}{cca}(object, newdata, type = c("response", "wa", "sp", "lc"),
     rank = "full", model = c("CCA", "CA"), scaling = FALSE, ...)
 calibrate.cca(object, newdata, rank = "full", ...)
@@ -36,7 +37,12 @@ calibrate.cca(object, newdata, rank = "full", ...)
     this a new community data frame, but for \code{predict.cca}
     \code{type = "lc"} it must be an environment data frame, and for
     \code{type = "response"} this is ignored.}
-  \item{type}{The type of prediction: \code{"response"} 
+  \item{type}{The type of prediction, fitted values or residuals: In
+    \code{fitted} and \code{residuals}, \code{"response"} scales results so
+    that the same ordination gives the same results, and \code{"working"}
+    gives the values used internally, that is after Chi-square
+    standardization in \code{cca} and scaling and centring in \code{rda}.
+    In \code{predict} \code{"response"} 
     gives an approximation of the original data matrix, \code{"wa"} the
     site scores as weighted averages of the community data, \code{"lc"}
     the site scores as linear combinations of environmental data, and
@@ -52,10 +58,12 @@ calibrate.cca(object, newdata, rank = "full", ...)
 }
 \details{
   Function \code{fitted} gives the approximation of the original data
-  matrix from the ordination result.  Function \code{residuals} gives
+  matrix from the ordination result either in the scale of the response
+  or as scaled internally by the function.  Function \code{residuals} gives
   the approximation of the original data from the unconstrained
-  ordination.  The \code{fitted.cca} and \code{residuals.cca} function
-  both have the same marginal totals as the original data matrix, and
+  ordination.  With argument \code{type = "response"} the
+  \code{fitted.cca} and \code{residuals.cca} function 
+  both give the same marginal totals as the original data matrix, and
   their entries do not add up to the original data. They are defined so
   that for model \code{mod <- cca(y ~ x)}, \code{cca(fitted(mod))} is equal
   to constrained ordination, and \code{cca(residuals(mod))} is equal to
@@ -66,8 +74,8 @@ calibrate.cca(object, newdata, rank = "full", ...)
     "full"} it is identical to \code{fitted}.  In addition, the function
   can find the species scores or site scores from the community data
   matrix.  The function can be used with new data, and it can be used to
-  add new species or site sccores to existing ordinations.  The function
-  returns (weighted) orthornormal scores by default, and you must
+  add new species or site scores to existing ordinations.  The function
+  returns (weighted) orthonormal scores by default, and you must
   specify explicit \code{scaling} to
   add those scores to ordination diagrams. With
   \code{type = "wa"} the function finds the site scores from species

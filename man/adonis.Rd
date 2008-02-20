@@ -3,31 +3,36 @@
 \alias{adonis}
 \alias{print.adonis}
 
-\title{Multivariate Analysis of Variance Using Distance Matrices }
+\title{Multivariate Analysis of Variance Using Distance Matrices}
 
-\description{ Analysis of variance using distance matrices --- for partitioning distance
-matrices among sources of variation and fitting linear models to
-distance matrices.  }
+\description{Analysis of variance using distance matrices --- for
+  partitioning distance matrices among sources of variation and fitting
+  linear models (e.g., factors, polynomial regression) to distance 
+  matrices.}
 
 \usage{
-adonis(formula, data, permutations = 5, method = "bray", strata = NULL,
-     contr.unordered = "contr.sum", contr.ordered = "contr.poly")
+adonis(formula, data, permutations = 5, method = "bray",
+       strata = NULL, contr.unordered = "contr.sum",
+       contr.ordered = "contr.poly", ...)
 }
 
-\arguments{
+\arguments{  
   \item{formula}{a typical model formula such as \code{Y ~ A + B*C}, but
-    where \code{Y} is a data frame or a matrix; \code{A}, \code{B}, and
+    where \code{Y} is either a dissimilarity object (inheriting from
+    class \code{"dist"}) or data frame or a matrix; \code{A}, \code{B}, and
     \code{C} may be factors or continuous variables. } 
   \item{data}{ the data frame from which \code{A}, \code{B}, and
     \code{C} would be drawn.} 
   \item{permutations}{ number of replicate permutations used for the
     hypothesis tests (\eqn{F} tests).} 
   \item{method}{ the name of any method used in \code{\link{vegdist}} to
-    calculate pairwise distances. } 
+    calculate pairwise distances if the left hand side of the
+    \code{formula} was a data frame or a matrix. } 
   \item{strata}{ groups (strata) within which to constrain permutations.  }
   \item{contr.unordered, contr.ordered}{contrasts used for the design
     matrix (default in R is dummy or treatment contrasts for unordered
-    factors). } 
+    factors). }
+  \item{\dots}{Other arguments passed to \code{vegdist}.}
 }
 
 \details{\code{adonis} is a function for the analysis and partitioning
@@ -39,7 +44,7 @@ method as \dQuote{nonparametric manova}. Further, as its inputs are
 linear predictors, and a response matrix of an arbitrary number of
 columns (2 to millions), it is a robust alternative to both parametric
 MANOVA and to ordination methods for describing how variation is
-atributed to different experimental treatments or uncontrolled
+attributed to different experimental treatments or uncontrolled
 covariates. It is also analogous to redundancy analysis (Legendre and
 Anderson 1999).
 
@@ -104,12 +109,13 @@ overview of rules.
   \item{coefficients }{ matrix of coefficients of the linear model, with
     rows representing sources of variation and columns representing
     species. } 
-  \item{f.perms}{ an \eqn{N} by \eqn{m} matrix of the null \eqn{F} statistics for each
-    source of variation  based on \eqn{N} permutations of the data. }  
+  \item{f.perms}{ an \eqn{N} by \eqn{m} matrix of the null \eqn{F}
+    statistics for each source of variation  based on \eqn{N}
+    permutations of the data.}
 }
 \references{
 Anderson, M.J. 2001. A new method for non-parametric multivariate
-analysis of variance. \emph{Austral Ecology}, 26: 32--46.
+analysis of variance. \emph{Austral Ecology}, \strong{26}: 32--46.
 
 Crawley, M.J. 2002. \emph{Statistical Computing: An Introduction to Data
   Analysis Using S-PLUS} 
@@ -117,20 +123,20 @@ Crawley, M.J. 2002. \emph{Statistical Computing: An Introduction to Data
 Excoffier, L., P.E. Smouse, and J.M. Quattro. 1992. Analysis of
 molecular variance inferred from metric distances among DNA haplotypes:
 Application to human mitochondrial DNA restriction data. \emph{Genetics},
-131:479--491.
+\strong{131}:479--491.
 
 Legendre, P. and M.J. Anderson. 1999. Distance-based redundancy
 analysis: Testing multispecies responses in multifactorial ecological
-experiments. \emph{Ecological Monographs}, 69:1--24.
+experiments. \emph{Ecological Monographs}, \strong{69}:1--24.
 
 McArdle, B.H.  and M.J. Anderson. 2001. Fitting multivariate models to
 community data: A comment on distance-based redundancy
-analysis. \emph{Ecology}, 82: 290--297.
+analysis. \emph{Ecology}, \strong{82}: 290--297.
 
 Zapala, M.A. and N.J. Schork. 2006. Multivariate regression analysis of
 distance matrices for testing associations between gene expression
 patterns and related variables. \emph{Proceedings of the National Academy of
-Sciences, USA}, 103:19430--19435.
+Sciences, USA}, \strong{103}:19430--19435.
 }
 \author{Martin Henry H. Stevens
 \email{HStevens@muohio.edu},

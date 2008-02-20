@@ -1,5 +1,5 @@
 "scores.default" <-
-    function (x, display = c("sites", "species"), choices, ...) 
+    function (x, choices, display = c("sites", "species"), ...) 
 {
     display <- match.arg(display)
     att <- names(x)

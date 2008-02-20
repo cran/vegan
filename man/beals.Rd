@@ -20,12 +20,12 @@ swan(x)
   \item{x}{Community data frame or matrix }
 }
 \details{
-  The Beals smoothing is the estimated probability \eqn{p_{ij}}{p[ij]}
+  Beals smoothing is the estimated probability \eqn{p_{ij}}{p[ij]}
   that species \eqn{j} occurs in site \eqn{i}.  It is defined as
   \eqn{p_{ij} = \frac{1}{S_i} \sum_k \frac{N_{jk} I_{ik}}{N_k}}{p[ij]
-    = 1/S[i] Sum(k) N[jk] I[ik] / N[k]}, where \eqn{S} is the
-  number of species on a site, \eqn{N_{jk}}{N[jk]} is the number of
-  joint occurrences of species \eqn{j} and \eqn{k}, and
+    = 1/S[i] Sum(k) N[jk] I[ik] / N[k]}, where \eqn{S_i}{S[i]} is the
+  number of species on site \eqn{i}, \eqn{N_{jk}}{N[jk]} is the number of
+  joint occurrences of species \eqn{j} and \eqn{k},
   \eqn{N_k}{N[k]} is the number of occurences of species \eqn{k}, and
   \eqn{I} is the incidence (0 or 1) of species (this last term is
   usually omitted from the equation, but it is necessary).
@@ -44,10 +44,10 @@ swan(x)
 
   Swan (1970) suggested replacing zero values with degrees of absence of
   a species in a community data matrix. Swan expressed the method in
-  terms of similarity matrix, but it is equivalent to applying Beals
-  smoothing to zero values, at each step shifting smallest initially
+  terms of a similarity matrix, but it is equivalent to applying Beals
+  smoothing to zero values, at each step shifting the smallest initially
   non-zero item to value one, and repeating this so many times that
-  there are no zeros left in the data. This actually is very similar to
+  there are no zeros left in the data. This is actually very similar to
   extended dissimilarities (implemented in function
   \code{\link{stepacross}}), but very rarely used. 
 }

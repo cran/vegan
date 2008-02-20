@@ -8,14 +8,14 @@
   some ordination methods.
 }
 \usage{
-\method{scores}{default}(x, display=c("sites", "species"), choices, ...)
+\method{scores}{default}(x, choices, display=c("sites", "species"), ...)
 }
 
 \arguments{
   \item{x}{ An ordination result. }
-  \item{display}{ Partial match to access scores for \code{sites} or
-    \code{species}.  }
   \item{choices}{ Ordination axes.  If missing, returns all axes.}
+  \item{display}{ Partial match to access scores for \code{sites} or
+    \code{species}.}
   \item{...}{ Other parameters (unused). }
 }
 \details{

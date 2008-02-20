@@ -15,7 +15,7 @@
 
 \value{
   A \code{cca} object has the following elements:
-  \item{call }{function call.}
+  \item{call }{the function call.}
   \item{colsum, rowsum }{Column and row sums in \code{cca}.  In
     \code{rda}, item \code{colsum} contains standard deviations of
     species and \code{rowsum} is \code{NA}.}
@@ -42,23 +42,23 @@
     component.
     Items \code{pCCA}, \code{CCA} and \code{CA} have similar
     structure, and contain following items:
-    \item{alias}{The names of the aliased constraints or conditions.
+    \item{\code{alias}}{The names of the aliased constraints or conditions.
       Function \code{\link{alias.cca}} does not access this item
       directly, but it finds the aliased variables and their defining
-      equations from the item \code{QR}.}
-    \item{biplot}{Biplot scores of constraints.  Only in \code{CCA}.}
+      equations from the \code{QR} item.}
+    \item{\code{biplot}}{Biplot scores of constraints.  Only in \code{CCA}.}
     \item{centroids}{(Weighted) centroids of factor levels of
       constraints. Only in \code{CCA}. Missing if the ordination was not
     called with \code{formula}.}
-    \item{eig}{Eigenvalues of axes. In \code{CCA} and \code{CA}.}
-    \item{envcentre}{(Weighted) means of the original constraining or
+    \item{\code{eig}}{Eigenvalues of axes. In \code{CCA} and \code{CA}.}
+    \item{\code{envcentre}}{(Weighted) means of the original constraining or
       conditioning variables. In \code{pCCA} and in \code{CCA}.}
-    \item{Fit}{The fitted values of standardized data matrix after
+    \item{\code{Fit}}{The fitted values of standardized data matrix after
       fitting conditions. Only in \code{pCCA}.}
-    \item{QR}{The QR decomposition of explanatory variables as produced
+    \item{\code{QR}}{The QR decomposition of explanatory variables as produced
       by \code{\link{qr}}. 
       The constrained ordination 
-      algorithm is based on \code{QR} decomposition of constraints and
+      algorithm is based on QR decomposition of constraints and
       conditions (environmental data).  The environmental data
       are first centred in \code{rda} or weighted and centred in
       \code{cca}.  The QR decomposition is used in many functions that
@@ -69,33 +69,33 @@
       \code{\link{predict.cca}}, \code{\link{predict.rda}},
       \code{\link{calibrate.cca}}.  For possible uses of this component,
       see \code{\link{qr}}. In \code{pCCA} and \code{CCA}.} 
-    \item{rank}{The rank of the component.}
-    \item{tot.chi}{Total inertia or the sum of all eigenvalues of the
+    \item{\code{rank}}{The rank of the component.}
+    \item{\code{tot.chi}}{Total inertia or the sum of all eigenvalues of the
       component.}
-    \item{u}{(Weighted) orthonormal site scores.  Please note that
+    \item{\code{u}}{(Weighted) orthonormal site scores.  Please note that
       scaled scores are not stored in the \code{cca} object, but they
       are made when the object is accessed with functions like
       \code{\link{scores.cca}}, \code{\link{summary.cca}} or
       \code{\link{plot.cca}}, or their \code{rda} variants.   Only in
-      \code{CCA} and \code{CA}.  In \code{CCA} component these are the
-      so-called linear combination scores. }
-    \item{u.eig}{\code{u} scaled by eigenvalues.  There is no guarantee
-      that any \code{.eig} variants of scores will be kept in the future
-      releases.}
-    \item{v}{(Weighted) orthonormal species scores.  If missing species
+      \code{CCA} and \code{CA}.  In the \code{CCA} component these are
+      the so-called linear combination scores. }
+    \item{\code{u.eig}}{\code{u} scaled by eigenvalues.  There is no
+      guarantee that any \code{.eig} variants of scores will be kept in
+      the future releases.}
+    \item{\code{v}}{(Weighted) orthonormal species scores.  If missing species
       were omitted from the analysis, this will contain
       attribute \code{\link{na.action}} that lists the
       omitted species. Only in \code{CCA} and \code{CA}.}
-    \item{v.eig}{\code{v} weighted by eigenvalues.}
-    \item{wa}{Site scores found as weighted averages (\code{cca}) or
+    \item{\code{v.eig}}{\code{v} weighted by eigenvalues.}
+    \item{\code{wa}}{Site scores found as weighted averages (\code{cca}) or
       weighted sums (\code{rda}) of 
       \code{v} with weights \code{Xbar}, but the multiplying effect of
       eigenvalues  removed. These often are known as WA scores in
       \code{cca}. Only in  \code{CCA}.}
-    \item{wa.eig}{The direct result of weighted avaraging or weighted
+    \item{\code{wa.eig}}{The direct result of weighted avaraging or weighted
       summation  (matrix multiplication)
       with the resulting eigenvalue inflation.}
-    \item{Xbar}{The standardized data matrix after previous stages of
+    \item{\code{Xbar}}{The standardized data matrix after previous stages of
       analysis. In \code{CCA} this is after possible \code{pCCA} or
       after partialling out the effects of conditions, and in \code{CA}
       after both \code{pCCA} and \code{CCA}. In \code{\link{cca}} the

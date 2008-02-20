@@ -7,8 +7,7 @@ function (object, ...)
     if (is.null(object$terms)) 
         stop("Analysis is only possible for models fitted using formula")
     lc <- object$CCA$u
-    newdata <- model.frame(object$terminfo, data = eval(as.list(object$call)$data))
-    newdata <- cbind(lc, newdata)
+    newdata <- cbind(lc, eval(as.list(object$call)$data))
     axnam <- colnames(lc)
     df <- c(rep(1, rnk), object$CA$rank)
     chi <- c(object$CCA$eig, Residual = object$CA$tot.chi)
@@ -45,4 +44,3 @@ function (object, ...)
     class(out) <- c("anova.cca", "anova", "data.frame")
     out
 }
-

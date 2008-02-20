@@ -16,6 +16,7 @@
 }
 \usage{
 \method{deviance}{cca}(object, ...)
+
 \method{extractAIC}{cca}(fit, scale = 0, k = 2, ...)
 }
 
@@ -32,35 +33,32 @@
 \details{
   The functions find statistics that
   resemble \code{\link{deviance}} and \code{\link{AIC}} in constrained
-  ordination.  Actually,
-  constrained ordination methods do not have log-Likelihood, which means
-  that they cannot have AIC and deviance.  Therefore you should not use
-  these functions, and if you use them, you should not trust them.  If
-  you use these functions, it remains as your responsibility to check
-  the adequacy of the result.
+  ordination.  Actually, constrained ordination methods do not have a
+  log-Likelihood, which means that they cannot have AIC and deviance.
+  Therefore you should not use these functions, and if you use them, you
+  should not trust them.  If you use these functions, it remains as your
+  responsibility to check the adequacy of the result.
 
-  The deviance of \code{\link{cca}} is equal to Chi-square of
-  the residual data matrix after fitting the constraints.  The deviance of
-  \code{\link{rda}} is defined as the residual sum of squares.
-  The deviance function of \code{rda} is also used for
-  \code{\link{capscale}}. 
-  Function \code{extractAIC} mimics
+  The deviance of \code{\link{cca}} is equal to the Chi-square of
+  the residual data matrix after fitting the constraints.  The deviance
+  of  \code{\link{rda}} is defined as the residual sum of squares. The
+  deviance function of \code{rda} is also used for
+  \code{\link{capscale}}. Function \code{extractAIC} mimics
   \code{extractAIC.lm} in translating deviance to AIC.
-
+  
   There is little need to call these functions directly.  However, they
   are called implicitly in \code{\link{step}} function used in automatic
-  selection of constraining variables.  You should check the
-  resulting model with some other criteria, because the statistics used
-  here are unfounded. In particular, the penalty \code{k} is not properly
+  selection of constraining variables.  You should check the resulting
+  model with some other criteria, because the statistics used here are
+  unfounded. In particular, the penalty \code{k} is not properly
   defined, and the default \code{k = 2} is not justified
   theoretically. If you have only continuous covariates, the \code{step}
   function will base the model building on magnitude of eigenvalues, and
-  the value of \code{k} only influences the stopping point (but
-  variable with highest eigenvalues is not necessarily the most
-  significant one in permutation
-  tests in \code{\link{anova.cca}}). If you also
-  have multi-class factors, the value of \code{k} will have a
-  capricious effect in model building.  
+  the value of \code{k} only influences the stopping point (but the
+  variables with the highest eigenvalues are not necessarily the most
+  significant in permutation tests in \code{\link{anova.cca}}). If you
+  also have multi-class factors, the value of \code{k} will have a
+  capricious effect in model building.
  
 }
 \value{
@@ -68,9 +66,10 @@
   \code{extractAIC} returns effective degrees of freedom and ``AIC''. 
 }
 \references{
-  \enc{Godínez-Domínguez}{Godinez-Dominguez}, E. & Freire, J. (2003) Information-theoretic
-  approach for selection of spatial and temporal models of community
-  organization. \emph{Marine Ecology Progress Series} 253, 17--24.
+  \enc{Godínez-Domínguez}{Godinez-Dominguez}, E. & Freire, J. (2003)
+  Information-theoretic approach for selection of spatial and temporal
+  models of community organization. \emph{Marine Ecology Progress
+    Series} \strong{253}, 17--24. 
 }
 \author{ Jari  Oksanen }
 
@@ -95,7 +94,8 @@ step(ord)
 # Stepwise selection (forward from an empty model "dune ~ 1")
 step(cca(dune ~ 1, dune.env), scope = formula(ord))
 # ANOVA: added variable + the first left out
-anova(cca(dune ~ Moisture + Management, dune.env), permut=200, by = "terms")
+anova(cca(dune ~ Moisture + Management, dune.env), permut=200,
+      by = "terms")
 }
 \keyword{ multivariate }
 \keyword{ models }

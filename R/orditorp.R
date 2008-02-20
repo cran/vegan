@@ -1,12 +1,21 @@
 `orditorp` <-
-    function (x, display, labels, choices = c(1, 2), priority, cex = 0.7, 
-              pcex, col = par("col"), pcol, pch = par("pch"), air = 1, 
-              ...) 
+    function (x, display, labels, choices = c(1, 2), priority,
+              cex = 0.7, pcex, col = par("col"),
+              pcol, pch = par("pch"), air = 1, ...) 
 {
     if (missing(pcex)) 
         pcex <- cex
     if (missing(pcol)) 
         pcol <- col
+    ## currently need to extract three arguments from '...'
+    ## i) scaling, ii) origin and iii) shrink
+    ## define local functions as per plot.default
+    ## arguments after '...' in local functions are dropped and not passed on
+    ##
+    ## For future, if new scores methods accept extra arguments, add their
+    ## names to the local functions below.
+    localPoints <- function(..., shrink, origin, scaling) points(...)
+    localText <- function(..., shrink, origin, scaling) text(...)
     x <- scores(x, display = display, choices = choices, ...)
     if (missing(labels)) 
         labels <- rownames(x)
@@ -36,15 +45,19 @@
             pcex <- (pcex[ord])[!tt]
         if (length(pcol) > 1) 
             pcol <- (pcol[ord])[!tt]
-        points(x[!tt, , drop = FALSE], pch = pch, cex = pcex, 
-               col = pcol, ...)
+        ##points(x[!tt, , drop = FALSE], pch = pch, cex = pcex, 
+        ##       col = pcol, ...)
+        localPoints(x[!tt, , drop = FALSE], pch = pch, cex = pcex, 
+                    col = pcol, ...)
     }
     if (length(cex) > 1) 
         cex <- (cex[ord])[tt]
     if (length(col) > 1) 
         col <- (col[ord])[tt]
-    text(x[tt, , drop = FALSE], labels[tt], cex = cex, col = col, 
-         ...)
+    ##text(x[tt, , drop = FALSE], labels[tt], cex = cex, col = col, 
+    ##     ...)
+    localText(x[tt, , drop = FALSE], labels[tt], cex = cex, col = col, 
+              ...)
     names(tt) <- labels
     tt <- tt[order(ord)]
     invisible(tt)

@@ -77,9 +77,9 @@ The function returns a list of class mrpp with following items:
   \item{E.delta}{expected delta, under the null hypothesis of no group
     structure. This is the mean of the permuted deltas.}
   \item{Pvalue}{Significance of the test.}
-  \item{A}{A chance-corrected estimated of the distances explained by
-    group identity; a value analogous to a coefficient of determination
-    in a linear model.}
+  \item{A}{A chance-corrected estimate of the proportion of the distances
+    explained by group identity; a value analogous to a coefficient of 
+    determination in a linear model.} 
   \item{distance}{Choice of distance metric used; the "method" entry of
     the dist object.}
   \item{weight.type}{The choice of group weights used.}

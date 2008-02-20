@@ -7,7 +7,9 @@
   defined in \code{\link{options}}.
 }
 \usage{
-vegandocs(doc = c("ChangeLog", "FAQ-vegan.pdf", "vegan-FAQ.pdf", "partitioning.pdf"))
+vegandocs(doc = c("NEWS", "ChangeLog", "FAQ-vegan.pdf", 
+    "intro-vegan.pdf", "diversity-vegan.pdf", "decision-vegan.pdf", 
+    "partitioning.pdf"))
 }
 
 \arguments{
@@ -17,9 +19,7 @@ vegandocs(doc = c("ChangeLog", "FAQ-vegan.pdf", "vegan-FAQ.pdf", "partitioning.p
 \note{
   The function is a kluge, since \R does not have this facility (I hope
   it will come there). Function \code{\link{vignette}} only works with
-  vignettes. Document \dQuote{FAQ-vegan.pdf} is the proper FAQ, and
-  \dQuote{vegan-FAQ.pdf} rather describes design decision and technical
-  details of implementatin.
+  vignettes. 
 }
 \seealso{\code{\link{vignette}}. }
 \examples{
