@@ -1,14 +1,17 @@
 `anova.ccabyterm` <-
-    function (object, step = 10, ...) 
+    function (object, step = 100, ...) 
 {
-    #if (object$CCA$rank < object$CCA$QR$rank) 
-    #    warning("cannot analyse single terms: their rank is higher than the rank of CCA")
     trm <- terms(object)
     call <- paste("Model:", c(object$call))
     trmlab <- attr(trm, "term.labels")
     trmlab <- trmlab[trmlab %in% attr(terms(object$terminfo), 
                                       "term.labels")]
     ntrm <- length(trmlab)
+    ## 'adj' puts the result together with the permutations and reduces
+    ## number of simulations by one so that P = (hits+1)/(permutations+1).
+    ## The first step is reduced by adj.
+    adj <- (step %% 10) == 0
+    step <- step - adj
     pchi <- matrix(0, nrow = ntrm + 1, ncol = step)
     chi <- numeric(ntrm + 1)
     df <- numeric(ntrm + 1)
@@ -41,7 +44,7 @@
                                  2, pchi[ntrm + 1, , drop = FALSE], "/")
     P <- rowSums(sweep(pchi[-(ntrm + 1), , drop = FALSE], 1, 
                        Fval[-(ntrm + 1)], ">"))
-    P <- c(P/step, NA)
+    P <- c((P + adj)/(step + adj), NA)
     out <- data.frame(df, chi, Fval, c(rep(step, ntrm), NA), 
                       P)
     inertname <- if (sim$method == "cca") 
@@ -58,4 +61,3 @@
     structure(out, heading = c(head, call), Random.seed = sim$Random.seed, 
               class = c("anova.cca", "anova", "data.frame"))
 }
-

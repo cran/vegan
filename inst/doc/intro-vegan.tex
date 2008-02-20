@@ -1,0 +1,608 @@
+% -*- mode: noweb; noweb-default-code-mode: R-mode; -*-
+%\VignetteIndexEntry{Introduction to ordination in vegan}
+\documentclass[a4paper,10pt]{amsart}
+\usepackage{ucs}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{sidecap}
+\setlength{\captionindent}{0pt}
+\usepackage{url}
+
+\renewcommand{\floatpagefraction}{0.8}
+
+
+\title{Vegan: an introduction to ordination}
+\author{Jari Oksanen}
+
+\date{$ $Id: intro-vegan.Rnw 205 2008-02-15 06:08:56Z jarioksa $ $
+  processed with vegan
+1.11-0
+in R version 2.6.2 (2008-02-08) on \today}
+\usepackage{/usr/local/lib/R/share/texmf/Sweave}
+\begin{document}
+
+\setkeys{Gin}{width=0.55\linewidth}
+
+
+\maketitle
+
+\tableofcontents
+
+
+\noindent \texttt{Vegan} is a package for community ecologists.  This
+documents explains how the commonly used ordination methods can be
+done in \texttt{vegan}.  The document only is a very basic
+introduction.  Another document (\emph{vegan tutorial})
+(\url{http://cc.oulu.fi/~jarioksa/opetus/method/vegantutor.pdf}) gives
+a longer and more detailed introduction to ordination.  The
+current document only describes a small part of all \texttt{vegan}
+functions.  For most functions, the canonical references are the
+\texttt{vegan} help pages, and some of the most important additional
+functions are listed at this document.
+
+\section{Ordination}
+
+The \texttt{vegan} package contains all common ordination methods:
+Principal component analysis (function \texttt{rda}, or
+\texttt{prcomp} in the base \textsf{R}), correspondence analysis
+(\texttt{cca}), detrended correspondence analysis (\texttt{decorana})
+and a wrapper for non-metric multidimensional scaling
+(\texttt{metaMDS}).  Functions \texttt{rda} and \texttt{cca} mainly
+are designed for constrained ordination, and will be discussed later.
+In this chapter I describe functions \texttt{decorana} and
+\texttt{metaMDS}.
+
+\subsection{Detrended correspondence analysis}
+
+
+Detrended correspondence analysis (\textsc{dca}) is done like this:
+\begin{Schunk}
+\begin{Sinput}
+> library(vegan)
+> data(dune)
+> ord <- decorana(dune)
+\end{Sinput}
+\end{Schunk}
+This saves ordination results in \texttt{ord}:
+\begin{Schunk}
+\begin{Sinput}
+> ord
+\end{Sinput}
+\begin{Soutput}
+Call:
+decorana(veg = dune) 
+
+Detrended correspondence analysis with 26 segments.
+Rescaling of axes with 4 iterations.
+
+                  DCA1   DCA2    DCA3    DCA4
+Eigenvalues     0.5117 0.3036 0.12125 0.14266
+Decorana values 0.5360 0.2869 0.08136 0.04814
+Axis lengths    3.7004 3.1166 1.30057 1.47883
+\end{Soutput}
+\end{Schunk}
+The display of results is very brief: only eigenvalues and used
+options are listed.  Actual ordination results are not shown, but you
+can see them with command \texttt{summary(ord)}, or extract the scores
+with command \texttt{scores}.  The \texttt{plot} function also
+automatically knows how to access the scores.
+
+\subsection{Non-metric multidimensional scaling}
+
+Function \texttt{metaMDS} is a bit special case.  The actual
+ordination is performed by function \texttt{isoMDS} of the \texttt{MASS}
+package.  Function \texttt{metaMDS} is a wrapper to perform non-metric
+multidimensional scaling (\textsc{nmds}) like recommended in community
+ordination: it uses adequate dissimilarity measures (function
+\texttt{vegdist}), then it runs \textsc{nmds} several times with
+random starting configurations, compares results (function
+\texttt{procrustes}), and stops after finding twice a similar minimum stress
+solution.  Finally it scales and rotates the solution, and adds
+species scores to the configuration as weighted averages (function
+\texttt{wascores}):
+\begin{Schunk}
+\begin{Sinput}
+> ord <- metaMDS(dune)
+\end{Sinput}
+\begin{Soutput}
+Run 0 stress 12.05894 
+Run 1 stress 11.97273 
+... New best solution
+... procrustes: rmse 0.01950976  max resid 0.06038378 
+Run 2 stress 11.97273 
+... procrustes: rmse 3.344300e-05  max resid 7.426618e-05 
+*** Solution reached
+\end{Soutput}
+\begin{Sinput}
+> ord
+\end{Sinput}
+\begin{Soutput}
+Call:
+metaMDS(comm = dune) 
+
+Nonmetric Multidimensional Scaling using isoMDS (MASS package)
+
+Data:     dune 
+Distance: bray 
+
+Dimensions: 2 
+Stress:     11.97273 
+Two convergent solutions found after 2 tries
+Scaling: centring, PC rotation, halfchange scaling 
+Species: expanded scores
+\end{Soutput}
+\end{Schunk}
+
+\section{Ordination graphics}
+
+Ordination is nothing but a way of drawing graphs, and it is best to
+inspect ordinations only graphically (which also implies that they
+should not be taken too seriously).
+
+All ordination results of \texttt{vegan} can be displayed with a
+\texttt{plot} command (Fig. \ref{fig:plot}):
+\begin{Schunk}
+\begin{Sinput}
+> plot(ord)
+\end{Sinput}
+\end{Schunk}
+\begin{SCfigure}
+\includegraphics{intro-vegan-006}
+\caption{Default ordination plot.}
+\label{fig:plot}
+\end{SCfigure}
+Default \texttt{plot} command uses either black circles for sites and
+red pluses for species, or black and red text for sites and species,
+resp.  The choices depend on the number of items in the plot and
+ordination method.  You can override the default choice by setting
+\texttt{type = "p"} for points, or \texttt{type = "t"} for text.  For
+a better control of ordination graphics you can first draw an empty
+plot (\texttt{type = "n"}) and then add species and sites separately
+using \texttt{points} or \texttt{text} functions.  In this way you can
+combine points and text, and you can select colours and character
+sizes freely (Fig. \ref{fig:plot.args}):
+\begin{Schunk}
+\begin{Sinput}
+> plot(ord, type = "n")
+> points(ord, display = "sites", cex = 0.8, pch = 21, col = "red", 
++     bg = "yellow")
+> text(ord, display = "spec", cex = 0.7, col = "blue")
+\end{Sinput}
+\end{Schunk}
+\begin{SCfigure}
+\includegraphics{intro-vegan-008}
+\caption{A more colourful ordination plot where sites are points, and
+  species are text.}
+\label{fig:plot.args}
+\end{SCfigure}
+
+All \texttt{vegan} ordination methods have a specific \texttt{plot}
+function.  In addition, \texttt{vegan} has an alternative plotting
+function \texttt{ordiplot} that also knows many non-\texttt{vegan}
+ordination methods, such as \texttt{prcomp}, \texttt{cmdscale} and
+\texttt{isoMDS}.  All \texttt{vegan} plot functions return invisibly
+an \texttt{ordiplot} object, so that you can use \texttt{ordiplot}
+support functions with the results (\texttt{points}, \texttt{text},
+\texttt{identify}).
+
+Function \texttt{ordirgl} (requires \texttt{rgl} package) provides
+dynamic three-dimensional graphics that can be spun around or zoomed
+into with your mouse.  Function \texttt{ordiplot3d} (requires package
+\texttt{scatterplot3d}) displays simple three-dimensional
+scatterplots.
+
+\subsection{Cluttered plots}
+
+Ordination plots are often congested: there is a large number of sites
+and species, and it may be impossible to display all clearly.  In
+particular, two or more species may have identical scores and are
+plotted over each other.  \texttt{Vegan} does not have (yet?)
+automatic tools for clean plotting in these cases, but here some
+methods you can try:
+\begin{itemize}
+\item Zoom into graph setting axis limits \texttt{xlim} and
+  \texttt{ylim}.  You must typically set both, because \texttt{vegan}
+  will maintain equal aspect ratio of axes.
+\item Use points and label only some of these with \texttt{identify}
+  command.
+\item Use \texttt{select} argument in ordination \texttt{text} and
+  \texttt{points} functions to only show the specified items.
+\item Use automatic \texttt{orditorp} function that uses text only if
+  this can be done without overwriting previous labels, but points in
+  other cases.
+\item Use interactive \texttt{orditkplot} function that draws both
+  points and labels for ordination scores, and allows you to drag labels
+  to better positions. You can export the results of the edited graph to
+  encapsulated postscript, pdf, png or jpeg files, or copy directly to
+  encapsulated postscript, or return the edited positions to R for
+  further processing.
+\end{itemize}
+
+\subsection{Adding items to ordination plots}
+
+\texttt{Vegan} has a group of functions for adding information about
+classification or grouping of points onto ordination diagrams.
+Function \texttt{ordihull} adds convex hulls, \texttt{ordiellipse}
+(which needs package \texttt{ellipse}) adds ellipses of standard
+deviation, standard error or confidence areas, and \texttt{ordispider}
+combines items to their centroid (Fig. \ref{fig:ordihull}):
+\begin{Schunk}
+\begin{Sinput}
+> data(dune.env)
+> attach(dune.env)
+\end{Sinput}
+\end{Schunk}
+\begin{Schunk}
+\begin{Sinput}
+> plot(ord, disp = "sites", type = "n")
+> ordihull(ord, Management, col = "blue")
+> ordiellipse(ord, Management, col = 3, lwd = 2)
+> ordispider(ord, Management, col = "red")
+> points(ord, disp = "sites", pch = 21, col = "red", bg = "yellow", 
++     cex = 1.3)
+\end{Sinput}
+\end{Schunk}
+\begin{SCfigure}
+\includegraphics{intro-vegan-011}
+\caption{Convex hull, standard error ellipse and a spider web diagram
+  for Management levels in ordination.}
+\label{fig:ordihull}
+\end{SCfigure}
+In addition, you can overlay a cluster dendrogram from \texttt{hclust}
+using \texttt{ordicluster} or a minimum spanning tree from
+\texttt{spantree} with its \texttt{lines} function.  Segmented arrows
+can be added with \texttt{ordiarrows}, lines with
+\texttt{ordisegments} and regular grids with \texttt{ordigrid}.
+
+\section{Fitting environmental variables}
+
+\texttt{Vegan} provides two functions for fitting environmental
+variables onto ordination:
+\begin{itemize}
+\item \texttt{envfit} fits vectors of continuous variables and
+  centroids of levels of class variables (defined as \texttt{factor}
+  in \textsf{R}).  The direction of the vector shows the direction of
+  the gradient, and the length of the arrow is proportional to the
+  correlation between the variable and the ordination.
+\item \texttt{ordisurf} (which requires package \texttt{mgcv}) fits
+  smooth surfaces for continuous variables onto ordination using
+  thinplate splines with cross-validatory selection of smoothness.
+\end{itemize}
+
+Function \texttt{envfit} can be called with a \texttt{formula}
+interface, and it optionally can assess the ``significance'' of the
+variables using permutation tests:
+\begin{Schunk}
+\begin{Sinput}
+> ord.fit <- envfit(ord ~ A1 + Management, data = dune.env, 
++     perm = 1000)
+> ord.fit
+\end{Sinput}
+\begin{Soutput}
+***VECTORS
+
+     NMDS1   NMDS2     r2 Pr(>r)  
+A1 0.97950 0.20144 0.3689   0.02 *
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+P values based on 1000 permutations.
+
+***FACTORS:
+
+Centroids:
+               NMDS1   NMDS2
+ManagementBF -0.4532  0.0011
+ManagementHF -0.2712 -0.1209
+ManagementNM  0.3267  0.5688
+ManagementSF  0.1260 -0.4686
+
+Goodness of fit:
+               r2 Pr(>r)   
+Management 0.4206  0.006 **
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+P values based on 1000 permutations.
+\end{Soutput}
+\end{Schunk}
+The result can be drawn directly or added to an ordination diagram
+(Fig. \ref{fig:envfit}):
+\begin{Schunk}
+\begin{Sinput}
+> plot(ord, dis = "site")
+> plot(ord.fit)
+\end{Sinput}
+\end{Schunk}
+
+Function \texttt{ordisurf} directly adds a fitted surface onto
+ordination, but it returns the result of the fitted thinplate spline
+\texttt{gam} (Fig. \ref{fig:envfit}):
+\begin{Schunk}
+\begin{Sinput}
+> ordisurf(ord, A1, add = TRUE)
+\end{Sinput}
+\begin{Soutput}
+This is mgcv 1.3-29 
+
+Family: gaussian 
+Link function: identity 
+
+Formula:
+y ~ s(x1, x2, k = knots)
+
+Estimated degrees of freedom:
+ 2   total =  3 
+
+GCV score:  3.941037 
+\end{Soutput}
+\end{Schunk}
+\begin{SCfigure}
+\includegraphics{intro-vegan-015}
+\caption{Fitted vector and smooth surface for the thickness of A1
+  horizon (\texttt{A1}, in cm), and centroids of Management levels.}
+\label{fig:envfit}
+\end{SCfigure}
+
+\section{Constrained ordination}
+
+\texttt{Vegan} has three methods of constrained ordination:
+constrained or ``canonical'' correspondence analysis (function
+\texttt{cca}), redundancy analysis (function \texttt{rda}) and
+constrained analysis of proximities (function \texttt{capscale}).  All
+these functions also can have a conditioning term that is ``partialled
+out''.  I only demonstrate \texttt{cca}, but all functions accept
+similar commands and can be used in the same way.
+
+The preferred way is to use \texttt{formula} interface, where the left
+hand side gives the community data frame and the right hand side lists
+the constraining variables:
+\begin{Schunk}
+\begin{Sinput}
+> ord <- cca(dune ~ A1 + Management, data = dune.env)
+> ord
+\end{Sinput}
+\begin{Soutput}
+Call:
+cca(formula = dune ~ A1 + Management, data = dune.env) 
+
+              Inertia Rank
+Total          2.1153     
+Constrained    0.7798    4
+Unconstrained  1.3355   15
+Inertia is mean squared contingency coefficient 
+
+Eigenvalues for constrained axes:
+   CCA1    CCA2    CCA3    CCA4 
+0.31875 0.23718 0.13217 0.09168 
+
+Eigenvalues for unconstrained axes:
+     CA1      CA2      CA3      CA4      CA5      CA6      CA7      CA8 
+0.362024 0.202884 0.152661 0.134549 0.110957 0.079982 0.076698 0.055267 
+     CA9     CA10     CA11     CA12     CA13     CA14     CA15 
+0.044361 0.041528 0.031699 0.017786 0.011642 0.008736 0.004711 
+\end{Soutput}
+\end{Schunk}
+The results can be plotted with (Fig. \ref{fig:cca}):
+\begin{Schunk}
+\begin{Sinput}
+> plot(ord)
+\end{Sinput}
+\end{Schunk}
+\begin{SCfigure}
+\includegraphics{intro-vegan-018}
+\caption{Default plot from constrained correspondence analysis.}
+\label{fig:cca}
+\end{SCfigure}
+There are three groups of items: sites, species and centroids (and
+biplot arrows) of environmental variables.  All these can be added
+individually to an empty plot, and all previously explained tricks of
+controlling graphics still apply.
+
+It is not recommended to perform constrained ordination with all
+environmental variables you happen to have: adding the number of
+constraints means slacker constraint, and you finally end up with
+solution similar to unconstrained ordination. In that case it is
+better to use unconstrained ordination with environmental fitting.
+However, if you really want to do so, it is possible with the
+following shortcut in \texttt{formula}:
+\begin{Schunk}
+\begin{Sinput}
+> cca(dune ~ ., data = dune.env)
+\end{Sinput}
+\begin{Soutput}
+Call:
+cca(formula = dune ~ A1 + Moisture + Management + Use + Manure,      data = dune.env) 
+
+              Inertia Rank
+Total          2.1153     
+Constrained    1.5032   12
+Unconstrained  0.6121    7
+Inertia is mean squared contingency coefficient 
+Some constraints were aliased because they were collinear (redundant)
+
+Eigenvalues for constrained axes:
+   CCA1    CCA2    CCA3    CCA4    CCA5    CCA6    CCA7    CCA8    CCA9 
+0.46713 0.34102 0.17606 0.15317 0.09528 0.07027 0.05887 0.04993 0.03183 
+  CCA10   CCA11   CCA12 
+0.02596 0.02282 0.01082 
+
+Eigenvalues for unconstrained axes:
+    CA1     CA2     CA3     CA4     CA5     CA6     CA7 
+0.27237 0.10876 0.08975 0.06305 0.03489 0.02529 0.01798 
+\end{Soutput}
+\end{Schunk}
+
+\subsection{Significance tests}
+
+\texttt{Vegan} provides permutation tests for the significance of
+constraints.  The test mimics standard analysis of variance function
+(\texttt{anova}), and the default test analyses all constraints
+simultaneously:
+\begin{Schunk}
+\begin{Sinput}
+> anova(ord)
+\end{Sinput}
+\begin{Soutput}
+Permutation test for cca under direct model
+
+Model: cca(formula = dune ~ A1 + Management, data = dune.env)
+         Df  Chisq      F N.Perm Pr(>F)   
+Model     4 0.7798 2.1896    199  0.005 **
+Residual 15 1.3355                        
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+\end{Soutput}
+\end{Schunk}
+The function actually used was \texttt{anova.cca}, but you do not need
+to give its name in full, because \textsf{R} automatically chooses the
+correct \texttt{anova} variant for the result of constrained
+ordination.
+
+The \texttt{anova.cca} function tries to be clever and lazy: it
+automatically stops if the observed permutation significance probably
+differs from the targeted critical value ($0.05$ as default), but it
+will continue long in uncertain cases.  You must set \texttt{step} and
+\texttt{perm.max} to same values to override this behaviour.
+
+It is also possible to analyse terms separately:
+\begin{Schunk}
+\begin{Sinput}
+> anova(ord, by = "term", permu = 200)
+\end{Sinput}
+\begin{Soutput}
+Permutation test for cca under direct model
+Terms added sequentially (first to last)
+
+Model: cca(formula = dune ~ A1 + Management, data = dune.env)
+           Df  Chisq      F N.Perm Pr(>F)   
+A1          1 0.2248 2.5245    199  0.015 * 
+Management  3 0.5550 2.0780    199  0.005 **
+Residual   15 1.3355                        
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+\end{Soutput}
+\end{Schunk}
+In this case, the function is unable to automatically select the
+number of iterations. This test is sequential: the terms are analysed
+in the order they happen to be in the model. You can also analyse
+significances of marginal effects (``Type III effects''):
+\begin{Schunk}
+\begin{Sinput}
+> anova(ord, by = "mar")
+\end{Sinput}
+\begin{Soutput}
+Permutation test for cca under direct model
+Marginal effects of terms
+
+Model: cca(formula = dune ~ A1 + Management, data = dune.env)
+           Df  Chisq      F N.Perm  Pr(>F)   
+A1          1 0.1759 1.9761    899 0.03111 * 
+Management  3 0.5550 2.0780    199 0.00500 **
+Residual   15 1.3355                         
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+\end{Soutput}
+\end{Schunk}
+
+Moreover, it is possible to analyse significance of each axis:
+\begin{Schunk}
+\begin{Sinput}
+> anova(ord, by = "axis", perm = 500)
+\end{Sinput}
+\begin{Soutput}
+Permutation test for cca under direct model
+
+Model: cca(formula = dune ~ A1 + Management, data = dune.env)
+         Df  Chisq      F N.Perm  Pr(>F)  
+CCA1      1 0.3187 3.5801    299 0.01667 *
+CCA2      1 0.2372 2.6640    599 0.05000 *
+CCA3      1 0.1322 1.4845     99 0.31000  
+CCA4      1 0.0917 1.0297     99 0.35000  
+Residual 15 1.3355                        
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+\end{Soutput}
+\end{Schunk}
+Now the automatic selection works, but typically some of your axes
+will be very close to the critical value, and it may be useful to set
+a lower \texttt{perm.max} than the default $10000$ (typically you use
+higher limits than in these examples: we used lower limits to save
+time when this document is automatically generated with this package).
+
+\subsection{Conditioned or partial ordination}
+
+All constrained ordination methods can have terms that are partialled
+out from the analysis before constraints:
+\begin{Schunk}
+\begin{Sinput}
+> ord <- cca(dune ~ A1 + Management + Condition(Moisture), 
++     data = dune.env)
+> ord
+\end{Sinput}
+\begin{Soutput}
+Call:
+cca(formula = dune ~ A1 + Management + Condition(Moisture), data = dune.env) 
+
+              Inertia Rank
+Total          2.1153     
+Conditional    0.6283    3
+Constrained    0.5109    4
+Unconstrained  0.9761   12
+Inertia is mean squared contingency coefficient 
+
+Eigenvalues for constrained axes:
+   CCA1    CCA2    CCA3    CCA4 
+0.24932 0.12090 0.08160 0.05904 
+
+Eigenvalues for unconstrained axes:
+     CA1      CA2      CA3      CA4      CA5      CA6      CA7      CA8 
+0.306366 0.131911 0.115157 0.109469 0.077242 0.075754 0.048714 0.037582 
+     CA9     CA10     CA11     CA12 
+0.031058 0.021024 0.012542 0.009277 
+\end{Soutput}
+\end{Schunk}
+This partials out the effect of \texttt{Moisture} before analysing the
+effects of \texttt{A1} and \texttt{Management}.  This also influences
+the signficances of the terms:
+\begin{Schunk}
+\begin{Sinput}
+> anova(ord, by = "term", perm = 500)
+\end{Sinput}
+\begin{Soutput}
+Permutation test for cca under direct model
+Terms added sequentially (first to last)
+
+Model: cca(formula = dune ~ A1 + Management + Condition(Moisture), data = dune.env)
+           Df  Chisq      F N.Perm Pr(>F)   
+A1          1 0.1154 1.4190     99   0.12   
+Management  3 0.3954 1.6205     99   0.01 **
+Residual   12 0.9761                        
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+\end{Soutput}
+\end{Schunk}
+If we had a designed experiment, we may wish to restrict the
+permutations so that the observations only are permuted within levels
+of \texttt{strata}:
+\begin{Schunk}
+\begin{Sinput}
+> anova(ord, by = "term", perm = 500, strata = Moisture)
+\end{Sinput}
+\begin{Soutput}
+Permutation test for cca under direct model
+Terms added sequentially (first to last)
+Permutations stratified within `Moisture'
+
+Model: cca(formula = dune ~ A1 + Management + Condition(Moisture), data = dune.env)
+           Df  Chisq      F N.Perm Pr(>F)   
+A1          1 0.1154 1.4190     99   0.32   
+Management  3 0.3954 1.6205     99   0.01 **
+Residual   12 0.9761                        
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+\end{Soutput}
+\end{Schunk}
+
+%%%%%%%%%%%%%%%%%%%
+
+\end{document}

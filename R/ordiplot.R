@@ -29,7 +29,7 @@
                 warning("Species scores not available")
             }
         }
-        tmp <- apply(rbind(X, Y), 2, range)
+        tmp <- apply(rbind(X, Y), 2, range, na.rm=TRUE)
         if (missing(xlim)) 
             xlim <- tmp[, 1]
         if (missing(ylim)) 

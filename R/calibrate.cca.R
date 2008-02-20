@@ -1,4 +1,4 @@
-"calibrate.cca" <-
+`calibrate.cca` <-
     function(object, newdata, rank = "full", ...)
 {
     if (!is.null(object$pCCA))
@@ -16,7 +16,9 @@
     b <- (coef(object))[object$CCA$QR$pivot[1:object$CCA$rank], , drop=FALSE]
     b <- solve(b)
     pred <- wa[ , 1:rank, drop=FALSE]  %*% b[1:rank, , drop =FALSE]
-    pred <- sweep(pred, 2, object$CCA$envcentre, "+")
+    envcen <- object$CCA$envcentre[object$CCA$QR$pivot]
+    envcen <- envcen[1:object$CCA$rank]
+    pred <- sweep(pred, 2, envcen, "+")
     pred
 }
 

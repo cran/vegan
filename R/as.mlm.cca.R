@@ -1,9 +1,11 @@
 `as.mlm.cca` <-
-function(x)
+    function (x) 
 {
     w <- weights(x)
     wa <- x$CCA$wa
     wa <- sweep(wa, 1, sqrt(w), "*")
-    lm(wa ~ . - 1, data=as.data.frame(qr.X(x$CCA$QR)))
+    X <- qr.X(x$CCA$QR)
+    colnames(X) <- colnames(X)[x$CCA$QR$pivot]
+    lm(wa ~ . - 1, data = as.data.frame(X))
 }
 

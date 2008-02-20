@@ -82,13 +82,14 @@
 }
 \author{ Jari Oksanen. The code for selecting all possible subsets was
   posted to the R mailing list by Prof. B. D. Ripley in 1999. }
+
 \note{
   If you want to study the \sQuote{significance} of \code{bioenv}
   results, you can use function \code{\link{mantel}} or
   \code{\link{mantel.partial}} which use the same definition of
   correlation. 
   However, \code{bioenv} standardizes environmental variables to unit standard
-  deviation using function \code{\link{scale}} and you must to the same
+  deviation using function \code{\link{scale}} and you must do the same
   in \code{\link{mantel}} for comparable results. Further, \code{bioenv}
   selects variables to maximize the Mantel correlation, and significance
   tests based on \emph{a priori} selection of variables are biased. 

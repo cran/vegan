@@ -6,7 +6,7 @@
 \alias{rda}
 \alias{rda.default}
 \alias{rda.formula}
-
+\concept{ordination}
 
 \title{ [Partial] [Constrained] Correspondence Analysis and Redundancy
   Analysis } 
@@ -37,16 +37,16 @@
     Can be missing. }
   \item{Z}{ Conditioning matrix, the effect of which is removed
     (`partialled out') before next step. Can be missing.}
-  \item{scale}{Scale species to unit variance (like correlations do).}
-  \item{...}{Other parameters for \code{print} or \code{plot} functions
+  \item{scale}{Scale species to unit variance (like correlations).}
+  \item{...}{Other arguments for \code{print} or \code{plot} functions
     (ignored in other functions).}
 }
 \details{
-  Since their introduction (ter Braak 1986), constrained or canonical
-  correspondence analysis, and its spin-off, redundancy analysis have
+  Since their introduction (ter Braak 1986), constrained, or canonical,
+  correspondence analysis and its spin-off, redundancy analysis, have
   been the most popular ordination methods in community ecology.
   Functions \code{cca} and \code{rda} are  similar to popular
-  proprietary software \code{Canoco}, although implementation is
+  proprietary software \code{Canoco}, although the implementation is
   completely different.  The functions are based on Legendre &
   Legendre's (1998) algorithm: in \code{cca}
   Chi-square transformed data matrix is subjected to weighted linear
@@ -55,14 +55,17 @@
   decomposition (\code{\link{svd}}). Function \code{rda} is similar, but uses
   ordinary, unweighted linear regression and unweighted SVD.
 
-  The functions can be called either with matrix entries for community
+  The functions can be called either with matrix-like entries for community
   data and constraints, or with formula interface.  In general, the
   formula interface is preferred, because it allows a better control of
   the model and allows factor constraints.
 
-  In matrix interface, the
-  community data matrix \code{X} must be given, but any other data
-  matrix can be omitted, and the corresponding stage of analysis is
+  In the following sections, \code{X}, \code{Y} and \code{Z}, although
+  referred to as matrices, are more commonly data frames.
+
+  In the matrix interface, the
+  community data matrix \code{X} must be given, but the other data
+  matrices may be omitted, and the corresponding stage of analysis is
   skipped.  If matrix \code{Z} is supplied, its effects are removed from
   the community matrix, and the residual matrix is submitted to the next
   stage.  This is called `partial' correspondence or redundancy
@@ -85,9 +88,9 @@
   \code{\link{contrasts}} are honoured in \code{\link{factor}}
   variables.  The formula can include a special term \code{Condition}
   for conditioning variables (``covariables'') ``partialled out'' before
-  analysis.  So the following commands are equivalent: \code{cca(X, y,
-    z)}, \code{cca(X ~ y + Condition(z))}, where \code{y} and \code{z}
-  refer to single variable constraints and conditions.
+  analysis.  So the following commands are equivalent: \code{cca(X, Y,
+    Z)}, \code{cca(X ~ Y + Condition(Z))}, where \code{Y} and \code{Z}
+  refer to constraints and conditions matrices respectively.
 
   Constrained correspondence analysis is indeed a constrained method:
   CCA does not try to display all variation in the
@@ -106,15 +109,14 @@
   clear and strong \emph{a priori} hypotheses on constraints and is not
   interested in the major structure in the data set.  
 
-  CCA is able to correct a common
-  curve artefact in correspondence analysis by
-  forcing the configuration into linear constraints.  However, the curve
-  artefact can be avoided only with a low number of constraints that do
-  not have a curvilinear relation with each other.  The curve can reappear
-  even with two badly chosen constraints or a single factor.  Although
-  the formula
-  interface makes easy to include polynomial or interaction terms, such
-  terms often allow curve artefact (and are difficult to interpret), and
+  CCA is able to correct the curve artefact commonly found in
+  correspondence analysis by forcing the configuration into linear
+  constraints.  However, the curve artefact can be avoided only with a
+  low number of constraints that do not have a curvilinear relation with
+  each other.  The curve can reappear even with two badly chosen
+  constraints or a single factor.  Although the formula interface makes
+  easy to include polynomial or interaction terms, such terms often
+  produce curved artefacts (that are difficult to interpret), these
   should probably be avoided.
 
   According to folklore, \code{rda} should be used with ``short
@@ -128,9 +130,9 @@
   the effect of some
   conditioning or ``background'' or ``random'' variables or
   ``covariables'' before CCA proper.  In fact, pCCA compares models
-  \code{cca(X ~ z)} and \code{cca(X ~ y + z)} and attributes their
-  difference to the effect of \code{y} cleansed of the effect of
-  \code{z}.  Some people have used the method for extracting
+  \code{cca(X ~ Z)} and \code{cca(X ~ Y + Z)} and attributes their
+  difference to the effect of \code{Y} cleansed of the effect of
+  \code{Z}.  Some people have used the method for extracting
   ``components of variance'' in CCA.  However, if the effect of
   variables together is stronger than sum of both separately, this can
   increase total Chi-square after ``partialling out'' some
@@ -148,7 +150,7 @@
 
   Function \code{rda} returns an object of class \code{rda} which
   inherits from class \code{cca} and is described in \code{\link{cca.object}}.
-  The scaling used in \code{rda} scores is desribed in a separate
+  The scaling used in \code{rda} scores is described in a separate
   vignette with this package.
 }
 \references{ The original method was by ter Braak, but the current
@@ -158,15 +160,15 @@
   ed. Elsevier.
 
   McCune, B. (1997) Influence of noisy environmental data on canonical
-  correspondence analysis. \emph{Ecology} 78, 2617-2623.
+  correspondence analysis. \emph{Ecology} \strong{78}, 2617-2623.
   
   Palmer, M. W. (1993) Putting things in even better order: The
-  advantages of canonical correspondence analysis.  \emph{Ecology} 74,
-  2215-2230. 
+  advantages of canonical correspondence analysis.  \emph{Ecology}
+  \strong{74},2215-2230. 
   
   Ter Braak, C. J. F. (1986) Canonical Correspondence Analysis: a new
   eigenvector technique for multivariate direct gradient
-  analysis. \emph{Ecology} 67, 1167-1179.
+  analysis. \emph{Ecology} \strong{67}, 1167-1179.
   
 }
 \author{
@@ -192,7 +194,7 @@
   You can use \code{\link{as.mlm}} to refit ordination result as a
   multiple response linear model to find some descriptive statistics.
   Design decisions are explained in
-  \code{\link{vignette}} \file{vegan-FAQ} which also can be accessed
+  \code{\link{vignette}} \file{decision-vegan} which also can be accessed
   with \code{\link{vegandocs}}.  
 }
 
@@ -218,7 +220,7 @@ dune.Manure <- rda(dune ~ Manure, dune.env)
 plot(dune.Manure) 
 ## For further documentation:
 \dontrun{
-vegandocs("vegan-FAQ")
+vegandocs("decision")
 }
 }
 \keyword{ multivariate }

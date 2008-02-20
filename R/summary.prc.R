@@ -1,7 +1,7 @@
 "summary.prc" <-
     function (object, axis = 1, scaling = 2, digits = 4, ...) 
 {
-    species <- drop(scores(object, scaling = scaling, display="sp", choices=1))
+    species <- drop(scores(object, scaling = scaling, display="sp", choices=axis))
     b <- coef(object)[, axis]
     prnk <- object$pCCA$rank
     lentreat <- length(object$terminfo$xlev[[2]])

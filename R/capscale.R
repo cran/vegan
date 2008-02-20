@@ -55,6 +55,7 @@
     }
     if (!is.null(comm)) {
         comm <- scale(comm, center = TRUE, scale = FALSE)
+        sol$colsum <- sd(comm)
         if (!is.null(sol$pCCA)) 
             comm <- qr.resid(sol$pCCA$QR, comm)
         if (!is.null(sol$CCA)) {

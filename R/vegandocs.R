@@ -1,5 +1,7 @@
 "vegandocs" <-
-    function (doc = c("ChangeLog", "FAQ-vegan.pdf", "vegan-FAQ.pdf", "partitioning.pdf")) 
+    function (doc = c("NEWS", "ChangeLog", "FAQ-vegan.pdf", "intro-vegan.pdf",
+              "diversity-vegan.pdf", "decision-vegan.pdf",
+              "partitioning.pdf")) 
 {
     doc <- match.arg(doc)
     if (length(grep(".pdf", doc)) > 0) {

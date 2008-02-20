@@ -57,7 +57,8 @@ anosim(dis, grouping, permutations=1000, strata)
   \code{varwidth=TRUE}. 
 }
 \value{
-  The function returs a list of class \code{anosim} with following items:
+  The function returs a list of class \code{"anosim"} with following
+  items: 
   \item{call }{Function call.}
   \item{statistic}{The value of ANOSIM statistic \eqn{R}}
   \item{signif}{Significance from permutation.}

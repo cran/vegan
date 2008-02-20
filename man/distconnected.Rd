@@ -2,7 +2,7 @@
 \alias{distconnected}
 \alias{no.shared}
 
-\title{Connectedness of Dissimilarities  }
+\title{Connectedness of Dissimilarities}
 \description{
   Function \code{distconnected} finds groups that are connected
   disregarding dissimilarities that are at or above a threshold or
@@ -16,6 +16,7 @@
 }
 \usage{
 distconnected(dis, toolong = 1, trace = TRUE)
+
 no.shared(x)
 }
 
@@ -28,7 +29,7 @@ no.shared(x)
   \item{toolong}{ Shortest dissimilarity regarded as \code{NA}.
     The function uses a fuzz factor, so
     that dissimilarities close to the limit will be made \code{NA}, too.
-    If \code{toolong = 0} (or negative), no dissimmilarity is regarded
+    If \code{toolong = 0} (or negative), no dissimilarity is regarded
     as too long.
   }
   \item{trace}{Summarize results of \code{distconnected}}
@@ -38,18 +39,17 @@ no.shared(x)
 \details{
   Data sets are disconnected if they have sample plots or groups of
   sample plots which share no species with other sites or groups of
-  sites. Such data sets
-  cannot be sensibly ordinated by any unconstrained method, because
-  these subsets cannot be related to each other. For instance,
-  correspondence analysis will polarize these subsets with eigenvalue
-  1. Neither can such dissimilarities be transformed with
-  \code{\link{stepacross}}, because there is no path between all points,
-  and result will contain \code{NA}s. Function \code{distconnected} will
-  find such subsets in dissimilarity matrices. The function will return
-  a grouping vector that can be used for subsetting the
-  data. If data are connected, the result vector will be all
-  \eqn{1}s. The connectedness between two points can be defined either
-  by a threshold \code{toolong} or using input dissimilarities
+  sites. Such data sets cannot be sensibly ordinated by any
+  unconstrained method because these subsets cannot be related to each
+  other. For instance, correspondence analysis will polarize these
+  subsets with eigenvalue 1. Neither can such dissimilarities be
+  transformed with \code{\link{stepacross}}, because there is no path
+  between all points, and result will contain \code{NA}s. Function
+  \code{distconnected} will find such subsets in dissimilarity
+  matrices. The function will return a grouping vector that can be used
+  for sub-setting the data. If data are connected, the result vector will
+  be all \eqn{1}s. The connectedness between two points can be defined
+  either by a threshold \code{toolong} or using input dissimilarities
   with \code{NA}s.
 
   Function \code{no.shared} returns a \code{dist} structure having value

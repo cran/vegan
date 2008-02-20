@@ -12,31 +12,31 @@
   the results are identical to \code{\link{rda}}, but \code{capscale}
   will be much more inefficient. Function \code{capscale} is a
   constrained version of metric scaling, a.k.a. principal coordintates
-  analysis, which also is based on Euclidean distance but still is more
-  useful with other dissimilarity measures. 
+  analysis, which is based on the Euclidean distance but can be used,
+  and is more useful, with other dissimilarity measures. 
 }
 \usage{
-capscale(formula, data, distance = "euclidean", comm = NULL, add =
-FALSE,  ...)
+capscale(formula, data, distance = "euclidean", comm = NULL,
+         add = FALSE,  ...)
 }
 
 \arguments{
   \item{formula}{Model formula. The function can be called only with the
-  formula interface. Most usual features of \code{\link{formula}} hold,
-  especially as defined in \code{\link{cca}} and \code{\link{rda}}. The
-  LHS must be either a community data matrix or a dissimilarity matrix,
-  e.g., from
-  \code{\link{vegdist}} or \code{\link{dist}}.
-  If the LHS is a data matrix, function \code{\link{vegdist}}
-  will be used to find the dissimilarities. RHS defines the constraints.
-  The constraints can be continuous or factors, they can be transformed
-  within the formula, and they can have interactions as in typical
-  \code{\link{formula}}. The RHS can have a special term \code{Condition}
-  that defines variables ``partialled out'' before constraints, just like
-  in \code{\link{rda}} or \code{\link{cca}}. This allows the use of
-  partial CAP.}
-\item{data}{ Data frame containing the variables on the right hand side of
-  the model formula. }
+    formula interface. Most usual features of \code{\link{formula}} hold,
+    especially as defined in \code{\link{cca}} and \code{\link{rda}}. The
+    LHS must be either a community data matrix or a dissimilarity matrix,
+    e.g., from
+    \code{\link{vegdist}} or \code{\link{dist}}.
+    If the LHS is a data matrix, function \code{\link{vegdist}}
+    will be used to find the dissimilarities. The RHS defines the
+    constraints. The constraints can be continuous variables or factors,
+    they can be transformed within the formula, and they can have
+    interactions as in a typical \code{\link{formula}}. The RHS can have a
+    special term \code{Condition} that defines variables to be
+    ``partialled out'' before constraints, just like in \code{\link{rda}}
+    or \code{\link{cca}}. This allows the use of partial CAP.}
+  \item{data}{ Data frame containing the variables on the right hand side of
+    the model formula. }
   \item{distance}{Dissimilarity (or distance) index  in
     \code{\link{vegdist}} used if the LHS of the \code{formula} is a
     data frame instead of dissimilarity matrix. }
@@ -46,19 +46,24 @@ FALSE,  ...)
     frame. If this is not supplied, the ``species scores'' are the axes
     of initial metric scaling (\code{\link{cmdscale}}) and may be
     confusing.}
-  \item{add}{logical indicating if an additive constant should be
-     computed, and added to the non-diagonal dissimilarities  such
-     that all eigenvalues are non-negative in underlying
+  \item{add}{Logical indicating if an additive constant should be
+     computed, and added to the non-diagonal dissimilarities such
+     that all eigenvalues are non-negative in the underlying
      Principal Co-ordinates Analysis (see \code{\link{cmdscale}} 
-     for details). }
+     for details). This implements \dQuote{correction method 2} of
+     Legendre & Legendre (1998, p. 434). The negative eigenvalues are
+     caused by using semi-metric or non-metric dissimilarities with
+     basically metric \code{\link{cmdscale}}. They are harmless and
+     ignored in \code{capscale}, but you also can avoid warnings with
+     this option. }
   \item{\dots}{Other parameters passed to \code{\link{rda}}. }
 }
 \details{
-  The Canonical Analysis of Principal Coordinates (CAP) is simply a
+  Canonical Analysis of Principal Coordinates (CAP) is simply a
   Redundancy Analysis of results of Metric (Classical) Multidimensional
   Scaling (Anderson & Willis 2003). Function capscale uses two steps:
   (1) it ordinates the dissimilarity matrix using
-  \code{\link{cmdscale}} and (2) analyses these results using
+  \code{\link{cmdscale}} and (2) analyzes these results using
   \code{\link{rda}}. If the user supplied a community data frame instead
   of dissimilarities, the function will find the needed dissimilarity
   matrix using \code{\link{vegdist}} with specified
@@ -76,12 +81,12 @@ FALSE,  ...)
   similar to distance-based redundancy analysis (Legendre & Anderson
   1999):
   \enumerate{
-    \item Anderson & Willis used orthonormal solution of
+    \item Anderson & Willis used the orthonormal solution of
     \code{\link{cmdscale}}, whereas \code{capscale} uses axes
     weighted by corresponding eigenvalues, so that the ordination
-    distances are best approximations of original dissimilarities. In
-    the original method, later ``noise'' axes are just as important as
-    first major axes.
+    distances are the best approximations of original
+    dissimilarities. In the original method, later ``noise'' axes are
+    just as important as first major axes.
     \item Anderson & Willis take only a subset of axes, whereas 
     \code{capscale} uses all axes with positive eigenvalues. The use of
     subset is necessary with orthonormal axes to chop off some
@@ -98,9 +103,10 @@ FALSE,  ...)
   However, it makes no sense to use \code{capscale} with
   Euclidean distances, since direct use of \code{\link{rda}} is much more
   efficient. Even with non-Euclidean dissimilarities, the
-  rest of the analysis will be metric and linear.  The test for all axes
-  is available only for ordinations defined with \code{formula}
-  interface. 
+  rest of the analysis will be metric and linear.
+
+  %The test for all axes is available only for ordinations defined with
+  %\code{formula} interface. 
   
 }
 \value{
@@ -121,6 +127,9 @@ FALSE,  ...)
   Legendre, P. & Anderson, M. J. (1999). Distance-based redundancy
   analysis: testing multispecies responses in multifactorial ecological
   experiments. \emph{Ecological Monographs} 69, 1--24.
+
+  Legendre, P. & Legendre, L. (1998).  \emph{Numerical Ecology}. 2nd English
+  Edition. Elsevier
 }
 \author{ Jari Oksanen }
 \note{
@@ -134,18 +143,16 @@ FALSE,  ...)
   cause warnings.
   
   Function \code{\link{rda}} usually divides the ordination scores by
-  number of
-  sites minus one. In this way, the inertia is variance instead of sum
-  of squares, and the eigenvalues sum up to variance. Many
-  dissimilarity measures are in the range 0 to 1, so they have already
-  made a similar division. If the largest original dissimilarity is less or
-  equal to 4
-  (allowing for \code{\link{stepacross}}), this division is undone in
-  \code{capscale} and original dissimilarities are used. The inertia is
-  called as \code{squared dissimilarity}
-  (as defined in the dissimilarity matrix), but keyword
-  \code{mean} is added to the inertia in cases where division was
-  made, e.g. in Euclidean and Manhattan distances. 
+  number of sites minus one. In this way, the inertia is variance
+  instead of sum of squares, and the eigenvalues sum up to
+  variance. Many dissimilarity measures are in the range 0 to 1, so they
+  have already made a similar division. If the largest original
+  dissimilarity is less than or equal to 4 (allowing for
+  \code{\link{stepacross}}), this division is undone in \code{capscale}
+  and original dissimilarities are used. The inertia is named
+  \code{squared dissimilarity} (as defined in the dissimilarity matrix),
+  but keyword \code{mean} is added to the inertia in cases where
+  division was made, e.g. in Euclidean and Manhattan distances.
 }
 
 
@@ -155,7 +162,8 @@ FALSE,  ...)
 \examples{
 data(varespec)
 data(varechem)
-vare.cap <- capscale(varespec ~ N + P + K + Condition(Al), varechem, dist="bray")
+vare.cap <- capscale(varespec ~ N + P + K + Condition(Al), varechem,
+                     dist="bray")
 vare.cap
 plot(vare.cap)
 anova(vare.cap)

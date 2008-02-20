@@ -1,17 +1,274 @@
-VEGAN STABLE VERSIONS 
-$Date: 2007-10-03 10:10:09 +0300 (Wed, 03 Oct 2007) $
+
+$Date: 2008-02-20 09:48:15 +0200 (Wed, 20 Feb 2008) $
+
+VEGAN DEVEL VERSIONS at http://r-forge.r-project.org/
+
+Version 1.11-0 (Released Feb 20, 2008)
+
+	* Made a realese branch (1.11-0) based on the the rev. 204, and
+	relabelled the devel branch to 1.12-0.
+
+	* Removed nestedtemp and associated functions: there was an
+	implementation error to be fixed in the trunk.
+
+	* Added a NEWS file for user visible changes, and updated
+	vegandocs() to know abot NEWS.
+
+	* Doc updates (also merged to the trunk).
+
+Version 1.10-13 (closed Feb 15, 2008)
+
+	* preparing for a release and trying to close open threads.
+
+	* nestedtemp: implemented smooth fill line. The kind of the fill
+	line was not specified in the original paper, but I used parabola
+	which is "as smooth as possible" in the sense that its second
+	derivative is constant. Needs checking, though.
+
+Version 1.10-12 (closed Feb 12, 2008)
+
+	* nestedtemp: new try with smooth fill line.
+
+	* anova.cca: by = "margin" stops with informative error message if
+	some terms are completely aliased (used to stop with an
+	uninformative error message). Type III effects really do not make
+	sense with aliased variables.
 	
+	* calibrate.cca: does correct pivoting of aliased models.
+
+	* orditkplot: Set up all basic features, and added points, text,
+	and scores methods. Features that should be added include zooming
+	to a rectangle drawn with a mouse, and adding env variables. The
+	latter would be trivial in a simple way, but the user should be
+	able to move the bunch of arrows to another place, and scale the
+	length of arrows with a mouse.
+	
+Version 1.10-11 (closed Feb 3, 2008)
+
+	* bgdispersal: New, more powerful test statistic (in terms of Type
+	1 error rate) for the McNemar test (Pierre Legendre).
+
+	* CCorA: internal functions embedded in CCorA().
+
+	* orditkplot: More resilient against user errors. New output file
+	types (bmp, xfig), jpeg uses 100% quality. more aware of operating
+	system and capabilities. Accepts graphical par in the function
+	call. Gains arguments xlim, ylim. Arguments col, bg, cex renamed
+	to pcol, pb, pcex so that the do not shadow par().
+	
+	* permuted.index2: fixed a bug in permutations with strata.
+
+	* summary.prc: honours now argument 'axis'. Reported by Francois
+	Gillet, Lausanne.
+
+	* Documentation: added documentation for permuted.index2,
+	permControl, permCheck and helper functions. FAQ and intro know
+	now about orditkplot, anova.cca(..., by="margin") and
+	permuted.index2. FAQ gained new sections on using different
+	plotting symbols and handling congested plots in ordination
+	graphics.
+
+Version 1.10-10 (closed Jan 27, 2008)
+
+	* DESCRIPTION: suggests tcltk.
+
+	* orditkplot: new function for ordination plots based on Tcl/Tk:
+	you can edit graph by moving labels using a mouse and save the
+	edited graph as an eps file, or export via R plot function to
+	eps, pdf, png or jpeg, or to dump to R session for further
+	processing. 
+
+	* CCorA: removed partial analysis (which needs more work and may
+	reappear later).
+	
+Version 1.10-9 (closed Jan 16, 2008)
+
+	* anova.cca: new option by = "margin" to perform separate tests
+	for each marginal effect in a model with all other terms. This is
+	similar to Type III tests, but will only work with marginal terms,
+	and will exclude main effects when corresponding interactions are
+	in the model.  P-value is now assessed in the true blue way as
+	(hits+1)/(permutations+1) in all anova.cca methods. Permutations
+	should be able to handle now rank deficit cases with pivoting in
+	the QR decomposition (permutest.cca).
+	
+	* permuted.index2: New version of permuted.index() that now allows
+	restricted permutations. Can produce permutations for time-series
+	or line transects and for spatial grids. These can also be nested
+	within 'strata'. permuted.series() and permuted.grid() are the 
+	relevant workhorse functions. Permutation options are set by new 
+	function permControl(). Plan to migrate vegan functions to 
+	permuted.index2() in the devel version, and will eventually replace
+	the current permuted.index().
+
+	* permCheck: New function for checking permutation schemes under
+	permuted.index2. Uses new function numPerms() to generate the 
+	number of possible permutations. permCheck() has print, summary
+	and print.summary methods.
+	
+Version 1.10-8 (closed Dec 14 2007, at Rev. 133)
+
+	* metaMDS: gains argument wascores (defaults TRUE) to suppress
+	calculation of species scores.
+
+	* wascores: return now NA for missing (all zero) species instead
+	of failing.
+
+	* ordiplot: ignore missing scores in plotting and printing.
+
+	* betadisper: new functions for Marti Anderson's analysis of
+	homogeneity of multivariate dispersions.
+
+	* nestedtemp: handles now tied frequencies using ties.method =
+	"average" in rank(). Function is still preliminary, and may be
+	dropped from the release.
+	
+	* taxa2dist: issues now a warning if called with 'check = FALSE'
+	and there are zero distances, typically meaning that basal taxa
+	(species) were not coded. Also explained in the help.
+
+	* varpart: failed if there were unused levels in factors (reported
+	by Clément Tisseuil, Toulouse). 
+
+	* adonis: loses argument 'distfun'. Instead accepts now any 'dist'
+	object as input instead of a data frame or a matrix.
+	
+Version 1.10-7 (closed Nov 18, 2007 at Rev. 119)
+
+	* adonis: gains argument 'distfun' (default 'vegdist') so that
+	other standard conforming dissimilarity functions than vegdist can
+	be used (a user request).
+	
+	* decorana: does not crash R when called with NULL row data such
+	as decorana(dune[FALSE,]) (reported by Richard Tellford, Bergen,
+	Norway), and predict(..., type="sites") works correctly with
+	downweighted analysis (reported by Colin Beale, Aberdeen,
+	Scotland).
+
+	* isomap: checks now that input data are dissimilarities or can be
+	changed into dissimilarities without warnings.
+
+	* ordixyplot: can now display biplot arrows and factor centroids
+	in constrained ordination or from envfit (ordisplom and ordicloud
+	cannot display these).
+	
+	* ordixyplot, ordicloud and ordisplom: no longer have explicit scaling
+	argument, but can now pass arguments to scores() as well as to the
+	plotting functions.
+
+	* oecosimu: evaluates now two-sided P-value of the statistic from
+	simulations. Doc updates.
+
+	* vignettes: use all similar style (amsart, a4paper, sidecap,
+	date style).
+
+	* FAQ: tell about docs added to R-Forge versions of vegan. Tell
+	about predict() for having "passive" points.
+	
+Version 1.10-6 (closed Oct 31, 2007 at Rev. 100)
+
+	* Gavin Simpson joined the vegan team.
+
+	* oecosimu: new functions for indices of nestedness of patches or
+	islands, and simulation of null communities.
+	
+	* scores: cca method does now accept display = c("species", "sites").
+	Previous fix (1.10-5) was for rda method only. Documentation updated
+	to reflect changes.
+	
+	* biplot.rda: now allows a different type to be specified for each of
+	the species and site scores. Function now documented more completely.
+	
+	* ordixyplot, ordicloud and ordisplom: now have argument 'scaling'.
+	
+	* orditorp: now handles additional arguments passed as '...' more 
+	cleanly. Arguments can be passed to scores() or points/text. This
+	should avoid the warning messages of previous versions.
+
+	* sipoo: a new data set on the bird communities in the Sipoo
+	(Sibbo) archipelago to demonstrate the oecosimu functions.
+
+Version 1.10-5 (closed Oct 18, 2007 at Rev. 86)
+
+	* biplot.rda: new biplot function for PCA in rda() (Gavin
+	Simpson). 
+
+	* scores: cca method accepts now display = c("species", "sites"),
+	when it only used to accept c("sp","wa"). More consistent
+	arguments in the default method.  
+	
+	* CCorA: Pierre Legendre submitted code for permutation test of
+	Pillai's trace.
+
+	* capscale: negative scaling works now in plot() and scores():
+	estimates species  sd() from the 'comm' if 'comm' is known.
+
+Version 1.10-4 (closed Oct 6, 2007 at Rev. 75)
+
+	* anova.cca: failed in anova(object, by = "axis") when the fitted
+	model had terms like poly(x, 2) or log(x).
+
+	* ordiresids: new function for plot.lm like diagnostic plots for
+	constrained ordination: Residuals ~ Fitted, sqrt(abs(Residuals)) ~
+	Fitted, and qqmath(~ Residuals) using Lattice graphics.
+       
+	* fitted.cca, fitted.rda: gained agument type = "working" to get
+	the fitted values and residuals used internally in calculation (to
+	be used in plot.lm diagnostic plots residuals ~ fitted).
+ 	
+Version 1.10-3 (closed Oct 2, 2007 at Rev. 62)
+
+	* doc: added vignettes intro-vegan on ordination methods and
+	diversity-vegan.
+
+	* Trellis graphics for ordination objects with functions
+	ordixyplot, ordicloud and ordisplom. These functions are still
+	unsatisfactory. In particular, I haven't found a clean way of
+	having biplot arrows in the graphs (how do you know the
+	coordinates and the axes used?). Contributions are welcome.
+
+	* ordispantree made dysfunctional (deprecated in 1.8-1). 
+	
+Version 1.10-2 (closed Sep 14, 2007 at Rev. 36)
+
+	* vegandocs: added FAQ-vegan, and renamed the old vegan-FAQ to
+	decision-vegan. Only primary sources (texi, Rnw) in the source
+	repository: derived files (.tex, .pdf) should be made when package
+	is built.
+	
+	* CCorA: Pierre Legendre's functions for Canonical Correlation
+	Analysis. These provide a more robust alternative to the standard
+	cancor() in base R. (under work)
+		
+	* scores.default: handles numeric data frames.
+	
+Version 1.10-1 (closed Sep 7, 2007 at Rev. 21)
+
+	* taxondive: Fixed dimension checking, matching names and
+	non-unique taxon names.
+	
+Version 1.10-0 (Sep 6, 2007)
+
+	* Moved vegan_1.8-7 (CRAN release) into R-Forge.R-Project.org and
+	Subversion SCM. This ChangeLog will only contain most important
+	news (and should be renamed to NEWS), and the real ChangeLogs are
+	created by the SCM.  The revisions will be numbered as 1.10-1 to
+	1.10-x, and the next release will be 1.11-0.
+
+VEGAN RELEASE VERSIONS at http://cran.r-project.org/
+
 Version 1.8-8 (Oct 2, 2007)
 
 	* Minor bugfix release for upcoming R-2.6.0. Based on the
 	http://r-forge.r-project.org/projects/vegan/ revision 17 (= 1.8-7)
-	with ported bug fix revisions (see below for revision numbers).
-
+	with ported bug fix revisions from 1.10-3 (see below for revision
+	numbers).
+	
 	* anova.cca: by = "term" failed in partial model. This was broken
 	in 1.8-6 by introducing a test against deficit rank models (r47). 
 	
 	* cascadeKM: Calinski index works now when the input data is a
-	data.frame (r57:58).
+	data.frame (r57, 58).
 
 	* flush.console: metaMDSiter and bioenv use now flush.console()
 	so that Windows people also see the trace (r56).

@@ -31,18 +31,17 @@
   \item{x, object}{A \code{cca} result object.}
     \item{choices}{Axes shown.}
   \item{display}{Scores shown.  These must some of the alternatives
-    \code{sp} for species scores, \code{wa} for site scores, \code{lc}
-    for linear constraints or ``LC scores'', or \code{bp} for biplot
-    arrows or \code{cn} for centroids of factor constraints instead of
-    an arrow.}
+    \code{species} or \code{sp} for species scores, \code{sites} or
+    \code{wa} for site scores, \code{lc} for linear constraints or ``LC
+    scores'', or \code{bp} for biplot arrows or \code{cn} for centroids
+    of factor constraints instead of an arrow.}
    \item{scaling}{Scaling for species and site scores. Either species
     (\code{2}) or site (\code{1}) scores are scaled by eigenvalues, and
     the other set of scores is left unscaled, or with \code{3} both are
     scaled symmetrically by square root of eigenvalues.  Corresponding
     negative values can be used in \code{cca} to additionally multiply
     results with \eqn{\sqrt(1/(1-\lambda))}.  This scaling is know as
-    Hill scaling
-    (although it has nothing to do
+    Hill scaling (although it has nothing to do
     with Hill's rescaling of \code{\link{decorana}}). With corresponding
     negative values in\code{rda},
     species scores are divided by standard deviation of each species and
