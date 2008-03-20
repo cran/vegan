@@ -12,7 +12,7 @@
 
 \title{Vegan: ecological diversity}
 \author{Jari Oksanen}
-\date{$ $Id: diversity-vegan.Rnw 205 2008-02-15 06:08:56Z jarioksa $ $
+\date{$ $Id: diversity-vegan.Rnw 271 2008-03-20 08:41:29Z jarioksa $ $
   processed with vegan \Sexpr{packageDescription("vegan", field="Version")}
   in \Sexpr{R.version.string} on \today}
 \begin{document}
@@ -28,8 +28,8 @@ options(width=72)
 
 \tableofcontents
 
-\noindent The \texttt{vegan} packages has two major components:
-multivariate analysis, mainly ordination, and methods for diversity
+\noindent The \texttt{vegan} package has two major components:
+multivariate analysis (mainly ordination), and methods for diversity
 analysis of ecological communities.  This document gives an
 introduction to the latter.  Ordination methods are covered in other
 documents.  Many of the diversity functions were written by Roeland
@@ -37,9 +37,9 @@ Kindt and Bob O'Hara.
 
 Most diversity methods assume that data are counts of individuals.
 The methods are used with other data types, and some people argue that
-biomass or cover are more adequate units than counts of individuals of
-variable sizes.  However, this document only uses a data set with
-counts: stem counts of trees on 1ha plots in the Barro Colorado
+biomass or cover are more adequate than counts of individuals of
+variable sizes.  However, this document mainly uses a data set with
+counts: stem counts of trees on $1$ha plots in the Barro Colorado
 Island.  The following steps make these data available for the
 document:
 <<>>=
@@ -60,7 +60,8 @@ where $p_i$ is the proportion of species $i$, and $S$ is the number of
 species so that $\sum_{i=1}^S p_i = 1$, and $b$ is the base of the
 logarithm.  It is most common to use natural logarithms (and then we
 mark index as $H'$), but $b=2$ has
-theoretical justification. Shannon index is calculated with:
+theoretical justification. The default is to use natural logarithms.
+Shannon index is calculated with:
 <<>>=
 H <- diversity(BCI)
 @
@@ -72,24 +73,27 @@ found as:
 <<>>=
 J <- H/log(specnumber(BCI))
 @
-where \texttt{specnumber} is a simple \texttt{vegan} function.
+where \texttt{specnumber} is a simple \texttt{vegan} function to find
+the numbers of species.
 
-\texttt{Vegan} also can estimate RÃ©nyi diversities of order $a$:
+\texttt{Vegan} also can estimate Rényi diversities of order $a$:
 \begin{equation}
 H_a = \frac{1}{1-a} \log \sum_{i=1}^S p_i^a
 \end{equation}
 or the corresponding Hill numbers $N_a = \exp(H_a)$.  Many common
 diversity indices are special cases of Hill numbers: $N_0 = S$, $N_1 =
-\exp(H')$, $N_2 = D_2$, and $N_\infty = 1/(\max p_i)$.  We select a
-random subset of five sites for RÃ©nyi diversities:
+\exp(H')$, $N_2 = D_2$, and $N_\infty = 1/(\max p_i)$. The
+correspoding Rényi diversities are $H_0 = \log(S)$, $H_1 = H'$, $H_2 =
+- \log(\sum p_i^2)$, and $H_\infty = - \log(\max p_i)$.  We select a
+random subset of five sites for Rényi diversities:
 <<>>=
 k <- sample(nrow(BCI), 6)
 R <- renyi(BCI[k,])
 @
-We can really regard a site more diverse if all of its RÃ©nyi
+We can really regard a site more diverse if all of its Rényi
 diversities are higher than in another site.  We can inspect this
 graphically using the standard \texttt{plot} function for the
-\texttt{renyi} result(Fig. \ref{fig:renyi}).
+\texttt{renyi} result (Fig. \ref{fig:renyi}).
 <<echo=false,results=hide>>=
 require(lattice, quietly=TRUE)
 @
@@ -97,7 +101,7 @@ require(lattice, quietly=TRUE)
 <<fig=true,echo=false>>=
 print(plot(R))
 @
-\caption{RÃ©nyi diversities in six randomly selected plots. The plot
+\caption{Rényi diversities in six randomly selected plots. The plot
   uses Trellis graphics with a separate panel for each site. The dots
   show the values for sites, and the lines the extremes and median in
   the data set.}
@@ -124,8 +128,8 @@ rarefied from $N$ to $n$ individuals is:
 \end{equation}
 where $x_i$ is the count of species $i$, and ${N \choose n}$ is the
 binomial coefficient, or the number of ways we can choose $n$ from
-$N$. $p_i$ give the probabilities that species $i$ does not occur in a
-sample of size $n$.  This is only defined for $N-x_i > n$, but for
+$N$, and $p_i$ give the probabilities that species $i$ does not occur in a
+sample of size $n$.  This is defined only when $N-x_i > n$, but for
 other cases $p_i = 0$ or the species is sure to occur in the sample.
 The variance of rarefied richness is:
 \begin{equation}
@@ -137,7 +141,8 @@ s^2 = p_i (1-p_i) + 2 \sum_{i=1}^S \sum_{j>i} \left[ {N- x_i - x_j
 Equation \ref{eq:rarevar} actually is of the same form as the variance
 of sum of correlated variables:
 \begin{equation}
-\mathrm{var} \left(\sum x_i \right) = \sum \mathrm{var}(x_i) - 2 \mathrm{cov}(x_i, x_j)
+\mathrm{var} \left(\sum x_i \right) = \sum \mathrm{var}(x_i) - 2 \sum_{i=1}^S
+\sum_{j>i} \mathrm{cov}(x_i, x_j)
 \end{equation}
 
 The number of stems per hectare varies in our
@@ -151,8 +156,7 @@ Srar <- rarefy(BCI, min(rowSums(BCI)))
 @
 Rarefaction curves often are seen as an objective solution for
 comparing species richness with different sample sizes.  However, rank
-orders typically differ among different rarefaction sample sizes, and
-rarefaction richness often shares the problems of RÃ©nyi diversities.
+orders typically differ among different rarefaction sample sizes.
 
 As an extreme case we may rarefy sample size to two individuals:
 <<>>=
@@ -163,15 +167,85 @@ richness:
 <<>>=
 all(rank(Srar) == rank(S2))
 @
-Moreover, the rarefied richness for two individuals only is a finite
+Moreover, the rarefied richness for two individuals is a finite
 sample variant of Simpson's diversity index (or, more precisely of
-$D_1 + 1$), and almost identical with sample sizes in BCI:
+$D_1 + 1$), and these two are almost identical in BCI:
 <<>>=
 range(diversity(BCI, "simp") - (S2 -1))
 @
-Rarefaction is sometimes presented as ecologically meaningful
+Rarefaction is sometimes presented as an ecologically meaningful
 alternative to dubious diversity indices, but the differences really
 seem to be small.
+
+\section{Taxonomic diversity}
+
+Simple diversity indices only consider species identity: all different
+species are equally different. In contrast, taxonomic diversity sees
+how different two different species are. The index is much used in
+aquatic ecology, in particular for studying the effects of pollution
+or other degradation, which often is first evident in the loss of
+higher taxonomic units.
+
+The two basic indecies are called taxonomic diversity ($\Delta$) and
+taxonomic distinctness ($\Delta^*$):
+\begin{align}
+  \Delta &= \frac{\sum \sum_{i<j} \omega_{ij} x_i x_j}{n (n-1) / 2}\\
+\Delta^* &= \frac{\sum \sum_{i<j} \omega_{ij} x_i x_j}{\sum \sum_{i<j} x_i x_j}
+\end{align}
+These equations give the index values for a single site, and summation
+goes over species $i$ and $j$, and $\omega$ are the taxonomic
+distances among taxa, $x$ are species abundances, and $n$ is the total
+abundance for a site.  With presence absence data, both indices
+reduce to the same index called $\Delta^+$, and for this it is
+possible to estimate standard deviation. There are two indices
+derived from $\Delta^+$: it can be multiplied with species
+richness\footnote{This text normally uses upper case letter $S$ for
+  species richness, but lower case $s$ is used here in accordance with
+  the original papers on taxonomic diversity}
+to give $s \Delta^+$, or it can be used to estimate an index of
+variation in taxonomic distinctness $\Lambda^+$:
+\begin{equation}
+  \Lambda^+ = \frac{\sum \sum_{i<j} \omega_{ij}^2}{n (n-1) / 2} - (\Delta^+)^2
+\end{equation}
+
+We still need the taxonomic differences among species ($\omega$) to
+calculate the indices. These can be any
+distance structure among species, but usually it is found from
+established hierarchic taxonomy. Typical coding is that differences
+among species in the same genus is $1$, among the same family it is
+$2$ etc. However, the taxonomic differences are scaled to maximum
+$100$ for easier comparison between different data sets and
+taxonomies. Alternatively, it is possible to scale steps between
+taxonomic level proportional to the reduction in the number of
+categories: if almost all genera have only one species, it does not
+make a great difference if two individuals belong to a different
+species or to a different genus.
+
+Function \texttt{taxondive} implements indices of taxonomic diversity,
+and \texttt{taxa2dist} can be used to convert classification tables to
+taxonomic distances either with constant or variable step lengths
+between succesive categories. There is no taxonomic table for the BCI
+data in \texttt{vegan}\footnote{Actually I made such a classification,
+  but taxonomic differences proved to be of little use in the Barro
+  Colorado data: they only singled out sites with Monocots (palm
+  trees) in the data.}
+but there is such a table for the Dune meadow data (Fig. \ref{fig:taxondive}):
+<<>>=
+data(dune)
+data(dune.taxon)
+taxdis <- taxa2dist(dune.taxon, varstep=TRUE)
+mod <- taxondive(dune, taxdis)
+@
+\begin{SCfigure}
+<<fig=true,echo=false>>=
+plot(mod)
+@
+\caption{Taxonomic diversity $\Delta^+$ for the dune meadow data. The
+  points are diversity values of single sites, and the funnel is their
+  approximate confidence intervals ($2 \times$ standard error).}
+\label{fig:taxondive}
+\end{SCfigure}
+
 
 \section{Species abundance models}
 
@@ -183,12 +257,13 @@ several models for species abundance distribution.
 
 \subsection{Fisher and Preston}
 
-In Fisher's log-series, the expected number of species with $n$
+In Fisher's log-series, the expected number of species $\hat f$ with $n$
 individuals is:
 \begin{equation}
 \hat f_n = \frac{\alpha x^n}{n}
 \end{equation}
-where $x$ is a nuisance parameter defined by $\alpha$ and total number
+where $\alpha$ is the diversity parameter, and $x$ is a nuisance
+parameter defined by $\alpha$ and total number
 of individuals $N$ in the site, $x = N/(N-\alpha)$.  Fisher's
 log-series for a randomly selected plot is (Fig. \ref{fig:fisher}):
 <<>>=
@@ -204,16 +279,15 @@ plot(fish)
   (\Sexpr{k}).}
 \label{fig:fisher}
 \end{SCfigure}
-We already saw this model as a diversity index.  Now we also obtained
+We already saw $\alpha$ as a diversity index.  Now we also obtained
 estimate of standard error of $\alpha$ (these also are optionally
-available in \texttt{fisher.fit}).  The standard errors are based on
-the second derivatives (curvature) of the partial derivatives of
-log-likelihood at the solution of $\alpha$.  The distribution of
-$\alpha$ often is very non-normal and skewed, and standard errors are
-of not much use.  However, \texttt{fisherfit} has a \texttt{profile}
-method that can be used to inspect the validity of normal assumptions,
-and will be used in calculations of confidence intervals from profile
-deviance:
+available in \texttt{fisherfit}).  The standard errors are based on
+the second derivatives (curvature) of log-likelihood at the solution
+of $\alpha$.  The distribution of $\alpha$ is often non-normal
+and skewed, and standard errors are of not much use.  However,
+\texttt{fisherfit} has a \texttt{profile} method that can be used to
+inspect the validity of normal assumptions, and will be used in
+calculations of confidence intervals from profile deviance:
 <<>>=
 confint(fish)
 @
@@ -232,7 +306,7 @@ with arbitrary choices of binning limits and treatment of ties.
 Function \texttt{prestondistr} directly
 maximizes truncated log-normal likelihood without binning data, and it
 is the recommended alternative.  Log-normal models  usually fit poorly
-to the BCI data, but here our random plot:
+to the BCI data, but here our random plot (number \Sexpr{k}):
 <<>>=
 prestondistr(BCI[k,])
 @
@@ -241,8 +315,9 @@ prestondistr(BCI[k,])
 
 An alternative approach to species abundance distribution is to plot
 logarithmic abundances in decreasing order, or against ranks of
-species.  These are known, among other names, as ranked abundance
-distribution curves, dominance--diversity curves and Whittaker plots.
+species.  These are known as ranked abundance
+distribution curves, species abundance curves, dominance--diversity
+curves or Whittaker plots.
 Function \texttt{radfit} fits some of the most popular models using
 maximum likelihood estimation:
 \begin{align}
@@ -293,7 +368,7 @@ for each site. It is curious that log-normal model rarely is the
 choice, although it generally is regarded as the canonical model, in
 particular in data sets like Barro Colorado tropical forests.
 
-\section{Species accumulation and species pool}
+\section{Species accumulation and beta diversity}
 
 Species accumulation models and species pool models study collections
 of sites, and their species richness, or try to estimate the number of
@@ -333,8 +408,7 @@ covariance component.  In addition, eq. \ref{eq:cole} does not
 properly handle sampling without replacement and underestimates the
 species accumulation curve.
 
-but the recommended is Kindt's exact
-method (Fig. \ref{fig:sac}):
+The recommended is Kindt's exact method (Fig. \ref{fig:sac}):
 <<a>>=
 sac <- specaccum(BCI)
 plot(sac, ci.type="polygon", ci.col="yellow")
@@ -347,18 +421,111 @@ plot(sac, ci.type="polygon", ci.col="yellow")
 \label{fig:sac}
 \end{SCfigure}
 
+\subsection{Beta diversity}
+
+Whittaker divided diversity into various components. The best known
+are diversity in one spot that he called alpha diversity, and the
+diversity along gradients that he called beta diversity. The basic
+diversity indices are indices of alpha diversity. Beta diversity
+should be studied with respect to gradients, but almost everybody
+understand that as a measure of general heterogeneity: how many more
+species do you have in a collection of sites compared to an average
+site.
+
+The best known index of beta diversity is based on the ratio of total
+number of species in a collection of sites ($S$) and the average
+richness per one site ($\bar \alpha$):
+\begin{equation}
+  \label{eq:beta}
+  \beta = S/\bar \alpha - 1
+\end{equation}
+Substraction of one means that $\beta = 0$ when there are no excess
+species or no heterogeneity between sites. For this index, no specific
+functions are needed, but this index can be easily found with the help
+of \texttt{vegan} function \texttt{specnumber}:
+<<>>=
+ncol(BCI)/mean(specnumber(BCI)) - 1
+@
+
+The index of eq. \ref{eq:beta} is problematic because $S$ increases
+with the number of sites even when sites are all subsets of the same
+community.  Whittaker noticed this, and suggested the index to be
+found from pairwise comparison of sites.  If the numbers of species in
+two sites are $A$ and $B$, and the number of species shared between
+these two sites is $J$, then $\bar \alpha = (A+B)/2$ and $S = A+B-J$.
+Index \ref{eq:beta} can be expressed as:
+\begin{equation}
+  \label{eq:betabray}
+  \beta = \frac{A+B-J}{(A+B)/2} - 1 = \frac{A+B-2J}{A+B}
+\end{equation}
+This is the S{\o}rensen index of dissimilarity, and it can be found
+for all sites using \texttt{vegan} function \texttt{vegdist} with
+binary data:
+<<>>=
+beta <- vegdist(BCI, binary=TRUE)
+mean(beta)
+@
+
+There are many other definitions of beta diversity in addition to
+eq. \ref{eq:beta}, and many of these reduce to well known
+dissimilarity indices.  All commonly used indices can be found using
+\texttt{designdist} function which allows defining your own
+dissimilarity measures. One of the more interesting indices is based
+on the Arrhenius species--area model
+\begin{equation}
+  \label{eq:arrhenius}
+  \hat S = c X^z
+\end{equation}
+where $X$ is the area (size) of the patch or site, and $c$ and $z$ are
+parameters. Parameter $c$ is uninteresting, but $z$ gives the
+steepness of the species area curve and is a measure of beta
+diversity. In islands,  $z$ is typically about $0.3$. This kind of
+islands can be regarded as subsets of the same community, indicating
+that we really should talk about gradient differences if $z > 0.3$. We
+can find the value of $z$ for a pair of plots using function
+\texttt{designdist}:
+<<>>=
+z <- designdist(BCI, "(log(A+B-J)-log(A+B)+log(2))/log(2)")
+quantile(z)
+@
+The size $X$ and parameter $c$ cancel out, and the index gives the
+estimate $z$ for any pair of sites.
+
+Function \texttt{betadisper} can be used to analyse beta diversities
+with respect to classes or factors.  There is no such classification
+available for the Barro Colorado Island data, and the example studies
+beta diversities in the management classes of the dune meadows
+(Fig. \ref{fig:betadisper}):
+<<>>=
+data(dune)
+data(dune.env)
+z <- designdist(dune, "(log(A+B-J)-log(A+B)+log(2))/log(2)")
+quantile(z)
+mod <- with(dune.env, betadisper(z, Management))
+mod
+@
+\begin{SCfigure}
+<<fig=true,echo=false>>=
+boxplot(mod)
+@
+\caption{Box plots of beta diversity measured as the average steepness
+  ($z$) of the species area curve in the Arrhenius model $S = cX^z$ in
+  Management classes of dune meadows.}
+\label{fig:betadisper}
+\end{SCfigure}
+
+\section{Species pool}
 \subsection{Number of unseen species}
 
-Species accumulation models indicate that not all potential species
-are seen in any sites.  These unseen species also belong to the
-species pool of the site.  Functions \texttt{specpool} and
-\texttt{estimateR} implement some methods of estimating the number of
-unseen species.  Function \texttt{specpool} studies a collection of
-sites, and assumes how many species may be unobserved.  Function
-\texttt{estimateR} works with counts of individuals, and also can be
-used with a single site.  Both functions assume that the number of
-unseen species is related to the number of rare species, or species
-seen only once or twice.
+Species accumulation models indicate that not all species were seen in
+any site.  These unseen species also belong to the species pool.
+Functions \texttt{specpool} and \texttt{estimateR} implement some
+methods of estimating the number of unseen species.  Function
+\texttt{specpool} studies a collection of sites, and
+\texttt{estimateR} works with counts of individuals, and can be used
+with a single site.  Both functions assume that the number of unseen
+species is related to the number of rare species, or species seen only
+once or twice.
 
 Function \texttt{specpool} implements the following models to estimate
 the pool size $S_p$:
@@ -376,7 +543,7 @@ be that we missed about as many species as we saw only once, and the
 idea in bootstrap that if we repeat sampling (with replacement) from
 the same data, we miss any many species as we missed originally.
 
-The variance estimators are of Chao is:
+The variance estimators of Chao is:
 \begin{equation}
 s^2 = f_2 \left(\frac{G^4}{4} + G^3 + \frac{G^2}{2} \right), \,
 \text{where}\quad G = \frac{f_1}{f_2}
@@ -465,8 +632,8 @@ veiledspec(BCI[k,])
 
 \subsection{Probability of pool membership}
 
-Beals smoothing was originally suggested as tool of regularizing data
-for ordination.  It regularizes data too strongly for that purpose,
+Beals smoothing was originally suggested as a tool of regularizing data
+for ordination.  It regularizes data too strongly,
 but it has been suggested as a method of estimating which of the
 missing species could occur in a site, or which sites are suitable for
 a species.  The probability for each species at each site is assessed
@@ -491,5 +658,9 @@ ylab="Occurrence")
 \caption{Beals smoothing for \emph{Ceiba pentandra}.}
 \label{fig:beals}
 \end{SCfigure}
+For the probability of the pool membership, jackknived estimates
+should be used, and concerned site and species should be removed when
+estimating the probablity, but this is not done in \texttt{beals}
+which uses the traditional equations.
 
 \end{document}

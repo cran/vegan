@@ -3,7 +3,7 @@
 @setfilename FAQ-vegan.info
 @settitle vegan FAQ
 @setchapternewpage on
-@set FAQ_YEAR 2007
+@set FAQ_YEAR 2008
 @afourpaper
 @c %**end of header
 
@@ -11,7 +11,7 @@
 @ifnottex
 This document contains answers to some of the most frequently asked
 questions about R package vegan. 
-This is version of $Date: 2008-02-15 08:08:56 +0200 (Fri, 15 Feb 2008) $.
+This is version of $Date: 2008-03-20 10:41:29 +0200 (Thu, 20 Mar 2008) $.
 @end ifnottex
 
 @quotation
@@ -21,7 +21,7 @@ License. To view a copy of this license, visit
 Creative Commons, 543 Howard Street, 5th Floor, San Francisco,
 California, 94105, USA.
 
-Copyright @copyright{} 2007 Jari Oksanen
+Copyright @copyright{} 2008 Jari Oksanen
 @end quotation
 @end copying
 
@@ -35,7 +35,7 @@ Copyright @copyright{} 2007 Jari Oksanen
 @titlepage
 @title vegan @acronym{FAQ}
 @subtitle Frequently Asked Questions on R package vegan
-@subtitle Version of $Date: 2008-02-15 08:08:56 +0200 (Fri, 15 Feb 2008) $ 
+@subtitle Version of $Date: 2008-03-20 10:41:29 +0200 (Thu, 20 Mar 2008) $ 
 @author Jari Oksanen
 
 @vskip 0pt plus 1filll
@@ -85,14 +85,14 @@ Copyright @copyright{} 2007 Jari Oksanen
 @node What is vegan?, What is R?, Introduction, Introduction
 @section What is vegan?
 
-Vegan is an R package for community ecologists. It contains most
-multivariate analysis needed in analysing ecological communities, and
-tools for diversity analysis, and other potentially useful functions.
-Vegan is not self-contained but it must be run under R statistical
-environment, and it also depends on many other R packages. Vegan is
-@url{http://www.gnu.org/philosophy/free-sw.html, free software} and
-distributed under 
-@url{http://www.gnu.org/licenses/gpl.html, ,GPL2 license}. 
+Vegan is an R package for community ecologists. It contains the most
+popular methods of multivariate analysis needed in analysing ecological
+communities, and tools for diversity analysis, and other potentially
+useful functions.  Vegan is not self-contained but it must be run under
+R statistical environment, and it also depends on many other R
+packages. Vegan is @url{http://www.gnu.org/philosophy/free-sw.html, free
+software} and distributed under
+@url{http://www.gnu.org/licenses/gpl.html, ,GPL2 license}.
 
 @node What is R?, How to obtain vegan and R?, What is vegan?, Introduction
 @section What is R?
@@ -158,10 +158,11 @@ of most important packages.
 @section What other documentation is available for vegan?
 
 Vegan is a fully documented R package with standard help pages.  These
-are the most authoritative sources of documentation.  Vegan package ships
-with other documents which can be read with @code{vegandocs} command
-(documented in the vegan help).  The documents included in the vegan
-package are 
+are the most authoritative sources of documentation (and as a last
+resource you can use the force and the read the source, as vegan is open
+source).  Vegan package ships with other documents which can be read
+with @code{vegandocs} command (documented in the vegan help).  The
+documents included in the vegan package are
 @itemize
 @item 
 Vegan @code{ChangeLog}.
@@ -184,7 +185,7 @@ Web documents outside the package include:
 @itemize
 
 @item
-@url{http://cc.oulu.fi/~jarioksa/softhelp/vegan.html}: vegan homepage.
+@url{http://vegan.r-forge.r-project.org/}: vegan homepage.
 @item
 @url{http://cc.oulu.fi/~jarioksa/opetus/metodi/vegantutor.pdf}: vegan
 tutorial.
@@ -249,8 +250,7 @@ and MacOS X).
 tests on the devel package, and if passed, it builds source package and
 Windows binaries. You can install those packages within R with command
 @code{install.packages("vegan",
-repos="http://r-forge.r-project.org/")}.  However, MacOS X binaries
-are not available from R-Forge.
+repos="http://r-forge.r-project.org/")}. 
 
 @node How to report a bug in vegan?, Is it a bug or a feature?, Are there binaries for devel versions?, Introduction
 @section How to report a bug in vegan?
@@ -447,7 +447,7 @@ add points to eigenvector methods using @code{predict} functions with
 species or sites, and then you can find scores for all points
 using your complete data as @code{newdata}.  The @code{predict}
 functions are available for basic eigenvector methods in vegan
-(@code{cca}, @code{rda}, @code{decorana}, for an up-to-date list use
+(@code{cca}, @code{rda}, @code{decorana}, for an up-to-date list, use command
 @code{methods("predict")}). You also can simulate the passive points in R by using
 low weights to row and columns (this is the method used in software
 with passive points). For instance, the following command makes row 3
@@ -476,11 +476,11 @@ dummies in a consistent and correct way.
 @node I want to use Helmert or sum contrasts, What are aliased variables and how to see them?, Class variables and dummies, Ordination
 @section I want to use Helmert or sum contrasts
 
-@code{vegan} uses standard @code{R} utilities for defining
+@code{vegan} uses standard R utilities for defining
 contrasts. The default in standard installations is to use treatment
 contrasts, but you can change the behaviour globally setting
 @code{options} or locally by using keyword @code{contrasts}. Please
-check the @code{R} help pages and user manuals for details.
+check the R help pages and user manuals for details.
 
 @node What are aliased variables and how to see them?, Plotting aliased variables, I want to use Helmert or sum contrasts, Ordination
 @section What are aliased variables and how to see them?
@@ -514,9 +514,9 @@ functions that use permutation, such as @code{adonis}, @code{anosim},
 Vegan has an alternative permutation function @code{permuted.index2}
 which allows restricted permutation designs for time series, line
 transects, spatial grids and blocking factors. Over time, the other
-functions that currently use the older @code{permuted.index} will be updated
-to use @code{permuted.index2}, but at the moment it is used only in one
-pilot function.
+functions that currently use the older @code{permuted.index} will be
+updated to use @code{permuted.index2}, but at the moment it is still
+experimental.
 
 @node How to use different plotting symbols in ordination graphics?, How to avoid cluttered ordination graphs?, Constrained permutations in vegan, Ordination
 @section How to use different plotting symbols in ordination graphics?
@@ -546,9 +546,7 @@ graph. (Here and below  @code{...} means other arguments you want
 to give to your @code{plot} command.)
 
 @item Use points, and add labels to desired points using @code{identify}
-for ordination graphics, if you do not need to see all labels.  You may
-need to first create an empty plot using @code{plot(..., type="n")}, if
-you are not satisfied with the default graph.
+for ordination graphics, if you do not need to see all labels.  
 
 @item Use @code{orditorp} function that uses labels only if these can be
 added to a graph without overwriting other labels, and points otherwise,
