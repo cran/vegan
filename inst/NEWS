@@ -1,8 +1,33 @@
 -*-Text-*-
 
 			VEGAN RELEASE VERSIONS 
+
+		   CHANGES IN VEGAN VERSION 1.11-2
+
+GENERAL
+
+    - minor bug fixes and documentation updates from the devel trunk.
+
+    - version 1.11-1 was made but never released to CRAN, and this is
+      the first public release of the 1.11 series.
+
+FIXES AND UPDATES
+
+    - bstick.princomp: works now.
+
+    - numPerms: was returning incorrect number of permutations
+      when type = "strata" selected.
+
+    - permuted.index2: was permuting samples within levels of strata
+      as well as permuting the levels themselves if type = "strata"
+      selected.
+ 
+    - Documentation: diversity-vegan gains discussion on taxonomic
+      diversity and using designdist for analysing beta diversity.
+      Proof-reading and updates in diversity-vegan and FAQ-vegan.
+
 	
-		    CHANGE IN VEGAN VERSION 1.11-0
+		   CHANGES IN VEGAN VERSION 1.11-0
 
 GENERAL
 

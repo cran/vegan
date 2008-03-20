@@ -1,7 +1,22 @@
-
-$Date: 2008-02-20 09:48:15 +0200 (Wed, 20 Feb 2008) $
+$Date: 2008-03-19 16:21:36 +0200 (Wed, 19 Mar 2008) $
 
 VEGAN DEVEL VERSIONS at http://r-forge.r-project.org/
+
+Version 1.11-2 (March 20, 2008)
+
+        * numPerms: bugfix revision 265
+
+	* permuted.index2: bugfix revision 266
+	
+	* Docs: merged fixes from the main branches for FAQ-vegan.texi
+	(r262) and diversity-vegan.Rnw (r263, but not r264). Edited
+	FAQ-vegan.texi for the bugfix release (no rgl.isomap here).
+	
+Version 1.11-1 (March 10, 2008)
+
+	* diversity-vegan.Rnw: merged revision 243 and 244
+	
+	* biplot.princomp: bugfix revision 247
 
 Version 1.11-0 (Released Feb 20, 2008)
 

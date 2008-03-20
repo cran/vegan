@@ -17,7 +17,7 @@
 
 \date{$ $Id: intro-vegan.Rnw 205 2008-02-15 06:08:56Z jarioksa $ $
   processed with vegan
-1.11-0
+1.11-2
 in R version 2.6.2 (2008-02-08) on \today}
 \usepackage{/usr/local/lib/R/share/texmf/Sweave}
 \begin{document}
@@ -107,11 +107,12 @@ species scores to the configuration as weighted averages (function
 \end{Sinput}
 \begin{Soutput}
 Run 0 stress 12.05894 
-Run 1 stress 11.97273 
+Run 1 stress 12.04547 
 ... New best solution
-... procrustes: rmse 0.01950976  max resid 0.06038378 
-Run 2 stress 11.97273 
-... procrustes: rmse 3.344300e-05  max resid 7.426618e-05 
+... procrustes: rmse 0.003063957  max resid 0.01044394 
+Run 2 stress 12.04547 
+... New best solution
+... procrustes: rmse 0.0001550631  max resid 0.0004288721 
 *** Solution reached
 \end{Soutput}
 \begin{Sinput}
@@ -127,7 +128,7 @@ Data:     dune
 Distance: bray 
 
 Dimensions: 2 
-Stress:     11.97273 
+Stress:     12.04547 
 Two convergent solutions found after 2 tries
 Scaling: centring, PC rotation, halfchange scaling 
 Species: expanded scores
@@ -282,8 +283,8 @@ variables using permutation tests:
 \begin{Soutput}
 ***VECTORS
 
-     NMDS1   NMDS2     r2 Pr(>r)  
-A1 0.97950 0.20144 0.3689   0.02 *
+      NMDS1    NMDS2     r2 Pr(>r)  
+A1 0.997184 0.074994 0.3863  0.019 *
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 P values based on 1000 permutations.
@@ -292,14 +293,14 @@ P values based on 1000 permutations.
 
 Centroids:
                NMDS1   NMDS2
-ManagementBF -0.4532  0.0011
-ManagementHF -0.2712 -0.1209
-ManagementNM  0.3267  0.5688
-ManagementSF  0.1260 -0.4686
+ManagementBF -0.4504 -0.0052
+ManagementHF -0.2739 -0.1183
+ManagementNM  0.3308  0.5691
+ManagementSF  0.1227 -0.4680
 
 Goodness of fit:
-               r2 Pr(>r)   
-Management 0.4206  0.006 **
+              r2 Pr(>r)   
+Management 0.422  0.007 **
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 P values based on 1000 permutations.
@@ -333,7 +334,7 @@ y ~ s(x1, x2, k = knots)
 Estimated degrees of freedom:
  2   total =  3 
 
-GCV score:  3.941037 
+GCV score:  3.832034 
 \end{Soutput}
 \end{Schunk}
 \begin{SCfigure}
@@ -475,7 +476,7 @@ Terms added sequentially (first to last)
 
 Model: cca(formula = dune ~ A1 + Management, data = dune.env)
            Df  Chisq      F N.Perm Pr(>F)   
-A1          1 0.2248 2.5245    199  0.015 * 
+A1          1 0.2248 2.5245    199  0.010 **
 Management  3 0.5550 2.0780    199  0.005 **
 Residual   15 1.3355                        
 ---
@@ -496,7 +497,7 @@ Marginal effects of terms
 
 Model: cca(formula = dune ~ A1 + Management, data = dune.env)
            Df  Chisq      F N.Perm  Pr(>F)   
-A1          1 0.1759 1.9761    899 0.03111 * 
+A1          1 0.1759 1.9761    699 0.02857 * 
 Management  3 0.5550 2.0780    199 0.00500 **
 Residual   15 1.3355                         
 ---
@@ -514,9 +515,9 @@ Permutation test for cca under direct model
 
 Model: cca(formula = dune ~ A1 + Management, data = dune.env)
          Df  Chisq      F N.Perm  Pr(>F)  
-CCA1      1 0.3187 3.5801    299 0.01667 *
-CCA2      1 0.2372 2.6640    599 0.05000 *
-CCA3      1 0.1322 1.4845     99 0.31000  
+CCA1      1 0.3187 3.5801    199 0.01500 *
+CCA2      1 0.2372 2.6640    599 0.04167 *
+CCA3      1 0.1322 1.4845     99 0.27000  
 CCA4      1 0.0917 1.0297     99 0.35000  
 Residual 15 1.3355                        
 ---
@@ -574,7 +575,7 @@ Terms added sequentially (first to last)
 
 Model: cca(formula = dune ~ A1 + Management + Condition(Moisture), data = dune.env)
            Df  Chisq      F N.Perm Pr(>F)   
-A1          1 0.1154 1.4190     99   0.12   
+A1          1 0.1154 1.4190     99   0.18   
 Management  3 0.3954 1.6205     99   0.01 **
 Residual   12 0.9761                        
 ---
@@ -595,7 +596,7 @@ Permutations stratified within `Moisture'
 
 Model: cca(formula = dune ~ A1 + Management + Condition(Moisture), data = dune.env)
            Df  Chisq      F N.Perm Pr(>F)   
-A1          1 0.1154 1.4190     99   0.32   
+A1          1 0.1154 1.4190     99   0.21   
 Management  3 0.3954 1.6205     99   0.01 **
 Residual   12 0.9761                        
 ---

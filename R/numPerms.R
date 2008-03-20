@@ -42,7 +42,7 @@
                 nobs
         }
     } else if(control$type == "strata") {
-        exp(lfactorial(length(levels(control$strata)))) * unique(tab.strata)
+        exp(lfactorial(length(levels(control$strata))))
     } else {
         stop("Ambiguous permutation type in 'control$type'")
     }

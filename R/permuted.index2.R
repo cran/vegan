@@ -6,7 +6,8 @@
         {
             lev <- length(levels(strata))
             ngr <- length(strata) / lev
-            rep(sample(lev), ngr) + (rep(seq(0, ngr-1), each = lev) * lev)
+            sp <- split(seq(along = strata), strata)
+            unname(do.call(c, sp[.Internal(sample(lev, lev, FALSE, NULL))]))
         }
     `permuted.grid` <-
         function(nrow, ncol, mirror = FALSE, start.row = NULL, start.col = NULL)
