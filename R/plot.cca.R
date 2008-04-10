@@ -1,4 +1,4 @@
-"plot.cca" <-
+`plot.cca` <-
     function (x, choices = c(1, 2), display = c("sp", "wa", "cn"), 
               scaling = 2, type, xlim, ylim,  ...) 
 {
@@ -27,10 +27,10 @@
     else type <- match.arg(type, TYPES)
     if (missing(xlim))
         xlim <- range(g$spe[, 1], g$sit[, 1], g$con[, 1], g$default[, 
-                                                                1])
+                                                                    1])
     if (missing(ylim))
         ylim <- range(g$spe[, 2], g$sit[, 2], g$con[, 2], g$default[, 
-                                                                2])
+                                                                    2])
     plot(g[[1]], xlim = xlim, ylim = ylim, type = "n", asp = 1, 
          ...)
     abline(h = 0, lty = 3)
@@ -57,10 +57,7 @@
     }
     if (!is.null(g$biplot) && type != "none") {
         if (length(display) > 1) {
-            mul <- par("usr")/c(range(g$biplot[, 1]), range(g$biplot[, 
-                                                                     2]))
-            mul <- mul[is.finite(mul) & mul > 0]
-            mul <- 0.75 * min(mul)
+            mul <- ordiArrowMul(g$biplot)
         }
         else mul <- 1
         arrows(0, 0, mul * g$biplot[, 1], mul * g$biplot[, 2], 

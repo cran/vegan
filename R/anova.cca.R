@@ -7,6 +7,8 @@
     if (is.null(object$CCA))
         stop("Nothing to analyse: no constrained component")
     perm.max <- max(step-1, perm.max)
+    if (perm.max %% step == 0)
+        perm.max <- perm.max - 1
     if (!is.null(by)) {
         by <- match.arg(by, c("axis", "terms", "margin"))
         if (by == "axis") 
@@ -59,4 +61,3 @@
     structure(table, heading = c(head, mod), Random.seed = seed, 
               class = c("anova.cca", "anova", "data.frame"))
 }
-

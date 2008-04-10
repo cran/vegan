@@ -1,4 +1,4 @@
-"plot.envfit" <-
+`plot.envfit` <-
     function (x, choices = c(1, 2), arrow.mul, at = c(0, 0), 
               axis = FALSE, p.max = NULL, col = "blue", add = TRUE, ...) 
 {
@@ -27,11 +27,8 @@
         if (missing(arrow.mul)) {
             if(!add)
                 arrow.mul <- 1
-            else {
-                mul <- par("usr")/c(range(vect[,1]), range(vect[,2]))
-                mul <- mul[is.finite(mul) & mul > 0]
-                arrow.mul <- 0.75 * min(mul)
-            }
+            else 
+                arrow.mul <- ordiArrowMul(vect, at = at)
         }
         if (axis) {
             maxarr <- round(sqrt(max(x$vectors$r)), 1)

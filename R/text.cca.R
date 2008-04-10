@@ -1,4 +1,4 @@
-"text.cca" <-
+`text.cca` <-
     function (x, display = "sites", labels, choices = c(1, 2), scaling = 2, 
               arrow.mul, head.arrow = 0.05, select, ...) 
 {
@@ -22,10 +22,7 @@
     }
     if (display == "bp") {
         if (missing(arrow.mul)) {
-            mul <- par("usr")/c(range(pts[, 1]), range(pts[, 
-                                                           2]))
-            mul <- mul[is.finite(mul) & mul > 0]
-            arrow.mul <- 0.75 * min(mul)
+            arrow.mul <- ordiArrowMul(pts)
         }
         pts <- pts * arrow.mul
         arrows(0, 0, pts[, 1], pts[, 2], length = head.arrow, 
