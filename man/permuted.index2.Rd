@@ -15,7 +15,8 @@ permControl(strata = NULL, nperm = 199, complete = FALSE,
             type = c("free", "series", "grid", "strata"),
             maxperm = 9999, minperm = 99,
             mirror = FALSE, constant = FALSE,
-            ncol = NULL, nrow = NULL)
+            ncol = NULL, nrow = NULL,
+            all.perms = NULL)
 }
 
 \arguments{
@@ -42,6 +43,8 @@ permControl(strata = NULL, nperm = 199, complete = FALSE,
     permutation is produced for each level of \code{strata}.}
   \item{ncol, nrow}{numeric; the number of columns and rows of samples
     in the spatial grid respectiavly.}
+  \item{all.perms}{an object of class \code{allPerms}, the result of a
+    call to \code{\link{allPerms}}.}
 }
 \details{
   \code{permuted.index2} can generate permutations for a wide range of

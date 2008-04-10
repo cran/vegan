@@ -1,7 +1,25 @@
-$Date: 2008-03-19 16:21:36 +0200 (Wed, 19 Mar 2008) $
+$Date: 2008-04-09 12:16:52 +0300 (Wed, 09 Apr 2008) $
 
 VEGAN DEVEL VERSIONS at http://r-forge.r-project.org/
 
+Version 1.11-3 (April 8, 2008)
+
+	* ordiArrowMul & associates: merged Rev 302 (scaling of arrows). 
+
+	* varpart4: merged Rev 289 (wrong sum of squares).
+
+	* anova.cca: merged Rev 288 (no. perms could exceed perm.max)
+
+	* plot.procrustes: merged Rev 278 (fails with two identical
+	configs).
+
+	* diversity.Rnw: merged Rev 301 (portable spelling R\'{e}nyi). 
+
+	* permuted.index2 & associates: merged Rev 274 (allPerms support
+	functions), Rev 283 (numPerms fix), Rev 292 (permuted.index2 fix),
+	Rev. 295 (permControl fix), Rev 298 (added permuplot), and Rev 308
+	(allPerms fix and permCheck.Rd update). 
+	
 Version 1.11-2 (March 20, 2008)
 
         * numPerms: bugfix revision 265

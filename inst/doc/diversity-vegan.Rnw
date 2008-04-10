@@ -12,7 +12,7 @@
 
 \title{Vegan: ecological diversity}
 \author{Jari Oksanen}
-\date{$ $Id: diversity-vegan.Rnw 271 2008-03-20 08:41:29Z jarioksa $ $
+\date{$ $Id: diversity-vegan.Rnw 307 2008-04-08 08:32:12Z jarioksa $ $
   processed with vegan \Sexpr{packageDescription("vegan", field="Version")}
   in \Sexpr{R.version.string} on \today}
 \begin{document}
@@ -76,21 +76,21 @@ J <- H/log(specnumber(BCI))
 where \texttt{specnumber} is a simple \texttt{vegan} function to find
 the numbers of species.
 
-\texttt{Vegan} also can estimate Rényi diversities of order $a$:
+\texttt{Vegan} also can estimate R\'{e}nyi diversities of order $a$:
 \begin{equation}
 H_a = \frac{1}{1-a} \log \sum_{i=1}^S p_i^a
 \end{equation}
 or the corresponding Hill numbers $N_a = \exp(H_a)$.  Many common
 diversity indices are special cases of Hill numbers: $N_0 = S$, $N_1 =
 \exp(H')$, $N_2 = D_2$, and $N_\infty = 1/(\max p_i)$. The
-correspoding Rényi diversities are $H_0 = \log(S)$, $H_1 = H'$, $H_2 =
+correspoding R\'{e}nyi diversities are $H_0 = \log(S)$, $H_1 = H'$, $H_2 =
 - \log(\sum p_i^2)$, and $H_\infty = - \log(\max p_i)$.  We select a
-random subset of five sites for Rényi diversities:
+random subset of five sites for R\'{e}nyi diversities:
 <<>>=
 k <- sample(nrow(BCI), 6)
 R <- renyi(BCI[k,])
 @
-We can really regard a site more diverse if all of its Rényi
+We can really regard a site more diverse if all of its R\'{e}nyi
 diversities are higher than in another site.  We can inspect this
 graphically using the standard \texttt{plot} function for the
 \texttt{renyi} result (Fig. \ref{fig:renyi}).
@@ -101,7 +101,7 @@ require(lattice, quietly=TRUE)
 <<fig=true,echo=false>>=
 print(plot(R))
 @
-\caption{Rényi diversities in six randomly selected plots. The plot
+\caption{R\'{e}nyi diversities in six randomly selected plots. The plot
   uses Trellis graphics with a separate panel for each site. The dots
   show the values for sites, and the lines the extremes and median in
   the data set.}

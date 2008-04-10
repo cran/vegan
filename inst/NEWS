@@ -2,6 +2,34 @@
 
 			VEGAN RELEASE VERSIONS 
 
+		   CHANGES IN VEGAN VERSION 1.11-3
+
+GENERAL
+
+    - Bug fixes from Rev. 305 on http://r-forge.r-project.org/.
+
+FIXES
+
+    - anova.cca: number of permutations could exceed perm.max.
+
+    - permuted.index2: updated to the version in devel branch. This
+      means bugfixes in permCheck, numPerms and permuted.index2. It
+      also adds allPerms to get all possible permutations when
+      complete enumeration is feasible. In addition, there is now a
+      function permuplot to graphically show the current permutation
+      scheme.
+
+    - plot.cca, plot.envfit and associates: automatic scaling of
+      biplot arrows and fitted vectors was wrong when axes were
+      reversed (like 'xlim = c(1,-1)') or the origin was shifted in
+      plot.envfit (like 'at = c(1,1)'). Added internal function
+      'ordiArrowMul'.
+
+    - plot.procrustes: failed if two configurations were identical.
+
+    - varpart4: sum of squares was wrong if called directly instead of
+      being called via varpart(). Reported by Guillaume Blanchet.
+
 		   CHANGES IN VEGAN VERSION 1.11-2
 
 GENERAL
@@ -9,7 +37,7 @@ GENERAL
     - minor bug fixes and documentation updates from the devel trunk.
 
     - version 1.11-1 was made but never released to CRAN, and this is
-      the first public release of the 1.11 series.
+      the first minor release of the 1.11 series.
 
 FIXES AND UPDATES
 

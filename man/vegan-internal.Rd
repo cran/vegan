@@ -6,6 +6,7 @@
 \alias{ordiTerminfo}
 \alias{ordispantree}
 \alias{pasteCall}
+\alias{ordiArrowMul}
 \title{Internal vegan functions}
 
 \description{
@@ -15,6 +16,7 @@
 ordiGetData(call, env)
 ordiParseFormula(formula, data, xlev = NULL)
 ordiTerminfo(d, data)
+ordiArrowMul(x, at = c(0,0), fill = 0.75)
 centroids.cca(x, mf, wt)
 permuted.index(n, strata)
 ordispantree(ord, tree, display = "sites", ...)
