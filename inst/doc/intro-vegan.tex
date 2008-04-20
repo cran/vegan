@@ -17,7 +17,7 @@
 
 \date{$ $Id: intro-vegan.Rnw 205 2008-02-15 06:08:56Z jarioksa $ $
   processed with vegan
-1.11-3
+1.11-4
 in R version 2.6.2 (2008-02-08) on \today}
 \usepackage{/usr/local/lib/R/share/texmf/Sweave}
 \begin{document}
@@ -109,9 +109,10 @@ species scores to the configuration as weighted averages (function
 Run 0 stress 12.05894 
 Run 1 stress 12.04546 
 ... New best solution
-... procrustes: rmse 0.003143370  max resid 0.01080942 
-Run 2 stress 12.04546 
-... procrustes: rmse 5.53678e-05  max resid 0.0001551746 
+... procrustes: rmse 0.003129778  max resid 0.01072834 
+Run 2 stress 18.23000 
+Run 3 stress 12.04547 
+... procrustes: rmse 7.29894e-05  max resid 0.0001937243 
 *** Solution reached
 \end{Soutput}
 \begin{Sinput}
@@ -128,7 +129,7 @@ Distance: bray
 
 Dimensions: 2 
 Stress:     12.04546 
-Two convergent solutions found after 2 tries
+Two convergent solutions found after 3 tries
 Scaling: centring, PC rotation, halfchange scaling 
 Species: expanded scores
 \end{Soutput}
@@ -283,7 +284,7 @@ variables using permutation tests:
 ***VECTORS
 
       NMDS1    NMDS2     r2 Pr(>r)  
-A1 0.997172 0.075151 0.3863  0.014 *
+A1 0.997182 0.075019 0.3863  0.021 *
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 P values based on 1000 permutations.
@@ -293,13 +294,13 @@ P values based on 1000 permutations.
 Centroids:
                NMDS1   NMDS2
 ManagementBF -0.4504 -0.0052
-ManagementHF -0.2739 -0.1183
-ManagementNM  0.3307  0.5692
-ManagementSF  0.1228 -0.4680
+ManagementHF -0.2740 -0.1183
+ManagementNM  0.3308  0.5692
+ManagementSF  0.1227 -0.4679
 
 Goodness of fit:
-               r2 Pr(>r)   
-Management 0.4219  0.005 **
+              r2 Pr(>r)   
+Management 0.422  0.003 **
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 P values based on 1000 permutations.
@@ -333,7 +334,7 @@ y ~ s(x1, x2, k = knots)
 Estimated degrees of freedom:
  2   total =  3 
 
-GCV score:  3.832152 
+GCV score:  3.832127 
 \end{Soutput}
 \end{Schunk}
 \begin{SCfigure}
@@ -475,7 +476,7 @@ Terms added sequentially (first to last)
 
 Model: cca(formula = dune ~ A1 + Management, data = dune.env)
            Df  Chisq      F N.Perm Pr(>F)   
-A1          1 0.2248 2.5245    199  0.005 **
+A1          1 0.2248 2.5245    199  0.015 * 
 Management  3 0.5550 2.0780    199  0.005 **
 Residual   15 1.3355                        
 ---
@@ -496,8 +497,8 @@ Marginal effects of terms
 
 Model: cca(formula = dune ~ A1 + Management, data = dune.env)
            Df  Chisq      F N.Perm  Pr(>F)   
-A1          1 0.1759 1.9761   1299 0.03538 * 
-Management  3 0.5550 2.0780    199 0.00500 **
+A1          1 0.1759 1.9761   1299 0.03385 * 
+Management  3 0.5550 2.0780    199 0.01000 **
 Residual   15 1.3355                         
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
@@ -513,12 +514,12 @@ Moreover, it is possible to analyse significance of each axis:
 Permutation test for cca under direct model
 
 Model: cca(formula = dune ~ A1 + Management, data = dune.env)
-         Df  Chisq      F N.Perm Pr(>F)  
-CCA1      1 0.3187 3.5801    199  0.015 *
-CCA2      1 0.2372 2.6640    499  0.050 *
-CCA3      1 0.1322 1.4845     99  0.250  
-CCA4      1 0.0917 1.0297     99  0.390  
-Residual 15 1.3355                       
+         Df  Chisq      F N.Perm Pr(>F)   
+CCA1      1 0.3187 3.5801    199  0.010 **
+CCA2      1 0.2372 2.6640    499  0.048 * 
+CCA3      1 0.1322 1.4845     99  0.290   
+CCA4      1 0.0917 1.0297     99  0.460   
+Residual 15 1.3355                        
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 \end{Soutput}
@@ -574,8 +575,8 @@ Terms added sequentially (first to last)
 
 Model: cca(formula = dune ~ A1 + Management + Condition(Moisture), data = dune.env)
            Df  Chisq      F N.Perm Pr(>F)  
-A1          1 0.1154 1.4190     99   0.15  
-Management  3 0.3954 1.6205     99   0.02 *
+A1          1 0.1154 1.4190     99   0.16  
+Management  3 0.3954 1.6205     99   0.06 .
 Residual   12 0.9761                       
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
@@ -595,7 +596,7 @@ Permutations stratified within `Moisture'
 
 Model: cca(formula = dune ~ A1 + Management + Condition(Moisture), data = dune.env)
            Df  Chisq      F N.Perm Pr(>F)   
-A1          1 0.1154 1.4190     99   0.26   
+A1          1 0.1154 1.4190     99   0.22   
 Management  3 0.3954 1.6205     99   0.01 **
 Residual   12 0.9761                        
 ---
