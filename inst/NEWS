@@ -2,6 +2,15 @@
 
 			VEGAN RELEASE VERSIONS 
 
+CHANGES IN VEGAN VERSION 1.11-4
+
+    - A critical bug fix in adonis: there was a critical bug in adonis
+      code, and inconsistent statistics were used in permutations so
+      that P-values were grossly wrong in multi-variables models
+      (single variable models were OK). In addition, df were wrong in
+      deficit rank models, and unused factor levels were not dropped.
+      All adonis users should upgrade and rerun their analyses.
+
 		   CHANGES IN VEGAN VERSION 1.11-3
 
 GENERAL
