@@ -3,6 +3,8 @@
 \alias{anova.ccabyaxis}
 \alias{anova.ccabyterm}
 \alias{anova.ccabymargin}
+\alias{permutest}
+\alias{permutest.default}
 \alias{permutest.cca}
 \alias{print.permutest.cca}
 
@@ -18,9 +20,11 @@
 \method{anova}{cca}(object, alpha=0.05, beta=0.01, step=100, perm.max=9999,
       by = NULL, ...)
 
-permutest.cca(x, permutations = 100,
-              model = c("direct", "reduced", "full"),
-              first = FALSE, strata, ...)
+permutest(x, ...)
+
+\method{permutest}{cca}(x, permutations = 100,
+          model = c("direct", "reduced", "full"),
+          first = FALSE, strata, ...)
 }
 
 \arguments{

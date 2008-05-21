@@ -1,5 +1,6 @@
 \name{capscale}
 \alias{capscale}
+\alias{print.capscale}
 
 \title{[Partial] Constrained Analysis of Principal Coordinates or
   distance-based RDA }
@@ -11,13 +12,15 @@
   is strictly linear and metric. If called with Euclidean distance,
   the results are identical to \code{\link{rda}}, but \code{capscale}
   will be much more inefficient. Function \code{capscale} is a
-  constrained version of metric scaling, a.k.a. principal coordintates
+  constrained version of metric scaling, a.k.a. principal coordinates
   analysis, which is based on the Euclidean distance but can be used,
-  and is more useful, with other dissimilarity measures. 
+  and is more useful, with other dissimilarity measures. The function
+  can also perform unconstrained principal coordinates analysis,
+  optionally using extended dissimilarities.
 }
 \usage{
 capscale(formula, data, distance = "euclidean", comm = NULL,
-         add = FALSE,  ...)
+         add = FALSE,  dfun = vegdist, metaMDSdist = FALSE, ...)
 }
 
 \arguments{
@@ -56,7 +59,16 @@ capscale(formula, data, distance = "euclidean", comm = NULL,
      basically metric \code{\link{cmdscale}}. They are harmless and
      ignored in \code{capscale}, but you also can avoid warnings with
      this option. }
-  \item{\dots}{Other parameters passed to \code{\link{rda}}. }
+   \item{dfun}{Distance or dissimilarity function used. Any function
+     returning standard \code{"dist"} and taking the index name as the
+     first argument can be used. }
+   \item{metaMDSdist}{Use \code{\link{metaMDSdist}} similarly as in
+     \code{\link{metaMDS}}. This means automatic data transformation and
+     using extended flexible shortest path dissimilarities (function
+     \code{\link{stepacross}}) when there are many dissimilarities based on
+     no shared species.}
+   \item{\dots}{Other parameters passed to \code{\link{rda}} or to
+     \code{\link{metaMDSdist}}.  }
 }
 \details{
   Canonical Analysis of Principal Coordinates (CAP) is simply a
@@ -105,8 +117,13 @@ capscale(formula, data, distance = "euclidean", comm = NULL,
   efficient. Even with non-Euclidean dissimilarities, the
   rest of the analysis will be metric and linear.
 
-  %The test for all axes is available only for ordinations defined with
-  %\code{formula} interface. 
+  The function can be also used to perform ordinary metric scaling
+  a.k.a. principal coordinates analysis by using a formula with only a
+  constant on the left hand side, or \code{comm ~ 1}. With
+  \code{metaMDSdist = TRUE}, the function can do automatic data
+  standardization and use extended dissimilarities using function
+  \code{\link{stepacross}} similary as in non-metric multidimensional
+  scaling with \code{\link{metaMDS}}. 
   
 }
 \value{
@@ -167,6 +184,8 @@ vare.cap <- capscale(varespec ~ N + P + K + Condition(Al), varechem,
 vare.cap
 plot(vare.cap)
 anova(vare.cap)
+## Principal coordinates analysis with extended dissimilarities
+capscale(varespec ~ 1, dist="bray", metaMDS = TRUE)
 }
 \keyword{ multivariate }
 

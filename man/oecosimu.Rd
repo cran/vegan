@@ -4,11 +4,14 @@
 \alias{nestedchecker}
 \alias{nestedn0}
 \alias{nesteddisc}
+\alias{nestedtemp}
 \alias{commsimulator}
 \alias{print.oecosimu}
 \alias{print.nestedchecker}
 \alias{print.nestedn0}
 \alias{print.nesteddisc}
+\alias{print.nestedtemp}
+\alias{plot.nestedtemp}
 
 \title{ Nestedness and Null Models for Islands or Patches }
 
@@ -26,6 +29,9 @@ oecosimu(comm, nestfun, method, nsimul = 99, burnin = 0, thin = 1, ...)
 nestedchecker(comm)
 nestedn0(comm)
 nesteddisc(comm)
+nestedtemp(comm, ...)
+\method{plot}{nestedtemp}(x, kind = c("temperature", "incidendce"),
+    col=rev(heat.colors(100)),  names = FALSE, ...)
 commsimulator(x, method, thin=1)
 }
 
@@ -42,7 +48,10 @@ commsimulator(x, method, thin=1)
   \item{thin}{Number of discarded null communities between two
   evaluations of nestedness statistic in sequential methods
   \code{"swap"} and \code{"tswap"}.}
-  \item{x}{Matrix for \code{commsimulator}.}
+  \item{kind}{The kind of plot produced.}
+  \item{x}{Matrix for \code{commsimulator} or a \code{plot} object.}
+  \item{col}{Colour scheme for matrix temperatures.}
+  \item{names}{Label columns and rows in the plot using names in \code{comm}.}
   \item{\dots}{Other arguments to functions.}
 }
 
@@ -55,15 +64,34 @@ commsimulator(x, method, thin=1)
   generation of null models is described towards the end of this
   section.
 
-  Function \code{netstedchecker} gives the number of checkerboard
-  units, or 2x2 submatrices where both species occur once but on
-  different sites (Stone & Roberts 1990).  Function \code{nestedn0}
-  implements nestedness measure N0 which is the number of absences
-  from the sites which are richer than the most pauperate site species
-  occurs (Patterson & Atmar 1986).  Function \code{nesteddisc}
-  implements discrepancy index which is the number of ones that should
-  be shifted to fill a row with ones in a table arranged by species
-  frequencies (Brualdi & Sanderson 1999).
+  Function \code{netstedchecker} gives the number of checkerboard units,
+  or 2x2 submatrices where both species occur once but on different
+  sites (Stone & Roberts 1990).  Function \code{nestedn0} implements
+  nestedness measure N0 which is the number of absences from the sites
+  which are richer than the most pauperate site species occurs
+  (Patterson & Atmar 1986).  Function \code{nesteddisc} implements
+  discrepancy index which is the number of ones that should be shifted
+  to fill a row with ones in a table arranged by species frequencies
+  (Brualdi & Sanderson 1999). Function \code{nestedtemp} finds the
+  matrix temperature which is defined as the sum of \dQuote{surprises}
+  in arranged matrix.  In arranged unsurprising matrix all species
+  within proportion given by matrix fill are in the upper left corner of
+  the matrix, and the surprise of the absence or presences is the
+  diagonal distance from the fill line (Atmar & Patterson
+  1993). Function tries to pack species and sites to a low
+  temperature (\enc{Rodríguez-Gironés}{Rodriguez-Girones} & Santamaria
+  2006), but this is an iterative procedure, and the temperatures
+  usually vary among runs.  Function \code{nestedtemp} also has a
+  \code{plot} method which can display either incidences or temperatures
+  of the surprises. Matrix temperature was rather vaguely described
+  (Atmar & Patterson 1993), but
+  \enc{Rodríguez-Gironés}{Rodriguez-Girones} & Santamaria (2006) are
+  more explicit and their description is used here. However, the results
+  probably differ from other implementations, and users should be
+  cautious in interpreting the results. The details of calculations
+  are explained in the \code{\link{vignette}} \emph{Design decisions
+  and implementation} that you can read using functions
+  \code{\link{vignette}} or \code{\link{vegandocs}}. 
 
   In addition to these functions provided in \pkg{vegan}, any function
   can be used that takes \code{comm} as the first argument, and
@@ -141,6 +169,10 @@ commsimulator(x, method, thin=1)
   input matrix.  }
 
 \references{
+  Atmar, W. & Patterson, B.D. (1993). The measurement of order and
+  disorder in the distribution of species in fragmented
+  habitat. \emph{Oecologia} 96, 373--382.
+
   Brualdi, R.A. & Sanderson, J.G. (1999). Nested species subsets, gaps,
   and discrepancy. \emph{Oecologia} 119, 256--264.
 
@@ -160,6 +192,10 @@ commsimulator(x, method, thin=1)
   Patterson, B.D. & Atmar, W. (1986). Nested subsets and the structure
   of insular mammalian faunas and archipelagos. \emph{Biol. J. Linnean
     Soc.} 28, 65--82.
+
+  \enc{Rodríguez-Gironés}{Rodriguez-Girones}, M.A.  & Santamaria, L.
+  (2006). A new algorithm to calculate the nestedness temperature of
+  presence-absence matrices. \emph{J. Biogeogr.} 33, 924--935.
 
   Stone, L. & Roberts, A. (1990). The checkerboard score and species
   distributions. \emph{Oecologia} 85, 74--79.

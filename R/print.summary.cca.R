@@ -22,9 +22,11 @@
         cat("after removing the contribution of conditiniong variables\n")
     }
     cat("\n")
-    out <- rbind(lambda = c(x$ev.con, x$ev.uncon), accounted = c(x$ev.con.account, 
-                                                   x$ev.uncon.account))
+    out <- rbind("Eig.value" = c(x$ev.con, x$ev.uncon),
+                 "Accounted" = c(x$ev.con.account, x$ev.uncon.account))
     print(out, digits = digits, ...)
+    cat("\nAccumulated constrained eigenvalues\n")
+    print(x$cca.acc, digits = digits, ...)
     cat("\nScaling", x$scaling, "for species and site scores\n")
     if (abs(x$scaling) == 2) {
         ev.ent <- "Species"
@@ -77,3 +79,4 @@
     cat("\n")
     invisible(x)
 }
+

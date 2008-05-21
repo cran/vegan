@@ -140,9 +140,10 @@ data(dune)
 data(dune.env)
 mod <- cca(dune ~ Moisture, dune.env)
 attach(dune.env)
-plot(mod, type="n")
-ordihull(mod, Moisture)
-ordispider(mod, col="red")
+## pass non-graphical arguments without warnings
+plot(mod, type="n", scaling = 3)
+ordihull(mod, Moisture, scaling = 3)
+ordispider(mod, col="red", scaling = 3)
 plot(mod, type = "p", display="sites")
 ordicluster(mod, hclust(vegdist(dune)), prune=3, col = "blue")
 # The following is not executed automatically because it needs

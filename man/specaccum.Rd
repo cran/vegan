@@ -87,8 +87,9 @@ specaccum(comm, method = "exact", permutations = 100,
   \item{call }{Function call.}
   \item{method}{Accumulator method.}
   \item{sites}{Number of sites.  For \code{method = "rarefaction"} this
-    is the average number of sites corresponding to a certain number of
-    individuals.}
+    is the number of sites corresponding to a certain number of
+    individuals and generally not an integer, and the average
+    number of individuals is also retunred in item \code{individuals}.} 
   \item{richness}{The number of species corresponding to number of
     sites.  With \code{method = "collector"} this is the observed
     richness, for other methods the average or expected richness.}

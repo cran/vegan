@@ -25,7 +25,7 @@
 \usage{
 metaMDS(comm, distance = "bray", k = 2, trymax = 20, autotransform =TRUE,
         noshare = 0.1, wascores = TRUE, expand = TRUE, trace = 1,
-        plot = FALSE, previous.best, ...)
+        plot = FALSE, previous.best, old.wa = FALSE, ...)
 \method{plot}{metaMDS}(x, display = c("sites", "species"), choices = c(1, 2),
      type = "p", shrink = FALSE,  ...)
 \method{points}{metaMDS}(x, display = c("sites", "species"),
@@ -66,6 +66,11 @@ metaMDSredist(object, ...)
   \item{previous.best}{Start searches from a previous
     solutions. Otherwise use \code{\link[MASS]{isoMDS}} default for the
     starting solution.}
+  \item{old.wa}{Use the old way of calculating WA scores for species:
+    in vegan versions 1.12-5 and 1.11-2 WA scores were based on
+    untransformed data even when data were transformed in analysis, but
+    since then the similar transformation will be used in WA scores as
+    in ordination.}
   \item{x}{Dissimilarity matrix for \code{\link[MASS]{isoMDS}} or \code{plot}
     object.} 
   \item{choices}{Axes shown.}
@@ -82,7 +87,7 @@ metaMDSredist(object, ...)
  \item{commname}{The name of \code{comm}: should not be given if the
    function is called directly.}
  \item{zerodist}{Handling of zero dissimilarities: either \code{"fail"}
-   or \code{"add"} a small positive value.}
+   or \code{"add"} a small positive value, or \code{"ignore"}.}
  \item{distfun}{Dissimilarity function. Any function returning a
    \code{dist} object and accepting argument \code{method} can be used
    (but some extra arguments may cause name conflicts).}
@@ -236,7 +241,13 @@ metaMDSredist(object, ...)
   tries to reconstruct the used dissimilarities with original data
   transformation and possible \code{\link{stepacross}}.
 }
-
+\section{Warning}{
+  The calculation of \code{\link{wascores}} for species was changed in
+  \pkg{vegan} version 1.12-6. They are now based on the community data
+  transformed similarly as in the ordination. Previously the species
+  scores always were based on the original data. You can re-establish
+  the old behaviour with argument \code{old.wa = TRUE}.
+}
 \seealso{\code{\link[MASS]{isoMDS}}, \code{\link{decostand}},
   \code{\link{wisconsin}}, 
   \code{\link{vegdist}}, \code{\link{rankindex}}, \code{\link{stepacross}}, 

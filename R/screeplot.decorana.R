@@ -18,7 +18,8 @@
              xlab = xlab, ylab = ylab, main = main, ...)
         axis(2)
         axis(1, at = comps, labels = names(eig.vals[comps]))
+        mids <- comps
         box()
     }
-    invisible(x)
+    invisible(xy.coords(x = mids, y = eig.vals[comps]))
 }

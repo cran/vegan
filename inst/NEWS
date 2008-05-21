@@ -1,8 +1,74 @@
 -*-Text-*-
 
 			VEGAN RELEASE VERSIONS 
+		       	======================
 
-CHANGES IN VEGAN VERSION 1.11-4
+GENERAL
+
+    - Based on development version 1.12-15 (revision 354 at
+      http://vegan.r-forge.r-project.org) 
+
+NEW FUNCTIONS
+
+    - betadiver: beta diversity functions as reviewed by Patricia
+      Koleff et al.  (J. Anim. Ecol., 72, 367-382; 2003), with a plot
+      function to produce triangular plots.
+
+    - mso: Helene Wagner's multiscale ordination or spatial
+      partitioning of cca and rda. This is taken from the Ecological
+      Archives with minimal edition with the permission of Helene
+      Wagner.
+
+    - nestedtemp: matrix temperature method for oecosimu following
+      Rodriguez-Girones & Santamaria (J. Biogeogr. 33, 924-935; 2006),
+      but still without iterative optimization of row and column
+      ordering.
+
+    - TukeyHSD.betadisper: pairwise comparisons for betadisper.
+
+NEW FEATURES AND FIXES
+
+    - adonis: returns both species and site scores.
+
+    - betadisper: was not calculating distance to centroid correctly
+      for observations where the imaginary distance to centroid was
+      greater than the real distance. Now takes the absolute value of
+      the combined distance before taking the square root. This is
+      in-line with Marti Anderson's PERMDISP2.
+
+    - BCI: example has spatial coordinates of plots.
+
+    - biplot.rda: argument for arrow col.
+
+    - capscale: accepts other distance functions than vegdist, and can
+      use metaMDSdist for extended dissimilarites & "metaPCoA".
+
+    - designdist: knows 2x2 contingency table notation with a, b, c,
+      and d.
+
+    - metaMDS: transforms data like with distances for species WA.
+
+    - orditkplot: allows editing labels and zooming into plot.
+
+    - permDisper: renamed to permutest.betadisper.
+
+    - permutest: now a generic function, currently with methods
+      'cca' and 'permDisper'.
+
+    - rarefy: accepts vectors of sample sizes.
+
+    - rgl.isomap: dynamic rgl plots for isomap.
+
+    - screeplot.cca etc: return invisibly xycoords.
+
+    - specaccum: returns numbers of individuals with method = "rarefaction".
+
+    - summary.cca: returns more statistics on "variance explained by axes".
+
+    - zzz: vegan got startup message.
+
+
+		   CHANGES IN VEGAN VERSION 1.11-4
 
     - A critical bug fix in adonis: there was a critical bug in adonis
       code, and inconsistent statistics were used in permutations so

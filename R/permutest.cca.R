@@ -1,3 +1,9 @@
+permutest <- function(x, ...)
+    UseMethod("permutest")
+
+permutest.default <- function(x, ...)
+    stop("No default permutation test defined")
+
 `permutest.cca` <-
     function (x, permutations = 100, model = c("direct", "reduced", 
                                      "full"), first = FALSE, strata, ...) 

@@ -26,7 +26,8 @@ specnumber(x, MARGIN = 1)
     \code{"simpson"} or \code{"invsimpson"}.}
   \item{MARGIN}{Margin for which the index is computed. }
   \item{base}{ The logarithm \code{base} used in \code{shannon}.}
-  \item{sample}{Subsample size for rarefying community.}
+  \item{sample}{Subsample size for rarefying community, either a single
+    value or a vector.}
   \item{se}{Estimate standard errors.}
   \item{...}{Parameters passed to \code{\link{nlm}}}
 }
@@ -46,7 +47,9 @@ specnumber(x, MARGIN = 1)
   subsamples of size \code{sample} from the community. The size of
   \code{sample} should be smaller than total community size, but the
   function will  silently work for larger \code{sample} as well and
-  return non-rarefied species richness (and standard error = 0).
+  return non-rarefied species richness (and standard error = 0). If
+  \code{sample} is a vector, rarefaction is performed for each sample
+  size separately.
   Rarefaction can be performed only with genuine counts of individuals.
   The function \code{rarefy} is based on Hurlbert's (1971) formulation,
   and the standard errors on Heck et al. (1975).  
@@ -79,9 +82,13 @@ specnumber(x, MARGIN = 1)
 
 \value{
   A vector of diversity indices or rarefied species richness values. With
-  option \code{se = TRUE}, function \code{rarefy} returns a 2-row matrix
+  a single \code{sample} and \code{se = TRUE}, function \code{rarefy}
+  returns a 2-row matrix 
   with rarefied richness (\code{S}) and its standard error
-  (\code{se}).
+  (\code{se}). If \code{sample} is a vector in \code{rarefy}, the
+  function returns a matrix with a column for each \code{sample} size,
+  and if \code{se = TRUE}, rarefied richness and its standard error are
+  on consecutive lines.
   With option \code{se = TRUE}, function \code{fisher.alpha} returns a
   data frame with items for \eqn{\alpha} (\code{alpha}), its approximate
   standard errors (\code{se}), residual degrees of freedom

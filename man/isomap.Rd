@@ -5,6 +5,7 @@
 \alias{summary.isomap}
 \alias{print.summary.isomap}
 \alias{print.isomap}
+\alias{rgl.isomap}
 
 \title{ Isometric Feature Mapping Ordination }
 \description{
@@ -19,6 +20,7 @@ isomap(dist, ndim=10, ...)
 isomapdist(dist, epsilon, k, path = "shortest", fragmentedOK =FALSE, ...)
 \method{summary}{isomap}(object, axes = 4, ...)
 \method{plot}{isomap}(x, net = TRUE, n.col = "gray", ...)
+rgl.isomap(x, web = "white", ...)
 }
 
 \arguments{
@@ -37,6 +39,7 @@ isomapdist(dist, epsilon, k, path = "shortest", fragmentedOK =FALSE, ...)
   \item{axes}{Number of axes displayed.}
   \item{net}{Draw the net of retained dissimilarities.}
   \item{n.col}{Colour of drawn net segments.}
+  \item{web}{Colour of the web in \pkg{rgl} graphics.}
   \item{\dots}{Other parameters passed to functions. }
 }
 \details{
@@ -61,8 +64,14 @@ isomapdist(dist, epsilon, k, path = "shortest", fragmentedOK =FALSE, ...)
   used \code{epsilon} criterion.  In practice, De'ath also retains
   higher proportion of dissimilarities than typical \code{isomap}.
 
-
+  In addition to the standard \code{plot} function, function
+  \code{rgl.isomap} can make dynamic 3D plots that can be rotated on the
+  screen. The functions is based on \code{\link{ordirgl}}, but it adds
+  the connecting lines. The function passes extra arguments to
+  \code{\link{scores}} and \code{\link{ordirgl}} functions so that you
+  can select axes, or define colours and sizes of points.
 }
+
 \value{
   Function \code{isomapdist} returns a dissimilarity object similar to
   \code{dist}. Function \code{isomap} returns an object of class
@@ -115,6 +124,10 @@ lines(tr, pl, col="red")
 pl <- plot(isomap(dis, epsilon=0.45), main="isomap epsilon=0.45")
 lines(tr, pl, col="red")
 par(op)
+## The following command requires user interaction
+\dontrun{
+rgl.isomap(ord, size=4, color="hotpink")
+}
 }
 \keyword{ multivariate}
 
