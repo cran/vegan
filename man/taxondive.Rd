@@ -71,7 +71,7 @@ taxa2dist(x, varstep = FALSE, check = TRUE, labels)
   taxonomic, but other species classifications can be used. 
 
   Function \code{taxa2dist} can produce a suitable \code{dist} object
-  form a classification table. Each species (or basic taxon) correspond
+  from a classification table. Each species (or basic taxon) corresponds
   to a row of the classification table, and columns give the
   classification at different levels. With \code{varstep = FALSE} the
   successive levels will be separated by equal steps, and with

@@ -1,6 +1,6 @@
 "ordihull" <-
-    function (ord, groups, display = "sites", draw = c("lines", "polygon"), 
-              show.groups, ...) 
+    function (ord, groups, display = "sites", draw = c("lines", "polygon"),
+              show.groups, ...)
 {
     draw <- match.arg(draw)
     pts <- scores(ord, display = display, ...)
@@ -17,9 +17,9 @@
             X <- pts[gr, ]
             hpts <- chull(X)
             hpts <- c(hpts, hpts[1])
-            if (draw == "lines") 
-                lines(X[hpts, ], ...)
-            else polygon(X[hpts, ], ...)
+            if (draw == "lines")
+                ordiArgAbsorber(X[hpts, ], FUN = lines, ...)
+            else ordiArgAbsorber(X[hpts,], FUN = polygon, ...)
         }
     }
     invisible()

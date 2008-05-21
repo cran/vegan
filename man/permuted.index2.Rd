@@ -2,6 +2,7 @@
 \alias{permuted.index2}
 \alias{permControl}
 \alias{print.permControl}
+\alias{permute}
 
 \title{Unrestricted and restricted permutations}
 \description{
@@ -17,6 +18,8 @@ permControl(strata = NULL, nperm = 199, complete = FALSE,
             mirror = FALSE, constant = FALSE,
             ncol = NULL, nrow = NULL,
             all.perms = NULL)
+
+permute(i, n, control)
 }
 
 \arguments{
@@ -45,6 +48,7 @@ permControl(strata = NULL, nperm = 199, complete = FALSE,
     in the spatial grid respectiavly.}
   \item{all.perms}{an object of class \code{allPerms}, the result of a
     call to \code{\link{allPerms}}.}
+  \item{i}{integer; row of \code{control$all.perms} to return.}
 }
 \details{
   \code{permuted.index2} can generate permutations for a wide range of
@@ -71,6 +75,13 @@ permControl(strata = NULL, nperm = 199, complete = FALSE,
   argument \code{constant}. If \code{constant = TRUE} then the same
   permutation will be generated for each level of \code{strata}. The
   default is \code{constant = FALSE}.
+
+  \code{permute} is a higher level utility function for use in a loop
+  within a function implementing a permutation test. The main purpose of
+  \code{permute} is to return the correct permutation in each iteration
+  of the loop, either a random permutation from the current design or
+  the next permutation from \code{control$all.perms} if it is not
+  \code{NULL} and \code{control$complete} is \code{TRUE}.
 }
 \value{
   For \code{permuted.index2} a vector of length \code{n} containing a
@@ -82,9 +93,9 @@ permControl(strata = NULL, nperm = 199, complete = FALSE,
 }
 \note{
   \code{permuted.index2} is currently used in one Vegan function;
-  \code{\link{permDisper}}. Over time, the other functions that
-  currently use the older \code{\link{permuted.index}} will be updated
-  to use \code{permuted.index2}.
+  \code{\link{permutest.betadisper}}. Over time, the other functions
+  that currently use the older \code{\link{permuted.index}} will be
+  updated to use \code{permuted.index2}.
 }
 %\references{
 %}
@@ -134,6 +145,60 @@ permuted.index2(100, permControl(strata = block, type = "grid",
 ## permuting levels of block instead of observations
 permuted.index2(20, permControl(strata = block, type = "strata"))
 
+## Simple function using permute() to assess significance
+## of a t.test  
+pt.test <- function(x, group, control) {
+    ## function to calculate t
+    t.statistic <- function(x, y) {
+        m <- length(x)
+        n <- length(y)
+        ## means and variances, but for speed
+        xbar <- .Internal(mean(x))
+        ybar <- .Internal(mean(y))
+        xvar <- .Internal(cov(x, NULL, 1, FALSE))
+        yvar <- .Internal(cov(y, NULL, 1, FALSE))
+        pooled <- sqrt(((m-1)*xvar + (n-1)*yvar) / (m+n-2))
+        (xbar - ybar) / (pooled * sqrt(1/m + 1/n))
+    }
+    ## check the control object
+    control <- permCheck(x, control)$control
+    ## number of observations
+    nobs <- getNumObs(x)
+    ## group names
+    lev <- names(table(group))
+    ## vector to hold results, +1 because of observed t
+    t.permu <- numeric(length = control$nperm) + 1
+    ## calculate observed t
+    t.permu[1] <- t.statistic(x[group == lev[1]], x[group == lev[2]])
+    ## generate randomisation distribution of t
+    for(i in seq_along(t.permu)) {
+        ## return a permutation
+        want <- permute(i, nobs, control)
+        ## calculate permuted t
+        t.permu[i+1] <- t.statistic(x[want][group == lev[1]],
+                                    x[want][group == lev[2]])
+    }
+    ## pval from permutation test
+    pval <- sum(abs(t.permu) >= abs(t.permu[1])) / (control$nperm + 1)
+    ## return value
+    return(list(t.stat = t.permu[1], pval = pval))
+}
+
+## generate some data with slightly different means
+set.seed(1234)
+gr1 <- rnorm(20, mean = 9)
+gr2 <- rnorm(20, mean = 10)
+dat <- c(gr1, gr2)
+## grouping variable
+grp <- gl(2, 20, labels = paste("Group", 1:2))
+## create the permutation design
+control <- permControl(type = "free", nperm = 999)
+## perform permutation t test
+perm.val <- pt.test(dat, grp, control)
+perm.val
+
+## compare perm.val with the p-value from t.test()
+t.test(dat ~ grp, var.equal = TRUE)
 }
 \keyword{ htest }
 \keyword{ design }

@@ -1,15 +1,15 @@
 \name{biplot.rda}
 \alias{biplot.rda}
-%- Also NEED an '\alias' for EACH other topic documented here.
+
 \title{PCA biplot}
 \description{
   Draws a PCA biplot with species scores indicated by biplot arrows
 }
 \usage{
 \method{biplot}{rda}(x, choices = c(1, 2), scaling = 2,
-       display = c("sites", "species"), type, xlim, ylim, ...)
+       display = c("sites", "species"), type, xlim, ylim, col = c(1,2), ...)
 }
-%- maybe also 'usage' for other objects documented here.
+
 \arguments{
   \item{x}{A \code{\link{rda}} result object.}
   \item{choices}{Axes to show.}
@@ -32,6 +32,8 @@
     element describes how species scores are handled, and the second how
     site scores are drawn.}
   \item{xlim, ylim}{the x and y limits (min, max) of the plot.}
+  \item{col}{Colours used for sites and species (in this order). If only
+    one colour is given, it is used for both.}
   \item{\dots}{Other parameters for plotting functions.}
 }
 \details{

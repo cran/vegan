@@ -1,4 +1,4 @@
-"rarefy" <-
+`rarefy` <-
     function (x, sample, se = FALSE, MARGIN = 1) 
 {
     x <- as.matrix(x)
@@ -28,9 +28,18 @@
         }
         out
     }
-    S.rare <- apply(x, MARGIN, rarefun, sample = sample)
-    if (se) 
-        rownames(S.rare) <- c("S", "se")
+    if (length(sample) > 1) {
+        S.rare <- sapply(sample, function(n) apply(x, MARGIN, rarefun, sample = n))
+        colnames(S.rare) <- paste("N", sample, sep="")
+        if (se) {
+            dn <- unlist(dimnames(x)[MARGIN])
+            rownames(S.rare) <- paste(rep(dn, each=2), c("S","se"), sep=".")
+        }
+    } else {
+        S.rare <- apply(x, MARGIN, rarefun, sample = sample)
+        if (se) 
+            rownames(S.rare) <- c("S", "se")
+    }
     attr(S.rare, "Subsample") <- sample
     S.rare
 }

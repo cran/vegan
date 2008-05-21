@@ -1,6 +1,6 @@
 `capscale` <-
     function (formula, data, distance = "euclidean", comm = NULL, 
-              add = FALSE, ...) 
+              add = FALSE, dfun = vegdist, metaMDSdist = FALSE, ...) 
 {
     if (!inherits(formula, "formula")) 
         stop("Needs a model formula")
@@ -15,7 +15,16 @@
     X <- eval(X, environment(formula))
     if (!inherits(X, "dist")) {
         comm <- X
-        X <- vegdist(X, method = distance)
+        dfun <- match.fun(dfun)
+        if (metaMDSdist) {
+            commname <- as.character(formula[[2]])
+            X <- metaMDSdist(comm, distance = distance, zerodist = "ignore",
+                             commname = commname, distfun = dfun, ...)
+            commname <- attr(X, "commname")
+            comm <- eval.parent(parse(text=commname))
+        } else {
+            X <- dfun(X, distance)
+        }
     }
     inertia <- attr(X, "method")
     if (is.null(inertia))
@@ -46,12 +55,13 @@
     sol <- rda.default(d$X, d$Y, d$Z, ...)
     sol$tot.chi <- sol$tot.chi
     if (!is.null(sol$CCA)) {
-        colnames(sol$CCA$u) <- colnames(sol$CCA$biplot) <- names(sol$CCA$eig) <- colnames(sol$CCA$wa) <- colnames(sol$CCA$v) <- paste("CAP", 
-                                                                                                                                      1:ncol(sol$CCA$u), sep = "")
+        colnames(sol$CCA$u) <- colnames(sol$CCA$biplot) <- names(sol$CCA$eig) <-
+            colnames(sol$CCA$wa) <- colnames(sol$CCA$v) <-
+                paste("CAP", 1:ncol(sol$CCA$u), sep = "")
     }
     if (!is.null(sol$CA)) {
-        colnames(sol$CA$u) <- names(sol$CA$eig) <- colnames(sol$CA$v) <- paste("MDS", 
-                                                                               1:ncol(sol$CA$u), sep = "")
+        colnames(sol$CA$u) <- names(sol$CA$eig) <- colnames(sol$CA$v) <-
+            paste("MDS", 1:ncol(sol$CA$u), sep = "")
     }
     if (!is.null(comm)) {
         comm <- scale(comm, center = TRUE, scale = FALSE)
@@ -86,6 +96,8 @@
     sol$call$formula[[2]] <- formula[[2]]
     sol$method <- "capscale"
     sol$inertia <- inertia
+    if (metaMDSdist)
+        sol$metaMDSdist <- commname
     class(sol) <- c("capscale", class(sol))
     sol
 }

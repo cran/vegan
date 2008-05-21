@@ -16,7 +16,7 @@
 
 \author{Jari Oksanen}
 \title{Design decisions and implementation details in vegan}
-\date{$ $Id: decision-vegan.Rnw 205 2008-02-15 06:08:56Z jarioksa $ $
+\date{$ $Id: decision-vegan.Rnw 254 2008-03-06 20:32:48Z jarioksa $ $
   processed with vegan
 \Sexpr{packageDescription("vegan", field="Version")}
 in \Sexpr{R.version.string} on \today}
@@ -24,6 +24,10 @@ in \Sexpr{R.version.string} on \today}
 \begin{document}
 \SweaveOpts{strip.white=TRUE}
 \setkeys{Gin}{width=0.55\linewidth}
+<<echo=false,results=hide>>=
+par(mar=c(3,3,1,1)+.1)
+require(vegan)
+@
 
 \maketitle
 
@@ -36,6 +40,152 @@ another document.
 \end{abstract}
 
 \tableofcontents
+
+\section{Nestedness and Null models}
+
+Some indicators of nestedness and null models of communities are only
+described in general terms, and they could be implemented in various
+ways. Here I discuss the implementation in \texttt{vegan}.
+
+\subsection{Matrix temperature}
+
+The matrix temperature is intuitively simple
+(Fig. \ref{fig:nestedtemp}), but the the exact calculations were not
+explaind in the original publication \cite{AtmarPat93}.
+\begin{SCfigure}
+<<fig=true,echo=false,results=hide>>=
+data(sipoo)
+mod <- nestedtemp(sipoo)
+plot(mod, "i")
+x <- mod$c["Falcsubb"]
+y <- 1 - mod$r["1"]
+points(x,y, pch=16, cex=1.5)
+abline(x+y, -1, lty=2)
+f <- function(x, p) (1-(1-x)^p)^(1/p)
+cross <- function(x, a, p) f(x,p) - a + x
+r <- uniroot(cross, c(0,1), a = x+y, p = mod$p)$root
+arrows(x,y, r, f(r, mod$p), lwd=4)
+@
+\label{fig:nestedtemp}
+\caption{Matrix temperature for \emph{Falco subbuteo} on island 1
+  (dot; Sibbo Svartholmen). The curve is the fill line, and in a cold
+  matrix, all presences (red squares) should be in the upper left
+  corner behind the fill line. Dashed diagonal line of length $D$ goes
+  through the point, and an arrow of length $d$ connects the point to
+  the fill line. The ``surprise'' for this point is $u = (d/D)^2$ and
+  the matrix temperature is based on the sum of surprises: presences
+  outside the fill line or absences within the fill line.}
+\end{SCfigure}
+The function can be implemented in many ways following the general
+principles.  Rodr{\'i}guez-Girond{\'e}s and Santamaria \cite{RodGir06}
+have seen the original code and reveal more details of calculations,
+and their explanation is the basis of the implementation in
+\texttt{vegan}.  However, there are still some open issues, and
+probably \texttt{vegan} function \texttt{nestedtemp} will never
+exactly reproduce results from other programs, although it is based on
+the same general principles. I try to give main computation details in
+this documents --- all details can be seen in the source code of
+\texttt{nestedtemp}.
+
+\begin{itemize}
+\item Species and sites are put into unit square \citep{RodGir06}. The
+  coordinates for $n$ item will be $(k-0.5)/n$ for $k=1 \ldots n$, so
+  that there are no points in the corners or the margins of the unit
+  square, and a diagonal line can be drawn through any point. I do not
+  know how the rows and columns are converted to the unit square in
+  other software, and this may be a considerable source of differences
+  among implementations.
+  \item Species and sites are ordered alternately using indices
+    \citep{RodGir06}:
+    \begin{equation}
+    \begin{split}
+      s_j &= \sum_{i|x_{ij} = 1} i^2 \\
+      t_j &= \sum_{i|x_{ij} = 0} (n-i+1)^2 
+    \end{split}
+    \end{equation}
+    Here $x$ is the data matrix, where $1$ is presence, and $0$ is
+    absence, $i$ and $j$ are row and column indices, and $n$ is the
+    number of rows. The equations give the indices for columns, but
+    the indices can be reversed for corresponding row indexing.
+    Ordering by $s$ packs presences to the topleft corner, and
+    ordering by $t$ pack zeros away from the topleft corner. The final
+    sorting should be ``a compromise'' \cite{RodGir06} between these
+    scores, and \texttt{vegan} uses $s+t$.  The result should be cool,
+    but the packing does not try to minimize the temperature
+    \citep{RodGir06}.  I do not know how the ``compromise'' is
+    defined, and this can cause some differences to other
+    implementations.
+  \item The following function is used to define the fill line:
+    \begin{equation}
+      y = (1-(1-x)^p)^{1/p}
+    \end{equation}
+    This is similar to the equation suggested by
+    \citet[eq. 4]{RodGir06}, but omits all terms dependent on the
+    numbers of species or sites, because I could not understand why
+    they were needed. The differences are visible only in small data
+    sets. The $y$ and $x$ are the coordinates in the unit square, and
+    the parameter $p$ is selected so that the curve covers the same
+    area as is the proportion of presences
+    (Fig. \ref{fig:nestedtemp}). The parameter $p$ is found
+    numerically using \textsf{R} functions \texttt{integrate} and
+    \texttt{uniroot}.  The fill line used in the original matrix
+    temperature software \cite{AtmarPat93} is supposed to be similar
+    \citep{RodGir06}. Small details in the fill line combined with
+    differences in scores used in the unit square (especially in the
+    corners) can cause large differences in the results.
+  \item A line with slope $-1$ is drawn through the point and the $x$
+    coordinate of the intersection of this line and the fill line is
+    found using function \texttt{uniroot}. The difference of this
+    intersection and the row coordinate gives the argument $d$ of matrix
+    temperature (Fig. \ref{fig:nestedtemp}).
+  \item In other software, ``duplicated'' species occurring on every
+    site are removed, as well as empty sites and species after
+    reordering \cite{RodGir06}. This is not done in \texttt{vegan}.
+\end{itemize}
+
+\subsection{Backtracking}
+
+Gotelli and Entsminger's seminal paper \cite{GotelliEnt01} on filling
+algorithms is somewhat confusing: it explicitly deals with ``knight's
+tour'' which is quite a different problem than the one we face with
+null models.  The chess piece ``knight''\footnote{``Knight'' is
+  ``Springer'' in German which is very appropriate as Springer was the
+  publisher of the paper on ``knight't tour''} has a track of history:
+a piece in a certain position could only have entered from some
+candidate squares. The filling of incidence matrix no such a history:
+if we know that the item last added was in certain row and column, we
+have no information to guess which of the filled items was entered
+previously. A consequence of dealing with a different problem is that
+\citet{GotelliEnt01} does not give many hints on implementing a fill
+algorithm as a community null model.
+
+The backtracking is implemented in two stage: filling and
+backtracking.
+\begin{enumerate}
+  \item The matrix is filled in the order given by the marginal
+    probabilities. In this way the matrix will look similar to the
+    final matrix at all stages of filling. Equal filling probabilities
+    were not used since that was ineffective and produced strange fill
+    patterns: the rows and columns with one or a couple of presences
+    were filled first, and the process was cornered to columns and
+    rows with many presences. As a consequence, the the process tried
+    harder to fill that corner, and the result was a more tighlty
+    packed quadratic fill pattern than with other methods.
+  \item The filling stage stops when no new points can be added
+    without exceeding row or column totals. ``Backtracking'' means
+    removing random points and seeing if this allows adding new points
+    to the plot. No record of history is kept (and there is no reason
+    to keep a record of history), but random points are removed and
+    filled again. The number of removed points increases from one to
+    four points. New configuration is kept if it is at least as good
+    as the previous one, and the number of removed points is reduced
+    back to one if the new configuration is better than the old one.
+    Because there is no record of history, this does not sound like a
+    backtracking, but it still fits the general definition of
+    backtracking: ``try something, and if it fails, try something
+    else'' \cite{Sedgewick90}.
+\end{enumerate}
+
 
 \section{Scaling in redundancy analysis}
 

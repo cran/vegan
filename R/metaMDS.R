@@ -1,7 +1,7 @@
 `metaMDS` <-
     function (comm, distance = "bray", k = 2, trymax = 20, autotransform = TRUE, 
               noshare = 0.1, wascores = TRUE, expand = TRUE, trace = 1,
-              plot = FALSE, previous.best, ...) 
+              plot = FALSE, previous.best, old.wa = FALSE, ...) 
 {
     commname <- deparse(substitute(comm))
     if (inherits(comm, "dist"))
@@ -20,8 +20,12 @@
                       halfchange = (maxdis < 1.1), ...)
     if (is.null(rownames(points))) 
         rownames(points) <- rownames(comm)
-    if (wascores)
+    if (wascores) {
+        if (!old.wa)
+            comm <- eval.parent(parse(text=attr(dis, "commname")))
         wa <- wascores(points, comm, expand = expand)
+        attr(wa, "old.wa") <- old.wa
+    }
     else
         wa <- NA
     out$points <- points

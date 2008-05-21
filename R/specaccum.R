@@ -1,6 +1,6 @@
 `specaccum` <-
-function (comm, method = "exact", permutations = 100, conditioned=TRUE,
-                        gamma="Jack.1", ...)
+    function (comm, method = "exact", permutations = 100, conditioned=TRUE,
+              gamma="Jack.1", ...)
 {
     x <- comm
     x <- as.matrix(x)
@@ -85,8 +85,9 @@ function (comm, method = "exact", permutations = 100, conditioned=TRUE,
         sdaccum <- sqrt(apply(result * (1 - result), 1, sum))
     })
     out <- list(call = match.call(), method = method, sites = sites,
-        richness = specaccum, sd = sdaccum, perm = perm)
+                richness = specaccum, sd = sdaccum, perm = perm)
+    if (method == "rarefaction")
+        out$invidividuals <- ind
     class(out) <- "specaccum"
     out
 }
-

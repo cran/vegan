@@ -20,6 +20,10 @@
 
   The data frame contains only the Barro Colorado Island subset of the
   original data.
+
+  The quadrats are located in a regular grid. See\code{examples} for the
+  coordinates. 
+
 }
 \source{
   \url{http://www.sciencemag.org/cgi/content/full/295/5555/666/DC1}
@@ -30,7 +34,13 @@
   H.C., Losos, E. & Hubbell, S.P. (2002). Beta-diversity in tropical
   forest trees. \emph{Science} 295, 666--669.
 }
+\seealso{\code{\link[BiodiversityR]{BCI.env}} in \pkg{BiodiversityR}
+  package for environmental data  (coordinates are given below in the
+  \code{examples}).}  
 \examples{
 data(BCI)
+## UTM Coordinates (in metres)
+UTM.EW <- rep(seq(625754, 626654, by=100), each=5)
+UTM.NS <- rep(seq(1011569,  1011969, by=100), len=50)
 }
 \keyword{datasets}

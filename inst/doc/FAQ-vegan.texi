@@ -138,6 +138,7 @@ is needed by @code{ordiplot3d}
 
 @item Package @code{rgl}
 is needed by @code{ordirgl}
+and @code{rgl.isomap}
 
 @item Package @code{tcltk}
 is needed by @code{orditkplot}

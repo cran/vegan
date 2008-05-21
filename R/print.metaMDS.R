@@ -25,9 +25,14 @@
     } else {
         spattr <- attr(x$species, "shrinkage")
         if (is.null(spattr))
-            cat("Species: non-expanded scores\n")
+            cat("Species: non-expanded scores ")
         else
-            cat("Species: expanded scores\n")
+            cat("Species: expanded scores ")
+        if(attr(x$species, "old.wa"))
+            cat("based on untransformed data\n")
+        else
+            cat("based on", sQuote(x$data), "\n")
+        
     }
     cat("\n")
     invisible(x)

@@ -31,8 +31,10 @@
                            })
     if (inherits(lhs, "dist"))
         dmat <- as.matrix(lhs^2)
-    else
-        dmat <- as.matrix(vegdist(lhs, method=method, ...))^2
+    else {
+        dist.lhs <- as.matrix(vegdist(lhs, method=method, ...))
+        dmat <- dist.lhs^2
+    }
     n <- nrow(dmat)
     I <- diag(n)
     ones <- matrix(1,nrow=n)
@@ -47,8 +49,16 @@
     SS.Res <- sum(diag( ( G %*% (I-H.snterm))))
     df.Exp <- sapply(u.grps[-1], function(i) sum(grps==i) )
     df.Res <- n - qrhs$rank
-    beta <-  qr.coef(qrhs, as.matrix(lhs) )
-    colnames(beta) <- colnames(lhs)
+    ## Get coefficients both for the species (if possible) and sites
+    if (inherits(lhs, "dist")) {
+        beta.sites <- qr.coef(qrhs, as.matrix(lhs))
+        beta.spp <-  NULL
+    } else {
+        beta.sites <- qr.coef(qrhs, dist.lhs)
+        beta.spp <-  qr.coef(qrhs, as.matrix(lhs))
+    }
+    colnames(beta.spp) <- colnames(lhs)
+    colnames(beta.sites) <- rownames(lhs)
     F.Mod <- (SS.Exp.each/df.Exp) / (SS.Res/df.Res)
 
     f.test <- function(H, G, I, df.Exp, df.Res, H.snterm){
@@ -84,7 +94,8 @@
                        "Residuals", "Total")
     colnames(tab)[ncol(tab)] <- "Pr(>F)"
     out <- list(aov.tab = tab, call = match.call(), 
-                coefficients = beta,  f.perms = f.perms, design.matrix = rhs)
+                coefficients = beta.spp, coef.sites = beta.sites,
+                f.perms = f.perms, design.matrix = rhs)
     class(out) <- "adonis"
     out
 }

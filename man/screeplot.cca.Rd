@@ -100,9 +100,12 @@ bstick(n, \dots)
   additive in detrended analysis.
   }
 \value{
-  For \code{screeplot}, a plot on the currently active device.
+  Function \code{screeplot} draws a plot on the currently active device, 
+  and returns invisibly the \code{\link{xy.coords}} of the points or
+  bars for the eigenvalues.
 
-  For \code{bstick}, a numeric vector of broken stick components.
+  Function \code{bstick} returns a numeric vector of broken stick
+  components. 
 }
 \references{
   Jackson, D. A. (1993). Stopping rules in principal components

@@ -1,5 +1,5 @@
-`print.permDisper` <- function(x, digits = max(getOption("digits") - 2, 3),
-                             ...)
+`print.permutest.betadisper` <- function(x, digits = max(getOption("digits") - 2, 3),
+                                         ...)
 {
     ## uses code from stats:::print.anova by R Core Development Team
     cat("\n")
@@ -26,5 +26,15 @@
                  signif.stars = getOption("show.signif.stars"),
                  has.Pvalue = has.P, P.values = has.P, cs.ind = NULL,
                  zap.ind = zap.i, tst.ind = tst.i, na.print = "", ...)
+    if(!is.null(x$pairwise)) {
+        cat("\nPairwise comparisons:", sep = "\n")
+        writeLines(strwrap("(Observed p-value below diagonal,\npermuted p-value above diagonal)\n"))
+        n.grp <- length(x$groups)
+        mat <- matrix(NA, ncol = n.grp, nrow = n.grp)
+        colnames(mat) <- rownames(mat) <- x$groups
+        mat[lower.tri(mat)] <- x$pairwise$observed
+        mat[upper.tri(mat)] <- x$pairwise$permuted
+        printCoefmat(mat, na.print = "", digits = digits)
+    }
     invisible(x)
 }

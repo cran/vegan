@@ -1,10 +1,10 @@
 "ordiarrows" <-
-    function (ord, groups, levels, replicates, display = "sites", 
-              show.groups, startmark, ...) 
+    function (ord, groups, levels, replicates, display = "sites",
+              show.groups, startmark, ...)
 {
     pts <- scores(ord, display = display, ...)
     npoints <- nrow(pts)
-    if (missing(groups)) 
+    if (missing(groups))
         groups <- gl(levels, replicates, npoints)
     if (!missing(show.groups)) {
         take <- groups %in% show.groups
@@ -22,9 +22,11 @@
             nseg <- nrow(X0)
             if (!missing(startmark))
                 points(X0[1,1], X0[1,2], pch=startmark, ...)
-            if (nseg > 1) 
-                segments(X0[-nseg,1], X0[-nseg,2], X1[-nseg,1], X1[-nseg,2], ...)
-            arrows(X0[nseg, 1], X0[nseg, 2], X1[nseg, 1], X1[nseg, 2], ...)
+            if (nseg > 1)
+                ordiArgAbsorber(X0[-nseg,1], X0[-nseg,2], X1[-nseg,1],
+                                X1[-nseg,2], FUN = segments, ...)
+            ordiArgAbsorber(X0[nseg, 1], X0[nseg, 2], X1[nseg, 1], X1[nseg, 2],
+                            FUN = arrows, ...)
         }
     }
     invisible()

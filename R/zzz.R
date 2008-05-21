@@ -1,7 +1,6 @@
 .First.lib <- function(lib, pkg)  {
     library.dynam("vegan", pkg, lib)
+    packageStartupMessage("This is vegan ",
+                          utils::packageDescription("vegan", field="Version"),
+                          appendLF = TRUE)
 }
-if (R.version$major == 1 && R.version$minor < 8)
-    printCoefmat <- print.coefmat
-
-

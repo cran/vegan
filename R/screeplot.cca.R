@@ -35,14 +35,11 @@
         axis(2)
         axis(1, at = comps, labels = names(eig.vals[comps]))
         box()
+        mids <- comps
     }
     if(bstick) {
-        if(type == "barplot")
-            lines(mids, ord.bstick[comps], type = ptype, col = bst.col,
-                  lty = bst.lty)
-        else
-            lines(ord.bstick[comps], type = ptype, col = bst.col,
-                  lty = bst.lty)
+        lines(mids, ord.bstick[comps], type = ptype, col = bst.col,
+              lty = bst.lty)
     }
-    invisible(x)
+    invisible(xy.coords(x = mids, y = eig.vals[comps]))
 }

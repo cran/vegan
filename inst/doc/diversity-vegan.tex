@@ -12,9 +12,9 @@
 
 \title{Vegan: ecological diversity}
 \author{Jari Oksanen}
-\date{$ $Id: diversity-vegan.Rnw 307 2008-04-08 08:32:12Z jarioksa $ $
-  processed with vegan 1.11-4
-  in R version 2.6.2 (2008-02-08) on \today}
+\date{$ $Id: diversity-vegan.Rnw 301 2008-04-02 17:03:22Z gsimpson $ $
+  processed with vegan 1.13-0
+  in R version 2.7.0 (2008-04-22) on \today}
 \usepackage{/usr/local/lib/R/share/texmf/Sweave}
 \begin{document}
 \setkeys{Gin}{width=0.55\linewidth}
@@ -295,16 +295,16 @@ log-series for a randomly selected plot is (Fig. \ref{fig:fisher}):
 \end{Sinput}
 \begin{Soutput}
 Fisher log series model
-No. of species: 88 
+No. of species: 93 
 
       Estimate Std. Error
-alpha    33.45     4.4327
+alpha   36.404      4.723
 \end{Soutput}
 \end{Schunk}
 \begin{SCfigure}
 \includegraphics{diversity-vegan-017}
 \caption{Fisher's log-series fitted to one randomly selected site
-  (8).}
+  (50).}
 \label{fig:fisher}
 \end{SCfigure}
 We already saw $\alpha$ as a diversity index.  Now we also obtained
@@ -322,7 +322,7 @@ calculations of confidence intervals from profile deviance:
 \end{Sinput}
 \begin{Soutput}
    2.5 %   97.5 % 
-25.65035 43.14051 
+28.08008 46.71359 
 \end{Soutput}
 \end{Schunk}
 
@@ -340,7 +340,7 @@ with arbitrary choices of binning limits and treatment of ties.
 Function \texttt{prestondistr} directly
 maximizes truncated log-normal likelihood without binning data, and it
 is the recommended alternative.  Log-normal models  usually fit poorly
-to the BCI data, but here our random plot (number 8):
+to the BCI data, but here our random plot (number 50):
 \begin{Schunk}
 \begin{Sinput}
 > prestondistr(BCI[k, ])
@@ -348,18 +348,18 @@ to the BCI data, but here our random plot (number 8):
 \begin{Soutput}
 Preston lognormal model
 Method: maximized likelihood to log2 abundances 
-No. of species: 88 
+No. of species: 93 
 
-     mode     width        S0 
- 1.336053  1.532860 24.462533 
+      mode      width         S0 
+ 0.8251737  1.8272779 24.1411729 
 
 Frequencies by Octave
-                0        1        2        3        4        5
-Observed 24.00000 22.00000 18.00000 12.00000 7.000000 3.000000
-Fitted   16.73148 23.88167 22.27214 13.57145 5.403281 1.405581
+                0        1        2        3         4        5
+Observed 37.00000 19.00000 14.00000  7.00000 11.000000 4.000000
+Fitted   21.80095 24.03093 19.63344 11.88920  5.336294 1.775241
                  6
-Observed 2.0000000
-Fitted   0.2389029
+Observed 1.0000000
+Fitted   0.4377291
 \end{Soutput}
 \end{Schunk}
 
@@ -398,20 +398,20 @@ set gives (Fig. \ref{fig:rad}):
 \end{Sinput}
 \begin{Soutput}
 RAD models, family poisson 
-No. of species 88, total abundance 431
+No. of species 93, total abundance 432
 
            par1      par2     par3    Deviance AIC      BIC     
-Null                                   54.2317 316.9413 316.9413
-Preemption  0.045772                   59.9013 324.6109 327.0882
-Lognormal   1.0121    1.0923           13.9156 280.6252 285.5799
-Zipf        0.13275  -0.81577          21.3906 288.1002 293.0549
-Mandelbrot  0.59924  -1.2149   3.6276   6.5744 275.2840 282.7160
+Null                                   66.6294 333.2959 333.2959
+Preemption  0.047311                   51.5143 320.1808 322.7134
+Lognormal   0.90656   1.1413           21.2540 291.9205 296.9857
+Zipf        0.13567  -0.83199          38.8722 309.5387 314.6039
+Mandelbrot  3.2893   -1.632    8.7019   9.3815 282.0480 289.6458
 \end{Soutput}
 \end{Schunk}
 \begin{SCfigure}
 \includegraphics{diversity-vegan-021}
 \caption{Ranked abundance distribution models for a random plot
-  (no. 8).  The best model is chosen by the \textsc{aic}, and
+  (no. 50).  The best model is chosen by the \textsc{aic}, and
   displayed with a thick line.}
 \label{fig:rad}
 \end{SCfigure}
@@ -518,13 +518,13 @@ of \texttt{vegan} function \texttt{specnumber}:
 The index of eq. \ref{eq:beta} is problematic because $S$ increases
 with the number of sites even when sites are all subsets of the same
 community.  Whittaker noticed this, and suggested the index to be
-found from pairwise comparison of sites.  If the numbers of species in
-two sites are $A$ and $B$, and the number of species shared between
-these two sites is $J$, then $\bar \alpha = (A+B)/2$ and $S = A+B-J$.
-Index \ref{eq:beta} can be expressed as:
+found from pairwise comparison of sites. If the number of shared
+species in two sites is $a$, and the numbers of species unique to each
+site are $b$ and $c$, then $\bar \alpha = (2a + b + c)/2$ and $S =
+a+b+c$, and index \ref{eq:beta} can be expressed as:
 \begin{equation}
   \label{eq:betabray}
-  \beta = \frac{A+B-J}{(A+B)/2} - 1 = \frac{A+B-2J}{A+B}
+  \beta = \frac{a+b+c}{(2a+b+c)/2} - 1 = \frac{b+c}{2a+b+c}
 \end{equation}
 This is the S{\o}rensen index of dissimilarity, and it can be found
 for all sites using \texttt{vegan} function \texttt{vegdist} with
@@ -540,10 +540,43 @@ binary data:
 \end{Schunk}
 
 There are many other definitions of beta diversity in addition to
-eq. \ref{eq:beta}, and many of these reduce to well known
-dissimilarity indices.  All commonly used indices can be found using
-\texttt{designdist} function which allows defining your own
-dissimilarity measures. One of the more interesting indices is based
+eq. \ref{eq:beta}.  All commonly used indices can be found using
+\texttt{betadiver}. The indices in \texttt{betadiver} can be referred
+to by subscript name, or index number:
+\begin{Schunk}
+\begin{Sinput}
+> betadiver(help = TRUE)
+\end{Sinput}
+\begin{Soutput}
+1 "w" = (b+c)/(2*a+b+c)
+2 "-1" = (b+c)/(2*a+b+c)
+3 "c" = (b+c)/2
+4 "wb" = b+c
+5 "r" = 2*b*c/((a+b+c)^2-2*b*c)
+6 "I" = log(2*a+b+c)-2*a*log(2)/(2*a+b+c)-((a+b)*log(a+b)+(a+c)*log(a+c))/(2*a+b+c)
+7 "e" = exp(log(2*a+b+c)-2*a*log(2)/(2*a+b+c)-((a+b)*log(a+b)+(a+c)*log(a+c))/(2*a+b+c))-1
+8 "t" = (b+c)/(2*a+b+c)
+9 "me" = (b+c)/(2*a+b+c)
+10 "j" = a/(a+b+c)
+11 "sor" = 2*a/(2*a+b+c)
+12 "m" = (2*a+b+c)*(b+c)/(a+b+c)
+13 "-2" = pmin(b,c)/(pmax(b,c)+a)
+14 "co" = (a*c+a*b+2*b*c)/(2*(a+b)*(a+c))
+15 "cc" = (b+c)/(a+b+c)
+16 "g" = (b+c)/(a+b+c)
+17 "-3" = pmin(b,c)/(a+b+c)
+18 "l" = (b+c)/2
+19 "19" = 2*(b*c+1)/((a+b+c)^2+(a+b+c))
+20 "hk" = (b+c)/(2*a+b+c)
+21 "rlb" = a/(a+c)
+22 "sim" = pmin(b,c)/(pmin(b,c)+a)
+23 "gl" = 2*abs(b-c)/(2*a+b+c)
+24 "z" = (log(2)-log(2*a+b+c)+log(a+b+c))/log(2)
+\end{Soutput}
+\end{Schunk}
+Some of these indices are duplicates, and many of them are well known
+dissimilarity indices.
+One of the more interesting indices is based
 on the Arrhenius species--area model
 \begin{equation}
   \label{eq:arrhenius}
@@ -556,10 +589,10 @@ diversity. In islands,  $z$ is typically about $0.3$. This kind of
 islands can be regarded as subsets of the same community, indicating
 that we really should talk about gradient differences if $z > 0.3$. We
 can find the value of $z$ for a pair of plots using function
-\texttt{designdist}:
+\texttt{betadiver}:
 \begin{Schunk}
 \begin{Sinput}
-> z <- designdist(BCI, "(log(A+B-J)-log(A+B)+log(2))/log(2)")
+> z <- betadiver(BCI, "z")
 > quantile(z)
 \end{Sinput}
 \begin{Soutput}
@@ -579,14 +612,7 @@ beta diversities in the management classes of the dune meadows
 \begin{Sinput}
 > data(dune)
 > data(dune.env)
-> z <- designdist(dune, "(log(A+B-J)-log(A+B)+log(2))/log(2)")
-> quantile(z)
-\end{Sinput}
-\begin{Soutput}
-       0%       25%       50%       75%      100% 
-0.1154772 0.4873301 0.6374299 0.7655347 1.0000000 
-\end{Soutput}
-\begin{Sinput}
+> z <- betadiver(dune, "z")
 > mod <- with(dune.env, betadisper(z, Management))
 > mod
 \end{Sinput}
@@ -612,7 +638,7 @@ Eigenvalues for PCoA axes:
 \end{Soutput}
 \end{Schunk}
 \begin{SCfigure}
-\includegraphics{diversity-vegan-028}
+\includegraphics{diversity-vegan-029}
 \caption{Box plots of beta diversity measured as the average steepness
   ($z$) of the species area curve in the Arrhenius model $S = cX^z$ in
   Management classes of dune meadows.}
@@ -691,10 +717,10 @@ the plots:
 > specpool(BCI[s, ])
 \end{Sinput}
 \begin{Soutput}
-    Species     Chao Chao.SE Jack.1 Jack1.SE  Jack.2     Boot  Boot.SE
-All     205 222.6333 9.61446 227.08  6.79388 235.015 215.6204 4.006591
-     n
-All 25
+    Species     Chao  Chao.SE Jack.1 Jack1.SE   Jack.2     Boot
+All     210 231.4412 10.79773 235.92 7.456755 245.7717 222.6503
+     Boot.SE  n
+All 4.240259 25
 \end{Soutput}
 \end{Schunk}
 These typically are even lower than the observed richness
@@ -713,12 +739,12 @@ two of these methods:
 > estimateR(BCI[k, ])
 \end{Sinput}
 \begin{Soutput}
-                  8
-S.obs     88.000000
-S.chao1  100.000000
-se.chao1   7.031538
-S.ACE    106.588523
-se.ACE     4.682420
+                 50
+S.obs     93.000000
+S.chao1  126.300000
+se.chao1  15.641279
+S.ACE    142.122824
+se.ACE     6.779004
 \end{Soutput}
 \end{Schunk}
 Chao's method is similar as above, but uses another, ``unbiased''
@@ -762,14 +788,14 @@ explicitly uses \texttt{prestondistr}, although this also may fail:
 \end{Sinput}
 \begin{Soutput}
 Extrapolated     Observed       Veiled 
-    93.99263     88.00000      5.99263 
+   110.57397     93.00000     17.57397 
 \end{Soutput}
 \begin{Sinput}
 > veiledspec(BCI[k, ])
 \end{Sinput}
 \begin{Soutput}
 Extrapolated     Observed       Veiled 
-   158.40458     88.00000     70.40458 
+          NA           93           NA 
 \end{Soutput}
 \end{Schunk}
 
@@ -799,7 +825,7 @@ numbers of stems relate in one of the more familiar species
 \end{Sinput}
 \end{Schunk}
 \begin{SCfigure}
-\includegraphics{diversity-vegan-035}
+\includegraphics{diversity-vegan-036}
 \caption{Beals smoothing for \emph{Ceiba pentandra}.}
 \label{fig:beals}
 \end{SCfigure}

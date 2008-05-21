@@ -23,19 +23,19 @@
     centroids <- apply(vectors, 2, function(x) tapply(x, group, mean))
     ## for each of the groups, calculate distance to centroid for
     ## observation in the group
-    dist.pos <- vectors[, pos, drop=FALSE] - centroids[group, pos, drop = FALSE]
+    dist.pos <- vectors[, pos, drop=FALSE] - centroids[group, pos, drop=FALSE]
     dist.pos <- rowSums(dist.pos^2)
     if (any(!pos)) {
         dist.neg <- vectors[, !pos, drop=FALSE] -
-            centroids[group, !pos, drop = FALSE]
+            centroids[group, !pos, drop=FALSE]
         dist.neg <- rowSums(dist.neg^2)
     } else {
         dist.neg <- 0
     }
     ## zij are the distances of each point to its group centroid
-    zij <- sqrt(dist.pos - dist.neg)
+    zij <- sqrt(abs(dist.pos - dist.neg))
     ## add in correct labels
-    colnames(vectors) <- colnames(centroids) <- names(eig) <- 
+    colnames(vectors) <- colnames(centroids) <- names(eig) <-
         paste("PCoA", 1:n, sep = "")
     rownames(vectors) <- names(zij) <- attr(d, "Labels")
     retval <- list(eig = eig, vectors = vectors, distances = zij,
