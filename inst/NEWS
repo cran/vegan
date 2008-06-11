@@ -3,6 +3,68 @@
 			VEGAN RELEASE VERSIONS 
 		       	======================
 
+		       CHANGES IN VEGAN 1.13-1
+
+GENERAL
+
+    - Helene Wagner joined the vegan team.
+
+FIXES FOR HANDLING RANKS IN CONSTRAINED ORDINATION
+
+    - cca, rda and capscale had only known one kind of rank: the rank
+      of the ordination result (= number of axes). In fact there are
+      two other types of ranks: the rank of constraints after removing
+      conditions, and the rank of constraints + conditions, where
+      conditions refer to terms "partialled out". This hit those that
+      tried to use rda with single response variable instead of
+      community matrix, and also some partial models were handled
+      wrongly. The changes mainly concern cases where the rank of
+      constraints is higher than the rank of the ordination (more
+      constraints than ordination axes).  The changes have visible
+      effects in following support functions:
+      	  
+    - alias: no superfluous aliasing of terms, partial models aliased
+      correctly.
+
+    - anova: always uses rank of the constraints which also fixes
+      anova(..., by = "terms") when single response variable was used.
+
+    - calibrate.cca: identifies cases when the rank of constraints is
+      higher than the rank of ordination and refuses to analyse these.
+
+    - extractAIC: uses rank of constraints for degrees of freedom.
+
+    - predict: predict(..., type = "lc", newdata = somedata) works in
+      partial analysis.
+
+OTHER FIXES
+
+    - adonis: faster and improved documentation.
+
+    - intersetcor and inertcomp now check that input really is from
+      constrained ordination instead of giving obscure error messages.
+
+    - lines.spantree knows again graphical arguments such as 'col',
+      'lty'.
+
+    - mite.xy: new data set on the spatial coordinates of sample sites
+      of Oribatid mites.
+
+    - mso: plot.mso replaced with msoplot, and plot function now
+      displays the ordination scatter plot. Function msoplot collapses
+      distances larger than half of the maximum distance into a single
+      distance class. Printed result shows the variogram data.
+
+    - ordicluster, ordiellipse, ordispider, orglspider, ordisurf,
+      factorfit and vectorfit could fail with non-vegan ordination
+      objects in R 2.7.0 whose weights.default function gave error if
+      object had no weights (these worked in R 2.6.2 and earlier).
+
+    - taxa2dist: has a "method" name for distances.
+
+
+		       CHANGES IN VEGAN 1.13-0
+
 GENERAL
 
     - Based on development version 1.12-15 (revision 354 at

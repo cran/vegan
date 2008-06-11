@@ -2,6 +2,7 @@
 \alias{mite}
 \alias{mite.env}
 \alias{mite.pcnm}
+\alias{mite.xy}
 \docType{data}
 \title{Oribatid Mite Data with Explanatory Variables
   }
@@ -13,11 +14,13 @@ See Borcard et al. (1992, 1994) for details.
 data(mite)
 data(mite.env)
 data(mite.pcnm)
+data(mite.xy)
 }
 \format{
   There are three linked data sets: \code{mite} that contains the data
   on 35 species of Oribatid mites, \code{mite.env} that contains
-  environmental data in the same sampling sites, and \code{mite.pcnm}
+  environmental data in the same sampling sites, \code{mite.xy}
+  that contains geographic coordinates,  and \code{mite.pcnm}
   that contains 22 PCNM base functions (columns) computed from the geographic
   coordinates of the 70 sampling sites (Borcard & Legendre 2002).
   The whole sampling area was 2.5 m x 10 m in size.

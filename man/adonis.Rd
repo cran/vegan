@@ -3,12 +3,12 @@
 \alias{adonis}
 \alias{print.adonis}
 
-\title{Multivariate Analysis of Variance Using Distance Matrices}
+\title{Permutational Multivariate Analysis of Variance Using Distance Matrices}
 
 \description{Analysis of variance using distance matrices --- for
   partitioning distance matrices among sources of variation and fitting
   linear models (e.g., factors, polynomial regression) to distance 
-  matrices.}
+  matrices; uses a permutation test with pseudo-F ratios.}
 
 \usage{
 adonis(formula, data, permutations = 5, method = "bray",
@@ -20,7 +20,9 @@ adonis(formula, data, permutations = 5, method = "bray",
   \item{formula}{a typical model formula such as \code{Y ~ A + B*C}, but
     where \code{Y} is either a dissimilarity object (inheriting from
     class \code{"dist"}) or data frame or a matrix; \code{A}, \code{B}, and
-    \code{C} may be factors or continuous variables. } 
+    \code{C} may be factors or continuous variables. If a dissimilarity
+  object is supplied, no species cofficients can be calculated (see
+  Value below).} 
   \item{data}{ the data frame from which \code{A}, \code{B}, and
     \code{C} would be drawn.} 
   \item{permutations}{ number of replicate permutations used for the
@@ -39,8 +41,8 @@ adonis(formula, data, permutations = 5, method = "bray",
 sums of squares using semimetric and metric distance matrices. Insofar
 as it partitions sums of squares of a multivariate data set, it is
 directly analogous to MANOVA (multivariate analysis of
-variance). McArdle and Anderson (2001) and Anderson (2001) refer to the
-method as \dQuote{nonparametric manova}. Further, as its inputs are
+variance). M.J. Anderson (McArdle and Anderson 2001, Anderson 2001) refers to the
+method as \dQuote{permutational manova} (formerly \dQuote{nonparametric manova}). Further, as its inputs are
 linear predictors, and a response matrix of an arbitrary number of
 columns (2 to millions), it is a robust alternative to both parametric
 MANOVA and to ordination methods for describing how variation is
@@ -75,10 +77,9 @@ Euclidean distances with the second method results in the same analysis
 as the first method.
 
 Significance tests are done using \eqn{F}-tests based on sequential sums
-of squares from permutations of the raw data. Additional work should be
-done to validate these methods; preliminary work suggests substantive
-differences between permutations of the raw data versus permutations of
-the residuals. Further, the precise meaning of hypothesis tests will
+of squares from permutations of the raw data, and not permutations of
+residuals. Permutations of the raw data may have better small sample
+characteristics. Further, the precise meaning of hypothesis tests will
 depend upon precisely what is permuted. The strata argument keeps groups
 intact for a particular hypothesis test where one does not want to
 permute the data among particular groups. For instance, \code{strata =
@@ -88,7 +89,8 @@ levels of \code{B} (no permutation among levels of \code{B}).
 The default \code{\link{contrasts}} are different than in \R in
 general. Specifically, they use \dQuote{sum} contrasts, sometimes known
 as \dQuote{ANOVA} contrasts. See a useful text (e.g. Crawley,
-2002) for a transparent introduction. This is simply a personal
+2002) for a transparent introduction to linear model contrasts. This
+choice of contrasts is simply a personal
 pedagogical preference. The particular contrasts can be set to any
 \code{\link{contrasts}} specified in \R, including Helmert and treatment
 contrasts.
@@ -102,13 +104,22 @@ overview of rules.
   This function returns typical, but limited, output for analysis of
   variance (general linear models). 
 
-  \item{aov.tab }{Typical AOV table showing sources of variation,
+  \item{aov.tab}{Typical AOV table showing sources of variation,
     degrees of freedom, sequential sums of squares, mean squares,
     \eqn{F} statistics, partial R-squared and \eqn{P} values, based on \eqn{N}
     permutations. }
-  \item{coefficients }{ matrix of coefficients of the linear model, with
+  \item{coefficients}{ matrix of coefficients of the linear model, with
     rows representing sources of variation and columns representing
-    species. } 
+    species; each column represents a fit of a species abundance to the
+    linear model. These are what you get when you fit one species to
+    your predictors. These are NOT available if you supply the distance
+    matrix in the formula, rather than the site x species matrix} 
+  \item{coef.sites}{ matrix of coefficients of the linear model, with
+    rows representing sources of variation and columns representing
+    sites; each column represents a fit of a sites distances (from all
+    other sites) to the  linear model.These are what you get when you
+    fit distances of one site to
+    your predictors. } 
   \item{f.perms}{ an \eqn{N} by \eqn{m} matrix of the null \eqn{F}
     statistics for each source of variation  based on \eqn{N}
     permutations of the data.}

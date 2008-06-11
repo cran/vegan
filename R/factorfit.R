@@ -2,6 +2,7 @@
     function (X, P, permutations = 0, strata, choices = c(1, 2),
               display = c("sites","lc"), w = weights(X),  ...) 
 {
+    weights.default <- function(object, ...) NULL
     display <- match.arg(display)
     w <- eval(w)
     P <- as.data.frame(P)

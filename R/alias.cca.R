@@ -14,7 +14,7 @@ function (object, ...)
     R <- R[1:min(dim(R)), , drop = FALSE]
     R[lower.tri(R)] <- 0
     d <- dim(R)
-    rank <- object$CCA$rank
+    rank <- object$CCA$QR$rank
     p <- d[2]
     value$Complete <- if (is.null(p) || rank == p) 
         NULL

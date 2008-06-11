@@ -1,5 +1,5 @@
 `adonis` <-
-    function(formula, data, permutations=5, method="bray", strata=NULL,
+    function(formula, data=NULL, permutations=5, method="bray", strata=NULL,
              contr.unordered="contr.sum", contr.ordered="contr.poly",
              ...)
 {
@@ -7,6 +7,7 @@
     ## frame or a matrix, and A, B, and C may be factors or continuous
     ## variables.  data is the data frame from which A, B, and C would
     ## be drawn.
+  TOL <- 1e-7
     lhs <- formula[[2]]
     lhs <- eval(lhs, data, parent.frame()) # to force evaluation 
     formula[[2]] <- NULL                # to remove the lhs
@@ -25,7 +26,7 @@
     nterms <- length(u.grps) - 1
     H.s <- lapply(2:length(u.grps),
                   function(j) {Xj <- rhs[, grps %in% u.grps[1:j] ]
-                               qrX <- qr(Xj, tol=1e-7)
+                               qrX <- qr(Xj, tol=TOL)
                                Q <- qr.Q(qrX)
                                tcrossprod(Q[,1:qrX$rank])
                            })
@@ -40,13 +41,13 @@
     ones <- matrix(1,nrow=n)
     A <- -(dmat)/2
     G <- -.5 * dmat %*% (I - ones%*%t(ones)/n)
-    SS.Exp.comb <- sapply(H.s, function(hat) sum( diag(G %*% hat) ) )
+    SS.Exp.comb <- sapply(H.s, function(hat) sum( G * t(hat)) )
     SS.Exp.each <- c(SS.Exp.comb - c(0,SS.Exp.comb[-nterms]) )
     H.snterm <- H.s[[nterms]]
     if (length(H.s) > 1)
         for (i in length(H.s):2)
             H.s[[i]] <- H.s[[i]] - H.s[[i-1]]
-    SS.Res <- sum(diag( ( G %*% (I-H.snterm))))
+    SS.Res <- sum( G * t(I-H.snterm))
     df.Exp <- sapply(u.grps[-1], function(i) sum(grps==i) )
     df.Res <- n - qrhs$rank
     ## Get coefficients both for the species (if possible) and sites
@@ -62,12 +63,13 @@
     F.Mod <- (SS.Exp.each/df.Exp) / (SS.Res/df.Res)
 
     f.test <- function(H, G, I, df.Exp, df.Res, H.snterm){
-        (sum( diag(G %*% H) )/df.Exp) /
-            ( sum(diag( G %*% (I-H.snterm) ))/df.Res) }
+        (sum( G * t(H) )/df.Exp) /
+            (sum( G * t(I-H.snterm) )/df.Res) }
     
     SS.perms <- function(H, G, I){
-        c(SS.Exp.p = sum( diag(G%*%H) ),
-          S.Res.p=sum(diag( G %*% (I-H) )) ) }
+        c(SS.Exp.p = sum( G * t(H) ),
+          S.Res.p=sum( G * t(I-H) )
+          ) }
     
     ## Permutations
     if (missing(strata)) 
@@ -83,6 +85,7 @@
             f.test(H.s[[i]], G.p[[j]], I, df.Exp[i], df.Res, H.snterm)
         } )
     })
+  
     SumsOfSqs = c(SS.Exp.each, SS.Res, sum(SS.Exp.each) + SS.Res)
     tab <- data.frame(Df = c(df.Exp, df.Res, n-1),
                       SumsOfSqs = SumsOfSqs,

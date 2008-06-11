@@ -56,7 +56,7 @@
                 length(x$distance[x$group == z[2]]) - 2})
         pairwise <- list(observed = 2 * pt(-abs(t.stats[1,]), df),
                          permuted = apply(t.stats, 2,
-                         function(z) sum(abs(z) >= z[1])/length(z)))
+                         function(z) sum(abs(z) >= abs(z[1]))/length(z)))
         names(pairwise$observed) <- names(pairwise$permuted) <-
             apply(combin, 2, paste, collapse = "-")
     } else {

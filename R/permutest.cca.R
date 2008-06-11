@@ -18,7 +18,7 @@ permutest.default <- function(x, ...)
     else {
         Chi.z <- x$CCA$tot.chi
         names(Chi.z) <- "Model"
-        q <- x$CCA$rank
+        q <- x$CCA$qrank
     }
     Chi.xz <- x$CA$tot.chi
     names(Chi.xz) <- "Residual"

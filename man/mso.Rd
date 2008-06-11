@@ -1,6 +1,7 @@
 \name{mso}
 \alias{mso}
-\alias{plot.mso}
+\alias{print.mso}
+\alias{msoplot}
 
 \title{ Functions for performing and displaying a spatial partitioning
 of cca or rda results}
@@ -14,7 +15,7 @@ of cca or rda results}
 
 \usage{
 mso(object.cca, object.xy, grain = 1, round.up = FALSE, permutations = FALSE)
-\method{plot}{mso}(x, alpha = 0.05, explained = FALSE, ...)
+msoplot(x, alpha = 0.05, explained = FALSE, ...)
 }
 \arguments{
   \item{object.cca}{ An object of class cca, created by the \code{\link{cca}} or
@@ -104,12 +105,30 @@ tmat <- c(1:3)
 ## Canonical correspondence analysis (cca):
 Example.cca <- cca(X, Y)
 Example.cca <- mso(Example.cca, tmat)
-plot(Example.cca)
+msoplot(Example.cca)
 Example.cca$vario
 
 ## Correspondence analysis (ca):
 Example.ca <- mso(cca(X), tmat)
-plot(Example.ca)
+msoplot(Example.ca)
+
+## Unconstrained ordination with test for autocorrelation
+## using oribatid mite data set as in Wagner (2004)
+data(mite)
+data(mite.env)
+data(mite.xy)
+
+mite.cca <- cca(log(mite + 1))
+mite.cca <- mso(mite.cca, mite.xy, grain =  1, permutations = 100)
+msoplot(mite.cca)
+mite.cca
+
+## Constrained ordination with test for residual autocorrelation
+## and scale-invariance of species-environment relationships
+mite.cca <- cca(log(mite + 1) ~ SubsDens + WatrCont + Substrate + Shrub + Topo, mite.env)
+mite.cca <- mso(mite.cca, mite.xy, permutations = 100)
+msoplot(mite.cca)
+mite.cca
 }
 \keyword{ spatial }
 \keyword{ multivariate }

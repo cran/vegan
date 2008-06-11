@@ -44,7 +44,8 @@
                                       object$terminfo$xlev)
                 E <- cbind(d$Z, d$Y)
             }
-            p1 <- object[[model]]$QR$pivot[1:object[[model]]$rank]
+            Q <- object[[model]]$QR
+            p1 <- Q$pivot[1:Q$rank]
             E <- sweep(E, 2, c(object$pCCA$envcentre, object$CCA$envcentre), 
                        "-")
             u <- E[, p1, drop = FALSE] %*% coef(object)[p1, , 
