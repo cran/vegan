@@ -2,6 +2,7 @@
     function (ord, cluster, prune=0, display="sites", w = weights(ord, display),
               ...)
 {
+    weights.default <- function(object, ...) NULL
     w <- eval(w)
     mrg <- cluster$merge
     ord <- scores(ord, display = display, ...)

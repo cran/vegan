@@ -69,7 +69,10 @@
       \code{\link{predict.cca}}, \code{\link{predict.rda}},
       \code{\link{calibrate.cca}}.  For possible uses of this component,
       see \code{\link{qr}}. In \code{pCCA} and \code{CCA}.} 
-    \item{\code{rank}}{The rank of the component.}
+    \item{\code{rank}}{The rank of the ordination component.}
+    \item{\code{qrank}}{The rank of the constraints which is the
+     difference of the ranks of QR decompositions in \code{pCCA} and
+     \code{CCA} components. Only in \code{CCA}.}
     \item{\code{tot.chi}}{Total inertia or the sum of all eigenvalues of the
       component.}
     \item{\code{u}}{(Weighted) orthonormal site scores.  Please note that

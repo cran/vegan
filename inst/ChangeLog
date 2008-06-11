@@ -1,7 +1,34 @@
-$Date: 2008-05-21 10:45:47 +0300 (Wed, 21 May 2008) $
+
+$Date: 2008-06-11 09:59:27 +0300 (Wed, 11 Jun 2008) $
 
 VEGAN DEVEL VERSIONS at http://r-forge.r-project.org/
 
+Version 1.13-1 (released June 11, 2008)
+
+	* adonis: speed-up and doc updates.
+
+	* merged r400:405 -- should fix rank problems in cca/rda (cancels
+	r396).
+
+	* merged r396: cca/rda/capscale print issues a warning when rank
+	of constraints+conditions < rank of dependent data, because vegan
+	cannot handle these cases properly.
+
+	* merged mso revisions since r372: now similar as in devel branch
+	at r389. 
+
+	* merged 371: mite.xy data.
+
+	* merged 368: method name to taxa2dist
+	
+	* merged r365: workaround to failure of weights.default in R 2.7.0
+	when object had no weights.
+
+	* merged r369: fixes bug in calculation of pair-wise permutation
+	p-values for some circumstances in 'permutest.betadisper'.
+
+	* merged r381: passes ... to 'lines' in 'lines.spantree'.
+	
 Version 1.13-0 (released May 21, 2008) 
 
 	* Branched version 1.12-15 (rev 354) for a new release.

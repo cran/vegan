@@ -28,6 +28,7 @@
         out <- out + add[i + 1] * outer(x[, i], x[, i], "!=")
     }
     out <- as.dist(out)
+    attr(out, "method") <- "taxa2dist"
     attr(out, "steps") <- add
     if (missing(labels)) {
         attr(out, "Labels") <- rownames(x)

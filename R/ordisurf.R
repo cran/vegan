@@ -3,6 +3,7 @@
               col = "red", thinplate = TRUE, add = FALSE, display = "sites", 
               w = weights(x), main, nlevels = 10, levels, labcex = 0.6,  ...) 
 {
+    weights.default <- function(object, ...) NULL
     GRID = 25
     w <- eval(w)
     if (!is.null(w) && length(w) == 1) 

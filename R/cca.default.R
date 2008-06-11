@@ -1,4 +1,4 @@
-"cca.default" <-
+`cca.default` <-
     function (X, Y, Z, ...) 
 {
     ZERO <- 1e-04
@@ -50,8 +50,11 @@
         if (is.null(pCCA)) 
             rank <- Q$rank
         else rank <- Q$rank - pCCA$rank
+        ## save rank of constraints
+        qrank <- rank
         Y <- qr.fitted(Q, Xbar)
         sol <- svd(Y)
+        ## rank of svd can be < qrank
         rank <- min(rank, sum(sol$d > ZERO))
         ax.names <- paste("CCA", 1:length(sol$d), sep = "")
         colnames(sol$u) <- ax.names
@@ -73,12 +76,13 @@
             oo <- Q$pivot
             if (!is.null(pCCA$rank)) 
                 oo <- oo[-(1:pCCA$rank)] - ncol(Z.r)
-            oo <- oo[1:rank]
+            oo <- oo[1:qrank]
             if (length(oo) < ncol(Y.r)) 
                 CCA$alias <- colnames(Y.r)[-oo]
             CCA$biplot <- cor(Y.r[, oo, drop = FALSE], sol$u[, 
                                         1:rank, drop = FALSE])
             CCA$rank <- rank
+            CCA$qrank <- qrank
             CCA$tot.chi <- sum(CCA$eig)
             CCA$QR <- Q
             CCA$envcentre <- attr(Y.r, "centre")

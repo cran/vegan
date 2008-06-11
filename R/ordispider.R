@@ -2,10 +2,12 @@
     function (ord, groups, display = "sites", w = weights(ord, display),
               show.groups, ...)
 {
+    weights.default <- function(object, ...) NULL
     if (inherits(ord, "cca") && missing(groups)) {
         lc <- scores(ord, display = "lc", ...)
         wa <- scores(ord, display = "wa", ...)
-        segments(lc[, 1], lc[, 2], wa[, 1], wa[, 2], ...)
+        ordiArgAbsorber(lc[, 1], lc[, 2], wa[, 1], wa[, 2],
+                        FUN = segments, ...)
         return(invisible())
     }
     pts <- scores(ord, display = display, ...)

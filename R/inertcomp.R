@@ -4,6 +4,8 @@
 {
     display <- match.arg(display)
     statistic <- match.arg(statistic)
+    if (!inherits(object, "cca"))
+        stop("can be used only with objects inheriting from 'cca'")
     if (inherits(object, "capscale") && display == "species")
         stop("cannot analyse species with 'capscale'")
     pCCA <- object$pCCA$Fit

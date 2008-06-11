@@ -13,7 +13,7 @@
 \title{Vegan: ecological diversity}
 \author{Jari Oksanen}
 \date{$ $Id: diversity-vegan.Rnw 301 2008-04-02 17:03:22Z gsimpson $ $
-  processed with vegan 1.13-0
+  processed with vegan 1.13-1
   in R version 2.7.0 (2008-04-22) on \today}
 \usepackage{/usr/local/lib/R/share/texmf/Sweave}
 \begin{document}
@@ -298,13 +298,13 @@ Fisher log series model
 No. of species: 93 
 
       Estimate Std. Error
-alpha   36.404      4.723
+alpha   36.169     4.6858
 \end{Soutput}
 \end{Schunk}
 \begin{SCfigure}
 \includegraphics{diversity-vegan-017}
 \caption{Fisher's log-series fitted to one randomly selected site
-  (50).}
+  (16).}
 \label{fig:fisher}
 \end{SCfigure}
 We already saw $\alpha$ as a diversity index.  Now we also obtained
@@ -322,7 +322,7 @@ calculations of confidence intervals from profile deviance:
 \end{Sinput}
 \begin{Soutput}
    2.5 %   97.5 % 
-28.08008 46.71359 
+27.90841 46.39410 
 \end{Soutput}
 \end{Schunk}
 
@@ -340,7 +340,7 @@ with arbitrary choices of binning limits and treatment of ties.
 Function \texttt{prestondistr} directly
 maximizes truncated log-normal likelihood without binning data, and it
 is the recommended alternative.  Log-normal models  usually fit poorly
-to the BCI data, but here our random plot (number 50):
+to the BCI data, but here our random plot (number 16):
 \begin{Schunk}
 \begin{Sinput}
 > prestondistr(BCI[k, ])
@@ -350,16 +350,13 @@ Preston lognormal model
 Method: maximized likelihood to log2 abundances 
 No. of species: 93 
 
-      mode      width         S0 
- 0.8251737  1.8272779 24.1411729 
+     mode     width        S0 
+ 1.029866  1.695599 24.741956 
 
 Frequencies by Octave
-                0        1        2        3         4        5
-Observed 37.00000 19.00000 14.00000  7.00000 11.000000 4.000000
-Fitted   21.80095 24.03093 19.63344 11.88920  5.336294 1.775241
-                 6
-Observed 1.0000000
-Fitted   0.4377291
+               0        1        2        3        4       5
+Observed 32.0000 22.00000 13.00000 14.00000 5.000000 7.00000
+Fitted   20.5744 24.73812 21.00633 12.59731 5.335182 1.59575
 \end{Soutput}
 \end{Schunk}
 
@@ -398,20 +395,20 @@ set gives (Fig. \ref{fig:rad}):
 \end{Sinput}
 \begin{Soutput}
 RAD models, family poisson 
-No. of species 93, total abundance 432
+No. of species 93, total abundance 437
 
            par1      par2     par3    Deviance AIC      BIC     
-Null                                   66.6294 333.2959 333.2959
-Preemption  0.047311                   51.5143 320.1808 322.7134
-Lognormal   0.90656   1.1413           21.2540 291.9205 296.9857
-Zipf        0.13567  -0.83199          38.8722 309.5387 314.6039
-Mandelbrot  3.2893   -1.632    8.7019   9.3815 282.0480 289.6458
+Null                                   71.4490 341.0108 341.0108
+Preemption  0.046363                   57.1444 328.7062 331.2388
+Lognormal   0.94233   1.1186           31.8308 305.3925 310.4577
+Zipf        0.13172  -0.81947          48.8686 322.4304 327.4956
+Mandelbrot  2.8626   -1.5964   8.3763   8.7297 284.2914 291.8892
 \end{Soutput}
 \end{Schunk}
 \begin{SCfigure}
 \includegraphics{diversity-vegan-021}
 \caption{Ranked abundance distribution models for a random plot
-  (no. 50).  The best model is chosen by the \textsc{aic}, and
+  (no. 16).  The best model is chosen by the \textsc{aic}, and
   displayed with a thick line.}
 \label{fig:rad}
 \end{SCfigure}
@@ -717,10 +714,8 @@ the plots:
 > specpool(BCI[s, ])
 \end{Sinput}
 \begin{Soutput}
-    Species     Chao  Chao.SE Jack.1 Jack1.SE   Jack.2     Boot
-All     210 231.4412 10.79773 235.92 7.456755 245.7717 222.6503
-     Boot.SE  n
-All 4.240259 25
+    Species   Chao  Chao.SE Jack.1 Jack1.SE Jack.2     Boot  Boot.SE  n
+All     209 229.25 10.18731 234.92 6.922658 243.89 221.4221 4.041603 25
 \end{Soutput}
 \end{Schunk}
 These typically are even lower than the observed richness
@@ -739,12 +734,12 @@ two of these methods:
 > estimateR(BCI[k, ])
 \end{Sinput}
 \begin{Soutput}
-                 50
+                 16
 S.obs     93.000000
-S.chao1  126.300000
-se.chao1  15.641279
-S.ACE    142.122824
-se.ACE     6.779004
+S.chao1  114.565217
+se.chao1  10.751479
+S.ACE    124.936721
+se.ACE     5.752701
 \end{Soutput}
 \end{Schunk}
 Chao's method is similar as above, but uses another, ``unbiased''
@@ -788,7 +783,7 @@ explicitly uses \texttt{prestondistr}, although this also may fail:
 \end{Sinput}
 \begin{Soutput}
 Extrapolated     Observed       Veiled 
-   110.57397     93.00000     17.57397 
+   105.15917     93.00000     12.15917 
 \end{Soutput}
 \begin{Sinput}
 > veiledspec(BCI[k, ])
