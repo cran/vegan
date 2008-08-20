@@ -33,24 +33,27 @@
                 v <- sweep(v, 1, x$colsum, "/")
                 v <- v * sqrt(x$tot.chi / (max(nrow(x$CA$u), nrow(x$CCA$u)) - 1 ))
             }
+            v <- const * v
         }
-        sol$species <- const * v
+        sol$species <- v
     }
     if ("sites" %in% take) {
         wa <- cbind(x$CCA$wa, x$CA$u)[, choices, drop=FALSE]
         if (scaling) {
             scal <- list(slam, 1, sqrt(slam))[[abs(scaling)]]
             wa <- sweep(wa, 2, scal, "*")
+            wa <- const * wa
         }
-        sol$sites <- const * wa
+        sol$sites <- wa
     }
     if ("constraints" %in% take) {
         u <- cbind(x$CCA$u, x$CA$u)[, choices, drop=FALSE]
         if (scaling) {
             scal <- list(slam, 1, sqrt(slam))[[abs(scaling)]]
             u <- sweep(u, 2, scal, "*")
+            u <- const * u
         }
-        sol$constraints <- const * u
+        sol$constraints <- u
     }
     if ("biplot" %in% take && !is.null(x$CCA$biplot)) {
         b <- matrix(0, nrow(x$CCA$biplot), length(choices))
@@ -70,12 +73,14 @@
             if (scaling) {
                 scal <- list(slam, 1, sqrt(slam))[[abs(scaling)]]
                 cn <- sweep(cn, 2, scal, "*")
+                cn <- const * cn
             }
-            sol$centroids <- const * cn
+            sol$centroids <- cn
         }
     }  
     if (length(sol) == 1) 
         sol <- sol[[1]]
+    attr(sol, "const") <- const
     return(sol)
 }
 

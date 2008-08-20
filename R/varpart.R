@@ -40,9 +40,8 @@
         out$transfo <- transfo
     out$call <- match.call()
     mx <- rep(" ", length(X))
-    for (i in 1:length(X)) mx[i] <- deparse(out$call[[i+2]])
+    for (i in 1:length(X)) mx[i] <- deparse(out$call[[i+2]], width.cutoff = 500)
     out$tables <- mx
     class(out) <- c("varpart", class(out))
     out
 }
-

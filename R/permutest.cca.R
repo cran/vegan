@@ -22,7 +22,7 @@ permutest.default <- function(x, ...)
     }
     Chi.xz <- x$CA$tot.chi
     names(Chi.xz) <- "Residual"
-    r <- x$CA$rank
+    r <- nrow(x$CA$Xbar) - x$CCA$QR$rank - 1
     if (model == "full") 
         Chi.tot <- Chi.xz
     else Chi.tot <- Chi.z + Chi.xz
@@ -96,4 +96,3 @@ permutest.default <- function(x, ...)
     class(sol) <- "permutest.cca"
     sol
 }
-

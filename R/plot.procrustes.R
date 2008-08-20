@@ -20,10 +20,16 @@
 	        abline(v = 0, lty = 2)
             abline(h = 0, lty = 2)
             if (ncol(x$rotation) == 2) {
-                ## Sometimes rotation[1,1] is 2.2e-16 above one
-                x$rotation[1,1] <- min(x$rotation[1,1], 1)
-                abline(0, tan(acos(x$rotation[1, 1])), lty = 1)
-                abline(0, 1/tan(acos(-x$rotation[1, 1])), lty = 1)
+                ## Draw rotated axes only if they visibly differ from
+                ## unrotated axes
+                b <- abs(x$rotation[1,1])
+                EPS <- 1e-8
+                if (1 - b > EPS && b > EPS) {
+                    abline(0, tan(acos(x$rotation[1, 1])), lty = 1)
+                    abline(0, 1/tan(acos(-x$rotation[1, 1])), lty = 1)
+                } else {
+                    abline(v = 0, h = 0)
+                }
             }
             else {
             	Y <- x$Yrot %*% t(x$rotation)
@@ -59,4 +65,3 @@
     }
     invisible(out)
 }
-

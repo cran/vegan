@@ -3,6 +3,40 @@
 			VEGAN RELEASE VERSIONS 
 		       	======================
 
+		       CHANGES IN VEGAN 1.13-2
+
+    - anova.cca (and permutest.cca) now calculate the residual df as
+      (number of rows) - (rank of constraints and conditions) - 1
+      instead of using the rank of the residual ordination.  With
+      single response variable in 'rda' the degrees of freedom and
+      F-values are now identical to those in 'lm' (linear
+      model). However, the change does not influence significances
+      (P-values), because these have been always found by permutation,
+      and this change does not influence the order statistic used in
+      permutations.
+
+    - oecosimu: always estimates the original statistic with binary
+      data even when the user supplies quantitative data.
+
+    - orditkplot: no superfluous pointer lines when moving labels. 
+
+    - procrustes plot failed if two configurations were exactly
+      identical. 
+
+    - rda (and capscale) use internal scaling constant so that the
+      returned site and species scores with scalings 1, 2 or 3
+      together provide a biplot approximation of the original
+      data. This scaling constant is calculated internally, but now
+      its numerical value is returned as an attribute of 'scores.rda',
+      and 'summary' displays its value. Vignette on "Design decisions
+      and implementation" in vegan explains the calculation of the
+      internal scaling constant.
+
+    - summary of capscale identical to the summary of rda.
+
+    - scores of rda and capscale with scaling = 0 really return the
+      unmodified scores without the scaling constant.
+
 		       CHANGES IN VEGAN 1.13-1
 
 GENERAL

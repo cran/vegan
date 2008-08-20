@@ -68,7 +68,8 @@ cIndexKM(y, x, index = "all")
   
   The default value is \code{"calinski"}, which refers to the well-known
   Calinski-Harabasz (1974) criterion. The other available index is the
-  simple structure index \code{"ssi"}. In the case of groups of equal
+  simple structure index \code{"ssi"} (Dolnicar et al. 1999).
+  In the case of groups of equal
   sizes, \code{"calinski"} is generally a good criterion to indicate the
   correct number of groups. Users should not take its indications
   literally when the groups are not equal in size. Type \code{"all"} to
@@ -82,13 +83,10 @@ cIndexKM(y, x, index = "all")
     is simply an \eqn{F} (ANOVA) statistic.
  
     \item \bold{ssi}:
-    this "Simple Structure Index" 
-    combines three elements which influence the interpretability of a
-    solution, i.e., the maximum difference of each variable between the
-    clusters, the sizes of the most contrasting clusters and the
-    deviation of a variable in the cluster centers compared to its
-    overall mean. These three elements are multiplicatively combined and
-    normalized to give a value between \eqn{0} and \eqn{1}.
+    the \dQuote{Simple Structure Index} multiplicatively combines
+    several elements which influence the interpretability of a
+    partitioning solution. The best partition is indicated by the
+    highest SSI value.
   }
 
   In a simulation study, Milligan and Cooper (1985) found
@@ -148,6 +146,12 @@ cIndexKM(y, x, index = "all")
 
   Calinski, T. and J. Harabasz. 1974. A dendrite method for cluster
   analysis. \emph{Commun. Stat.} \strong{3}: 1-27.
+
+  Dolnicar, S., K. Grabler and J. A. Mazanec. 1999.  A tale of three
+  cities: perceptual charting for analyzing destination images. Pp.
+  39-62 in: Woodside, A. et al. [eds.] \emph{Consumer psychology of
+  tourism, hospitality and leisure}. CAB International, New York.
+
   
   Gower, J. C. 1966. Some distance properties of latent root and vector
   methods used in multivariate analysis. \emph{Biometrika} \strong{53}:

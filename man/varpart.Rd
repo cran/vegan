@@ -255,7 +255,9 @@ mm2 <- model.matrix(~ Substrate + Shrub + Topo, mite.env)[, -1]
 mite.hel <- decostand(mite, "hel")
 mod <- varpart(mite.hel, mm1, mm2, mite.pcnm)
 # Use RDA to test fraction [a]
-rda.result <- rda(mite.hel, mm1, cbind(mm2, mite.pcnm))
+# Matrix can be an argument in formula
+rda.result <- rda(mite.hel ~ mm1 + Condition(mm2) +
+   Condition(as.matrix(mite.pcnm)))
 anova(rda.result, step=200, perm.max=200)
 
 # Four explanatory tables
