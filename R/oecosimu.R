@@ -6,9 +6,9 @@
     method <- match.arg(method, c("r00", "r0", "r1", "r2", "c0",
                                   "swap", "tswap", "backtrack",
                                   "quasiswap"))
+    comm <- ifelse(comm > 0, 1, 0)
     ind <- nestfun(comm, ...)
     simind <- numeric(nsimul)
-    comm <- ifelse(comm > 0, 1, 0)
     if (method %in% c("swap", "tswap")){
         checkbrd <- 1
         if (method == "tswap") {

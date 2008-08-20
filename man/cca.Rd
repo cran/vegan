@@ -86,7 +86,9 @@
   The constraints can contain ordered or unordered factors,
   interactions among variables and functions of variables.  The defined
   \code{\link{contrasts}} are honoured in \code{\link{factor}}
-  variables.  The formula can include a special term \code{Condition}
+  variables.  The constraints can also be matrices (but not data
+  frames).
+  The formula can include a special term \code{Condition}
   for conditioning variables (``covariables'') ``partialled out'' before
   analysis.  So the following commands are equivalent: \code{cca(X, Y,
     Z)}, \code{cca(X ~ Y + Condition(Z))}, where \code{Y} and \code{Z}

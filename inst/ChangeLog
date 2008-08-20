@@ -1,7 +1,40 @@
-
-$Date: 2008-06-11 09:59:27 +0300 (Wed, 11 Jun 2008) $
+$Date: 2008-08-20 09:19:43 +0300 (Wed, 20 Aug 2008) $
 
 VEGAN DEVEL VERSIONS at http://r-forge.r-project.org/
+
+Version 1.13-2 (released August 20, 2008)
+
+	* merged 430: fix residual df in permutest.cca/anova.cca.
+
+	* merged 428: scores.rda returns and summary.cca prints scaling
+	constant in rda/capscale.
+
+	* merged r425: scores.rda scaling=0 really returns unmodified
+	scores like documented.
+
+	* merged r427: summary for capscale result similar as for rda.
+
+	* r437 simultaneously with pkg/: oecosimu p/a transforms data also
+	for the original statistic.
+
+	* merged r448: bind moving only to labels (was canvas) in
+	orditkplot.
+
+	* merged r453: ordiArgAbsorber knows about 'choices' and 'display'
+	args of function scores().
+
+	* merged r434: wider formula cutoff in varpart.
+
+	* merged r435: cca & varpart doc tells that formula accepts
+	matrices. 
+
+	* merged r461, 462: ordiArgAbsorber learnt about 'const' arg in
+	scores.rda.
+
+	* merged r465: cascadeKM doc update.
+
+	* merged r472: fix procrustes plot failure with identical
+	configurations. 
 
 Version 1.13-1 (released June 11, 2008)
 
