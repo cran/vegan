@@ -3,6 +3,82 @@
 			VEGAN RELEASE VERSIONS 
 		       	======================
 
+		       CHANGES IN VEGAN 1.15-0
+
+GENERAL
+
+    - Peter Solymos joined the vegan development team.
+
+NEW FUNCTIONS
+
+    - add1.cca and drop1.cca: functions to implement permutation tests
+      with argument test = "permutation". Function drop1.cca uses
+      anova.cca(..., by = "margin") and add1.cca implements a new type
+      of analysis for single term additions.
+
+    - ordilabel: new alternative for cluttered ordination plots.  Text
+      is written on opaque labels. The texts still cover each other,
+      but at least the uppermost are readable, and the ordering can be
+      controlled by 'priority' argument. Similar to 's.label' in ade4
+      pacakge.
+
+    - ordipointlabel: new alternative for cluttered ordination plots.
+      Points are in fixed positions, but their text labels are
+      located to avoid overplotting. The optimization uses simulated
+      annealing of 'optim' function. Returns an "orditkplot" object so
+      that the results can be edited with 'orditkplot'. Similar to
+      'pointLabel' function in maptools package. 
+
+    - permatfull, permatswap: functions to permute quantitative count
+      data.
+
+    - treedive: estimation of functional diversity defined as the
+      height of the dendrogram of species properties (Petchey & Gaston,
+      Ecology Letters 9, 741-758; 2006). With a helper function
+      'treeheight' to find the height of a 'hclust' dendrogram.
+
+    - tsallis: Tsallis entropy family as an alternative to 'renyi'. 
+
+    - wcmdscale: weighted metric scaling a.k.a. weighted principal
+      coordinates analysis; only uses row weights.  
+
+NEW FEATURES AND FIXES
+
+    - anova.cca: default permutation model changed from "direct" to
+      "reduced" after Pierre Legendre demonstrated that model
+      "reduced" was superior in term of Type I error.
+
+    - anova.cca: handles smoothly models where constrained or
+      unconstrained models are NULL and the tests are impossible (used
+      to stop with error). 
+
+    - anova.cca(..., by = "margin") was handling wrongly 'x' in
+      '~Condition(x) + x + z', or model formulae where same variables
+      where used both as conditions and (aliased) constraints.
+
+    - cca/rda/capscale: improved robustness in the formula
+      interface. Partial handling of "cca" objects produced by
+      ade4:::cca. 
+
+    - commsimulator: swap, trial swap and quasiswap written in C and
+      *much* faster (100x in some tests). 
+
+    - oecosimu: accepts now a vector of statistics, and the user can
+      give the name of the statistic in the function call.
+
+    - ordiplot: did not use partial matching for "sites" and
+      "species". 
+
+    - orditkplot: Improved user interface. Improved zooming into
+      graphs. Imitates R plotting characters ('pch'). Label font
+      family, size and font type can be vectors.
+
+    - permuted.index2 and associated functions allow for restricted
+      permutations of strata (i.e., restricted shuffling of blocks). 
+
+    - specaccum: removes missing (all zero) species which gave sd = NA
+      with method = "exact".
+
 		       CHANGES IN VEGAN 1.13-2
 
     - anova.cca (and permutest.cca) now calculate the residual df as

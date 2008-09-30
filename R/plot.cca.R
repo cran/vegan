@@ -1,9 +1,9 @@
 `plot.cca` <-
     function (x, choices = c(1, 2), display = c("sp", "wa", "cn"), 
-              scaling = 2, type, xlim, ylim,  ...) 
+              scaling = 2, type, xlim, ylim,  const, ...) 
 {
     TYPES <- c("text", "points", "none")
-    g <- scores(x, choices, display, scaling)
+    g <- scores(x, choices, display, scaling, const)
     if (!is.list(g)) 
         g <- list(default = g)
     if (!is.null(g$centroids)) {
@@ -83,4 +83,3 @@
     class(g) <- "ordiplot"
     invisible(g)
 }
-

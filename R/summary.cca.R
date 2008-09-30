@@ -2,6 +2,11 @@
     function (object, scaling = 2, axes = 6, display=c("sp","wa","lc","bp","cn"), 
               digits = max(3, getOption("digits") - 3), ...) 
 {
+    if (inherits(object, "pcaiv")) {
+        warning("this is an ade4 object which vegan cannot handle")
+        axes <- min(axes, object$nf)
+        object <- ade2vegancca(object)
+    }
     axes <- min(axes, sum(object$CCA$rank, object$CA$rank))
     summ <- list()
     if (axes && length(display) && (!is.na(display) && !is.null(display))) 

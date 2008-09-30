@@ -6,8 +6,8 @@ decision-vegan.pdf: decision-vegan.tex
 	-rm -f decision-vegan-0*.* Rplots.*
 intro-vegan.pdf: intro-vegan.tex
 	texi2dvi --pdf --clean intro-vegan.tex
-	-rm -f intro-vegan-0*.* Rplots.ps
+	-rm -f intro-vegan-0*.* Rplots.*
 diversity-vegan.pdf: diversity-vegan.tex
 	texi2dvi --pdf --clean diversity-vegan.tex
-	-rm -f diversity-vegan-0*.* Rplots.ps
+	-rm -f diversity-vegan-0*.* Rplots.*
 

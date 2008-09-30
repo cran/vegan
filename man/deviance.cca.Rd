@@ -58,7 +58,11 @@
   variables with the highest eigenvalues are not necessarily the most
   significant in permutation tests in \code{\link{anova.cca}}). If you
   also have multi-class factors, the value of \code{k} will have a
-  capricious effect in model building.
+  capricious effect in model building. The \code{\link{step}} function
+  will pass arguments to \code{\link{add1.cca}} and
+  \code{\link{drop1.cca}}, and setting \code{test = "permutation"}
+  will provide permutation tests of each deletion and addition which
+  can help in judging the validity of the model building.
  
 }
 \value{
@@ -80,7 +84,8 @@
 }
 
 \seealso{\code{\link{cca}}, \code{\link{rda}}, \code{\link{anova.cca}},
-    \code{\link{step}}, \code{\link{extractAIC}}.}
+    \code{\link{step}}, \code{\link{extractAIC}},
+    \code{\link{add1.cca}}, \code{\link{drop1.cca}}. }
 \examples{
 # The deviance of correspondence analysis equals Chi-square
 data(dune)

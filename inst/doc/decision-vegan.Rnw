@@ -16,7 +16,7 @@
 
 \author{Jari Oksanen}
 \title{Design decisions and implementation details in vegan}
-\date{$ $Id: decision-vegan.Rnw 254 2008-03-06 20:32:48Z jarioksa $ $
+\date{$ $Id: decision-vegan.Rnw 508 2008-09-26 11:47:00Z jarioksa $ $
   processed with vegan
 \Sexpr{packageDescription("vegan", field="Version")}
 in \Sexpr{R.version.string} on \today}

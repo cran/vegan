@@ -12,10 +12,17 @@
     }
     else {
         type <- match.arg(type, c("points", "text", "none"))
+        ## Matching displays could be done better (see
+        ## ordipointlabel), but this may not be yet broken, so...
+        dplays <- c("sites", "species")
+        if (missing(display))
+            display <- dplays
+        else
+            display <- match.arg(display, dplays, several.ok = TRUE)
         X <- Y <- NULL
-        if (missing(display) || "sites" %in% display) 
+        if ("sites" %in% display) 
             X <- scores(ord, choices = choices, display = "sites")
-        if (missing(display) || "species" %in% display) {
+        if ("species" %in% display) {
             options(show.error.messages = FALSE)
             Y <- try(scores(ord, choices = choices, display = "species"))
             options(show.error.messages = TRUE)

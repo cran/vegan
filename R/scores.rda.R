@@ -1,6 +1,6 @@
 "scores.rda" <-
     function (x, choices = c(1, 2), display = c("sp", "wa", "cn"), 
-              scaling = 2, ...) 
+              scaling = 2, const, ...) 
 {
     tabula <- c("species", "sites", "constraints", "biplot", 
                 "centroids")
@@ -21,7 +21,8 @@
         nrow(x$CA$u)
     else
         nrow(x$CCA$u)
-    const <- sqrt(sqrt((nr-1) * sumev))
+    if (missing(const))
+        const <- sqrt(sqrt((nr-1) * sumev))
     rnk <- x$CCA$rank
     sol <- list()
     if ("species" %in% take) {
@@ -83,4 +84,3 @@
     attr(sol, "const") <- const
     return(sol)
 }
-

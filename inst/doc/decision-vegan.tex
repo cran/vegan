@@ -16,10 +16,10 @@
 
 \author{Jari Oksanen}
 \title{Design decisions and implementation details in vegan}
-\date{$ $Id: decision-vegan.Rnw 254 2008-03-06 20:32:48Z jarioksa $ $
+\date{$ $Id: decision-vegan.Rnw 508 2008-09-26 11:47:00Z jarioksa $ $
   processed with vegan
-1.13-2
-in R version 2.7.1 (2008-06-23) on \today}
+1.15-0
+in R version 2.7.2 (2008-08-25) on \today}
 
 \usepackage{/usr/local/lib/R/share/texmf/Sweave}
 \begin{document}
@@ -452,8 +452,7 @@ randomizations.}.
 > orig
 \end{Sinput}
 \begin{Soutput}
-Call:
-cca(formula = varespec ~ Al + K, data = varechem) 
+Call: cca(formula = varespec ~ Al + K, data = varechem)
 
               Inertia Rank
 Total           2.083     
@@ -474,22 +473,21 @@ Eigenvalues for unconstrained axes:
 > shuff
 \end{Sinput}
 \begin{Soutput}
-Call:
-cca(formula = varespec[i, ] ~ Al + K, data = varechem) 
+Call: cca(formula = varespec[i, ] ~ Al + K, data = varechem)
 
               Inertia Rank
 Total          2.0832     
-Constrained    0.2003    2
-Unconstrained  1.8829   21
+Constrained    0.2376    2
+Unconstrained  1.8456   21
 Inertia is mean squared contingency coefficient 
 
 Eigenvalues for constrained axes:
    CCA1    CCA2 
-0.14402 0.05632 
+0.16798 0.06967 
 
 Eigenvalues for unconstrained axes:
     CA1     CA2     CA3     CA4     CA5     CA6     CA7     CA8 
-0.47176 0.31817 0.21140 0.18961 0.16358 0.11973 0.11297 0.07386 
+0.46945 0.29536 0.22251 0.19368 0.13666 0.11429 0.10825 0.07979 
 (Showed only 8 of all 21 unconstrained eigenvalues)
 \end{Soutput}
 \end{Schunk}
@@ -515,8 +513,8 @@ remain within numerical precision:
 > tmp1
 \end{Sinput}
 \begin{Soutput}
-Call:
-rda(formula = varespec ~ N + P + K + Ca + Mg + S + Al + Fe +      Mn + Zn + Mo + Baresoil + Humdepth + pH, data = varechem) 
+Call: rda(formula = varespec ~ N + P + K + Ca + Mg + S + Al + Fe + Mn +
+Zn + Mo + Baresoil + Humdepth + pH, data = varechem)
 
               Inertia Rank
 Total          1825.7     
@@ -540,11 +538,11 @@ Eigenvalues for unconstrained axes:
 > max(residuals(proc))
 \end{Sinput}
 \begin{Soutput}
-[1] 4.403728e-14
+[1] 2.082183e-14
 \end{Soutput}
 \end{Schunk}
 In \texttt{cca} the difference would be somewhat larger than now
-observed 4.4037e-14 because site
+observed 2.0822e-14 because site
 weights used for environmental variables are shuffled with the species
 data.
 
@@ -573,8 +571,7 @@ following example uses the classical dune meadow data \cite{Jongman87}:
 > orig
 \end{Sinput}
 \begin{Soutput}
-Call:
-cca(formula = dune ~ Moisture, data = dune.env) 
+Call: cca(formula = dune ~ Moisture, data = dune.env)
 
               Inertia Rank
 Total          2.1153     

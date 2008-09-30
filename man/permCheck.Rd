@@ -253,7 +253,8 @@ permCheck(pyrifos, control = permControl(strata = ditch,
                    type = "series", mirror = TRUE, constant = TRUE))
 
 ## permute strata
-permCheck(pyrifos, permControl(strata = ditch, type = "strata"))
+permCheck(pyrifos, permControl(strata = ditch, type = "free",
+                               permute.strata = TRUE))
 
 ## this should also also for arbitrary vectors
 vec1 <- permCheck(1:100)
@@ -351,9 +352,6 @@ control <- permControl(type = "grid", strata = fac,
                        constant = TRUE)
 permuplot(150, control = control, cex = 0.8)
 
-## permute strata
-fac <- factor(rep(1:6, each = 20), labels = paste("Ditch", 1:6))
-permuplot(length(fac), permControl(strata = fac, type = "strata"))
 }
 \keyword{ utilities }
 \keyword{ design }

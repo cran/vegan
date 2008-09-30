@@ -13,7 +13,8 @@
 permuted.index2(n, control = permControl())
 
 permControl(strata = NULL, nperm = 199, complete = FALSE,
-            type = c("free", "series", "grid", "strata"),
+            type = c("free", "series", "grid"),
+            permute.strata = FALSE,
             maxperm = 9999, minperm = 99,
             mirror = FALSE, constant = FALSE,
             ncol = NULL, nrow = NULL,
@@ -34,7 +35,9 @@ permute(i, n, control)
   \item{complete}{logical; should complete enumeration of all
     permutations be performed?}
   \item{type}{the type of permutations required. One of \code{"free"},
-    \code{"series"}, \code{"grid"} or \code{"strata"}. See Details.}
+    \code{"series"}, or \code{"grid"}. See Details.}
+  \item{permute.strata}{logical; should strata be permuted? See
+    Details.}
   \item{maxperm}{the maximum number of permutations to
     perform. Currently unused.}
   \item{minperm}{the lower limit to the number of possible permutations
@@ -66,7 +69,7 @@ permute(i, n, control)
   \code{permControl}.
 
   To permute \code{strata} rather than the observations within the
-  levels of \code{strata}, use \code{type = "strata"}. However, note
+  levels of \code{strata}, use \code{permute.strata = TRUE}. However, note
   that the number of observations within each level of strata
   \strong{must} be equal! 
 
@@ -143,7 +146,8 @@ permuted.index2(100, permControl(strata = block, type = "grid",
                                  ncol = 5, nrow = 5, constant = TRUE))
 
 ## permuting levels of block instead of observations
-permuted.index2(20, permControl(strata = block, type = "strata"))
+permuted.index2(20, permControl(strata = block, type = "free",
+                                permute.strata = TRUE))
 
 ## Simple function using permute() to assess significance
 ## of a t.test  

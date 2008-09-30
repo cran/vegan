@@ -15,10 +15,10 @@
 \title{Vegan: an introduction to ordination}
 \author{Jari Oksanen}
 
-\date{$ $Id: intro-vegan.Rnw 175 2008-01-29 09:07:55Z jarioksa $ $
+\date{$ $Id: intro-vegan.Rnw 508 2008-09-26 11:47:00Z jarioksa $ $
   processed with vegan
-1.13-2
-in R version 2.7.1 (2008-06-23) on \today}
+1.15-0
+in R version 2.7.2 (2008-08-25) on \today}
 \usepackage{/usr/local/lib/R/share/texmf/Sweave}
 \begin{document}
 
@@ -107,12 +107,18 @@ species scores to the configuration as weighted averages (function
 \end{Sinput}
 \begin{Soutput}
 Run 0 stress 12.05894 
-Run 1 stress 11.97273 
+Run 1 stress 18.97837 
+Run 2 stress 12.04547 
 ... New best solution
-... procrustes: rmse 0.01950954  max resid 0.06040506 
-Run 2 stress 11.97273 
+... procrustes: rmse 0.003151163  max resid 0.01084345 
+Run 3 stress 11.97275 
 ... New best solution
-... procrustes: rmse 2.493715e-05  max resid 6.862633e-05 
+... procrustes: rmse 0.02000422  max resid 0.06292556 
+Run 4 stress 12.04547 
+Run 5 stress 20.35742 
+Run 6 stress 11.97274 
+... New best solution
+... procrustes: rmse 0.0001213726  max resid 0.000266161 
 *** Solution reached
 \end{Soutput}
 \begin{Sinput}
@@ -128,8 +134,8 @@ Data:     dune
 Distance: bray 
 
 Dimensions: 2 
-Stress:     11.97273 
-Two convergent solutions found after 2 tries
+Stress:     11.97274 
+Two convergent solutions found after 6 tries
 Scaling: centring, PC rotation, halfchange scaling 
 Species: expanded scores based on ‘dune’ 
 \end{Soutput}
@@ -209,9 +215,15 @@ methods you can try:
   command.
 \item Use \texttt{select} argument in ordination \texttt{text} and
   \texttt{points} functions to only show the specified items.
+\item Use \texttt{ordilabel} function that uses opaque background to
+  the text: some text labels will be covered, but the uppermost are
+  readable.
 \item Use automatic \texttt{orditorp} function that uses text only if
   this can be done without overwriting previous labels, but points in
   other cases.
+\item Use automatic \texttt{ordipointlabel} function that uses both
+  points and text labels, and tries to optimize the location of the
+  text to avoid overwriting.
 \item Use interactive \texttt{orditkplot} function that draws both
   points and labels for ordination scores, and allows you to drag labels
   to better positions. You can export the results of the edited graph to
@@ -284,7 +296,7 @@ variables using permutation tests:
 ***VECTORS
 
      NMDS1   NMDS2     r2 Pr(>r)  
-A1 0.97953 0.20131 0.3689  0.018 *
+A1 0.97941 0.20187 0.3689  0.015 *
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 P values based on 1000 permutations.
@@ -293,14 +305,14 @@ P values based on 1000 permutations.
 
 Centroids:
                NMDS1   NMDS2
-ManagementBF -0.4532  0.0011
-ManagementHF -0.2712 -0.1209
-ManagementNM  0.3267  0.5687
+ManagementBF -0.4531  0.0011
+ManagementHF -0.2711 -0.1209
+ManagementNM  0.3264  0.5688
 ManagementSF  0.1260 -0.4686
 
 Goodness of fit:
                r2 Pr(>r)   
-Management 0.4206  0.007 **
+Management 0.4205  0.004 **
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 P values based on 1000 permutations.
@@ -334,7 +346,7 @@ y ~ s(x1, x2, k = knots)
 Estimated degrees of freedom:
  2   total =  3 
 
-GCV score:  3.941081 
+GCV score:  3.940935 
 \end{Soutput}
 \end{Schunk}
 \begin{SCfigure}
@@ -363,8 +375,7 @@ the constraining variables:
 > ord
 \end{Sinput}
 \begin{Soutput}
-Call:
-cca(formula = dune ~ A1 + Management, data = dune.env) 
+Call: cca(formula = dune ~ A1 + Management, data = dune.env)
 
               Inertia Rank
 Total          2.1153     
@@ -411,8 +422,8 @@ following shortcut in \texttt{formula}:
 > cca(dune ~ ., data = dune.env)
 \end{Sinput}
 \begin{Soutput}
-Call:
-cca(formula = dune ~ A1 + Moisture + Management + Use + Manure,      data = dune.env) 
+Call: cca(formula = dune ~ A1 + Moisture + Management + Use +
+Manure, data = dune.env)
 
               Inertia Rank
 Total          2.1153     
@@ -444,7 +455,7 @@ simultaneously:
 > anova(ord)
 \end{Sinput}
 \begin{Soutput}
-Permutation test for cca under direct model
+Permutation test for cca under reduced model
 
 Model: cca(formula = dune ~ A1 + Management, data = dune.env)
          Df  Chisq      F N.Perm Pr(>F)   
@@ -471,13 +482,13 @@ It is also possible to analyse terms separately:
 > anova(ord, by = "term", permu = 200)
 \end{Sinput}
 \begin{Soutput}
-Permutation test for cca under direct model
+Permutation test for cca under reduced model
 Terms added sequentially (first to last)
 
 Model: cca(formula = dune ~ A1 + Management, data = dune.env)
            Df  Chisq      F N.Perm Pr(>F)   
-A1          1 0.2248 2.5245    199   0.02 * 
-Management  3 0.5550 2.0780    199   0.01 **
+A1          1 0.2248 2.5245    199  0.015 * 
+Management  3 0.5550 2.0780    199  0.005 **
 Residual   15 1.3355                        
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
@@ -492,12 +503,12 @@ significances of marginal effects (``Type III effects''):
 > anova(ord, by = "mar")
 \end{Sinput}
 \begin{Soutput}
-Permutation test for cca under direct model
+Permutation test for cca under reduced model
 Marginal effects of terms
 
 Model: cca(formula = dune ~ A1 + Management, data = dune.env)
            Df  Chisq      F N.Perm  Pr(>F)   
-A1          1 0.1759 1.9761   1599 0.03562 * 
+A1          1 0.1759 1.9761    699 0.02714 * 
 Management  3 0.5550 2.0780    199 0.00500 **
 Residual   15 1.3355                         
 ---
@@ -511,15 +522,15 @@ Moreover, it is possible to analyse significance of each axis:
 > anova(ord, by = "axis", perm = 500)
 \end{Sinput}
 \begin{Soutput}
-Permutation test for cca under direct model
+Permutation test for cca under reduced model
 
 Model: cca(formula = dune ~ A1 + Management, data = dune.env)
-         Df  Chisq      F N.Perm Pr(>F)  
-CCA1      1 0.3187 3.5801    199  0.015 *
-CCA2      1 0.2372 2.6640    499  0.036 *
-CCA3      1 0.1322 1.4845     99  0.330  
-CCA4      1 0.0917 1.0297     99  0.390  
-Residual 15 1.3355                       
+         Df  Chisq      F N.Perm  Pr(>F)  
+CCA1      1 0.3187 3.5801    299 0.01667 *
+CCA2      1 0.2372 2.6640    499 0.04600 *
+CCA3      1 0.1322 1.4845     99 0.26000  
+CCA4      1 0.0917 1.0297     99 0.39000  
+Residual 15 1.3355                        
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 \end{Soutput}
@@ -541,8 +552,8 @@ out from the analysis before constraints:
 > ord
 \end{Sinput}
 \begin{Soutput}
-Call:
-cca(formula = dune ~ A1 + Management + Condition(Moisture), data = dune.env) 
+Call: cca(formula = dune ~ A1 + Management +
+Condition(Moisture), data = dune.env)
 
               Inertia Rank
 Total          2.1153     
@@ -570,12 +581,12 @@ the signficances of the terms:
 > anova(ord, by = "term", perm = 500)
 \end{Sinput}
 \begin{Soutput}
-Permutation test for cca under direct model
+Permutation test for cca under reduced model
 Terms added sequentially (first to last)
 
 Model: cca(formula = dune ~ A1 + Management + Condition(Moisture), data = dune.env)
            Df  Chisq      F N.Perm Pr(>F)  
-A1          1 0.1154 1.4190     99   0.18  
+A1          1 0.1154 1.4190     99   0.11  
 Management  3 0.3954 1.6205     99   0.03 *
 Residual   12 0.9761                       
 ---
@@ -590,13 +601,13 @@ of \texttt{strata}:
 > anova(ord, by = "term", perm = 500, strata = Moisture)
 \end{Sinput}
 \begin{Soutput}
-Permutation test for cca under direct model
+Permutation test for cca under reduced model
 Terms added sequentially (first to last)
 Permutations stratified within `Moisture'
 
 Model: cca(formula = dune ~ A1 + Management + Condition(Moisture), data = dune.env)
            Df  Chisq      F N.Perm Pr(>F)   
-A1          1 0.1154 1.4190     99   0.29   
+A1          1 0.1154 1.4190     99   0.20   
 Management  3 0.3954 1.6205     99   0.01 **
 Residual   12 0.9761                        
 ---

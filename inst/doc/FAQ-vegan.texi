@@ -11,7 +11,7 @@
 @ifnottex
 This document contains answers to some of the most frequently asked
 questions about R package vegan. 
-This is version of $Date: 2008-03-20 12:50:06 +0200 (Thu, 20 Mar 2008) $.
+This is version of $Date: 2008-09-26 14:47:00 +0300 (Fri, 26 Sep 2008) $.
 @end ifnottex
 
 @quotation
@@ -35,7 +35,7 @@ Copyright @copyright{} 2008 Jari Oksanen
 @titlepage
 @title vegan @acronym{FAQ}
 @subtitle Frequently Asked Questions on R package vegan
-@subtitle Version of $Date: 2008-03-20 12:50:06 +0200 (Thu, 20 Mar 2008) $ 
+@subtitle Version of $Date: 2008-09-26 14:47:00 +0300 (Fri, 26 Sep 2008) $ 
 @author Jari Oksanen
 
 @vskip 0pt plus 1filll
@@ -547,13 +547,22 @@ graph. (Here and below  @code{...} means other arguments you want
 to give to your @code{plot} command.)
 
 @item Use points, and add labels to desired points using @code{identify}
-for ordination graphics, if you do not need to see all labels.  
+for ordination graphics, if you do not need to see all labels. 
+
+@item Add labels using function @code{ordilabel} which uses
+non-transparent background to the text. The labels still shadow each
+other, but the uppermost labels are readable. Argument @code{priority}
+will help in displaying the most interesting labels. 
 
 @item Use @code{orditorp} function that uses labels only if these can be
 added to a graph without overwriting other labels, and points otherwise,
 if you do not need to see all labels. You must first create an empty
 plot using  @code{plot(..., type="n")}, and then add labels or points
 with @code{orditorp}.  
+
+@item Use @code{ordipointlabel} which uses points and text labels to the
+points, and tries to optimize the location of the text to minimize the
+overlap. 
 
 @item Use interactive @code{orditkplot} function that lets you drag
 labels of points to better positions if you need to see all labels. Only
