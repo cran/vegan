@@ -15,7 +15,7 @@
 \title{Vegan: an introduction to ordination}
 \author{Jari Oksanen}
 
-\date{$ $Id: intro-vegan.Rnw 175 2008-01-29 09:07:55Z jarioksa $ $
+\date{$ $Id: intro-vegan.Rnw 508 2008-09-26 11:47:00Z jarioksa $ $
   processed with vegan
 \Sexpr{packageDescription("vegan", field="Version")}
 in \Sexpr{R.version.string} on \today}
@@ -167,9 +167,15 @@ methods you can try:
   command.
 \item Use \texttt{select} argument in ordination \texttt{text} and
   \texttt{points} functions to only show the specified items.
+\item Use \texttt{ordilabel} function that uses opaque background to
+  the text: some text labels will be covered, but the uppermost are
+  readable.
 \item Use automatic \texttt{orditorp} function that uses text only if
   this can be done without overwriting previous labels, but points in
   other cases.
+\item Use automatic \texttt{ordipointlabel} function that uses both
+  points and text labels, and tries to optimize the location of the
+  text to avoid overwriting.
 \item Use interactive \texttt{orditkplot} function that draws both
   points and labels for ordination scores, and allows you to drag labels
   to better positions. You can export the results of the edited graph to

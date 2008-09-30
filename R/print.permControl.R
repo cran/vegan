@@ -4,7 +4,7 @@
     stopifnot(class(x) == "permControl")
     ## set-up the messages we wish to print
     if (!is.null(x$strata)) {
-        if(x$type == "strata")
+        if(x$permute.strata)
             msg.strata <- paste("Permutations stratified between '",
                                 x$name.strata, "'\n", sep = "")
         else

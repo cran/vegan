@@ -4,6 +4,7 @@
 {
     x <- comm
     x <- as.matrix(x)
+    x <- x[, colSums(x) > 0]
     n <- nrow(x)
     p <- ncol(x)
     if (p == 1) {

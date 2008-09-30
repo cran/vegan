@@ -2,12 +2,28 @@
     function (n, control = permControl())
 {
     `permuted.strata` <-
-        function(strata)
+        function(strata, type, mirror = FALSE, start = NULL, flip = NULL,
+                 nrow, ncol, start.row = NULL, start.col = NULL)
         {
             lev <- length(levels(strata))
             ngr <- length(strata) / lev
             sp <- split(seq(along = strata), strata)
-            unname(do.call(c, sp[.Internal(sample(lev, lev, FALSE, NULL))]))
+            if(type == "free") {
+                unname(do.call(c, sp[.Internal(sample(lev, lev, FALSE, NULL))]))
+            } else if(type == "series") {
+                unname(do.call(c, sp[permuted.series(seq_len(lev),
+                                                     mirror = mirror,
+                                                     start = start,
+                                                     flip = flip)]))
+            } else if(type == "grid") {
+                unname(do.call(c, sp[permuted.grid(nrow = nrow, ncol = ncol,
+                                                   mirror = mirror,
+                                                   start.row = start.row,
+                                                   start.col = start.col,
+                                                   flip = flip)]))
+            } else {
+                stop("Invalid permutation type.")
+            }
         }
     `permuted.grid` <-
         function(nrow, ncol, mirror = FALSE,
@@ -60,8 +76,25 @@
                       "grid" = permuted.grid(nrow = control$nrow,
                       ncol = control$ncol, mirror = control$mirror)
                       )
-    } else if(control$type == "strata") {
-        out <- permuted.strata(control$strata)
+    } else if(control$permute.strata) {
+        if(control$constant) {
+            if(control$type == "series") {
+                n.lev <- length(levels(control$strata))
+                start <- .Internal(sample(n.lev, 1, FALSE, NULL))
+                flip <- runif(1) < 0.5
+            } else if(control$type == "grid") {
+                start.row <- .Internal(sample(control$nrow, 1, FALSE, NULL))
+                start.col <- .Internal(sample(control$ncol, 1, FALSE, NULL))
+                flip <- runif(2) < 0.5
+            }
+        } else {
+            start <- start.row <- start.col <- flip <- NULL
+        }
+        out <- permuted.strata(control$strata, type = control$type,
+                               mirror = control$mirror,
+                               start = start, flip = flip,
+                               nrow = control$nrow, ncol = control$ncol,
+                               start.row = start.row, start.col = start.col)
     } else {
         out <- 1:n
         inds <- names(table(control$strata))

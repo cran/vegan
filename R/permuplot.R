@@ -34,6 +34,9 @@
                  lim[2] + (lim.range * inset))
         return(res)
     }
+    ## currently doesn't support restricted permutations of strata themselves
+    if(control$permute.strata && control$type != "free")
+        stop("Restricted permutations of strata currently not supported")
     ## check that n and length of strata are equal
     if( use.strata <- !is.null(control$strata) ) {
         tab <- table(control$strata)
@@ -50,7 +53,7 @@
         on.exit(par(opar))
         ## if permuting strata, only need to draw the sub-plots
         ## in a different order
-        if(control$type == "strata") {
+        if(control$permute.strata) {
             ## expand shade, col
             if(identical(length(col), 1))
                 col <- rep(col, n.grp)

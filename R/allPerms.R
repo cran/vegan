@@ -71,7 +71,13 @@
         nperms <- numPerms(v, control)
         lev <- length(levels(control$strata))
         X <- matrix(nrow = nperms, ncol = length(control$strata))
-        perms <- all.free(lev)
+        perms <- if(control$type == "free") {
+            all.free(lev)
+        } else if(control$type == "series") {
+            all.series(lev, control = control)
+        } else {
+            all.grid(lev, control = control)
+        }
         sp <- split(v, control$strata)
         for(i in seq_len(nrow(perms)))
             X[i,] <- unname(do.call(c, sp[perms[i,]]))
@@ -104,7 +110,8 @@
     if(nperms > max)
         stop("Number of possible permutations too big (> 'max')")
     type <- control$type
-    if(type != "strata" && !is.null(control$strata)) {
+    ##if(type != "strata" && !is.null(control$strata)) {
+    if(!control$permute.strata && !is.null(control$strata)) {
         ## permuting within blocks
         ## FIXME: allperms expects samples to be arranged
         ## in order of fac, i.e. all level 1, followed by
@@ -188,7 +195,7 @@
             }
         }
     } else {
-        ## no blocks
+        ## not permuting within blocks or are permuting strata
         res <- switch(type,
                       free = all.free(n),
                       series = all.series(n, control=control),

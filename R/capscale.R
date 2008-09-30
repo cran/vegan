@@ -51,7 +51,7 @@
     sol <- X$points[, 1:neig]
     fla <- update(formula, sol ~ .)
     environment(fla) <- environment()
-    d <- ordiParseFormula(fla, data)
+    d <- ordiParseFormula(fla, data, envdepth = 1)
     sol <- rda.default(d$X, d$Y, d$Z, ...)
     sol$tot.chi <- sol$tot.chi
     if (!is.null(sol$CCA)) {

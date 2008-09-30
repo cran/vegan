@@ -21,12 +21,12 @@
         ## if grid design, check nrow*ncol is multiple of nobs
         if(type == "grid" &&
            !identical(nobs %% (control$ncol * control$nrow), 0))
-            stop("'nrow' * 'ncol' not a multilpe of number of observations.")
+            stop("'nrow' * 'ncol' not a multiple of number of observations.")
         ## if constant, check design balanced?
         if(control$constant && bal > 1)
             stop("Unbalanced designs not allowed with 'constant = TRUE'.")
         ## if permuting strata, must be balanced
-        if(type == "strata" && bal > 1)
+        if(control$permute.strata && bal > 1)
             stop("Design must be balanced if permuting 'strata'.")
     }
     ##

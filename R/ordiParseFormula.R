@@ -1,10 +1,10 @@
 "ordiParseFormula" <-
-function (formula, data, xlev = NULL) 
+function (formula, data, xlev = NULL, envdepth = 2) 
 {
     Terms <- terms(formula, "Condition", data = data)
     flapart <- fla <- formula <- formula(Terms, width.cutoff = 500)
     specdata <- formula[[2]]
-    X <- eval.parent(specdata)
+    X <- eval.parent(specdata, n = envdepth)
     X <- as.matrix(X)
     indPartial <- attr(Terms, "specials")$Condition
     mf <- Z <- NULL
@@ -12,7 +12,7 @@ function (formula, data, xlev = NULL)
         partterm <- attr(Terms, "variables")[1 + indPartial]
         Pterm <- sapply(partterm, function(x) deparse(x[[2]], width.cutoff=500))
         Pterm <- paste(Pterm, collapse = "+")
-        P.formula <- as.formula(paste("~", Pterm))
+        P.formula <- as.formula(paste("~", Pterm), env = environment(formula))
         zlev <- xlev[names(xlev) %in% Pterm]
         mf <- model.frame(P.formula, data, na.action = na.fail, 
             xlev = zlev)
@@ -43,4 +43,3 @@ function (formula, data, xlev = NULL)
     list(X = X, Y = Y, Z = Z, terms = terms(fla, width.cutoff = 500), 
         terms.expand = terms(flapart, width.cutoff = 500), modelframe = mf)
 }
-

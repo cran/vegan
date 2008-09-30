@@ -6,6 +6,7 @@
 \alias{scores.rda}
 \alias{summary.cca}
 \alias{print.summary.cca}
+\alias{ade2vegancca}
 
 \title{Plot or Extract Results of Constrained Correspondence Analysis
   or Redundancy Analysis}
@@ -16,12 +17,14 @@
 }
 \usage{
 \method{plot}{cca}(x, choices = c(1, 2), display = c("sp", "wa", "cn"),
-         scaling = 2, type, xlim, ylim, ...)
+         scaling = 2, type, xlim, ylim, const, ...)
 \method{text}{cca}(x, display = "sites", labels, choices = c(1, 2), scaling = 2,
     arrow.mul, head.arrow = 0.05, select, ...)
 \method{points}{cca}(x, display = "sites", choices = c(1, 2), scaling = 2,
     arrow.mul, head.arrow = 0.05, select, ...)
-\method{scores}{cca}(x, choices=c(1,2), display=c("sp","wa","cn"),scaling=2, ...)
+\method{scores}{cca}(x, choices=c(1,2), display=c("sp","wa","cn"), scaling=2, ...)
+\method{scores}{rda}(x, choices=c(1,2), display=c("sp","wa","cn"), scaling=2, 
+    const, ...)
 \method{summary}{cca}(object, scaling = 2, axes = 6, display = c("sp", "wa", 
     "lc", "bp", "cn"), digits = max(3, getOption("digits") - 3), ...)
 \method{print}{summary.cca}(x, digits = x$digits, head = NA, tail = head, ...)
@@ -61,6 +64,9 @@
   \item{select}{Items to be displayed.  This can either be a logical
     vector which is \code{TRUE} for displayed items or a vector of indices
     of displayed items.}
+  \item{const}{General scaling constant to \code{rda} scores. The
+    default is to use constant to give biplot scores, or scores that
+    approximate original data.}
   \item{axes}{Number of axes in summaries.}
   \item{digits}{Number of digits in output.}
   \item{head, tail}{Number of rows printed from the head and tail of
@@ -118,6 +124,16 @@
   can be used by function \code{\link{identify.ordiplot}} to identify
   the points or other functions in the \code{\link{ordiplot}} family. 
 }
+
+\note{Package \pkg{ade4} has function \code{\link[ade4]{cca}} which
+  returns constrained correspondence analysis of the same class as the
+  \pkg{vegan} function. If you have results of \pkg{ade4} in your
+  working environment, \pkg{vegan} functions may try to handle them and
+  fail with cryptic error messages. However, there is a simple utility
+  function \code{ade2vegancca} which tries to translate \pkg{ade4}
+  \code{cca} results to \pkg{vegan} \code{cca} results so that some
+  \pkg{vegan} functions may work partially with \pkg{ade4} objects
+  (with a warning).} 
 
 \author{Jari Oksanen }
 
