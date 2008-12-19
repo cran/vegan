@@ -31,10 +31,9 @@ function(d, k, eig = FALSE, add = FALSE, x.ret = FALSE, w)
     rownames(points) <- rownames(m)
     if (eig || x.ret || add) {
         out <- list(points = points, eig = if (eig) e$values[-n],
-                    x = if (x.ret) m, ac = NA, GOF = NA, weigths = w)
+                    x = if (x.ret) m, ac = NA, GOF = NA, weights = w)
         class(out) <- "wcmdscale"
     }
     else out <- points
     out
 }
-

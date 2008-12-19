@@ -5,7 +5,8 @@ function(x,  digits = max(3, getOption("digits") - 2),  ...)
     cat("No. of species ", length(x$y), ", total abundance ", 
         sum(x$y), "\n\n", sep = "")
     p <- coef(x)
-    p <- formatC(p, format="g", flag = " ", digits = digits)
+    if (any(!is.na(p)))
+        p <- formatC(p, format="g", flag = " ", digits = digits)
     p <- apply(p, 2, function(x) gsub("NA", " ", x))
     aic <- sapply(x$models, AIC)
     bic <- sapply(x$models, AIC, k = log(length(x$y)))
@@ -15,4 +16,3 @@ function(x,  digits = max(3, getOption("digits") - 2),  ...)
     print(out, quote=FALSE)
     invisible(x)
 }
-

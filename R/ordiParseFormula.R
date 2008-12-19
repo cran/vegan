@@ -40,6 +40,16 @@ function (formula, data, xlev = NULL, envdepth = 2)
             Y <- Y[, -xint, drop = FALSE]
         }
     }
+    rownames(X) <- rownames(X, do.NULL = FALSE)
+    colnames(X) <- colnames(X, do.NULL = FALSE)
+    if (!is.null(Y)) {
+        rownames(Y) <- rownames(Y, do.NULL = FALSE)
+        colnames(Y) <- colnames(Y, do.NULL = FALSE)
+    }
+    if (!is.null(Z)) {
+        rownames(Z) <- rownames(Z, do.NULL = FALSE)
+        colnames(Z) <- colnames(Z, do.NULL = FALSE)
+    }
     list(X = X, Y = Y, Z = Z, terms = terms(fla, width.cutoff = 500), 
         terms.expand = terms(flapart, width.cutoff = 500), modelframe = mf)
 }

@@ -1,7 +1,38 @@
 
-$Date: 2008-09-30 10:04:55 +0300 (Tue, 30 Sep 2008) $
+$Date: 2008-12-19 11:43:42 +0200 (Fri, 19 Dec 2008) $
 
 VEGAN STABLE VERSIONS
+
+Version 1.15-1 (opened October 10, 2008)
+
+	* merged r644: \$ escape fix in Rd files.
+	
+	* added warning on permatswap, since the "swap" algorithm used
+	there appeared to be biased in tests run by PS & JO.
+
+	* merged r598: text.decorana failed.
+
+	* merged r590: betadisper and related functions now work when
+	'group' represents a single group/level.
+	
+	* merged r550, 552: neat plot.cca when input rownames are NULL.
+
+	* new email address of Peter Solymos in Rd files (from r520).
+
+	* fixed row/column mix-up in permatfull (the bugfix part of r525
+	transferred by hand).
+
+	* merged r533: warning of ties in nesteddisc().
+
+	* merged r526: typo in wcmdscale() result object item.
+
+	* copied head/tail of summary.cca.
+
+	* merged r516, 519, 521: radfit fixes for 0..2 species
+	communities. 
+
+	* merged 522: ordiParseFormula takes care of non-NULL row names.
+
 
 Version 1.15-0 (released September 30, 2008)
 

@@ -6,6 +6,12 @@
     g <- scores(x, choices, display, scaling, const)
     if (!is.list(g)) 
         g <- list(default = g)
+    ## Take care that there are names
+    for (i in 1:length(g)) {
+        if (length(dim(g[[i]])) > 1)
+            rownames(g[[i]]) <- rownames(g[[i]], do.NULL = FALSE,
+                                         prefix = substr(names(g)[i], 1, 3))
+    }
     if (!is.null(g$centroids)) {
         if (is.null(g$biplot)) 
             g$biplot <- scores(x, choices, "bp", scaling)

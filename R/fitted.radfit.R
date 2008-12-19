@@ -1,2 +1,5 @@
-"fitted.radfit" <-
-function(object, ...) sapply(object$models, fitted)
+`fitted.radfit` <-
+    function(object, ...)
+{
+    matrix(sapply(object$models, fitted), ncol=length(object$models))
+}

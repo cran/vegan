@@ -4,7 +4,7 @@
     x <- as.rad(x)
     NU <- rad.null(x, ...)
     PE <- rad.preempt(x, ...)
-    #BS <- rad.brokenstick(x, ...)
+    ##BS <- rad.brokenstick(x, ...)
     LN <- rad.lognormal(x, ...)
     ZP <- rad.zipf(x, ...)
     ZM <- rad.zipfbrot(x, ...)
@@ -15,4 +15,3 @@
     class(out) <- "radfit"
     out
 }
-

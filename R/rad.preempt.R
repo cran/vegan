@@ -2,6 +2,8 @@
     function (x, family = poisson, ...) 
 {
     canfun <- function(p, x, ...) {
+        if (length(x) <= 1)
+            return(0)
         p <- plogis(p)
         if (p == 1) 
             p <- 1 - .Machine$double.eps
@@ -15,6 +17,7 @@
     linkinv <- fam$linkinv
     dev.resids <- fam$dev.resids
     x <- as.rad(x)
+    nsp <- length(x)
     rnk <- seq(along = x) - 1
     wt <- rep(1, length(x))
     logJ <- log(sum(x))
@@ -25,14 +28,21 @@
         aic <- rdf <- deviance <- NA
         p <- rep(NA, 1)
         fit <- residuals <- prior.weights <- rep(NA, length(x))
-    }
-    else {
-        p <- plogis(canon$estimate)
-        fit <- exp(logJ + log(p) + log(1 - p) * rnk)
+    } else {
+        if (nsp > 1) {
+            p <- plogis(canon$estimate)
+            fit <- exp(logJ + log(p) + log(1 - p) * rnk)
+        } else {
+            p <- if (nsp > 0) 1 else NA
+            fit <- x
+        }
         res <- dev.resids(x, fit, wt)
         deviance <- sum(res)
         residuals <- x - fit
-        aic <- aicfun(x, rep(1, length(x)), fit, wt, deviance) + 2
+        if (nsp > 0)
+            aic <- aicfun(x, rep(1, length(x)), fit, wt, deviance) + 2
+        else
+            aic <- NA
         rdf <- length(x) - 1
     }
     names(p) <- c("alpha")
@@ -42,4 +52,3 @@
     class(out) <- c("radline", "glm")
     out
 }
-

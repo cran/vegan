@@ -7,11 +7,17 @@
     x <- as.rad(x)
     nsp <- length(x)
     wt <- rep(1, nsp)
-    fit <- rev(cumsum(1/nsp:1)/nsp) * sum(x)
+    if (nsp > 0) { 
+        fit <- rev(cumsum(1/nsp:1)/nsp) * sum(x)
+        aic <- aicfun(x, nsp, fit, wt, deviance)
+    }
+    else {
+        fit <- NA
+        aic <- NA
+    }
     res <- dev.resids(x, fit, wt)
     deviance <- sum(res)
     residuals <- x - fit
-    aic <- aicfun(x, wt, fit, wt, deviance) 
     rdf <- nsp
     p <- NA
     names(p) <- "S"
@@ -21,4 +27,3 @@
     class(out) <- c("radline", "glm")
     out
 }
-

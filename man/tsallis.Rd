@@ -1,3 +1,4 @@
+\encoding{UTF-8}
 \name{tsallis}
 \alias{tsallis}
 \alias{tsallisaccum}
@@ -55,7 +56,7 @@ Patil, GP and Taillie, C. (1982). Diversity as a concep and its measurement.
 Keylock, CJ (2005). Simpson diversity and the Shannon-Wiener index as special cases of a generalized entropy.
   \emph{Oikos} 109, 203--207.
 }
-\author{Peter Solymos, based on the code of Roeland Kindt and Jari Oksanen written for \code{renyi}}
+\author{\enc{P\'eter S\'olymos}{Peter Solymos}, \email{solymos@ualberta.ca}, based on the code of Roeland Kindt and Jari Oksanen written for \code{renyi}}
 \seealso{
 Plotting methods and accumulation routins are based on functions \code{\link{renyi}} and \code{\link{renyiaccum}}. An object of class 'tsallisaccum' can be used with function \code{\link{rgl.renyiaccum}} as well. See also settings for \code{\link{persp}}.
 }
