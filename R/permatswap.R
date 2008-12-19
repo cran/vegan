@@ -2,6 +2,7 @@
 `permatswap` <-
 function(m, reg=NULL, hab=NULL, mtype="count", method="swap", times=100, burnin = 10000, thin = 1000)
 {
+    warning("permatswap code is experimental, and may not yield random Null models.\nAvoid using permatswap except to study its properties.")
     if (!identical(all.equal(m, round(m)), TRUE))
        stop("function accepts only integers (counts)")
     mtype <- match.arg(mtype, c("prab", "count"))

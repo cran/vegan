@@ -3,6 +3,32 @@
 			VEGAN RELEASE VERSIONS 
 		       	======================
 
+		       CHANGES IN VEGAN 1.15-1
+
+    - betadisper and related functions now work when the 'group'
+      argument represents a single group/level.
+
+    - decorana: 'text' function failed.
+
+    - cca/rda/capscale: cleaner handling of results with missing
+      (NULL) row or column names, also in plots.
+
+    - cca/rda/capscale: new functions 'head' and 'tail' for 'summary'
+      of cca results to show only some rows of the scores.
+
+    - nestedness: method nesteddisc was found to be strongly dependent
+      on the ordering of tied column (species) frequencies. A warning
+      is now issued, and development version of vegan in
+      http://vegan.r-forge.r-project.org/ has an experimental function
+      that tries to find the optimal ordering.
+
+    - permatfull: 'row'/'column' arguments were mixed.
+
+    - radfit: all methods work consistently for communities of 0, 1 or
+      2 species.
+
+    - wmdscale: typo in the result object items corrected.
+
 		       CHANGES IN VEGAN 1.15-0
 
 GENERAL

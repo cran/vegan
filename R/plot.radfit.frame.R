@@ -19,7 +19,7 @@
     }
     Nhm <- length(x)
     Abundance <- unlist(lapply(x, function(x) x$y))
-    Rank <- unlist(lapply(x, function(x) 1:length(x$y)))
+    Rank <- unlist(lapply(x, function(x) if (length(x$y) > 0) 1:length(x$y) else NULL))
     Site <- unlist(lapply(x, function(x) length(x$y)))
     N <- Site
     sitenames <- names(Site)
@@ -28,8 +28,9 @@
         order.by <- 1:Nhm
     else order.by <- order(order.by)
     Site <- factor(Site, levels = sitenames[order.by])
-    fit <- unlist(lapply(x, function(x) fitted(x)[, pickmod(x, 
-                                                            pick, BIC)]))
+    fit <- unlist(lapply(x, function(x)
+                         as.matrix(fitted(x))[, pickmod(x, 
+                                                        pick, BIC)]))
     take <- sapply(x, function(x) pickmod(x, pick, BIC))
     take <- rep(take, N)
     cols <- trellis.par.get("superpose.line")$col
@@ -59,4 +60,3 @@
                                                                   }, ...)
     out
 }
-

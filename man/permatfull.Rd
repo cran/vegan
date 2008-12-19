@@ -1,3 +1,4 @@
+\encoding{UTF-8}
 \name{permat}
 \alias{permatfull}
 \alias{permatswap}
@@ -19,9 +20,9 @@ several tests might be applied on the same set of random matrices.  }
 
 \usage{
 permatfull(m, fixedmar = "both", reg = NULL, 
-hab = NULL, mtype = "count", times = 100)
+  hab = NULL, mtype = "count", times = 100)
 permatswap(m, reg = NULL, hab = NULL, mtype = "count", 
-method = "swap", times = 100, burnin = 10000, thin = 1000)
+  method = "swap", times = 100, burnin = 10000, thin = 1000)
 \method{plot}{permat}(x, ...)
 \method{summary}{permat}(object, ...)
 \method{print}{summary.permat}(x, digits = 2, ...)
@@ -52,15 +53,22 @@ is a wrapper for the function \code{\link{commsimulator}}. The \code{r00, r0, c0
 algorithms of \code{\link{commsimulator}} are used for \code{"none", "rows", "columns", "both"} values 
 of the \code{fixedmar} argument, respectively 
 
-The function \code{permatswap} is useful when matrix fill (i.e. the proportion of empty cells) should be kept constant.
-\code{permatswap} uses different kinds of swap algorithms, and row and columns sums are fixed in all cases.
-For presence-absence data, the \code{swap} and \code{tswap} methods of \code{\link{commsimulator}} can be used.
-For count data, a special swap algorithm ('swapcount') is implemented that results in permuted matrices with
-fixed marginals and matrix fill at the same time.
+The function \code{permatswap} is useful when matrix fill (i.e. the
+proportion of empty cells) should be kept constant.  \code{permatswap}
+uses different kinds of swap algorithms, and row and columns sums are
+fixed in all cases.  For presence-absence data, the \code{swap} and
+\code{tswap} methods of \code{\link{commsimulator}} can be used.  For
+count data, an experimental swap algorithm ('swapcount') is
+implemented that results in permuted matrices with fixed marginals and
+matrix fill at the same time. However, it seems that this model may
+not give true random matrices, and its use should be avoided in
+generating Null hypotheses. The code is provided only for methods
+comparisons, and may be removed from the future versions of
+\pkg{vegan}.
 
 The 'swapcount' algorithm tries to find 2x2 submatrices (identified by 2 random row and 2 random column indices), that
 can be swapped in order to leave column and row totals and fill unchanged. First, the algorithm finds the largest value
-in the submatrix that can be swapped ($d$) and whether in diagonal or antidiagonal way. Submatrices that contain values larger than zero in either diagonal or antidiagonal position can be swapped. Swap means that the values in diagonal or antidiagonal positions are decreased by $d$, while remaining cells are increased by $d$. A swap is made only if fill doesn't change.
+in the submatrix that can be swapped (\eqn{d}) and whether in diagonal or antidiagonal way. Submatrices that contain values larger than zero in either diagonal or antidiagonal position can be swapped. Swap means that the values in diagonal or antidiagonal positions are decreased by \eqn{d}, while remaining cells are increased by \eqn{d}. A swap is made only if fill doesn't change.
 
 Constraints on row/colum sums, matrix fill, total sum and sums within
 strata can be checked by the \code{summary} method. \code{plot} method is for
@@ -96,7 +104,7 @@ Patefield, W. M. (1981) Algorithm AS159. An efficient method of generating r x c
 Applied Statistics 30, 91-97.
 }
 
-\author{Peter Solymos, \email{Solymos.Peter@aotk.szie.hu}; Jari Oksanen translated the original 'swapcount' algorithm for count data into C}
+\author{\enc{P\'eter S\'olymos}{Peter Solymos}, \email{solymos@ualberta.ca}; Jari Oksanen translated the original 'swapcount' algorithm for count data into C}
 
 \seealso{
 \code{\link{commsimulator}}, \code{\link{r2dtable}}, \code{\link{sample}}

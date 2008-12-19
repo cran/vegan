@@ -11,9 +11,19 @@
     off <- rep(log(sum(x)), length(x))
     p <- 0
     fam <- family(link = "log")
-    nl <- try(nlm(mandelfun, p = p, x = x, rnk = rnk, off = off, 
-                  family = fam, hessian = TRUE, ...))
-    if (inherits(nl, "try-error")) {
+    if (length(x) > 2) 
+        nl <- try(nlm(mandelfun, p = p, x = x, rnk = rnk, off = off, 
+                      family = fam, hessian = TRUE, ...))
+    if (length(x) < 3) {
+        aic <- NA
+        dev <- rdf <-  0
+        ln <- nl <- NA
+        p <- rep(NA, 3)
+        fit <- x
+        res <- rep(0, length(x))
+        wts <- rep(1, length(x))
+    }
+    else if (inherits(nl, "try-error")) {
         aic <- rdf <- ln <- nl <- dev <-  NA
         p <- rep(NA, 3)
         fit <- res <- wts <- rep(NA, length(x))

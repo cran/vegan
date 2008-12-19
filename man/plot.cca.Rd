@@ -7,6 +7,8 @@
 \alias{summary.cca}
 \alias{print.summary.cca}
 \alias{ade2vegancca}
+\alias{head.summary.cca}
+\alias{tail.summary.cca}
 
 \title{Plot or Extract Results of Constrained Correspondence Analysis
   or Redundancy Analysis}
@@ -28,6 +30,8 @@
 \method{summary}{cca}(object, scaling = 2, axes = 6, display = c("sp", "wa", 
     "lc", "bp", "cn"), digits = max(3, getOption("digits") - 3), ...)
 \method{print}{summary.cca}(x, digits = x$digits, head = NA, tail = head, ...)
+\method{head}{summary.cca}(x, n = 6, tail = 0, ...)
+\method{tail}{summary.cca}(x, n = 6, head = 0, ...)
 }
 
 \arguments{
@@ -69,9 +73,9 @@
     approximate original data.}
   \item{axes}{Number of axes in summaries.}
   \item{digits}{Number of digits in output.}
-  \item{head, tail}{Number of rows printed from the head and tail of
+  \item{n, head, tail}{Number of rows printed from the head and tail of
     species and site scores.  Default \code{NA} prints all.}
-  \item{...}{Other parameters for plotting functions.}
+  \item{...}{Parameters passed to other functions.}
 }
 
 \details{
@@ -106,9 +110,12 @@
   needed components with the selected \code{scaling}.
 
   Function \code{summary} lists all scores and the output can be very
-  long.  You can suppress all output for scores by setting \code{axes =
-    0} or \code{display = NA} or \code{display = NULL}. 
-  Palmer (1993) suggested using linear constraints
+  long.  You can suppress scores by setting \code{axes = 0} or
+  \code{display = NA} or \code{display = NULL}. You can display some
+  first or last (or both) rows of scores by using \code{head} or
+  \code{tail} or explicit \code{print} command for the \code{summary}.
+  
+ Palmer (1993) suggested using linear constraints
   (``LC scores'') in ordination diagrams, because these gave better
   results in simulations and site scores (``WA scores'') are a step from
   constrained to unconstrained analysis.  However, McCune (1997) showed
@@ -151,6 +158,8 @@ plot(mod, type="n")
 text(mod, dis="cn")
 points(mod, pch=21, col="red", bg="yellow", cex=1.2)
 text(mod, "species", col="blue", cex=0.8)
+## Limited output of 'summary'
+head(summary(mod), tail=2)
 }
 \keyword{hplot}
 \keyword{aplot}

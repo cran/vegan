@@ -1,7 +1,11 @@
 "plot.radfit" <-
     function (x, BIC = FALSE, legend = TRUE, ...) 
 {
+    if (length(x$y) == 0)
+        stop("No species, nothing to plot")
     out <- plot(x$y, ...)
+    if (length(x$y) == 1)
+        return(invisible(out))
     fv <- fitted(x)
     if (BIC) 
         k = log(length(x$y))

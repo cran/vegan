@@ -5,8 +5,18 @@
     rnk <- seq(along = x)
     off <- rep(log(sum(x)), length(x))
     fam <- family(link = "log")
-    ln <- try(glm(x ~ log(rnk) + offset(off), family = fam))
-    if (inherits(ln, "try-error")) {
+    if (length(x) > 1)
+        ln <- try(glm(x ~ log(rnk) + offset(off), family = fam))
+    if (length(x) < 2) {
+        aic <- NA
+        dev <- rdf <-  0
+        ln <- nl <- NA
+        p <- rep(NA, 2)
+        fit <- x
+        res <- rep(0, length(x))
+        wts <- rep(1, length(x))
+    }
+    else if (inherits(ln, "try-error")) {
         aic <- rdf <- ln <- nl <- dev <- NA
         p <- rep(NA, 2)
         fit <- res <- wts <- rep(NA, length(x))
