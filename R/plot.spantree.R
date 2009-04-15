@@ -26,8 +26,8 @@
         points(ord, cex = cex, ...)
     else if (type == "t") {
         if (missing(labels)) 
-            labels <- rownames(ord)
-        text(ord, labels = labels, cex = cex, ...)
+            labels <- x$labels
+        ordilabel(ord, display = "sites", labels = labels, cex = cex, ...)
     }
     ord <- list(sites = ord)
     class(ord) <- "ordiplot"

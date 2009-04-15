@@ -90,7 +90,7 @@ estimateR(x, ...)
     the number 
     of individuals in rare species.
 
-    Functions estimate the the standard errors of the estimates. These
+    Functions estimate the standard errors of the estimates. These
     only concern the number of added species, and assume that there is
     no variance in the observed richness.
     The equations of standard errors are too complicated to be reproduced in

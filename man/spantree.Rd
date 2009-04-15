@@ -35,9 +35,9 @@ spantree(dis, toolong = 0)
     by \code{\link{scores}}.}
   \item{cex}{Character expansion factor.}
   \item{type}{Observations are plotted as points with
-    \code{type="p"} or \code{type="b"}, or as text with
+    \code{type="p"} or \code{type="b"}, or as text label with
     \code{type="t"}. The tree (lines) will always be plotted.}
-  \item{labels}{Text used with \code{type="t"} or row names if this is
+  \item{labels}{Text used with \code{type="t"} or node names if this is
     missing.}
   \item{dlim}{A ceiling value used to highest \code{cophenetic} dissimilarity.}
   \item{FUN}{Ordination function to find the configuration from
@@ -60,7 +60,7 @@ spantree(dis, toolong = 0)
   the tree segments. Function \code{plot} displays the tree over a
   supplied ordination configuration, and \code{lines} adds a spanning
   tree to an ordination graph. If configuration is not supplied for \code{plot},
-  the function ordinates the the cophenetic dissimilarities of the
+  the function ordinates the cophenetic dissimilarities of the
   spanning tree and overlays the tree on this result. The default
   ordination function is \code{\link[MASS]{sammon}} (package \pkg{MASS}),
   because Sammon scaling emphasizes structure in the neighbourhood of
@@ -68,8 +68,7 @@ spantree(dis, toolong = 0)
   to set \code{dlim}, and sometimes the results will remain
   twisted). These ordination methods do not work with disconnected
   trees, but you must supply the ordination configuration. Function
-  \code{lines} will overlay the tree in an existing 
-  plot. 
+  \code{lines} will overlay the tree in an existing plot. 
 
   Function \code{spantree} uses Prim's method
   implemented as priority-first search for dense graphs (Sedgewick
@@ -89,6 +88,7 @@ spantree(dis, toolong = 0)
     and tree is disconnected at the node.}
   \item{dist }{Corresponding distance. If \code{kid = NA}, then
     \code{dist = 0}.}
+  \item{labels }{Names of nodes as found from the input dissimilarities.} 
 }
 \references{
  Sedgewick, R. (1990). \emph{Algorithms in C}. Addison Wesley. 
@@ -115,9 +115,9 @@ data(dune)
 dis <- vegdist(dune)
 tr <- spantree(dis)
 ## Add tree to a metric scaling 
-plot(tr, cmdscale(dis))
+plot(tr, cmdscale(dis), type = "t")
 ## Find a configuration to display the tree neatly
-plot(tr)
+plot(tr, type = "t")
 }
 \keyword{ multivariate}
 

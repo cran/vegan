@@ -36,14 +36,24 @@
             warning("Zero dissimilarities changed into ", zero)
         }
     }
-    maxdis <- max(dis)
-    if (sum(tmp <- no.shared(comm))/length(dis) > noshare && noshare > 0) {
+    ## We actually used maxdis to decide whether index has a closed
+    ## upper limit, but simple maximum does not give that info.
+    ## Therefore we see if an arbitrary matrix with no shared species
+    ## has distance = 1.
+    maxdis <- abs(distfun(matrix(c(7,0,0,3), 2, 2),
+                      method = distance, ...) - 1) < 1e-4
+    if (noshare > 0 && sum(tmp <- no.shared(comm))/length(dis) > noshare) {
         if (trace) 
             cat("Using step-across dissimilarities:\n")
-        dis <- stepacross(dis, trace = trace, ...)
+        rn <- range(dis[tmp])
+        if (rn[2]/rn[1] > 1.01)
+            warning("non-constant distances between points with nothing shared\n",
+                    "  stepacross may be meaningless: consider argument 'noshare=0'")
+        is.na(dis) <- tmp
+        dis <- stepacross(dis, trace = trace, toolong=0, ...)
+        if (length(unique(distconnected(tmp, trace = trace > 1))) > 1) 
+            warning("Data are disconnected, results may be meaningless")
     }
-    if (length(unique(distconnected(tmp, trace = trace > 1))) > 1) 
-        warning("Data are disconnected, results may be meaningless")
     attr(dis, "maxdis") <- maxdis
     attr(dis, "commname") <- commname
     attr(dis, "function") <- distname

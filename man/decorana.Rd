@@ -126,7 +126,7 @@ downweight(veg, fraction = 5)
   eigenvalues. The proper eigenvalues are estimated after extraction of
   the axes and they are the ratio of biased weighted variances of site
   and species scores even in detrended and rescaled solutions. The
-  `decorana values' are provided only for the the compatibility with
+  `decorana values' are provided only for the compatibility with
   legacy software, and they should not be used.
 }
 \value{

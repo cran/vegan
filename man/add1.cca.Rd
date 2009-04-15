@@ -64,9 +64,23 @@ constrained ordination model.
   output. Functions \code{\link{cca}}, \code{\link{rda}} and
   \code{\link{capscale}} produce result objects for these functions.}
 \examples{
-data(varespec)
-data(varechem)
-step(rda(varespec ~  1, varechem), reformulate(names(varechem)), test="perm")
+data(dune)
+data(dune.env)
+## Automatic model building with permutation tests
+step(rda(dune ~  1, dune.env), reformulate(names(dune.env)), test="perm")
+## Manual model building
+## -- define the maximal model for scope
+mbig <- rda(dune ~  ., dune.env)
+## -- define an empty model to start with
+m0 <- rda(dune ~ 1, dune.env)
+## -- manual selection and updating
+add1(m0, scope=formula(mbig), test="perm")
+m0 <- update(m0, . ~ . + Management)
+add1(m0, scope=formula(mbig), test="perm")
+m0 <- update(m0, . ~ . + Moisture)
+## -- included variables still significant?
+drop1(m0, test="perm")
+add1(m0, scope=formula(mbig), test="perm")
 }
 \keyword{multivariate }
 \keyword{ models}
