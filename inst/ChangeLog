@@ -1,9 +1,97 @@
 
-$Date: 2008-12-19 11:43:42 +0200 (Fri, 19 Dec 2008) $
+$Date: 2009-04-15 15:36:02 +0300 (Wed, 15 Apr 2009) $
 
 VEGAN STABLE VERSIONS
 
-Version 1.15-1 (opened October 10, 2008)
+Version 1.15-2 (released to CRAN: 15 April, 2009)
+
+	* spantree.Rd: example plots use type = "t". Parallel change with
+	pkg/vegan. 
+
+	* nestedtemp.Rd tells that bipartite::nestedness is a direct port
+	of BINMATNEST of Rodriquez-Girones & Santamaria. Parallel change
+	with pkg/vegan.
+
+	* merged r800 (adonis uses less memory in permutation tests) and
+	r802 (example enhanced in adonis.Rd, with formatting).
+
+	* merged r600: Oribatid mites (dataset 'mite') got taxon names. 
+
+	* copied nestednodf.R and print.nestednodf.R from pkg/vegan at
+	rev651, updated docs at rev653.
+
+	* merge r788: add "..." to decostand so that stressplot(metaMDS(x,
+	dist="gower", trymax=40)) works.
+
+	* merge r790 to 1.15 branch: handle missing values in betadisper.
+
+	* merged r781 and r786  from trunk to 1.15 branch: betadisper 
+	bug fix and upgrade to work more nicely with Euclidean 'd'.
+
+	* copied contribdiv from pkg/vegan at rev681 (vegan at rev775). 
+	
+	* merged rev 755 to 760: mrpp upgrade: group statistics,
+	classification strength.
+	
+	* merged rev 762, 763, 765: better heuristics for detecting
+	open-ended dissimilarities (Euclidean, Manhattan) and triggering
+	half-change scaling. metaMDS honours 'halfchange'.
+
+	* merged rev532, 596 to ordisurf: returns a grid item of fitted
+	surface, and gains option for bubble plots of observed values.
+
+	* merged new beals code by Miquel de Caceres (rev 528:531).
+
+	* copied dispindmorisita at rev769 from pkg/vegan.
+
+	* copied kendall.global at rev767 from pkg/vegan.
+	
+	* merged r608: plot.radfit gained argument log = "y".
+
+	* merged r538: orditkplot makes TIFF graphics.
+
+	* merged r539, 540: spantree retains names, and plot.spantree uses
+	ordilabel in plots.
+
+	* merged r676: commsimulator results retain names.
+	
+	* merged r518: doubled "the" in man pages of decorana, spantree,
+	decostand, specpool and metaMDS.
+	
+	* merged r750: better example in add1.cca.Rd.
+
+	* merged r735 & r736: stepacross fixes in metaMDSdist with
+	open-ended dissimilarities (Euclidean, Manhattan etc.).
+
+	* merged r728: oecosimu.Rd example knows "statistic" argument.
+
+	* merged r689: added text.procrustes.
+	
+	* merged r683 & r690: anova.cca(..., by = "axis") gained argument
+	"cutoff = 1", and doc expanded.
+
+	* merged r686: rad.null failed with families gaussian and Gamma.
+
+	* merged r678: anovacca.bymargin was not setting RNG properly for
+	the second term.
+
+	* merged r674: metaMDSdist does not evaluate no.shared if set
+	noshared=0. 
+	
+	* merged r673: vegdist doc fixes for Horn-Morisita equation.
+	
+	* merged r671: ordirgl warnings with type = "t".
+
+	* merged r559, r662, r663, r664: adonis adds one both to numerator
+	and denominator in permuation tests, increases default number of
+	permutations from 5 to 999, and gains a 'terms' component.
+
+	* merged r660: Rd parser v2 fixes to make vegan R 2.9.0-ready.
+
+	* merged r652, r657: cleaner output of summary.cca in unconstrained
+	models (PCA, CA).
+	
+Version 1.15-1 (released December 19, 2008)
 
 	* merged r644: \$ escape fix in Rd files.
 	

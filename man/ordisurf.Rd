@@ -9,7 +9,8 @@
 \usage{
 ordisurf(x, y, choices=c(1, 2), knots=10, family="gaussian", col="red",
      thinplate = TRUE, add = FALSE, display = "sites",
-     w = weights(x), main, nlevels = 10, levels, labcex = 0.6,  ...)
+     w = weights(x), main, nlevels = 10, levels, labcex = 0.6,
+     bubble = FALSE, cex = 1, ...)
 }
 
 \arguments{
@@ -34,13 +35,20 @@ ordisurf(x, y, choices=c(1, 2), knots=10, family="gaussian", col="red",
     \code{nlevels} if \code{levels} are not supplied.}
   \item{labcex}{Label size in contours.  Setting this zero will suppress
     labels.}
+  \item{bubble}{Use \dQuote{bubble plot} for points, or vary the point
+    diameter by the value of the plotted variable. If \code{bubble} is
+    numeric, its value is used for the maximum symbol size (as in
+    \code{cex}), or if \code{bubble = TRUE}, the value of \code{cex} gives
+    the maximum. The minimum size will always be \code{cex = 0.4}.  The
+    option only has an effect if \code{add = FALSE}.}
+  \item{cex}{Character expansion of plotting symbols.}
   \item{\dots}{ Other graphical parameters. }
 }
 \details{
   Function \code{ordisurf} fits a smooth surface using thinplate splines
   in \code{\link[mgcv]{gam}}, and uses \code{\link[mgcv]{predict.gam}}
   to find fitted values in a regular grid.
-  Function plots the fitted contours with convex hull of data poitns 
+  Function plots the fitted contours with convex hull of data points 
   either over an existing ordination diagram or draws a new plot
   The function uses
   \code{\link{scores}} to extract ordination scores, and \code{x} can be
@@ -56,10 +64,21 @@ ordisurf(x, y, choices=c(1, 2), knots=10, family="gaussian", col="red",
   accordance with constrained \code{\link{cca}}, you should set
   \code{display = "lc"} (and possibly \code{scaling = 2}).
 }
+
 \value{
-  Function is usually called for its side effect of drawing the contour
-  plot, but it returns the result object of \code{\link[mgcv]{gam}}.
+  Function is usually called for its side effect of drawing the
+  contour plot. The function returns the result object of class
+  \code{"ordisurf"} that inherits from \code{\link[mgcv]{gam}} used
+  internally to fit the surface, but adds an item \code{grid} that
+  contains the data for the grid surface. The item \code{grid} has
+  elements \code{x} and \code{y} which are vectors of axis coordinates,
+  and element \code{z} that is a matrix of fitted values for
+  \code{\link{contour}}. The values outside the convex hull of observed
+  points are \code{NA} in \code{z}. The \code{\link[mgcv]{gam}}
+  component of the result can be used for further analysis like
+  predicting new values (see \code{\link[mgcv]{predict.gam}}).
 }
+
 \author{ Dave Roberts and Jari Oksanen }
 \note{   
   The default is to use thinplate splines.  These make sense in
@@ -78,7 +97,7 @@ data(varechem)
 library(MASS)
 vare.dist <- vegdist(varespec)
 vare.mds <- isoMDS(vare.dist)
-with(varechem, ordisurf(vare.mds, Baresoil))
+with(varechem, ordisurf(vare.mds, Baresoil, bubble = 5))
 ## Cover of Cladina arbuscula
 with(varespec, ordisurf(vare.mds, Cla.arb, family=quasipoisson)) 
 }

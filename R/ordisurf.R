@@ -1,7 +1,8 @@
 "ordisurf" <-
     function (x, y, choices = c(1, 2), knots = 10, family = "gaussian", 
               col = "red", thinplate = TRUE, add = FALSE, display = "sites", 
-              w = weights(x), main, nlevels = 10, levels, labcex = 0.6,  ...) 
+              w = weights(x), main, nlevels = 10, levels, labcex = 0.6,
+              bubble = FALSE, cex = 1, ...) 
 {
     weights.default <- function(object, ...) NULL
     GRID = 25
@@ -32,7 +33,12 @@
                  inpoly = as.integer(inpoly), PACKAGE="vegan")$inpoly
     is.na(fit) <- inpoly == 0
     if (!add) {
-        plot(X, asp = 1, ...)
+        if (bubble) {
+            if (is.numeric(bubble))
+                cex <- bubble
+            cex <- (y -  min(y))/diff(range(y)) * (cex-0.4) + 0.4
+        }
+        plot(X, asp = 1, cex = cex, ...)
     }
     if (!missing(main) || (missing(main) && !add)) {
         if (missing(main)) 
@@ -45,5 +51,7 @@
     contour(xn1, xn2, matrix(fit, nrow=GRID), col = col, add = TRUE,
             levels = levels, labcex = labcex,
             drawlabels = !is.null(labcex) && labcex > 0)
+    mod$grid <- list(x = xn1, y = xn2, z = matrix(fit, nrow = GRID))
+    class(mod) <- c("ordisurf", class(mod))
     return(mod)
 }

@@ -13,11 +13,7 @@
         previous.best <- NULL
     out <- metaMDSiter(dis, k = k, trymax = trymax, trace = trace, 
                        plot = plot, previous.best = previous.best, ...)
-    maxdis <- attr(dis, "maxdis")
-    if (is.null(maxdis)) 
-        maxdis <- max(dis)
-    points <- postMDS(out$points, dis, plot = max(0, plot - 1), 
-                      halfchange = (maxdis < 1.1), ...)
+    points <- postMDS(out$points, dis, plot = max(0, plot - 1), ...)
     if (is.null(rownames(points))) 
         rownames(points) <- rownames(comm)
     if (wascores) {
@@ -34,4 +30,3 @@
     class(out) <- "metaMDS"
     out
 }
-

@@ -43,7 +43,7 @@ rad.zipfbrot(x, family = poisson, ...)
 \method{lines}{radline}(x, ...)
 \method{points}{radline}(x, ...)
 as.rad(x)
-\method{plot}{rad}(x, xlab = "Rank", ylab = "Abundance", ...)
+\method{plot}{rad}(x, xlab = "Rank", ylab = "Abundance", log = "y", ...)
 }
 
 \arguments{
@@ -68,6 +68,11 @@ as.rad(x)
   \item{type}{Type of the plot, \code{"b"} for plotting both observed points
     and fitted lines, \code{"p"} for only points, \code{"l"} for only
     fitted lines, and \code{"n"} for only setting the frame. }
+  \item{log}{Use logarithmic scale for given axis. The default
+    \code{log =" y"} gives the traditional plot in community ecology
+    where the pre-emption model is a straight line, and with
+    \code{log = "xy"} Zipf model is a straight line. With
+    \code{log = ""} both axes are in the original arithmetic scale.}
   \item{\dots}{Other parameters to functions. }
 }
 \details{
@@ -218,7 +223,10 @@ mod <- rad.lognormal(BCI[1,])
 mod
 plot(mod)
 mod <- radfit(BCI[1,])
+## Pre-emption model is a line
 plot(mod)
+## log for both axes: Zipf model is a line
+plot(mod, log = "xy")
 # Take a subset of BCI to save time and nerves
 mod <- radfit(BCI[2:5,])
 mod

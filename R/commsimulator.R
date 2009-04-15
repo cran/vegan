@@ -94,6 +94,7 @@ function (x, method, thin = 1)
                 out <- oldout
         }
     }
+    colnames(out) <- colnames(x)
+    rownames(out) <- rownames(x)
     out
 }
-

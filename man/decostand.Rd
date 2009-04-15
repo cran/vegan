@@ -8,7 +8,7 @@ The function provides some popular (and effective) standardization
 methods for community ecologists.
 }
 \usage{
-decostand(x, method, MARGIN, range.global, na.rm=FALSE)
+decostand(x, method, MARGIN, range.global, na.rm=FALSE, ...)
 
 wisconsin(x)
 }
@@ -23,6 +23,7 @@ wisconsin(x)
     subsets of data.  The dimensions of \code{MARGIN} must match with
     \code{x}. }
   \item{na.rm}{Ignore missing values in row or column standardizations.}
+  \item{\dots}{Other arguments to the function (ignored).}
 }
 \details{
   The function offers following standardization methods for community
@@ -44,7 +45,7 @@ wisconsin(x)
     \item \code{chi.square}: divide by row sums and square root of
     column sums, and adjust for square root of matrix total
     (Legendre & Gallagher 2001). When used with the Euclidean
-    distance, the distances should be similar to the the
+    distance, the distances should be similar to the
     Chi-square distance used in correspondence analysis. However, the
     results from \code{\link{cmdscale}} would still differ, since
     CA is a weighted ordination method (default \code{MARGIN =

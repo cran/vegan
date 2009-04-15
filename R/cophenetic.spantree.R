@@ -7,6 +7,6 @@
     ind <- t(ind[2:1,])
     mat[ind] <- x$dist
     d <- as.dist(mat)
+    attr(d, "Labels") <- x$labels
     stepacross(d, path = "extended", toolong=0, trace=FALSE)
 }
-
