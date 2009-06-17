@@ -42,7 +42,7 @@
             permstore[i, ] <- diag(cor(Hperm, take))^2
         }
         permstore <- sweep(permstore, 2, r, ">")
-        pvals <- apply(permstore, 2, sum)/permutations
+        pvals <- (apply(permstore, 2, sum) + 1)/(permutations + 1)
     }
     else pvals <- NULL
     sol <- list(arrows = heads, r = r, permutations = permutations, 

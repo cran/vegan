@@ -3,6 +3,67 @@
 			VEGAN RELEASE VERSIONS 
 		       	======================
 
+
+			CHANGES IN VEGAN 1.15-3
+
+    - anosim, mantel, mrpp, protest, envfit: did not include the
+      observed statistic among permutations. Functions adonis and
+      permutest.cca did this correctly, but did not print results
+      neatly. 
+      
+    - anova.cca: name clash if data were indexed with 'i'.
+
+    - capscale: fixed handling of negative eigenvalues with
+      non-Euclidean distances. The total inertia is the sum of all
+      eigenvalues so that negative eigenvalues are subtracted from the
+      total. The total inertia of negative components and their rank
+      (number) is given as 'Imaginary' component, and the negative
+      eigenvalues are listed after unconstrained positive eigenvalues.
+      The procedure is based on Gower, Linear Algebra and its
+      Applications 67, 81-97 (1985).  New argument 'sqrt.dist' takes
+      square root of the internally calculated dissimilarities and
+      avoids negative eigenvalues with some indices, such as vegan
+      Jaccard and Bray-Curtis. The adjustment is corrected for indices
+      with upper limit of one, and the reported eigenvalues and
+      inertia components are reduced by a factor of sqrt(n-1) and are
+      similar to those reported by 'cmdscale' or 'wcmdscale'.
+
+    - eigenvals: a new function to extract eigenvalues from rda, cca,
+      capscale, wcmdscale, prcomp, princomp, svd or eigen. If the
+      result object contains squareroots of eigenvalues, they are
+      squared. The summary method also finds proportions and
+      cumulative proportions explained. Function summary.cca now uses
+      this to display eigenvalues.
+
+    - kendall.global: could get wrong counts of ties in large data
+      sets. 
+
+    - meandist: new sister function to 'mrpp' that finds mean
+      within-group and between-group dissimilarities. The summary
+      function finds overall averages of these, and returns all three
+      MRPP variants plus classification strength. The plot method
+      draws a dendrogram based on the mean dissimilarity matrix, with
+      leaves hanging to within-groups dissimilarity. The functions
+      follow Sickle, J. Agric. Biol. Envir. Stat. 2, 370-388 (1997). 
+
+    - ordisurf: fits now linear or quadratic trend surfaces if 
+      'knots' argument is set to 0, 1, or 2. 
+
+    - orditkplot: copes with NA and NaN scores.
+
+    - ordixyplot: mixed x and y axes for biplot arrows and class
+      centroids. Function failed in constrained ordination. 
+
+    - tsallis: gained argument 'hill' to find results analogous to
+      Hill numbers in renyi(), or the species number equivalents of
+      indices.  
+
+    - wcmdscale: removes now zero eigenvalues instead of the last
+      eigenvalue. The bug was copied from cmdscale(), which still has
+      the bug in R 2.9.0 (plus another that was not copied to
+      wcmdscale).
+
+
 		       CHANGES IN VEGAN 1.15-2
     
     - adonis: adds one to numerator and denominator of permutation
