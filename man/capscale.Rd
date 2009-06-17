@@ -19,8 +19,9 @@
   optionally using extended dissimilarities.
 }
 \usage{
-capscale(formula, data, distance = "euclidean", comm = NULL,
-         add = FALSE,  dfun = vegdist, metaMDSdist = FALSE, ...)
+capscale(formula, data, distance = "euclidean", sqrt.dist = FALSE,
+    comm = NULL, add = FALSE,  dfun = vegdist, metaMDSdist = FALSE,
+    ...)
 }
 
 \arguments{
@@ -40,9 +41,11 @@ capscale(formula, data, distance = "euclidean", comm = NULL,
     or \code{\link{cca}}. This allows the use of partial CAP.}
   \item{data}{ Data frame containing the variables on the right hand side of
     the model formula. }
-  \item{distance}{Dissimilarity (or distance) index  in
-    \code{\link{vegdist}} used if the LHS of the \code{formula} is a
-    data frame instead of dissimilarity matrix. }
+  \item{distance}{The name of the dissimilarity (or distance) index if
+    the LHS of the \code{formula} is a data frame instead of
+    dissimilarity matrix.}
+  \item{sqrt.dist}{Take square roots of dissimilarities. See section
+  \code{Notes} below.}
   \item{comm}{ Community data frame which will be used for finding
     species scores when the LHS of the \code{formula} was a
     dissimilarity matrix. This is not used if the LHS is a data
@@ -141,6 +144,9 @@ capscale(formula, data, distance = "euclidean", comm = NULL,
   coordinates: a useful method of constrained ordination for
   ecology. \emph{Ecology} 84, 511--525.
 
+  Gower, J.C. (1985). Properties of Euclidean and non-Euclidean
+  distance matrices. \emph{Linear Algebra and its Applications} 67, 81--97.
+
   Legendre, P. & Anderson, M. J. (1999). Distance-based redundancy
   analysis: testing multispecies responses in multifactorial ecological
   experiments. \emph{Ecological Monographs} 69, 1--24.
@@ -149,27 +155,36 @@ capscale(formula, data, distance = "euclidean", comm = NULL,
   Edition. Elsevier
 }
 \author{ Jari Oksanen }
-\note{
-  Warnings of negative eigenvalues are issued with most dissimilarity
-  indices.  These are harmless, and negative eigenvalues will be ignored
-  in the analysis.  If the warnings are disturbing, you can use argument
-  \code{add = TRUE} passed to \code{\link{cmdscale}}, or, preferably, a
-  distance measure that does not cause these warnings.  In
-  \code{\link{vegdist}}, \code{method = "jaccard"} gives such an index.
-  Alternatively, after square root transformation many indices do not
-  cause warnings.
-  
-  Function \code{\link{rda}} usually divides the ordination scores by
-  number of sites minus one. In this way, the inertia is variance
-  instead of sum of squares, and the eigenvalues sum up to
-  variance. Many dissimilarity measures are in the range 0 to 1, so they
-  have already made a similar division. If the largest original
+
+\note{ The function produces negative eigenvalues with many
+  dissimilarity indices. The non-Euclidean component of inertia is
+  given under the title \code{Imaginary}, and the negative eigenvalues
+  are listed after unconstrained eigenvalues with prefix \code{NEG}.
+  The total inertia is the sum of all eigenvalues, including negative
+  ones (Gower 1985). No ordination scores are given for negative
+  eigenvalues.  If the negative eigenvalues are disturbing, you can
+  use argument \code{add = TRUE} passed to \code{\link{cmdscale}}, or,
+  preferably, a distance measure that does not cause these warnings.
+  Alternatively, after square root transformation of distances
+  (argument \code{sqrt.dist = TRUE}) many indices do not produce
+  negative eigenvalues.
+
+  The inertia is named after the dissimilarity index as defined in the
+  dissimilarity data, or as \code{unknown distance} if such an
+  information is missing.  Function \code{\link{rda}} usually divides
+  the ordination scores by number of sites minus one. In this way, the
+  inertia is variance instead of sum of squares, and the eigenvalues sum
+  up to variance. Many dissimilarity measures are in the range 0 to 1,
+  so they have already made a similar division. If the largest original
   dissimilarity is less than or equal to 4 (allowing for
   \code{\link{stepacross}}), this division is undone in \code{capscale}
-  and original dissimilarities are used. The inertia is named
-  \code{squared dissimilarity} (as defined in the dissimilarity matrix),
-  but keyword \code{mean} is added to the inertia in cases where
-  division was made, e.g. in Euclidean and Manhattan distances.
+  and original dissimilarities are used. Keyword \code{mean} is added to
+  the inertia in cases where division was made, e.g. in Euclidean and
+  Manhattan distances.  Inertia is based on squared index, and keyword
+  \code{squared} is added to the name of distance, unless data were
+  square root transformed (argument \code{sqrt.dist = TRUE}). If an
+  additive constant was used, keyword \code{euclidified} is added to the
+  the name of inertia (argument \code{add = TRUE}).
 }
 
 
@@ -179,11 +194,18 @@ capscale(formula, data, distance = "euclidean", comm = NULL,
 \examples{
 data(varespec)
 data(varechem)
+## Basic Analysis
 vare.cap <- capscale(varespec ~ N + P + K + Condition(Al), varechem,
                      dist="bray")
 vare.cap
 plot(vare.cap)
 anova(vare.cap)
+## Avoid negative eigenvalues with additive constant
+capscale(varespec ~ N + P + K + Condition(Al), varechem,
+                     dist="bray", add =TRUE)
+## Avoid negative eigenvalues by taking square roots of dissimilarities
+capscale(varespec ~ N + P + K + Condition(Al), varechem,
+                     dist = "bray", sqrt.dist= TRUE)
 ## Principal coordinates analysis with extended dissimilarities
 capscale(varespec ~ 1, dist="bray", metaMDS = TRUE)
 }

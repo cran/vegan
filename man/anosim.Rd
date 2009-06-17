@@ -11,7 +11,7 @@
   of sampling units.
 }
 \usage{
-anosim(dis, grouping, permutations=1000, strata)
+anosim(dis, grouping, permutations=999, strata)
 }
 
 \arguments{

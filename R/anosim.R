@@ -1,5 +1,5 @@
 "anosim" <-
-    function (dis, grouping, permutations = 1000, strata) 
+    function (dis, grouping, permutations = 999, strata) 
 {
     x <- as.dist(dis)
     sol <- c(call = match.call())
@@ -28,7 +28,7 @@
             tmp.ave <- tapply(x.rank, tmp.within, mean)
             perm[i] <- -diff(tmp.ave)/div
         }
-        p.val <- sum(perm >= statistic)/permutations
+        p.val <- (1 + sum(perm >= statistic))/(1 + permutations)
         sol$signif <- p.val
         sol$perm <- perm
     }

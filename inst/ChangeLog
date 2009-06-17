@@ -1,7 +1,54 @@
 
-$Date: 2009-04-15 15:36:02 +0300 (Wed, 15 Apr 2009) $
+$Date: 2009-06-17 11:17:22 +0300 (Wed, 17 Jun 2009) $
 
 VEGAN STABLE VERSIONS
+
+Version 1.15-3 (released June 17, 2009)
+
+	* merged revs 866 to 868: changed the way capscale displays
+	negative inertia, fixes scaling of 0..1 range indices.
+
+	* merged fixes for capscale handling of negative eigenvalues: revs
+	851, 858, 859, 861, 863.
+
+	* merged r850: wcmdscale removes zero eigenvalues, but may keep
+	the last (unlike cmdscale).
+
+	* merged r845: summary.cca uses eigenvals.
+	
+	* copied eigenvals at r845.
+
+	* merged r818, 820: tsallis got argument hill.
+
+	* merged r796, 801: ordisurf can do linear or quadratic surfaces
+	with knots 2, 1 or 0.
+
+	* merged r775, r789: meandist with support function (sister
+	function to mrpp).
+
+	* merged r834, r837:r842 and r846 that put the observed test
+	statistic among permutations like should be done with order
+	statistics.  Concerns functions anosim, mantel, mantel.partial,
+	mrpp, protest, factorfit, vectorfit. General cleanup also concerns
+	adonis and permutest.cca.
+
+	* merged r832: wrong reference in metaMDS.Rd.
+	
+	* merged r827: kendall.global: could get wrong counts of ties in
+	large data sets.
+	
+	* merged r823: fixed wrong test of output validity in taxa2dist.
+	
+	* merged r815: anova.cca(..., by = ) name clash if data were
+	indexed with 'i' in fitted model.
+	
+	* merged r812: ordixyplot mixed x and y axes for biplot arrows and
+	env centres.
+
+	* merged r811: orditkplot copes with NA and NaN scores.
+	
+	* merged r810: ordixyplot failed in constrained ordination (broken
+	in r108 in Nov 2007).
 
 Version 1.15-2 (released to CRAN: 15 April, 2009)
 
