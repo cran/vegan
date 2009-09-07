@@ -1,8 +1,72 @@
 
-$Date: 2009-06-17 11:17:22 +0300 (Wed, 17 Jun 2009) $
+$Date: 2009-09-07 10:32:11 +0300 (Mon, 07 Sep 2009) $
 
 VEGAN STABLE VERSIONS
 
+Version 1.15-4 (released September 7, 2009)
+
+	* merged r889, 891: the package was submitted to CRAN on 1 Sep,
+	2009, but failed in R 2.10 (development version) tests due to
+	obsolete or wrong links in Rd files. These are fixed here, and the
+	package will be re-released.
+
+	* merged r874: rrarefy.
+
+	* merged r875,888: betadisper fix of removing zero eigenvalues.
+
+	* merged r880: fix diversity.Rd warnings.
+
+	* merged r881, r882, r904: pass args of 'scores' to other
+	functions, clean summary.cca.
+
+	* merged r883: orditorp works with reverse axes.
+
+	* merged r884 to r886: wcmdscale returns axes scaled by negative
+	eigenvalues.
+
+	* merged r888: capscale got fitted method.
+
+	* merged r889: postMDS uses numeric palette.
+
+	* merged r902: orditkplot cleaning.
+
+	* merged r905-907, 910, 911: metaMDS takes distances.
+
+	* merged r908, 909, 925: remove backticks from messages.
+
+	* merged r918: cleaner specpool2vect.
+
+	* merged r929, 930: ordiellipse (and vegan 1.15) does not depend
+	on 'ellipse' package.
+
+	* merged r931: ordihull, ordiellipse gained arg 'label' and
+	invisibly return their result (summary() not yet merged).
+
+	* panel.ordi has now 'arrows': merged r813, 814, 835, 879.
+
+	* radlattice copied from pkg/ and merged doc changes r551, 553.
+
+	* copied indpower (with rev948 for beals.Rd).
+
+	* copied mantel.correlog.
+
+	* merged RsquareAdj (rev809, 945, 946).
+
+	* merged rev685: add keyword 'datagen' in Rd where appropriate.
+
+	* added poolaccum & estaccumR with associated functions and
+	updates (rev 913 to 923).
+
+	* merged summary.ordihull & summary.ordiellipse: centres and areas
+	of plotted hulls or ellipses.
+
+	* merged r602: plot.nestedtemp can independently turn of row or
+	column labels. 
+
+	* merged r779: formatting fixes in mrpp.Rd.
+
+	* merged changes to anosim (rev 523, 839, 963).
+	
 Version 1.15-3 (released June 17, 2009)
 
 	* merged revs 866 to 868: changed the way capscale displays
@@ -137,7 +201,7 @@ Version 1.15-2 (released to CRAN: 15 April, 2009)
 
 	* merged r652, r657: cleaner output of summary.cca in unconstrained
 	models (PCA, CA).
-	
+
 Version 1.15-1 (released December 19, 2008)
 
 	* merged r644: \$ escape fix in Rd files.

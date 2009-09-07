@@ -45,7 +45,10 @@ metaMDSredist(object, ...)
 }
 
 \arguments{
-  \item{comm}{Community data.}
+  \item{comm}{Community data. Alternatively, dissimilarities either as
+    a \code{\link{dist}} structure or as a symmetric square matrix. 
+    In the latter case all other stages are skipped except random 
+    starts and centring and pc rotation of axes. }
   \item{distance}{Dissimilarity index used in \code{\link{vegdist}}.}
   \item{k}{Number of dimensions in \code{\link[MASS]{isoMDS}}.}
   \item{trymax}{Maximum number of random starts in search of stable
@@ -111,7 +114,7 @@ metaMDSredist(object, ...)
   other functions are intended to 
   help run NMDS wit \code{\link[MASS]{isoMDS}} like recommended by
   Minchin (1987).  Function \code{metaMDS} combines all recommendations
-  into one command for a shotgun style analysis. The steps in
+  into one command for a shotgun style analysis. The complete steps in
   \code{metaMDS} are:
   \enumerate{
     \item Transformation: If the data values are larger than common
@@ -165,7 +168,8 @@ metaMDSredist(object, ...)
     may have found good and relatively stable solutions although the
     function is not yet satisfied. Setting \code{trace = TRUE} will
     monitor the final stresses, and \code{plot = TRUE} will display
-    Procrustes overlay plots from each comparison.
+    Procrustes overlay plots from each comparison. This is the only
+    step performed if input data (\code{comm}) were dissimilarities. 
 
     \item Scaling of the results: \code{metaMDS} will run \code{postMDS}
     for the final result. Function \code{postMDS} provides the following

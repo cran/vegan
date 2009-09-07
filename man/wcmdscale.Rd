@@ -48,6 +48,9 @@ wcmdscale(d, k, eig = FALSE, add = FALSE, x.ret = FALSE, w)
     \code{eig} is true.}
   \item{x}{the doubly centred and weighted distance matrix if \code{x.ret} is true.}
   \item{weights}{Weights.}
+  \item{negaxes}{A matrix of scores for axes with negative eigenvalues scaled 
+     by the absolute eigenvalues similarly as \code{points}. This is \code{NULL}
+     if there are no negative eigenvalues or \code{k} was specified, and would not     include negative eigenvalues.}
 }
 \references{
   Gower, J. C. (1966)  
@@ -78,5 +81,12 @@ ca$CA$eig - ord$eig
 ## eigenvalues in CA
 procrustes(ord, ca, choices=1:19, scaling = 1)
 plot(procrustes(ord, ca, choices=1:2, scaling=1))
+## Reconstruction of non-Euclidean distances with negative eigenvalues
+d <- vegdist(dune)
+ord <- wcmdscale(d, eig = TRUE)
+## Only positive eigenvalues:
+cor(d, dist(ord$points))
+## Correction with negative eigenvalues:
+cor(d, sqrt(dist(ord$points)^2 - dist(ord$negaxes)^2))
 }
 \keyword{multivariate}

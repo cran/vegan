@@ -1,7 +1,15 @@
 "anosim" <-
-    function (dis, grouping, permutations = 999, strata) 
+    function (dat, grouping, permutations = 999,
+              distance = "bray", strata) 
 {
-    x <- as.dist(dis)
+    if (inherits(dat, "dist")) 
+        x <- dat
+    else if (is.matrix(dat) && nrow(dat) == ncol(dat) && all(dat[lower.tri(dat)] == 
+        t(dat)[lower.tri(dat)])) {
+        x <- dat
+        attr(x, "method") <- "user supplied square matrix"
+    }
+    else x <- vegdist(dat, method = distance)
     sol <- c(call = match.call())
     grouping <- as.factor(grouping)
     matched <- function(irow, icol, grouping) {
@@ -36,7 +44,7 @@
     sol$statistic <- as.numeric(statistic)
     sol$class.vec <- cl.vec
     sol$dis.rank <- x.rank
-    sol$dissimilarity <- attr(dis, "method") 
+    sol$dissimilarity <- attr(x, "method") 
     if (!missing(strata)) {
         sol$strata <- deparse(substitute(strata))
         sol$stratum.values <- strata

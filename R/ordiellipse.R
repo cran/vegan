@@ -1,10 +1,12 @@
 "ordiellipse" <-
     function (ord, groups, display = "sites", kind = c("sd", "se"),
-              conf, draw = c("lines", "polygon"), w = weights(ord, display),
-              show.groups, ...)
+              conf, draw = c("lines", "polygon", "none"),
+              w = weights(ord, display),
+              show.groups, label = FALSE,  ...)
 {
-    if (!require(ellipse))
-        stop("Requires package `ellipse' (from CRAN)")
+    ## Define Circle for an ellipse: taken from the 'car' package
+    theta <- (0:51) * 2 * pi/51
+    Circle <- cbind(cos(theta), sin(theta))
     weights.default <- function(object, ...) NULL
     kind <- match.arg(kind)
     draw <- match.arg(draw)
@@ -22,6 +24,7 @@
     }
     out <- seq(along = groups)
     inds <- names(table(groups))
+    res <- list()
     for (is in inds) {
         gr <- out[groups == is]
         if (length(gr) > 2) {
@@ -33,16 +36,18 @@
             if (missing(conf))
                 t <- 1
             else t <- sqrt(qchisq(conf, 2))
+            xy <- t(mat$center + t * t(Circle %*% chol(mat$cov)))
             if (draw == "lines")
-                ordiArgAbsorber(ellipse(mat$cov, centre = mat$center, t = t),
-                      FUN = lines, ...)
-            else {
-                xy <- ellipse(mat$cov, center = mat$center, t = t)
-                ordiArgAbsorber(xy[, 1] + mat$center[1],
-                                xy[, 2] + mat$center[2],
-                                FUN = polygon, ...)
-            }
+                ordiArgAbsorber(xy, FUN = lines, ...)
+            else if (draw == "polygon") 
+                ordiArgAbsorber(xy[, 1], xy[, 2], FUN = polygon, ...)
+            if (label && draw != "none")
+                ordiArgAbsorber(mat$center[1], mat$center[2], labels=is,
+                               FUN = text, ...)
+            mat$scale <- t
+            res[[is]] <- mat
         }
     }
-    invisible()
+    class(res) <- "ordiellipse"
+    invisible(res)
 }
