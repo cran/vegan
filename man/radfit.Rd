@@ -11,6 +11,7 @@
 \alias{plot.radfit}
 \alias{plot.radline}
 \alias{plot.rad}
+\alias{radlattice}
 \alias{points.radline}
 \alias{print.radfit.frame}
 \alias{print.radfit}
@@ -34,6 +35,7 @@
      as.table = TRUE, ...)
 \method{radfit}{default}(x, ...)
 \method{plot}{radfit}(x, BIC = FALSE, legend = TRUE, ...)  
+radlattice(x, BIC = FALSE, ...)
 rad.null(x, family=poisson, ...)
 rad.preempt(x, family = poisson, ...)
 rad.lognormal(x, family = poisson, ...)
@@ -90,14 +92,17 @@ as.rad(x)
   single community or a data frame where each row represents a
   distinct community.  All these functions have their own \code{plot}
   functions. When the argument is a data frame, \code{plot} uses
-  \code{\link[lattice]{Lattice}} graphics, and other functions use
+  \code{\link[lattice]{Lattice}} graphics, and other \code{plot} functions use
   ordinary graphics. The ordinary graphics functions return invisibly an
   \code{\link{ordiplot}} object for observed points, and function
   \code{\link{identify.ordiplot}} can be used to label selected
   species. The most complete control of graphics can be achieved
   with \code{rad.XXXX} methods which have \code{points} and \code{lines}
   functions to add observed values and fitted models into existing
-  graphs.  
+  graphs.  Alternatively, \code{radlattice} uses
+  \code{\link[lattice]{Lattice}} graphics to display each
+  \code{radfit} model in a separate panel together with their AIC or
+  BIC values.
 
   Function \code{rad.null} fits a brokenstick model where the expected
   abundance of species at rank \eqn{r} is \eqn{a_r = (J/S) \sum_{x=r}^S
@@ -223,10 +228,13 @@ mod <- rad.lognormal(BCI[1,])
 mod
 plot(mod)
 mod <- radfit(BCI[1,])
+## Standard plot overlaid for all models
 ## Pre-emption model is a line
 plot(mod)
 ## log for both axes: Zipf model is a line
 plot(mod, log = "xy")
+## Lattice graphics separately for each model
+radlattice(mod)
 # Take a subset of BCI to save time and nerves
 mod <- radfit(BCI[2:5,])
 mod

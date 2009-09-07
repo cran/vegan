@@ -196,4 +196,6 @@ out
 matplot(t(out$oecosimu$simulated), type="l")
 }
 \keyword{ multivariate }
+\keyword{ datagen }
+
 
