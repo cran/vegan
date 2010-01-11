@@ -3,6 +3,113 @@
 			VEGAN RELEASE VERSIONS 
 		       	======================
 
+	       CHANGES AND NEW FEATURES IN VEGAN 1.17-0
+
+    - Guillaume Blanchet joined the vegan team.
+
+    - New function to partition data-set diversity (gamma) into
+      within-plot (alpha) and between-plot (beta) diversity
+      components. Function adipart performs additive
+      partitioning (gamma = alpha + beta). Function hiersimu performs
+      hierarchical null model testing similar to adipart but by using
+      custom function to calculate statistics for levels of a hierarchy.
+
+    - Subsets and missing value handling added to constrained
+      ordination methods cca(), rda() and capscale(). The missing
+      values (NA) can be handled with setting na.action (defaults
+      na.fail). With na.action = na.omit, observations with missing
+      values are removed, and with na.action = na.exclude they are
+      kept, but scores may be NA. However, the WA scores for sites are
+      available in non-partial models with na.action = na.exclude.
+      The 'subset' can be defined using any variable in the
+      constraining data set or species in the dependent data.
+
+    - Functions for fitting environmental variables onto ordination
+      (envfit, ordisurf) are aware of missing values in constraints or
+      NA values in scores. The ordination plot functions also can
+      handle NA scores.
+
+    - New and upgraded quantitative null models. In particular,
+      quantitative swap models (function abuswap) allows generetating
+      null matrices where marginal totals and fill are fixed, or row
+      and column fills are fixed, or row and column fills and either
+      row or column totals are fixed.
+
+    - oecosimu: rewritten to handle quantitative null models. Gained
+      keyword 'alternative' for "two-sided", or "less" and "greater"
+      one-sided tests. More robust with degenerate solutions. The
+      'method' can now be a user-supplied function. New support
+      functions as.ts() and as.mcmc which transform sequential models
+      into form that can be analysed using tools for time-series
+      (as.ts()) or MCMC sequences of the 'coda' package (as.mcmc).
+
+    - calibrate: calibrate is now a generic function with a new method
+      calibrate.ordisurf() in addition to the old calibrate.cca. These
+      find the estimates of environmental variables from ordination.
+
+    - ordistep: stepwise selection of terms in constrained ordination
+      (cca, rda and capscale) using permutation tests instead of
+      pseudo-AIC that is used by the standard step() function.
+
+    - pcnm: new function to find weighted principal coordinates of
+      neighbour matrix (PCNM) from distances between points. These are
+      typically used for spatial filtering in constrained
+      ordination. The function uses weighted analysis and can
+      therefore produce PCNM for correspondence analysis in addition
+      to PCA and RDA.
+
+    - betadisper: can use spatial medians which are now the default
+      method. Preliminary tests indicate that spatial medians correct
+      the anti-conservative Type I errors reported by Stewart
+      Schultz. 
+
+    - decostand & vegdist: new transformation 'log' which implements
+      Marti Anderson's scaling log(x) + 1 for x>0 (which is not at all
+      the same as log(x+1)), and vegdist has alternative Gower
+      function that skips double zeros. Together these implement the
+      "modified Gower" distance of Anderson et al. (Ecology Letters 9,
+      683-693; 2006).  Feature request #473 by Etienne Laliberte in
+      vegan.r-forge.r-project.org.
+
+    - model.matrix.cca & model.frame.cca: new functions to reconstruct
+      the model frame and model matrix (model matrices in partial
+      models) of constraints used in ordination methods cca(), rda()
+      and capscale().
+
+    - simulate.cca & simulate.cca: simulate the community (response)
+      data from the result of cca() or rda() under alternative
+      hypothesis. Error is added to the fitted values from
+      ordination. The function uses either Gaussian error or permutes
+      residuals and adds these to fitted values. 
+
+    - spandepth: a new function to find the depth of each node in the
+      minimum spanning tree produced by spantree(). Feature request by
+      W. E. Sharp. 
+
+    - alias.cca: gained argument names.only.
+
+    - metaMDSrotate: a new function to rotate metaMDS so that first
+      axis is parallel to an environmental variable. 
+
+    - msoplot: uses standard legend. 
+
+    - nesteddisc: new method that tries to find the smallest possible
+      value of the statistic in tied data. Slow, but fixes the
+      problems of the published method. The problem with tied values
+      in nesteddisc was found with Carsten Dormann. 
+
+    - contribdiv: gained a plot method. 
+
+    - rarefy: failed with one site and many sample sizes like
+      rarefy(rpois(10, 2), sample=2:3).
+
+    - meandist: plot can draw histograms as an alternative to
+      dendrograms. 
+
+    - plot functions for 'decorana' and 'cca' and friends and
+      'ordiplot' use 'linestack' if only one axis was requested.
+
+
 		       CHANGES IN VEGAN 1.15-4
 
     - Changed package dependence: vegan does not depend on 'ellipse'.

@@ -3,7 +3,7 @@
 \alias{beals}
 \alias{swan}
 
-\title{Beals Smoothing and Degree of Absence }
+\title{Beals Smoothing and Degree of Absence}
 \description{
   Beals smoothing replaces each entry in the community data with a
   probability of target species occurring in that particular site, based
@@ -17,18 +17,14 @@ beals(x, species = NA, reference = x, type = 0, include = TRUE)
 swan(x)
 }
 \arguments{
-  \item{x}{Community data frame or matrix }
-  \item{species}{ Column index used to compute Beals function for a single species. The default (\code{NA}) indicates that the function will be computed for all species.} 
+  \item{x}{Community data frame or matrix. }
+  \item{species}{ Column index used to compute Beals function for a single species. 
+  The default (\code{NA}) indicates that the function will be computed for all species.} 
   \item{reference}{ Community data frame or matrix to be used to compute
   joint occurrences. By default, \code{x} is used as reference to
   compute the joint occurrences.} 
-  \item{type}{Specifies if and how abundance values have to be
-  used. \code{type = 0} presence/absence mode. \code{type = 1}
-  abundances in \code{reference} (or \code{x}) are used to compute
-  conditioned probabilities. \code{type = 2} abundances in \code{x} are
-  used to compute weighted average of conditioned
-  probabilities. \code{type = 3} abundances are used to compute both
-  conditioned probabilities and the weighted average.}  
+  \item{type}{Numeric. For function \code{beals} it specifies if and how abundance 
+  values have to be used. See details for more explanation.}  
   \item{include}{This logical flag indicates whether the target species has to be
   included when computing the mean of the conditioned probabilities. The
   original Beals (1984) definition is equivalent to \code{include=TRUE},
@@ -43,14 +39,22 @@ swan(x)
   Sum(k) N[jk] I[ik] / N[k]}, where \eqn{S_i}{S[i]} is the number of
   species on site \eqn{i}, \eqn{N_{jk}}{N[jk]} is the number of joint
   occurrences of species \eqn{j} and \eqn{k}, \eqn{N_k}{N[k]} is the
-  number of occurences of species \eqn{k}, and \eqn{I} is the incidence
+  number of occurrences of species \eqn{k}, and \eqn{I} is the incidence
   (0 or 1) of species (this last term is usually omitted from the
   equation, but it is necessary). As \eqn{N_{jk}}{N[jk]} can be
   interpreted as a mean of conditional probability, the \code{beals}
-  fucntion can be interpred as a mean of conditioned probabilities (De
-  \enc{Cáceres}{Caceres} & Legendre 2008).  The currrent function is
+  function can be interpreted as a mean of conditioned probabilities (De
+  \enc{Cáceres}{Caceres} & Legendre 2008).  The current function is
   generalized to abundance values (De \enc{Cáceres}{Caceres} & Legendre
   2008).
+  
+  The \code{type} argument specifies if and how abundance values have to be
+  used. \code{type = 0} presence/absence mode. \code{type = 1}
+  abundances in \code{reference} (or \code{x}) are used to compute
+  conditioned probabilities. \code{type = 2} abundances in \code{x} are
+  used to compute weighted average of conditioned
+  probabilities. \code{type = 3} abundances are used to compute both
+  conditioned probabilities and the weighted average.
 
   Beals smoothing was originally suggested as a method of data
   transformation to remove excessive zeros (Beals 1984, McCune
@@ -62,7 +66,7 @@ swan(x)
   belong to the species pool (Ewald 2002) or to identify suitable
   unoccupied patches in metapopulation analysis
   (\enc{Münzbergová}{Munzbergova} & Herben 
-  2004).  In this case, the function shold be called with \code{include
+  2004).  In this case, the function should be called with \code{include
   = FALSE} for cross-validatory smoothing for species, and argument
   \code{species} can be used if only one species was studied.
 
@@ -76,7 +80,8 @@ swan(x)
   \code{\link{stepacross}}), but very rarely used. 
 }
 \value{
-  The function returns a transformed data matrix or a vector in case of asking Beals smoothing for a single species.
+  The function returns a transformed data matrix or a vector in case of 
+  asking Beals smoothing for a single species.
 }
 \references{
   
@@ -86,7 +91,7 @@ analysis of multivariate ecological data.  \emph{Adv. Ecol. Res.} 14:
 
 De \enc{Cáceres}{Caceres}, M. & Legendre, P. 2008. Beals smoothing
 revisited. \emph{Oecologia} 156: 657--669.
-  
+
 Ewald, J. 2002. A probabilistic approach to estimating species pools
 from large compositional matrices. \emph{J. Veg. Sci.} 13: 191--198.
 

@@ -21,7 +21,7 @@
 \usage{
 capscale(formula, data, distance = "euclidean", sqrt.dist = FALSE,
     comm = NULL, add = FALSE,  dfun = vegdist, metaMDSdist = FALSE,
-    ...)
+    na.action = na.fail, ...)
 }
 
 \arguments{
@@ -70,6 +70,15 @@ capscale(formula, data, distance = "euclidean", sqrt.dist = FALSE,
      using extended flexible shortest path dissimilarities (function
      \code{\link{stepacross}}) when there are many dissimilarities based on
      no shared species.}
+   \item{na.action}{Handling of missing values in constraints or
+     conditions. The default (\code{\link{na.fail}}) is to stop
+     with missing values. Choices \code{\link{na.omit}} and
+     \code{\link{na.exclude}} delete rows with missing values, but
+     differ in representation of results. With \code{na.omit} only
+     non-missing site scores are shown, but \code{na.exclude} gives
+     \code{NA} for scores of missing observations. Unlike in
+     \code{\link{rda}}, no WA scores are available for missing
+     constraints or conditions.}
    \item{\dots}{Other parameters passed to \code{\link{rda}} or to
      \code{\link{metaMDSdist}}.  }
 }
@@ -78,7 +87,7 @@ capscale(formula, data, distance = "euclidean", sqrt.dist = FALSE,
   Redundancy Analysis of results of Metric (Classical) Multidimensional
   Scaling (Anderson & Willis 2003). Function capscale uses two steps:
   (1) it ordinates the dissimilarity matrix using
-  \code{\link{cmdscale}} and (2) analyzes these results using
+  \code{\link{cmdscale}} and (2) analyses these results using
   \code{\link{rda}}. If the user supplied a community data frame instead
   of dissimilarities, the function will find the needed dissimilarity
   matrix using \code{\link{vegdist}} with specified
@@ -125,7 +134,7 @@ capscale(formula, data, distance = "euclidean", sqrt.dist = FALSE,
   constant on the left hand side, or \code{comm ~ 1}. With
   \code{metaMDSdist = TRUE}, the function can do automatic data
   standardization and use extended dissimilarities using function
-  \code{\link{stepacross}} similary as in non-metric multidimensional
+  \code{\link{stepacross}} similarly as in non-metric multidimensional
   scaling with \code{\link{metaMDS}}. 
   
 }

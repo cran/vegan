@@ -37,8 +37,8 @@
             X <- x$c1
         else stop("Can't find scores")
     }
-    else if (is.matrix(x)) 
-        X <- x
+    else if (is.numeric(x))
+        X <- as.matrix(x)
     if (is.null(rownames(X))) {
         root <- substr(display, 1, 4)
         rownames(X) <- paste(root, 1:nrow(X), sep = "")
@@ -46,7 +46,7 @@
     if (is.null(colnames(X))) 
         colnames(X) <- paste("Dim", 1:ncol(X), sep = "")
     if (!missing(choices)) 
-        X <- X[, choices]
+        X <- X[, choices, drop = FALSE]
     X <- as.matrix(X)
     X
 }

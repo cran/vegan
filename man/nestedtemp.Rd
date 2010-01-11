@@ -27,7 +27,7 @@ nestedn0(comm)
 nesteddisc(comm)
 nestedtemp(comm, ...)
 nestednodf(comm, order = TRUE)
-\method{plot}{nestedtemp}(x, kind = c("temperature", "incidendce"),
+\method{plot}{nestedtemp}(x, kind = c("temperature", "incidence"),
     col=rev(heat.colors(100)),  names = FALSE, ...)
 }
 
@@ -37,7 +37,8 @@ nestednodf(comm, order = TRUE)
   \item{col}{Colour scheme for matrix temperatures.}
   \item{kind}{The kind of plot produced.}
   \item{names}{Label columns and rows in the plot using names in \code{comm}.
-    If it is a logical vector of length 2, row and column labels are returned accordingly.}
+    If it is a logical vector of length 2, row and column labels are
+    returned accordingly.}
   \item{order}{Order rows and columns by frequencies.}
   \item{\dots}{Other arguments to functions.}
 }
@@ -46,7 +47,7 @@ nestednodf(comm, order = TRUE)
   The nestedness functions evaluate alternative indices of nestedness.
   The functions are intended to be used together with Null model
   communities and used as an argument in \code{\link{oecosimu}} to analyse
-  the nonrdanomness of results.
+  the nonrandomness of results.
   
   Function \code{netstedchecker} gives the number of checkerboard units,
   or 2x2 submatrices where both species occur once but on different
@@ -64,26 +65,34 @@ nestednodf(comm, order = TRUE)
   (columns) by their frequencies, but did not have any method of
   handling tied frequencies.
 
-  Function \code{nestedtemp} finds the
-  matrix temperature which is defined as the sum of \dQuote{surprises}
-  in arranged matrix.  In arranged unsurprising matrix all species
-  within proportion given by matrix fill are in the upper left corner of
-  the matrix, and the surprise of the absence or presences is the
-  diagonal distance from the fill line (Atmar & Patterson
-  1993). Function tries to pack species and sites to a low
-  temperature (\enc{Rodríguez-Gironés}{Rodriguez-Girones} & Santamaria
-  2006), but this is an iterative procedure, and the temperatures
-  usually vary among runs.  Function \code{nestedtemp} also has a
-  \code{plot} method which can display either incidences or temperatures
-  of the surprises. Matrix temperature was rather vaguely described
-  (Atmar & Patterson 1993), but
+  The \code{nesteddisc} function tries to
+  order tied columns to minimize the discrepancy statistic but this is
+  rather slow, and with a large number of tied columns there is no
+  guarantee that the best ordering was found. In that case a warning
+  of tied columns will be issued.
+
+  Function \code{nestedtemp} finds the matrix temperature which is
+  defined as the sum of \dQuote{surprises} in arranged matrix.  In
+  arranged unsurprising matrix all species within proportion given by
+  matrix fill are in the upper left corner of the matrix, and the
+  surprise of the absence or presences is the diagonal distance from the
+  fill line (Atmar & Patterson 1993). Function tries to pack species and
+  sites to a low temperature (\enc{Rodríguez-Gironés}{Rodriguez-Girones}
+  & Santamaria 2006), but this is an iterative procedure, and the
+  temperatures usually vary among runs.  Function \code{nestedtemp} also
+  has a \code{plot} method which can display either incidences or
+  temperatures of the surprises. Matrix temperature was rather vaguely
+  described (Atmar & Patterson 1993), but
   \enc{Rodríguez-Gironés}{Rodriguez-Girones} & Santamaria (2006) are
   more explicit and their description is used here. However, the results
   probably differ from other implementations, and users should be
-  cautious in interpreting the results. The details of calculations
-  are explained in the \code{\link{vignette}} \emph{Design decisions
-  and implementation} that you can read using functions
-  \code{\link{vignette}} or \code{\link{vegandocs}}.
+  cautious in interpreting the results. The details of calculations are
+  explained in the \code{\link{vignette}} \emph{Design decisions and
+  implementation} that you can read using functions
+  \code{\link{vignette}} or \code{\link{vegandocs}}. Function
+  \code{\link[bipartite]{nestedness}} in the \pkg{bipartite} package is
+  a direct port of the BINMATNEST programme of
+  \enc{Rodríguez-Gironés}{Rodriguez-Girones} & Santamaria (2006).
 
   Function \code{nestednodf} implements a nestedness metric based on
   overlap and decreasing fill (Almeida-Neto et al., 2008). Two basic
@@ -96,10 +105,8 @@ nestednodf(comm, order = TRUE)
   matrix (\code{NODF}).  If you set \code{order = FALSE}, the statistic
   is evaluated with the current matrix ordering allowing tests of other
   meaningful hypothesis of matrix structure than ordering by row and
-  column totals (see Almeida-Neto et al. 2008). Function
-  \code{\link[bipartite]{nestedness}} in the \pkg{bipartite} package is
-  a direct port of the BINMATNEST programme of
-  \enc{Rodríguez-Gironés}{Rodriguez-Girones} & Santamaria (2006).  }
+  column totals (see Almeida-Neto et al. 2008).
+}
 
 \value{
   The result returned by a nestedness function contains an item called
@@ -137,7 +144,7 @@ nestednodf(comm, order = TRUE)
   W. (1998). A comparative analysis of nested subset patterns of species
   composition. \emph{Oecologia} 113, 1--20.
   }
-\author{ Jari Oksanen and Gustavo Carvalho (\code{nestednodf}. }
+\author{ Jari Oksanen and Gustavo Carvalho (\code{nestednodf}). }
 
 \seealso{
   In general, the functions should be used with \code{\link{oecosimu}}

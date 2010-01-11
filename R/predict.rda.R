@@ -31,6 +31,11 @@
         } else {
             if (take > 0) 
                 out <- u %*% slam %*% t(v)
+            else {
+                out <- matrix(0, nrow = nrow(u), ncol = nrow(v))
+                rownames(out) <- rownames(u)
+                colnames(out) <- rownames(v)
+            }
             if (!is.null(scal)) 
                 out <- sweep(out, 2, scal, "*")
             out <- sweep(out, 2, cent, "+")
@@ -70,8 +75,10 @@
                 stop("No 'wa' scores available (yet) in partial RDA")
             Xbar <- as.matrix(newdata)
             Xbar <- sweep(Xbar, 2, cent, "-")
-            if (!is.null(scal)) 
-                Xbar <- sweep(Xbar, 2, scal, "/")
+            if (!is.null(scal)) {
+                nz <- scal > 0
+                Xbar[,nz] <- sweep(Xbar[,nz], 2, scal[nz], "/")
+            }
             w <- Xbar %*% v
             w <- sweep(w, 2, diag(slam), "/")
         }

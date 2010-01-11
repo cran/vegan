@@ -12,13 +12,12 @@
 
 \title{Vegan: ecological diversity}
 \author{Jari Oksanen}
-\date{$ $Id: diversity-vegan.Rnw 508 2008-09-26 11:47:00Z jarioksa $ $
-  processed with vegan 1.15-4
-  in R version 2.9.2 (2009-08-24) on \today}
+\date{$ $Id: diversity-vegan.Rnw 1036 2009-10-07 07:06:36Z jarioksa $ $
+  processed with vegan 1.17-0
+  in R version 2.10.1 (2009-12-14) on \today}
 \usepackage{Sweave}
 \begin{document}
 \setkeys{Gin}{width=0.55\linewidth}
-
 
 \maketitle
 
@@ -85,7 +84,7 @@ H_a = \frac{1}{1-a} \log \sum_{i=1}^S p_i^a
 or the corresponding Hill numbers $N_a = \exp(H_a)$.  Many common
 diversity indices are special cases of Hill numbers: $N_0 = S$, $N_1 =
 \exp(H')$, $N_2 = D_2$, and $N_\infty = 1/(\max p_i)$. The
-correspoding R\'{e}nyi diversities are $H_0 = \log(S)$, $H_1 = H'$, $H_2 =
+corresponding R\'{e}nyi diversities are $H_0 = \log(S)$, $H_1 = H'$, $H_2 =
 - \log(\sum p_i^2)$, and $H_\infty = - \log(\max p_i)$.  We select a
 random subset of five sites for R\'{e}nyi diversities:
 \begin{Schunk}
@@ -198,16 +197,19 @@ Rarefaction is sometimes presented as an ecologically meaningful
 alternative to dubious diversity indices, but the differences really
 seem to be small.
 
-\section{Taxonomic diversity}
+\section{Taxonomic and functional diversity}
 
 Simple diversity indices only consider species identity: all different
-species are equally different. In contrast, taxonomic diversity sees
-how different two different species are. The index is much used in
-aquatic ecology, in particular for studying the effects of pollution
-or other degradation, which often is first evident in the loss of
-higher taxonomic units.
+species are equally different. In contrast, taxonomic and functional
+diversity indices see how different two different species
+are. Taxonomic and functional diversities are used in different fields
+of science, but they really have very similar reasoning, and either
+could be used either with taxonomic or functional properties of
+species.
 
-The two basic indecies are called taxonomic diversity ($\Delta$) and
+\subsection{Taxonomic diversity: average distance of properties}
+
+The two basic indices are called taxonomic diversity ($\Delta$) and
 taxonomic distinctness ($\Delta^*$):
 \begin{align}
   \Delta &= \frac{\sum \sum_{i<j} \omega_{ij} x_i x_j}{n (n-1) / 2}\\
@@ -245,7 +247,7 @@ species or to a different genus.
 Function \texttt{taxondive} implements indices of taxonomic diversity,
 and \texttt{taxa2dist} can be used to convert classification tables to
 taxonomic distances either with constant or variable step lengths
-between succesive categories. There is no taxonomic table for the BCI
+between successive categories. There is no taxonomic table for the BCI
 data in \texttt{vegan}\footnote{Actually I made such a classification,
   but taxonomic differences proved to be of little use in the Barro
   Colorado data: they only singled out sites with Monocots (palm
@@ -267,6 +269,29 @@ but there is such a table for the Dune meadow data (Fig. \ref{fig:taxondive}):
 \label{fig:taxondive}
 \end{SCfigure}
 
+\subsection{Functional diversity: the height of property tree}
+
+In taxonomic diversity the primary data were taxonomic trees which
+were transformed to pairwise distances among species. In functional
+diversity the primary data are species properties which are translated
+to pairwise distances among species and then to clustering trees of
+species properties. The argument for trees is that in this way a
+single deviant species will have a small influence, since its
+difference is evaluated only once instead of evaluating its distance
+to all other species.
+
+Function \texttt{treedive} implements functional diversity defined as
+the total branch length in a trait dendrogram connecting all species,
+but excluding the unnecessary root segments of the tree.  The example
+uses the taxonomic distances of the previous chapter. These are first
+converted to a hierarchic clustering (which actually were their
+original form before \texttt{taxa2dist} converted them into distances)
+\begin{Schunk}
+\begin{Sinput}
+> tr <- hclust(taxdis, "aver")
+> mod <- treedive(dune, tr)
+\end{Sinput}
+\end{Schunk}
 
 \section{Species abundance models}
 
@@ -295,16 +320,16 @@ log-series for a randomly selected plot is (Fig. \ref{fig:fisher}):
 \end{Sinput}
 \begin{Soutput}
 Fisher log series model
-No. of species: 87 
+No. of species: 84 
 
       Estimate Std. Error
-alpha   34.206     4.5928
+alpha    34.12     4.6967
 \end{Soutput}
 \end{Schunk}
 \begin{SCfigure}
-\includegraphics{diversity-vegan-017}
+\includegraphics{diversity-vegan-018}
 \caption{Fisher's log-series fitted to one randomly selected site
-  (11).}
+  (12).}
 \label{fig:fisher}
 \end{SCfigure}
 We already saw $\alpha$ as a diversity index.  Now we also obtained
@@ -322,7 +347,7 @@ calculations of confidence intervals from profile deviance:
 \end{Sinput}
 \begin{Soutput}
    2.5 %   97.5 % 
-26.14134 44.27032 
+25.90110 44.45126 
 \end{Soutput}
 \end{Schunk}
 
@@ -340,7 +365,7 @@ with arbitrary choices of binning limits and treatment of ties.
 Function \texttt{prestondistr} directly
 maximizes truncated log-normal likelihood without binning data, and it
 is the recommended alternative.  Log-normal models  usually fit poorly
-to the BCI data, but here our random plot (number 11):
+to the BCI data, but here our random plot (number 12):
 \begin{Schunk}
 \begin{Sinput}
 > prestondistr(BCI[k, ])
@@ -348,18 +373,18 @@ to the BCI data, but here our random plot (number 11):
 \begin{Soutput}
 Preston lognormal model
 Method: maximized likelihood to log2 abundances 
-No. of species: 87 
+No. of species: 84 
 
-      mode      width         S0 
- 0.9746874  1.7267360 23.0085166 
+     mode     width        S0 
+ 0.668697  1.776272 22.833365 
 
 Frequencies by Octave
                 0        1        2        3        4        5
-Observed 34.00000 13.00000 14.00000 14.00000 6.000000 5.000000
-Fitted   19.62006 23.00604 19.28974 11.56520 4.958188 1.519971
+Observed 34.00000 20.00000 13.00000 6.000000 6.000000 3.000000
+Fitted   21.27136 22.43963 17.24209 9.649779 3.933674 1.167973
                  6
-Observed 1.0000000
-Fitted   0.3331887
+Observed 2.0000000
+Fitted   0.2525928
 \end{Soutput}
 \end{Schunk}
 
@@ -398,21 +423,20 @@ set gives (Fig. \ref{fig:rad}):
 \end{Sinput}
 \begin{Soutput}
 RAD models, family poisson 
-No. of species 87, total abundance 401
+No. of species 84, total abundance 366
 
-           par1      par2     par3   Deviance AIC      BIC     
-Null                                  57.5117 308.7325 308.7325
-Preemption  0.048864                  52.5203 305.7411 308.2070
-Lognormal   0.91395   1.1282          15.6169 270.8377 275.7696
-Zipf        0.13934  -0.83517         25.7094 280.9302 285.8620
-Mandelbrot  1.0939   -1.3752   5.035   6.3843 263.6050 271.0028
+           par1      par2     par3    Deviance AIC      BIC     
+Null                                   97.0832 330.6542 330.6542
+Preemption  0.055073                   90.2032 325.7742 328.2050
+Lognormal   0.73528   1.239            27.1559 264.7269 269.5885
+Zipf        0.16824  -0.91629          17.1743 254.7453 259.6070
+Mandelbrot  0.5485   -1.245    2.2134   6.0875 245.6585 252.9509
 \end{Soutput}
 \end{Schunk}
 \begin{SCfigure}
-\includegraphics{diversity-vegan-021}
+\includegraphics{diversity-vegan-022}
 \caption{Ranked abundance distribution models for a random plot
-  (no. 11).  The best model is chosen by the \textsc{aic}, and
-  displayed with a thick line.}
+  (no. 12).  The best model has the lowest \textsc{aic}.}
 \label{fig:rad}
 \end{SCfigure}
 
@@ -479,7 +503,7 @@ The recommended is Kindt's exact method (Fig. \ref{fig:sac}):
 \end{Sinput}
 \end{Schunk}
 \begin{SCfigure}
-\includegraphics{diversity-vegan-023}
+\includegraphics{diversity-vegan-024}
 \caption{Species accumulation curve for the BCI data; exact method.}
 \label{fig:sac}
 \end{SCfigure}
@@ -502,7 +526,7 @@ richness per one site ($\bar \alpha$):
   \label{eq:beta}
   \beta = S/\bar \alpha - 1
 \end{equation}
-Substraction of one means that $\beta = 0$ when there are no excess
+Subtraction of one means that $\beta = 0$ when there are no excess
 species or no heterogeneity between sites. For this index, no specific
 functions are needed, but this index can be easily found with the help
 of \texttt{vegan} function \texttt{specnumber}:
@@ -626,7 +650,7 @@ No. of Negative Eigenvalues: 7
 
 Average distance to centroid:
     BF     HF     NM     SF 
-0.2671 0.2693 0.4473 0.3728 
+0.2600 0.2570 0.4419 0.3667 
 
 Eigenvalues for PCoA axes:
   PCoA1   PCoA2   PCoA3   PCoA4   PCoA5   PCoA6   PCoA7   PCoA8   PCoA9 
@@ -638,7 +662,7 @@ Eigenvalues for PCoA axes:
 \end{Soutput}
 \end{Schunk}
 \begin{SCfigure}
-\includegraphics{diversity-vegan-029}
+\includegraphics{diversity-vegan-030}
 \caption{Box plots of beta diversity measured as the average steepness
   ($z$) of the species area curve in the Arrhenius model $S = cX^z$ in
   Management classes of dune meadows.}
@@ -717,10 +741,10 @@ the plots:
 > specpool(BCI[s, ])
 \end{Sinput}
 \begin{Soutput}
-    Species     chao  chao.se jack1 jack1.se    jack2    boot  boot.se
-All     208 218.5263 6.206346 227.2 5.472842 228.8483 218.378 3.778991
-     n
-All 25
+    Species     chao  chao.se  jack1 jack1.se    jack2     boot
+All     212 251.3846 18.77757 242.72  8.69317 260.6983 225.6209
+     boot.se  n
+All 4.709401 25
 \end{Soutput}
 \end{Schunk}
 These typically are even lower than the observed richness
@@ -739,12 +763,12 @@ two of these methods:
 > estimateR(BCI[k, ])
 \end{Sinput}
 \begin{Soutput}
-                 11
-S.obs     87.000000
-S.chao1  127.071429
-se.chao1  20.714568
-S.ACE    124.809298
-se.ACE     5.949116
+                 12
+S.obs     84.000000
+S.chao1  110.714286
+se.chao1  12.996942
+S.ACE    128.001262
+se.ACE     6.823939
 \end{Soutput}
 \end{Schunk}
 Chao's method is similar as above, but uses another, ``unbiased''
@@ -788,14 +812,14 @@ explicitly uses \texttt{prestondistr}, although this also may fail:
 \end{Sinput}
 \begin{Soutput}
 Extrapolated     Observed       Veiled 
-    99.58743     87.00000     12.58743 
+   101.66452     84.00000     17.66452 
 \end{Soutput}
 \begin{Sinput}
 > veiledspec(BCI[k, ])
 \end{Sinput}
 \begin{Soutput}
 Extrapolated     Observed       Veiled 
-    2956.748       87.000     2869.748 
+          NA           84           NA 
 \end{Soutput}
 \end{Schunk}
 
@@ -815,23 +839,21 @@ Function \texttt{beals} implement Beals smoothing:
 \end{Sinput}
 \end{Schunk}
 We may see how the estimated probability of occurrence and observed
-numbers of stems relate in one of the more familiar species
-(Fig. \ref{fig:beals}):
+numbers of stems relate in one of the more familiar species. We study
+only one species, and to avoid circular reasoning we do not include
+the target species in the smoothing (Fig. \ref{fig:beals}):
 \begin{Schunk}
 \begin{Sinput}
 > j <- which(colnames(BCI) == "Ceiba.pentandra")
-> plot(smo[, j], BCI[, j], main = "Ceiba pentandra", xlab = "Probability of occurrence", 
+> plot(beals(BCI, species = j, include = FALSE), BCI[, j], 
++     main = "Ceiba pentandra", xlab = "Probability of occurrence", 
 +     ylab = "Occurrence")
 \end{Sinput}
 \end{Schunk}
 \begin{SCfigure}
-\includegraphics{diversity-vegan-036}
+\includegraphics{diversity-vegan-037}
 \caption{Beals smoothing for \emph{Ceiba pentandra}.}
 \label{fig:beals}
 \end{SCfigure}
-For the probability of the pool membership, jackknived estimates
-should be used, and concerned site and species should be removed when
-estimating the probablity, but this is not done in \texttt{beals}
-which uses the traditional equations.
 
 \end{document}

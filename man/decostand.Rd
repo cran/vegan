@@ -1,3 +1,4 @@
+\encoding{UTF-8}
 \name{decostand}
 \alias{decostand}
 \alias{wisconsin}
@@ -8,7 +9,7 @@ The function provides some popular (and effective) standardization
 methods for community ecologists.
 }
 \usage{
-decostand(x, method, MARGIN, range.global, na.rm=FALSE, ...)
+decostand(x, method, MARGIN, range.global, logbase = 2, na.rm=FALSE, ...)
 
 wisconsin(x)
 }
@@ -22,6 +23,7 @@ wisconsin(x)
     \code{method = "range"}.  This allows using same ranges across
     subsets of data.  The dimensions of \code{MARGIN} must match with
     \code{x}. }
+  \item{logbase}{The logarithm base used in \code{method = "log"}.}
   \item{na.rm}{Ignore missing values in row or column standardizations.}
   \item{\dots}{Other arguments to the function (ignored).}
 }
@@ -52,6 +54,15 @@ wisconsin(x)
       1}).
     \item \code{hellinger}: square root of \code{method = "total"}
     (Legendre & Gallagher 2001).
+    \item \code{log}: logarithmic transformation as suggested by Anderson 
+     et al. (2006): \eqn{\log_b (x) + 1} for \eqn{x > 0},  where \eqn{b} is 
+     the base of the logarithm; zeros are left as zeros. Higher bases give
+     less weight to quantities and more to presences, and \code{logbase = Inf}
+     gives the presence/absence scaling. Please note this is \emph{not}
+     \eqn{\log(x+1)}.
+     Anderson et al. (2006) suggested this for their (strongly) modified
+     Gower distance, but the standardization can be used independently
+     of distance indices.
   }
   Standardization, as contrasted to transformation, means that the
   entries are transformed relative to other entries.
@@ -76,10 +87,16 @@ wisconsin(x)
   \code{"decostand"} giving the name of applied standardization
   \code{"method"}.
 }
-\author{Jari Oksanen}
+\author{Jari Oksanen and Etienne \enc{Laliberté}{Laliberte}
+  (\code{method = "log"}).}
 \note{Common transformations can be made with standard \R functions.}
 
-\references{
+\references{ 
+  
+  Anderson, M.J., Ellingsen, K.E. & McArdle, B.H. (2006) Multivariate
+  dispersion as a measure of beta diversity. \emph{Ecology Letters} 
+  \strong{9}, 683--693.
+
   Legendre, P. & Gallagher, E.D. (2001) Ecologically meaningful
   transformations for ordination of species data. \emph{Oecologia}
   \strong{129}; 271--280.
