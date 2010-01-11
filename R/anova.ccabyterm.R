@@ -1,6 +1,10 @@
 `anova.ccabyterm` <-
     function (object, step = 100, ...) 
 {
+    ## Data set size may change during iteration if there are missing
+    ## values: use length(object$residual) to check this like step,
+    ## drop1.default, add1.default do.
+    n0 <- length(object$residuals)
     trm <- terms(object)
     call <- paste("Model:", c(object$call))
     trmlab <- attr(trm, "term.labels")
@@ -21,12 +25,17 @@
     pchi[ntrm, ] <- sim$num
     df[ntrm:(ntrm + 1)] <- sim$df
     chi[ntrm:(ntrm + 1)] <- sim$chi
+    modelframe <- model.frame(object)
+    environment(object$terms) <- environment()
     for (.ITRM in ntrm:2) {
         if (ntrm < 2) 
             break
         assign(".Random.seed", sim$Random.seed, envir = .GlobalEnv)
         fla <- as.formula(paste(" . ~ . -", trmlab[.ITRM]))
-        object <- update(object, fla)
+        object <- update(object, fla, data = modelframe)
+        ## Change in data set due to missing values?
+        if (length(object$residuals) != n0)
+            stop("number of rows has changed: remove missing values?")
         if (is.null(object$CCA)) 
             break
         sim <- permutest.cca(object, permutations = step, ...)
@@ -42,8 +51,11 @@
     pchi <- sweep(pchi, 1, df, "/")
     pchi[-(ntrm + 1), ] <- sweep(pchi[-(ntrm + 1), , drop = FALSE], 
                                  2, pchi[ntrm + 1, , drop = FALSE], "/")
+    ## Round to avoid arbitrary P values due to numerical precision
+    pchi <- round(pchi, 12)
+    Fval <- round(Fval, 12)
     P <- rowSums(sweep(pchi[-(ntrm + 1), , drop = FALSE], 1, 
-                       Fval[-(ntrm + 1)], ">"))
+                       Fval[-(ntrm + 1)], ">="))
     P <- c((P + adj)/(step + adj), NA)
     out <- data.frame(df, chi, Fval, c(rep(step, ntrm), NA), 
                       P)

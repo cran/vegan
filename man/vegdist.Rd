@@ -26,8 +26,9 @@
   \item{x}{Community data matrix.}
   \item{method}{Dissimilarity index, partial match to  \code{"manhattan"},
     \code{"euclidean"}, \code{"canberra"}, \code{"bray"}, \code{"kulczynski"},
-     \code{"jaccard"}, \code{"gower"}, \code{"morisita"}, \code{"horn"},
-     \code{"mountford"}, \code{"raup"} , \code{"binomial"} or \code{"chao"}.}
+     \code{"jaccard"}, \code{"gower"}, \code{"altGower"}, \code{"morisita"}, 
+     \code{"horn"}, \code{"mountford"}, \code{"raup"} , \code{"binomial"} or 
+     \code{"chao"}.}
   \item{binary}{Perform presence/absence standardization before analysis
     using \code{\link{decostand}}.}
   \item{diag}{Compute diagonals. }
@@ -56,6 +57,10 @@
     \cr
     \tab where \eqn{M} is the number of columns (excluding missing
     values)
+    \cr
+    \code{altGower}
+    \tab like \code{gower}, but \eqn{M} is the number of pairs with at least
+    one non-zero value (excluding double zeros)
     \cr
     \code{canberra}
     \tab \eqn{d_{jk}=\frac{1}{NZ} \sum_i
@@ -129,7 +134,7 @@
   so that the results will be in the conventional range \eqn{0 \dots 1}.
 
   Raup--Crick dissimilarity (\code{method = "raup"}) is a probabilistic
-  index based on presensec/absence data.  It is defined as \eqn{1 - prob(j)},
+  index based on presence/absence data.  It is defined as \eqn{1 - prob(j)},
   or based on the probability of observing at least \eqn{j} 
   species in shared in compared communities.  Legendre & Legendre (1998)
   suggest
@@ -193,20 +198,25 @@
   Zealand.  \emph{Journal of Experimental Marine Biology and Ecology}
   305, 191--221.
 
+  Anderson, M.J., Ellingsen, K.E. & McArdle, B.H. (2006) Multivariate
+  dispersion as a measure of beta diversity. \emph{Ecology Letters} 
+  9, 683--693.
+
   Chao, A., Chazdon, R. L., Colwell, R. K. and Shen, T. (2005). A new
   statistical approach for assessing similarity of species composition
   with incidence and abundance data. \emph{Ecology Letters} 8, 148--159.
- 
-  
+   
   Faith, D. P, Minchin, P. R. and Belbin, L. (1987).
   Compositional dissimilarity as a robust measure of ecological
   distance. \emph{Vegetatio} 69, 57--68.
+
+  Gower, J. C. (1971). A general coefficient of similarity and some
+  of its properties. \emph{Biometrics} 27, 623--637.
 
   Krebs, C. J. (1999). \emph{Ecological Methodology.} Addison Wesley Longman.
 
   Legendre, P, & Legendre, L. (1998) \emph{Numerical Ecology}. 2nd English
   Edition. Elsevier.
-
   
   Mountford, M. D. (1962). An index of similarity and its application to
   classification problems. In: P.W.Murphy (ed.),
@@ -227,15 +237,22 @@
   number of variables in \code{vegdist}, but not in \code{\link{dist}}.
   So these differ by a constant multiplier, and the alternative in
   \code{vegdist} is in range (0,1).  Function \code{\link[cluster]{daisy}}
-  (package \pkg{cluster}) provides alternative implentation of Gower
-  index for mixed data of numeric and class variables (but it works for
-  mixed variables only).
+  (package \pkg{cluster}) provides alternative implementation of Gower
+  index that also can handle mixed data of numeric and class variables. 
+  There are two versions of Gower distance (\code{"gower"}, 
+  \code{"altGower"}) which differ in scaling: \code{"gower"} divides
+  all distances by the number of observations (rows), but 
+  \code{"altGower"} omits double-zeros and divides by the number of 
+  pairs with at least one above-zero value. Gower (1971) suggested this for
+  presences, but it is often taken as the general feature of the Gower 
+  distances. See Examples for implementing the Anderson et al. (2006)
+  variant of the Gower index.
 
   Most dissimilarity indices in \code{vegdist} are designed for
   community data, and they will give misleading values if there are
   negative data entries.  The results may also be misleading or
   \code{NA} or \code{NaN} if there are empty sites.  In principle, you
-  cannot study species compostion without species and you should remove
+  cannot study species composition without species and you should remove
   empty sites from community data.
 }
 
@@ -253,5 +270,7 @@ data(varespec)
 vare.dist <- vegdist(varespec)
 # Orlóci's Chord distance: range 0 .. sqrt(2)
 vare.dist <- vegdist(decostand(varespec, "norm"), "euclidean")
+# Anderson et al. version of Gower
+vare.dist <- vegdist(decostand(varespec, "log"), "altGower")
 }
 \keyword{ multivariate }

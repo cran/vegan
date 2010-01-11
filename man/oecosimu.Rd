@@ -3,6 +3,10 @@
 \alias{oecosimu}
 \alias{commsimulator}
 \alias{print.oecosimu}
+\alias{as.ts.oecosimu}
+\alias{as.mcmc.oecosimu}
+\alias{density.oecosimu}
+\alias{densityplot.oecosimu}
 
 \title{ Null Models for Biological Communities }
 
@@ -16,12 +20,20 @@
 
 \usage{
 oecosimu(comm, nestfun, method, nsimul = 99, burnin = 0, thin = 1,
-   statistic = "statistic",  ...)
+   statistic = "statistic", alternative = c("two.sided", "less", "greater"),
+   ...)
 commsimulator(x, method, thin=1)
+\method{as.ts}{oecosimu}(x, ...)
+\method{as.mcmc}{oecosimu}(x)
+\method{density}{oecosimu}(x, ...)
+\method{densityplot}{oecosimu}(x, data, xlab = "Simulated", ...)
 }
 
 \arguments{
-  \item{comm, x}{Community data. }
+  \item{comm}{Community data.}
+  \item{x}{Community data for \code{commsimulator}, or an \code{oecosimu}
+    result object for \code{as.ts}, \code{as.mcmc}, \code{density} and 
+    \code{densityplot}.}
   \item{nestfun}{Function to analyse nestedness. Some functions are
   provided in \pkg{vegan}, but any function can be used if it accepts the
   community as the first argument, and returns either a plain number or
@@ -36,6 +48,11 @@ commsimulator(x, method, thin=1)
   \code{"swap"} and \code{"tswap"}.}
   \item{statistic}{The name of the statistic returned by
     \code{nestedfun}} 
+  \item{alternative}{a character string specifying the alternative
+    hypothesis, must be one of \code{"two.sided"} (default), \code{"greater"}
+    or \code{"less"}. You can specify just the initial letter.}
+  \item{data}{Ignored argument of the generic function.}
+  \item{xlab}{Label of the x-axis.}
   \item{\dots}{Other arguments to functions.}
 }
 
@@ -43,13 +60,14 @@ commsimulator(x, method, thin=1)
   
   Function \code{oecosimu} is a wrapper that evaluates a nestedness
   statistic using function given by \code{nestfun}, and then simulates a
-  series of null models using \code{commsimulator}, and evaluates the
+  series of null models using \code{commsimulator} or 
+  other functions (depending on method argument), and evaluates the
   statistic on these null models. The \pkg{vegan} packages contains some
   nestedness functions that are described separately
   (\code{\link{nestedchecker}}, \code{\link{nesteddisc}},
   \code{\link{nestedn0}}, \code{\link{nestedtemp}}), but many other
   functions can be used as long as they are meaningful with binary
-  community models. An applicable function must return either the
+  or quantitative community models. An applicable function must return either the
   statistic as a plain number, or as a list element \code{"statistic"}
   (like \code{\link{chisq.test}}), or in an item whose name is given in
   the argument \code{statistic}.  The statistic can be a single number
@@ -57,8 +75,9 @@ commsimulator(x, method, thin=1)
   vector indices can be used to analyse site (row) or species (column)
   properties, see \code{\link{treedive}} for an example.
 
-  Function \code{commsimulator} implements null models for community
-  composition. The implemented models are \code{r00} which maintains the
+  Function \code{commsimulator} implements binary (presence/absence) 
+  null models for community composition.
+  The implemented models are \code{r00} which maintains the
   number of presences but fills these anywhere so that neither species
   (column) nor site (row) totals are preserved. Methods \code{r0},
   \code{r1} and \code{r2} maintain the site (row) frequencies. Method \code{r0}
@@ -100,7 +119,7 @@ commsimulator(x, method, thin=1)
   but each call produces a matrix that is independent of previous
   matrices, and has the same marginal totals as the original data. The
   recommended method is \code{quasiswap} which is much faster because
-  it is implemented in C. Method \code{bactkracking} is provided for
+  it is implemented in C. Method \code{backtracking} is provided for
   comparison, but it is so slow that it may be dropped from future
   releases of \pkg{vegan} (or also implemented in C).
   Method \code{quasiswap} (\enc{Miklós}{Miklos} & Podani 2004)
@@ -120,6 +139,43 @@ commsimulator(x, method, thin=1)
   backtracking is done so may times that all incidences will be filled
   into matrix. The \code{quasiswap} method is not sequential, but it produces
   a random incidence matrix with given marginal totals. 
+
+  Function \code{as.ts} transforms the simulated results of sequential
+  methods into a time series or a \code{\link{ts}} object. This allows
+  using analytic tools for time series in studying the sequences (see
+  examples). Function \code{as.mcmc} transforms the simulated results
+  of sequential methods into an \code{\link[coda]{mcmc}} object of the
+  \pkg{coda} package. The \pkg{coda} package provides functions for
+  the analysis of stationarity, adequacy of sample size,
+  autocorrelation, need of burn-in and much more for sequential
+  methods. Please consult the documentation of \pkg{coda} package.
+
+  Function \code{density} provides an interface to the
+  standard \code{\link{density}} function for the simulated
+  values. Function \code{densityplot} is an interface to the
+  \code{\link[lattice]{densityplot}} function of the \pkg{lattice}
+  package. The \code{density} can be used meaningfully only for single
+  statistics and must be plotted separately. The \code{densityplot}
+  function can handle multiple statistics, and it plots the results
+  directly. In addition to the density, the \code{densityplot} also
+  shows the observed value of the statistic (provided it is within the
+  graph limits). The \code{densityplot} function is defined as a
+  generic function in the \pkg{lattice} package and you must either
+  load the \pkg{lattice} library before calling \code{densityplot}, or
+  use the longer form \code{densityplot.oecosimu} when you first time
+  call the function.
+
+  As a result of \code{method = "r2dtable"} in \code{oecosimu}, quantitative
+  community null models are used to evaluate the statistic. This setting uses
+  the \code{\link{r2dtable}} function to generate random matrices with fixed
+  row and column totals (hypergeometric distribution). This null model is
+  used in diversity partitioning function (see \code{\link{adipart}}).
+
+  The \code{method} argument can be a function with first argument taking the 
+  community matrix, and optionally with \code{burnin} and \code{thin} argument.
+  The function must return a matrix-like object with same dimensions.
+  But be careful, blindly applying permuted matrices for null model testing
+  can be dangerous.
 }
 
 \value{
@@ -133,7 +189,7 @@ commsimulator(x, method, thin=1)
 
 \references{
   Gotelli, N.J. & Entsminger, N.J. (2001). Swap and fill algorithms in
-  null model analyis: rethinking the knight's tour. \emph{Oecologia}
+  null model analysis: rethinking the knight's tour. \emph{Oecologia}
   129, 281--291.
 
   Gotelli, N.J. & Entsminger, N.J. (2003). Swap algorithms in null model
@@ -192,8 +248,26 @@ commsimulator(x, method, thin=1)
 data(sipoo)
 out <- oecosimu(sipoo, decorana, "swap", burnin=100, thin=10, statistic="evals")
 out
-## Inspect the swap sequence
-matplot(t(out$oecosimu$simulated), type="l")
+## Inspect the swap sequence as a time series object
+plot(as.ts(out))
+lag.plot(as.ts(out))
+acf(as.ts(out))
+## Density plot: needs lattice
+require(lattice)
+densityplot(out, as.table = TRUE)
+## Use quantitative null models to compare
+## mean Bray-Curtis dissimilarities
+data(dune)
+meandist <- function(x) mean(vegdist(x, "bray"))
+mbc1 <- oecosimu(dune, meandist, "r2dtable")
+mbc1
+## Define a custom function that shuffles
+## cells in each rows
+f <- function(x) {
+    apply(x, 2, function(z) sample(z, length(z)))
+}
+mbc2 <- oecosimu(as.matrix(dune), meandist, f)
+mbc2
 }
 \keyword{ multivariate }
 \keyword{ datagen }

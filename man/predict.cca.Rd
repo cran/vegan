@@ -10,6 +10,7 @@
 \alias{coef.cca}
 \alias{coef.rda}
 \alias{calibrate.cca}
+\alias{calibrate}
 
 \title{Prediction Tools for [Constrained] Ordination (CCA,
   RDA, DCA, CA, PCA) }
@@ -25,7 +26,7 @@
 \method{residuals}{cca}(object, ...)
 \method{predict}{cca}(object, newdata, type = c("response", "wa", "sp", "lc"),
     rank = "full", model = c("CCA", "CA"), scaling = FALSE, ...)
-calibrate.cca(object, newdata, rank = "full", ...)
+\method{calibrate}{cca}(object, newdata, rank = "full", ...)
 \method{coef}{cca}(object, ...)
 \method{predict}{decorana}(object, newdata, type = c("response", "sites", "species"),
     rank = 4, ...)
@@ -49,7 +50,7 @@ calibrate.cca(object, newdata, rank = "full", ...)
     standardization in \code{\link{cca}} and scaling and centring in 
     \code{\link{rda}}. In \code{\link{capscale}} the \code{"response"} gives
     the dissimilarities, and \code{"working"} the scaled scores that produce
-    the dissimlarities as Euclidean distances.
+    the dissimilarities as Euclidean distances.
     In \code{predict} \code{"response"} 
     gives an approximation of the original data matrix or dissimilarities, 
     \code{"wa"} the site scores as weighted averages of the community data, 
@@ -83,7 +84,7 @@ calibrate.cca(object, newdata, rank = "full", ...)
   unconstrained part of the ordination.
 
   Function \code{predict} can find the estimate of the original data
-  matrix or dissimilarites (\code{type = "response"}) with any rank. 
+  matrix or dissimilarities (\code{type = "response"}) with any rank. 
   With \code{rank = "full"} it is identical to \code{fitted}.
   In addition, the function
   can find the species scores or site scores from the community data
@@ -166,7 +167,7 @@ predict(mod, type="sp", newdata=dune[, freq==1], scaling=2)
 predict(mod, type="lc", new=data.frame(A1 = 3, Management="NM", Moisture="2"), scal=2)
 # Calibration and residual plot
 mod <- cca(dune ~ A1 + Moisture, dune.env)
-pred <- calibrate.cca(mod)
+pred <- calibrate(mod)
 pred
 with(dune.env, plot(A1, pred[,"A1"] - A1, ylab="Prediction Error"))
 abline(h=0)

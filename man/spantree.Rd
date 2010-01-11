@@ -3,6 +3,7 @@
 \alias{cophenetic.spantree}
 \alias{plot.spantree}
 \alias{lines.spantree}
+\alias{spandepth}
 
 \title{Minimum Spanning Tree}
 \description{
@@ -11,15 +12,16 @@
   above the threshold or \code{NA}.  
 }
 \usage{
-spantree(dis, toolong = 0)
+spantree(d, toolong = 0)
 \method{cophenetic}{spantree}(x)
+spandepth(x)
 \method{plot}{spantree}(x, ord, cex = 0.7, type = "p", labels, dlim,
      FUN = sammon,  ...)
 \method{lines}{spantree}(x, ord, display="sites", ...)
 }
 
 \arguments{
-  \item{dis}{Dissimilarity data inheriting from class \code{dist} or
+  \item{d}{Dissimilarity data inheriting from class \code{dist} or
     a an object, such as a matrix, that can be converted to a
     dissimilarity matrix. Functions \code{\link{vegdist}} and
     \code{\link{dist}} are some functions producing suitable
@@ -27,7 +29,7 @@ spantree(dis, toolong = 0)
   \item{toolong}{ Shortest dissimilarity regarded as \code{NA}.
     The function uses a fuzz factor, so
     that dissimilarities close to the limit will be made \code{NA}, too.
-    If \code{toolong = 0} (or negative), no dissimmilarity is regarded
+    If \code{toolong = 0} (or negative), no dissimilarity is regarded
     as too long.
   }
   \item{x}{A \code{spantree} result object.}
@@ -57,7 +59,15 @@ spantree(dis, toolong = 0)
   using \code{\link{distconnected}}.
 
   Function \code{cophenetic} finds distances between all points along
-  the tree segments. Function \code{plot} displays the tree over a
+  the tree segments. Function \code{spandepth} returns the depth of
+  each node. The nodes of a tree are either leaves (with one link) or
+  internal nodes (more than one link). The leaves are recursively
+  removed from the tree, and the depth is the layer at with the leaf
+  was removed. In disconnected \code{spantree} object (in a forest)
+  each tree is analysed separately and disconnected nodes not in any
+  tree have depth zero.
+  
+  Function \code{plot} displays the tree over a
   supplied ordination configuration, and \code{lines} adds a spanning
   tree to an ordination graph. If configuration is not supplied for \code{plot},
   the function ordinates the cophenetic dissimilarities of the
@@ -89,6 +99,7 @@ spantree(dis, toolong = 0)
   \item{dist }{Corresponding distance. If \code{kid = NA}, then
     \code{dist = 0}.}
   \item{labels }{Names of nodes as found from the input dissimilarities.} 
+  \item{call}{The function call.}
 }
 \references{
  Sedgewick, R. (1990). \emph{Algorithms in C}. Addison Wesley. 
@@ -118,6 +129,9 @@ tr <- spantree(dis)
 plot(tr, cmdscale(dis), type = "t")
 ## Find a configuration to display the tree neatly
 plot(tr, type = "t")
+## Depths of nodes
+depths <- spandepth(tr)
+plot(tr, type = "t", label = depths)
 }
 \keyword{ multivariate}
 

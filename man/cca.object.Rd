@@ -16,9 +16,13 @@
 \value{
   A \code{cca} object has the following elements:
   \item{call }{the function call.}
-  \item{colsum, rowsum }{Column and row sums in \code{cca}.  In
-    \code{rda}, item \code{colsum} contains standard deviations of
-    species and \code{rowsum} is \code{NA}.}
+  \item{colsum, rowsum, rowsum.excluded }{Column and row sums in
+    \code{cca}.  In \code{rda}, item \code{colsum} contains standard
+    deviations of species and \code{rowsum} is \code{NA}. If some data
+    were removed in \code{\link{na.action}}, the row sums of excluded
+    observations are in item \code{rowsum.excluded} in \code{cca} (but
+    not in \code{rda}). The \code{rowsum.excluded} add to the total
+    (one) of \code{rowsum}. }
   \item{grand.total}{Grand total of community data in \code{cca} and
     \code{NA} in \code{rda}.}
   \item{inertia}{Text used as the name of inertia.}
@@ -28,7 +32,7 @@
     with \code{formula}.}
   \item{terminfo}{Further information on terms with three subitems:
     \code{terms} which is like the \code{terms} component above, but
-    lists conditions and constrainst similarly;  \code{xlev}
+    lists conditions and constraints similarly;  \code{xlev}
     which lists the factor levels, and \code{ordered} which is
     \code{TRUE} to ordered factors.
     This is produced by \pkg{vegan} internal function
@@ -36,7 +40,13 @@
     \code{\link{predict.cca}} with \code{newdata}.  This is missing if
     the ordination was not called with \code{formula}.}
   \item{tot.chi}{Total inertia or the sum of all eigenvalues.}
-  \item{pCCA, CCA, CA}{Actual ordination results for conditioned
+  \item{na.action}{The result of \code{\link{na.action}} if missing
+    values in constraints were handled by \code{\link{na.omit}} or
+    \code{\link{na.exclude}} (or \code{NULL} if there were no missing
+    values). This is a vector of indices of missing value rows in the
+    original data and a class of the action, usually either
+    \code{"omit"} or \code{"exclude"}.}
+\item{pCCA, CCA, CA}{Actual ordination results for conditioned
     (partial), constrained and unconstrained components of the
     model. Any of these can be \code{NULL} if there is no corresponding
     component.
@@ -100,9 +110,12 @@
       \code{v} with weights \code{Xbar}, but the multiplying effect of
       eigenvalues  removed. These often are known as WA scores in
       \code{cca}. Only in  \code{CCA}.}
-    \item{\code{wa.eig}}{The direct result of weighted avaraging or weighted
+    \item{\code{wa.eig}}{The direct result of weighted averaging or weighted
       summation  (matrix multiplication)
       with the resulting eigenvalue inflation.}
+    \item{\code{wa.excluded, u.excluded}}{WA scores for rows removed by
+      \code{na.action = na.exclude} in \code{CCA} and \code{CA}
+      components if these could be calculated.}
     \item{\code{Xbar}}{The standardized data matrix after previous stages of
       analysis. In \code{CCA} this is after possible \code{pCCA} or
       after partialling out the effects of conditions, and in \code{CA}
@@ -112,9 +125,35 @@
       \code{\link{scale}}.} }
   }
 }
+
+\section{NA Action}{
+  If the constraints had missing values, and \code{\link{na.action}}
+  was set to  \code{\link{na.exclude}} or \code{\link{na.omit}}, the
+  result will have some extra items:
+  \describe{
+    \item{\code{na.action}}{The object returned by
+    \code{\link{na.action}} which is a named vector of indices of
+    removed items. The class of the vector is either \code{"omit"} or
+    \code{"exclude"} as set by \code{\link{na.action}}.}
+  \item{\code{residuals.zombie}}{A zombie vector of the length of
+    number of rows in the residual ordination. Some standard \R
+    functions find the number of valid observations from this vector,
+    and it is provided for their use although this is useless in
+    \pkg{vegan}.}
+  \item{\code{rowsum.excluded}}{Row sums of removed observations. Only
+    in \code{\link{cca}}.}
+  \item{\code{CCA$wa.excluded}}{The WA scores for sites (found from
+    community data) in constrained ordinaiton if
+    \code{\link{na.action}}  was \code{\link{na.exclude}} and the
+    scores could be calculated. The scores cannot be found for 
+    \code{\link{capscale}} and in partial ordination.}
+  \item{\code{CA$u.excluded}}{Row scores for sites in unconstrained
+    ordination with identical conditions as above.}
+  }
+}
   
 \seealso{The description here provides a hacker's interface.  For more
-  user friendly acces to the \code{cca} object see
+  user friendly access to the \code{cca} object see
   \code{\link{alias.cca}}, \code{\link{coef.cca}},
   \code{\link{deviance.cca}}, \code{\link{predict.cca}},
   \code{\link{scores.cca}}, 

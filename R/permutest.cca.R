@@ -34,7 +34,7 @@ permutest.default <- function(x, ...)
     den <- numeric(permutations)
     Q <- x$CCA$QR
     if (isCCA) {
-        w <- weights(x, "sites")
+        w <- x$rowsum # works with any na.action, weights(x) won't
         X <- qr.X(Q, ncol=length(Q$pivot))
         X <- sweep(X, 1, sqrt(w), "/")
     }
@@ -86,6 +86,10 @@ permutest.default <- function(x, ...)
         den[i] <- ca.ev
         F.perm[i] <- (cca.ev/q)/(ca.ev/r)
     }
+    ## Round to avoid arbitrary ordering of statistics due to
+    ## numerical inaccuracy
+    F.0 <- round(F.0, 12)
+    F.perm <- round(F.perm, 12)
     sol <- list(call = x$call, model = model, F.0 = F.0, F.perm = F.perm, 
                 chi = c(Chi.z, Chi.xz), num = num, den = den, df = c(q, 
                                                               r), nperm = permutations, method = x$method, first = first,  Random.seed = seed)

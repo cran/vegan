@@ -81,10 +81,10 @@ kendall.post(Y, group, nperm = 999, mult = "holm")
 
   The corrections used for multiple testing are applied to the list of
   P-values (P); they take into account the number of tests (k) carried
-  out simulatenously (number of groups in \code{kendall.global}, or
+  out simultaneously (number of groups in \code{kendall.global}, or
   number of species in \code{kendall.post}). The corrections are
-  performed using funtion \code{\link{p.adjust}}; see that function
-  for the describtion of the correction methods. In addition, there is
+  performed using function \code{\link{p.adjust}}; see that function
+  for the description of the correction methods. In addition, there is
   \enc{Šidák}{Sidak} correction which defined as 
   \eqn{P_{corr} = 1 -(1 - P)^k}.
 }
@@ -145,7 +145,7 @@ the behavioral sciences. 2nd edition. McGraw-Hill, New York.
 
 \seealso{\code{\link{cor}}, \code{\link{friedman.test}},
 \code{\link{hclust}}, \code{\link{cutree}}, \code{\link{kmeans}},
-\code{\link[vegan]{cascadeKM}}, \code{\link[labdsv]{duleg}}}
+\code{\link[vegan]{cascadeKM}}, \code{\link[labdsv]{indval}}}
 
 \author{ F. Guillaume Blanchet, University of Alberta, and Pierre
   Legendre, Université de Montréal }
