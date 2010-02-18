@@ -1,7 +1,25 @@
-$Date: 2010-01-11 17:01:01 +0200 (Mon, 11 Jan 2010) $
+$Date: 2010-02-18 09:06:09 +0200 (Thu, 18 Feb 2010) $
 
 VEGAN RELEASE VERSIONS at http://cran.r-project.org/
 
+Version 1.17-1 (released February 18, 2010)
+
+	* merged and edited r1133: update FAQ.
+
+	* copied multipart.R & print.multipart.R from the devel branch. 
+
+	* merged r1124: envfit() weights fixed for cca().
+
+	* merged r1123: CCorA() output fixes plus upgrades of
+	biplot.CCorA(). 
+
+	* merged r1118, r1119: predict.cca/rda match 'newdata' by dim
+	names and gained new choice 'type = "working"'.
+
+	* merged r1120, 1122: simulate.rda/cca gained argument 'rank'. 
+
+	* merged r1102: isompadist() need not require 'vegan'.
+	
 Version 1.17-0 (released January 11, 2010)
 
 	* Copied from vegan/pkg/vegan version 1.16-34 (rev1087).
@@ -199,7 +217,7 @@ Version 1.16-30 (closed October 3, 2009)
 	zero, and z became NaN. Now z = 0 for these cases. A response to
 	the query of Martin Kopecky at the vegan-help forum in R-Forge.
 
-	* densitplot.oecosimu: panels keep the order of statistics. The
+	* densityplot.oecosimu: panels keep the order of statistics. The
 	panels were ordered alphabetically, but the vertical line for the
 	observed statistic was in the original order (and thus often in
 	the wrong panel).

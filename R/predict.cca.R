@@ -1,5 +1,5 @@
 "predict.cca" <-
-    function (object, newdata, type = c("response", "wa", "sp", "lc"), 
+    function (object, newdata, type = c("response", "wa", "sp", "lc", "working"), 
               rank = "full", model = c("CCA", "CA"), scaling = FALSE, ...) 
 {
     type <- match.arg(type)
@@ -18,14 +18,17 @@
     if (is.null(w)) 
         w <- u
     slam <- diag(sqrt(object[[model]]$eig[1:take]), nrow = take)
-    if (type == "response") {
+    if (type %in%  c("response", "working")) {
         Xbar <- 0
         if (take > 0) 
             Xbar <- u %*% slam %*% t(v)
         if (!is.null(object$pCCA)) 
             warning("Conditional ('partial') component ignored")
         rc <- outer(rs, cs)
-        out <- (Xbar + 1) * rc * gtot
+        if (type == "response") 
+            out <- (Xbar + 1) * rc * gtot
+        else                 # type == "working"
+            out <- Xbar * sqrt(rc)
     }
     else if (type == "lc") {
         if (model == "CA") 
@@ -59,10 +62,17 @@
         if (!missing(newdata)) {
             if (!is.null(object$pCCA)) 
                 stop("No 'wa' scores available (yet) in partial CCA")
+            nm <- rownames(v)
+            if (!is.null(nm)) { # Got rownames: keep only species with scores
+                if (!all(nm %in% colnames(newdata)))
+                    stop("'newdata' does not have named columns matching one or more the original columns")
+                newdata <-  newdata[, nm, drop = FALSE]
+            } else { #Rownames are NULL: still try to remove exclude.spec
+                exclude.spec <- attr(object[[model]]$v, "na.action")
+                if (!is.null(exclude.spec)) 
+                    Xbar <- Xbar[, -exclude.spec]
+            }
             Xbar <- as.matrix(newdata)
-            exclude.spec <- attr(object[[model]]$v, "na.action")
-            if (!is.null(exclude.spec)) 
-                Xbar <- Xbar[, -exclude.spec]
             rs <- rowSums(Xbar)
             Xbar <- (Xbar - outer(rs, cs))/sqrt(outer(rs, cs))
             v <- sweep(v, 1, sqrt(cs), "*")
@@ -81,6 +91,12 @@
     }
     else if (type == "sp") {
         if (!missing(newdata)) {
+            nm <- rownames(u)
+            if (!is.null(nm)) {
+                if (!all(nm %in% rownames(newdata)))
+                    stop("'newdata' does not have named rows matching one or more of the original rows")
+                newdata <- newdata[nm, , drop = FALSE]
+            }
             Xbar <- as.matrix(newdata)
             cs <- colSums(Xbar)
             Xbar <- (Xbar - outer(rs, cs))/sqrt(outer(rs, cs))

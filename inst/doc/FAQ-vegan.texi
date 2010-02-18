@@ -11,7 +11,7 @@
 @ifnottex
 This document contains answers to some of the most frequently asked
 questions about R package vegan. 
-This is version of $Date: 2009-06-09 11:45:34 +0300 (Tue, 09 Jun 2009) $.
+This is version of $Date: 2010-02-18 08:54:55 +0200 (Thu, 18 Feb 2010) $.
 @end ifnottex
 
 @quotation
@@ -35,7 +35,7 @@ Copyright @copyright{} 2008 Jari Oksanen
 @titlepage
 @title vegan @acronym{FAQ}
 @subtitle Frequently Asked Questions on R package vegan
-@subtitle Version of $Date: 2009-06-09 11:45:34 +0300 (Tue, 09 Jun 2009) $ 
+@subtitle Version of $Date: 2010-02-18 08:54:55 +0200 (Thu, 18 Feb 2010) $ 
 @author Jari Oksanen
 
 @vskip 0pt plus 1filll
@@ -130,8 +130,9 @@ Vegan declares these packages only as suggested ones, and you can install vegan
 and use most of its functions without these packages.  The
 non-standard packages needed by some vegan functions are:
 @itemize
-@item Package @code{ellipse} 
-is needed by @code{ordiellipse}
+
+@item Package @code{cluster}
+is needed by @code{decostand} if environmental data contain factors
 
 @item Package @code{scatterplot3d}
 is needed by @code{ordiplot3d}

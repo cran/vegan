@@ -3,6 +3,23 @@
 			VEGAN RELEASE VERSIONS 
 		       	======================
 
+
+		NEW FEATURES AND FIXES IN VEGAN 1.17-1
+
+    - multipart: new functions for multiplicative partionining of
+      gamma diversity into alpha and beta diversity components. 
+
+    - CCorA: Fixed choice of scores in biplots -- Used PC scores
+      instead of observed scores in the right-hand-side biplot
+      panel. The biplot function has several new and enhanched
+      alternatives of plots.
+
+    - envfit: ignored weights in cca() results for factors or a single
+      continuous variable.  The bug was introduced with NA handling
+      upgrade in vegan 1.17-0. The problem with fitted vectors was
+      reported by Richard Telford (Bergen, Norway).
+
+
 	       CHANGES AND NEW FEATURES IN VEGAN 1.17-0
 
     - Guillaume Blanchet joined the vegan team.
