@@ -3,6 +3,35 @@
 			VEGAN RELEASE VERSIONS 
 		       	======================
 
+		     NEW FEATURES IN VEGAN 1.17-2
+
+    - permutest.betadisper: printed P-values in a wrong order in
+      displaying the the matrix of pairwise tests (the values were
+      correct, but formatting failed). Reported by Dan O'Shea.
+
+    - nesteddisc: failed if the most species rich sites were tied. The
+      function is now much faster (though still slow), but the price
+      is that it does not try as hard to find the optimal ordering.
+
+    - screeplot.cca & friends: new argument 'legend' for all methods
+      (except 'decorana') to draw a legend if the observed and broken
+      stick distribution are both plotted. 
+
+    - ordistep: adds an 'anova' item to the final model similarly as
+      the standard step(). You can suppress the tracing ('trace =
+      FALSE'), and find the model build history save in 'anova' in a
+      compact form.
+
+    - densityplot.oecosimu: gave warnings when there was only one
+      statistic and hence one lattice panel. 
+
+    - predict functions for cca and rda objects match 'newdata' by
+      dimension names instead of index.
+
+    - simulate.rda and simulate.cca have new argument 'rank' which
+      allows using lower rank presentation of fitted values
+      (including rank = 0). 
+
 
 		NEW FEATURES AND FIXES IN VEGAN 1.17-1
 
