@@ -1,6 +1,51 @@
-$Date: 2010-03-08 17:56:13 +0200 (Mon, 08 Mar 2010) $
+$Date: 2010-06-16 01:13:19 +0300 (Wed, 16 Jun 2010) $
 
 VEGAN RELEASE VERSIONS at http://cran.r-project.org/
+
+Version 1.17-3 (release scheduled for June 15, 2010)
+
+	* copied permutations.Rd from devel version (added there in r1229
+	and updated in r1230).
+
+	* copied treedist.R from the devel version and merged its
+	documentation (r1205 plus fixes and speed-up r1207:1209).
+
+	* merge r1211:1213: mantel and mantel.partial speed-ups.
+
+	* merge r1210: tsallis a bit faster.
+
+	* merge r1197:1203: 'label' argument in ordispider, ordisegments
+	and ordiarrows.
+
+	* merge r1200: cca, rda failed when Condition() was a factor, but
+	constraints had no factors.
+	
+	* merge r1190: RsquareAdj.default handles vector arguments.
+
+	* merge r1189: ordiellipse checks that it gets the 2d it can use. 
+
+	* merge r1188: ordiresids de-weights *CA.
+
+	* merge r1186: envfit defaults to 999 permutations (was 0).
+
+	* merge r1185: metaMDS handles NA distances.
+
+	* merge r1182 (r1184 for Rd) r1187: mantel.correlog upgrades.
+
+	* merge r1181: RsquareAdj.rda used wrong df in rank-deficit
+	models. 
+
+	* merge r1179: tie handling in adonis.
+
+	* merge r1177: print.permutest.cca uses correct order statistic.
+
+	* merge r1176: permutest.cca speed-up in CCA re-weighting.
+
+	* merge r1174:1175: scores.cca/rda always have names.
+
+	* betadisper: 'type = "median"', the default, was not computing
+	the spatial median on the real and imaginary axes separately.
+	Reported by Marek Omelka.
 
 Version 1.17-2 (released March 8, 2010)
 

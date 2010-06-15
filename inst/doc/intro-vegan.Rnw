@@ -15,7 +15,7 @@
 \title{Vegan: an introduction to ordination}
 \author{Jari Oksanen}
 
-\date{$ $Id: intro-vegan.Rnw 1088 2010-01-02 14:01:15Z jarioksa $ $
+\date{$ $Id: intro-vegan.Rnw 1036 2009-10-07 07:06:36Z jarioksa $ $
   processed with vegan
 \Sexpr{packageDescription("vegan", field="Version")}
 in \Sexpr{R.version.string} on \today}

@@ -8,10 +8,10 @@
 `RsquareAdj.default` <-
     function(x, n, m, ...)
 {
-    if (m >= (n-1))
-        NA
-    else
-        1 - (1-x)*(n-1)/(n-m-1)
+    r2 <- 1 - (1-x)*(n-1)/(n-m-1)
+    if (any(na <- m >= n-1))
+        r2[na] <- NA
+    r2
 }
 
 ## Use this with rda() results
@@ -19,7 +19,7 @@
     function(x, ...)
 {
     R2 <- x$CCA$tot.chi/x$tot.chi
-    m <- x$CCA$rank
+    m <- x$CCA$qrank
     n <- nrow(x$CCA$u)
     if (is.null(x$pCCA))
         radj <- RsquareAdj(R2, n, m)
@@ -33,7 +33,7 @@ RsquareAdj.cca <-
     function(x, ...)
 {
     R2 <- x$CCA$tot.chi/x$tot.chi
-    m <- x$CCA$rank
+    m <- x$CCA$qrank
     n <- nrow(x$CCA$u)
     radj <- NA
     list(r.squared = R2, adj.r.squared = radj)
