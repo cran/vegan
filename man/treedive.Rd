@@ -1,6 +1,7 @@
 \name{treedive}
 \alias{treedive}
 \alias{treeheight}
+\alias{treedist}  
 
 \title{ Functional Diversity estimated from a Species Dendrogram}
 \description{
@@ -12,16 +13,18 @@
 \usage{
 treedive(comm, tree, match.force = FALSE)
 treeheight(tree)
+treedist(x, tree, ...)
 }
 
 \arguments{
-  \item{comm}{Community data frame or matrix.}
+  \item{comm, x}{Community data frame or matrix.}
   \item{tree}{A dendrogram which for \code{treedive} must be for species
     (columns).}
   \item{match.force}{Force matching of column names in \code{comm} and
     labels in \code{tree}. If \code{FALSE}, matching only happens when
     dimensions differ, and in that case the species must be in identical
     order in both.}
+  \item{\dots}{Other arguments passed to functions (ignored).}
 }
 \details{
   Function \code{treeheight} finds the sum of lengths of connecting
@@ -40,6 +43,16 @@ treeheight(tree)
   reconstructing the dendrogram for the subset of the cophenetic
   distance matrix for species occurring in each site.
 
+  Function \code{treedist} finds the dissimilarities among
+  trees. Pairwise dissimilarity of two trees is found by combining
+  species in a common tree and seeing how much of the tree height is
+  shared and how much is unique. The current function uses a Jaccard
+  like approach and defines dissimilarity as the total unshared height
+  proportional of the total height of the combined tree. The idea is
+  similar as in the UniFrac distance (Lozupone and Knight 2005), but
+  the implementation is completely different and only works in the
+  presence absence framework.
+
   The functions need a dendrogram of species traits as an input. If
   species traits contain \code{\link{factor}} or \code{\link{ordered}}
   factor variables, it is recommended to use Gower distances for mixed
@@ -53,10 +66,17 @@ treeheight(tree)
   Null model, and the results will change with this choice.
 }
 
-\value{
-  A vector of diversity values or a single tree height.
+\value{ 
+  A vector of diversity values or a single tree height, or a
+  dissimilarity structure that inherits from \code{\link{dist}} and
+  can be used similarly.  
 }
+
 \references{
+  Lozupone, C. and Knight, R. 2005. UniFrac: a new phylogenetic method
+  for comparing microbial communities. \emph{Applied and Environmental
+  Microbiology} 71, 8228--8235.
+
   Petchey, O.L. and Gaston, K.J. 2002. Functional diversity (FD), species
   richness and community composition. \emph{Ecology Letters} 5,
   402--411.
@@ -81,8 +101,11 @@ d <- taxa2dist(dune.taxon, varstep=TRUE)
 cl <- hclust(d, "aver")
 treedive(dune, cl)
 ## Significance test using Null model communities.
-## The current choice fixes both species and site totals.
-oecosimu(dune, treedive, "quasiswap", tree = cl)
+## The current choice fixes only site totals.
+oecosimu(dune, treedive, "r0", tree = cl)
+## Clustering of tree distances
+dtree <- treedist(dune, cl)
+plot(hclust(dtree, "aver"))
 }
 
 \keyword{ univar }

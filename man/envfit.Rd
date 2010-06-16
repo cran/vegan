@@ -18,7 +18,7 @@
   the factors show the averages of factor levels.
 }
 \usage{
-\method{envfit}{default}(ord, env, permutations = 0, strata, choices=c(1,2), 
+\method{envfit}{default}(ord, env, permutations = 999, strata, choices=c(1,2), 
    display = "sites", w  = weights(ord), na.rm = FALSE, ...)
 \method{envfit}{formula}(formula, data, ...)
 \method{plot}{envfit}(x, choices = c(1,2), arrow.mul, at = c(0,0), axis = FALSE, 
@@ -40,7 +40,7 @@ factorfit(X, P, permutations = 0, strata, w, ...)
     variable(s). These must be continuous for \code{vectorfit} and
     factors or characters for \code{factorfit}. }
   \item{permutations}{ Number of permutations for assessing significance
-    of vectors or factors.}
+    of vectors or factors. Set to \code{0} to skip permutations.}
   \item{formula, data}{Model  \code{\link{formula}} and data.  }
   \item{na.rm}{Remove points with missing values in ordination scores or 
     environmental variables}.
@@ -100,7 +100,9 @@ factorfit(X, P, permutations = 0, strata, w, ...)
   The goodness of fit statistic is squared correlation coefficient
   (\eqn{r^2}).
   For factors this is defined as \eqn{r^2 = 1 - ss_w/ss_t}, where
-  \eqn{ss_w} and \eqn{ss_t} are within-group and total sums of squares.
+  \eqn{ss_w} and \eqn{ss_t} are within-group and total sums of
+  squares. See \code{\link{permutations}} for additional details on
+  permutation tests in Vegan.
 
   User can supply a vector of prior  weights \code{w}. If the ordination
   object has weights, these will be used. In practise this means that

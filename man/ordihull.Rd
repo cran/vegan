@@ -10,6 +10,7 @@
 \alias{weights.rda}
 \alias{weights.decorana}
 \alias{summary.ordihull}
+\alias{scores.ordihull}
 \alias{summary.ordiellipse}
 
 \title{Add Graphical Items to Ordination Diagrams}
@@ -28,11 +29,11 @@ ordiellipse(ord, groups, display="sites", kind = c("sd","se"), conf,
          draw = c("lines","polygon", "none"), w = weights(ord, display),
          show.groups, label = FALSE, ...)
 ordispider(ord, groups, display="sites", w = weights(ord, display),
-         show.groups, ...)
+         show.groups, label = FALSE, ...)
 ordiarrows(ord, groups, levels, replicates, display = "sites",
-         show.groups, startmark, ...)
+         show.groups, startmark, label = FALSE, ...)
 ordisegments(ord, groups, levels, replicates, display = "sites",
-         show.groups, ...)
+         show.groups, label = FALSE, ...)
 ordigrid(ord, levels, replicates, display = "sites",  ...)
 ordicluster(ord, cluster, prune = 0, display = "sites",
          w = weights(ord, display), ...)
@@ -57,10 +58,13 @@ ordicluster(ord, cluster, prune = 0, display = "sites",
   \item{show.groups}{Show only given groups. This can be a vector, or
     \code{TRUE} if you want to show items for which condition is
     \code{TRUE}. This argument makes it possible to use different
-    colours and line types for groups. The default is to show all
-    groups. }
-  \item{label}{Label the centre of the points in hull or the ellipse with 
-    the group name.}
+    colours and line types for groups. The default is to show all groups. }
+  \item{label}{Label the \code{groups} by their names. In
+    \code{ordiellipse}, \code{ordihull} and \code{ordispider} the the
+    group name is in the centroid of the object, in \code{ordiarrows}
+    in the start of the arrow, and in \code{ordisegments} at both
+    ends. \code{ordiellipse} and \code{ordihull} use standard
+    \code{\link{text}}, and others use \code{\link{ordilabel}}.}
   \item{startmark}{plotting character used to mark the first
     item. The default is to use no mark, and for instance, 
     \code{startmark = 1} will draw a circle.  For other plotting characters,
@@ -102,15 +106,16 @@ ordicluster(ord, cluster, prune = 0, display = "sites",
   \code{\link[cluster]{ellipsoidhull}} of package \pkg{cluster}.
 
   Functions \code{ordihull} and \code{ordiellipse} return the
-  \code{\link{invisible}} plotting structure. In \code{ordihull} this
-  is a list of coordinates of the hull and in \code{ordiellipse} a
-  list of covariance matrices and scales used in drawing the
-  ellipses. These result objects have a summary method that returns
-  the coordinates of the centres of the ellipses or hulls and their
-  surface areas in user units. The centres of the hulls may differ
-  from the location of the \code{label} which is the centre of the
-  points instead of the centre of the polygon. With \code{draw = "none"}
-  only the result object is returned and nothing is drawn.
+  \code{\link{invisible}} plotting structure. In \code{ordihull} this is
+  a list of coordinates of the hulls (which can be extracted with
+  \code{scores}), and in \code{ordiellipse} a list of covariance
+  matrices and scales used in drawing the ellipses.  These result
+  objects have a \code{summary} method that returns the coordinates of
+  the centres of the ellipses or hulls and their surface areas in user
+  units. The centres of the hulls may differ from the location of the
+  \code{label} which is the centre of the points instead of the centre
+  of the polygon. With \code{draw = "none"} only the result object is
+  returned and nothing is drawn.
 
   Function \code{ordiarrows} draws
   \code{\link{arrows}} and \code{ordisegments} draws line
@@ -120,13 +125,15 @@ ordicluster(ord, cluster, prune = 0, display = "sites",
   corresponding items among the groups.
 
   Function \code{ordispider} draws a `spider' diagram where each point
-  is connected to the group centroid with
-  \code{\link{segments}}. Weighted centroids are used in the
-  correspondence analysis  methods \code{\link{cca}} and
+  is connected to the group centroid with \code{\link{segments}}. 
+  Weighted centroids are used in the
+  correspondence analysis methods \code{\link{cca}} and
   \code{\link{decorana}} or if the user gives the weights in the
   call. If \code{ordispider} is called with \code{\link{cca}} or
   \code{\link{rda}} result without \code{groups} argument, the function
-  connects each `WA' scores to the corresponding `LC' score.
+  connects each `WA' scores to the corresponding `LC' score. If the
+  argument is a (\code{invisible}) \code{ordihull} object, the functin
+  will connect the points of the hull to their centroid.
 
   Function \code{ordicluster} overlays a cluster dendrogram onto
   ordination. It needs the result from a hierarchic clustering such as
@@ -150,7 +157,6 @@ ordicluster(ord, cluster, prune = 0, display = "sites",
   \code{ordihull} is \code{\link{chull}}.
 }
 
-
 \examples{
 data(dune)
 data(dune.env)
@@ -162,7 +168,14 @@ plot(mod, type="n", scaling = 3)
 pl <- ordihull(mod, Management, scaling = 3, label = TRUE)
 ## ... and find centres and areas of the hulls
 summary(pl)
-ordispider(mod, col="red", scaling = 3)
+## use ordispider to label and mark the hull
+plot(mod, type = "n")
+pl <- ordihull(mod, Management, scaling = 3)
+ordispider(pl, col="red", lty=3, label = TRUE )
+## ordispider to connect WA and LC scores
+plot(mod, dis=c("wa","lc"), type="p")
+ordispider(mod)
+## Other types of plots
 plot(mod, type = "p", display="sites")
 ordicluster(mod, hclust(vegdist(dune)), prune=3, col = "blue")
 plot(mod, type="n", display = "sites")
@@ -171,4 +184,3 @@ pl <- ordiellipse(mod, Management, kind="se", conf=0.95, lwd=2, col="blue")
 summary(pl)
 }
 \keyword{aplot }
-

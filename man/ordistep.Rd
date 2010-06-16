@@ -102,8 +102,8 @@ ordistep(object, scope, direction = c("both", "backward", "forward"), Pin = 0.05
 data(dune)
 data(dune.env)
 mod1 <- rda(dune ~ ., dune.env)
-ordistep(mod1)
-ordistep(rda(dune ~ 1, dune.env), scope = formula(mod1))
+ordistep(mod1, perm.max = 200)
+ordistep(rda(dune ~ 1, dune.env), scope = formula(mod1), perm.max = 200)
 }
 
 \keyword{ multivariate }

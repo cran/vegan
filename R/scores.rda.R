@@ -36,7 +36,7 @@
             v <- sweep(v, 2, scal, "*")
             if (scaling < 0) {
                 v <- sweep(v, 1, x$colsum, "/")
-                v <- v * sqrt(x$tot.chi / (max(nrow(x$CA$u), nrow(x$CCA$u)) - 1 ))
+                v <- v * sqrt(sumev / (nr - 1))
             }
             v <- const * v
         }
@@ -82,7 +82,15 @@
             }
             sol$centroids <- cn
         }
-    }  
+    }
+    ## Take care that scores have names
+    for (i in 1:length(sol)) {
+        if (is.matrix(sol[[i]])) 
+            rownames(sol[[i]]) <-
+                rownames(sol[[i]], do.NULL = FALSE, 
+                         prefix = substr(names(sol)[i], 1, 3))
+    }
+    ## Only one type of scores: return a matrix instead of a list
     if (length(sol) == 1) 
         sol <- sol[[1]]
     attr(sol, "const") <- const

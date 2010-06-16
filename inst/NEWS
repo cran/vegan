@@ -3,6 +3,49 @@
 			VEGAN RELEASE VERSIONS 
 		       	======================
 
+	      NEW FEATURES AND BUG FIXES IN VEGAN 1.17-3
+
+    - adonis: handles ties correctly.
+
+    - anova.cca and permutest.cca: permutations of cca result is
+      faster and now nearly equally fast (or slow) in rda and cca. 
+
+    - betadisper: 'type = "median"' (the default) was not computing
+      the spatial median on the real and imaginary axes separately.
+      Reported by Marek Omelka.
+
+    - cca, rda and capscale failed when Condition() was a factor, but
+      the constraints had only continuous variables.
+
+    - envfit: defaults to use 999 permutations instead of skipping
+      permutations. 
+
+    - mantel and mantel.partial: faster permutation.
+
+    - mantel.correlog: upgraded and faster.
+
+    - ordiarrows, ordisegments and ordispider gained argument 'label'
+      to label the groups corresponding to drawn arrows or lines.
+
+    - ordiresids: de-weights residuals and fitted values in CCA so
+      that these are identical to the values shuffled in simulate.cca.
+
+    - permutest.cca: adds observed statistic among permutations when
+      printing the result (does not influence anova.cca or
+      calculations).
+
+    - RsquareAdj: The 'rda' method used wrong number of degrees of
+      freedom in rank deficit models (number of dependent variables
+      was lower than the rank of constraints and conditions). Default
+      method handles vector input.
+
+    - scores: default method works with one row of scores. The scores
+      of "cca" and "rda" methods always have names, even if there are
+      no names in the input data.
+
+    - Permutation tests: The available permutation tests are described
+      in a new help files accessed via ?permutations.
+
 		     NEW FEATURES IN VEGAN 1.17-2
 
     - permutest.betadisper: printed P-values in a wrong order in
@@ -32,6 +75,12 @@
       allows using lower rank presentation of fitted values
       (including rank = 0). 
 
+    - treedist: new function to find dissimilarities of species
+      property trees of communities. The property trees can be, e.g.,
+      functional diversity trees, taxonomies or phylogenies. Similar
+      in spirit to UniFrac distance (C. Lozupone & R. Knight, Appl
+      Environ Microbiol 71:8225-8235; 2005), but completely different
+      in design and works only with binary data.
 
 		NEW FEATURES AND FIXES IN VEGAN 1.17-1
 
