@@ -1,8 +1,45 @@
-$Date: 2010-06-16 01:13:19 +0300 (Wed, 16 Jun 2010) $
+$Date: 2010-08-19 15:13:41 +0300 (Thu, 19 Aug 2010) $
 
 VEGAN RELEASE VERSIONS at http://cran.r-project.org/
 
-Version 1.17-3 (release scheduled for June 15, 2010)
+Version 1.17-4 (released August 20, 2010)
+
+	* merged r1263: mrpp.Rd polish.
+
+	* merged changes 1235:1259 from the main devel branch plus copied
+	MOStest and support and predict.cca7rda update from earlier
+	revisions. Changed procedures include:
+
+	* decorana order of input check (r1243)
+
+	* predict.cca/rda: 'newdata' with types "response" and "working"
+	(r1180). 
+
+	* MOStest: copied from pkg/vegan.
+
+	* ordigrid: two line types (r1246)
+
+	* veganCovEllipse: copied from pkg/vegan.
+
+	* msoplot: legend fix (r1250). Reported by Daniel Borcard.
+
+	* adonis: cleaner print (r1247)
+
+	* mrpp bug fix: remove CS from mrpp, and correct weight type of CS
+	in meandist. Reported by John Van Sickle (US EPA, Corvallis OR). 
+
+	* ordiellipse: internal changes (r1237) and fix labels on filled
+	polygons (r1242).
+
+	* vegdist: fix Anderson variant of Gower ("altGower"). Reported as
+	bug #1002 by Sergio Garcia.
+
+	* Rd files cleanup, mainly removing visible backslash \ (r1253,
+	1254, 1257).
+
+	* vignettes updated (r1239, 1244, 1245, 1259).
+
+Version 1.17-3 (released June 16, 2010)
 
 	* copied permutations.Rd from devel version (added there in r1229
 	and updated in r1230).

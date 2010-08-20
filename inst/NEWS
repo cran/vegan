@@ -3,6 +3,41 @@
 			VEGAN RELEASE VERSIONS 
 		       	======================
 
+	      NEW FEATURES AND BUG FIXES IN VEGAN 1.17-4
+
+    - MOStest: a new set of functions to implement generalized
+      Mitchell-Olds & Shaw test for the location of the quadratic
+      extreme in a given interval. The test can also be used for the
+      location of the optimum of the Gaussian response model. In
+      addition to the basic test, there are Fieller and deviance
+      profile methods for the confidence interval of the location of
+      the quadratic extreme or Gaussian optimum.
+
+    - mrpp & meandist: mrpp() does not evaluate the Classification
+      Strength (CS) of Van Sickle & Hughes (J. N. Am. Benthol. Soc.,
+      19: 370-384; 2000) any longer. The old version misinterpreted
+      the weighting scheme of CS, and with correct scheme there is no
+      exact relationship between CS and the corresponding MRPP
+      statistic and therefore permutation tests are not available. CS
+      is still evaluated in meandist(), but with corrected weighting
+      scheme, and no tests are performed. Reported by Dr John Van
+      Sickle (Corvallis OR). 
+
+    - msoplot: legend text was in a wrong order. Reported by Daniel
+      Borcard. 
+
+    - vegdist: Marti Anderson variant of the Gower distance (method =
+      "altGower") should be without range standardization. Reported by
+      Sergio Garcia. 
+
+    - ordiellipse: labels disappeared in their background with 'draw =
+      "polygon"'. 
+
+    - predict.cca and predict.rda: gained argument 'newdata' for 'type
+      = "response"' and 'type = "working"'.  These return estimates
+      of the response data, or dissimilarities in capscale().
+  
+
 	      NEW FEATURES AND BUG FIXES IN VEGAN 1.17-3
 
     - adonis: handles ties correctly.

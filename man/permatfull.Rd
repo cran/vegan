@@ -119,7 +119,8 @@ Patefield, W. M. (1981) Algorithm AS159. An efficient method of generating r x c
 Applied Statistics 30, 91--97.
 }
 
-\author{\enc{P\'eter S\'olymos}{Peter Solymos}, \email{solymos@ualberta.ca} and Jari Oksanen}
+\author{\enc{Péter Sólymos}{Peter Solymos},
+\email{solymos@ualberta.ca} and Jari Oksanen}
 
 \seealso{
 For other functions to permute matrices: \code{\link{commsimulator}}, \code{\link{r2dtable}}, \code{\link{sample}}, \code{\link[bipartite]{swap.web}}.

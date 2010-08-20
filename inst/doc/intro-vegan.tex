@@ -15,9 +15,9 @@
 \title{Vegan: an introduction to ordination}
 \author{Jari Oksanen}
 
-\date{$ $Id: intro-vegan.Rnw 1036 2009-10-07 07:06:36Z jarioksa $ $
+\date{$ $Id: intro-vegan.Rnw 1260 2010-08-17 12:11:04Z jarioksa $ $
   processed with vegan
-1.17-3
+1.17-4
 in R version 2.11.1 (2010-05-31) on \today}
 \usepackage{Sweave}
 \begin{document}
@@ -107,18 +107,12 @@ species scores to the configuration as weighted averages (function
 \end{Sinput}
 \begin{Soutput}
 Run 0 stress 12.05894 
-Run 1 stress 19.28593 
+Run 1 stress 18.91766 
 Run 2 stress 12.04547 
 ... New best solution
-... procrustes: rmse 0.003141919  max resid 0.01079955 
-Run 3 stress 11.97274 
-... New best solution
-... procrustes: rmse 0.01994296  max resid 0.0627373 
-Run 4 stress 28.05952 
-Run 5 stress 37.6748 
-Run 6 stress 24.49085 
-Run 7 stress 11.97274 
-... procrustes: rmse 8.891134e-05  max resid 0.0001750990 
+... procrustes: rmse 0.003115928  max resid 0.01074535 
+Run 3 stress 12.04547 
+... procrustes: rmse 0.0001351562  max resid 0.0003826398 
 *** Solution reached
 \end{Soutput}
 \begin{Sinput}
@@ -134,8 +128,8 @@ Data:     dune
 Distance: bray 
 
 Dimensions: 2 
-Stress:     11.97274 
-Two convergent solutions found after 7 tries
+Stress:     12.04547 
+Two convergent solutions found after 3 tries
 Scaling: centring, PC rotation, halfchange scaling 
 Species: expanded scores based on ‘dune’ 
 \end{Soutput}
@@ -237,9 +231,9 @@ methods you can try:
 \texttt{Vegan} has a group of functions for adding information about
 classification or grouping of points onto ordination diagrams.
 Function \texttt{ordihull} adds convex hulls, \texttt{ordiellipse}
-(which needs package \texttt{ellipse}) adds ellipses of standard
-deviation, standard error or confidence areas, and \texttt{ordispider}
-combines items to their centroid (Fig. \ref{fig:ordihull}):
+adds ellipses of standard deviation, standard error or confidence
+areas, and \texttt{ordispider} combines items to their centroid
+(Fig. \ref{fig:ordihull}):
 \begin{Schunk}
 \begin{Sinput}
 > data(dune.env)
@@ -251,7 +245,7 @@ combines items to their centroid (Fig. \ref{fig:ordihull}):
 > plot(ord, disp = "sites", type = "n")
 > ordihull(ord, Management, col = "blue")
 > ordiellipse(ord, Management, col = 3, lwd = 2)
-> ordispider(ord, Management, col = "red")
+> ordispider(ord, Management, col = "red", label = TRUE)
 > points(ord, disp = "sites", pch = 21, col = "red", bg = "yellow", 
 +     cex = 1.3)
 \end{Sinput}
@@ -295,8 +289,8 @@ variables using permutation tests:
 \begin{Soutput}
 ***VECTORS
 
-     NMDS1   NMDS2     r2  Pr(>r)  
-A1 0.97941 0.20189 0.3688 0.01499 *
+      NMDS1    NMDS2     r2  Pr(>r)  
+A1 0.997198 0.074813 0.3863 0.01399 *
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 P values based on 1000 permutations.
@@ -305,14 +299,14 @@ P values based on 1000 permutations.
 
 Centroids:
                NMDS1   NMDS2
-ManagementBF -0.4531  0.0011
-ManagementHF -0.2712 -0.1209
-ManagementNM  0.3264  0.5688
-ManagementSF  0.1261 -0.4686
+ManagementBF -0.4505 -0.0052
+ManagementHF -0.2740 -0.1183
+ManagementNM  0.3308  0.5691
+ManagementSF  0.1227 -0.4680
 
 Goodness of fit:
-               r2   Pr(>r)   
-Management 0.4205 0.003996 **
+              r2   Pr(>r)   
+Management 0.422 0.004995 **
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 P values based on 1000 permutations.
@@ -346,7 +340,7 @@ y ~ s(x1, x2, k = knots)
 Estimated degrees of freedom:
 2  total = 3 
 
-GCV score: 3.941185
+GCV score: 3.832037
 \end{Soutput}
 \end{Schunk}
 \begin{SCfigure}
@@ -487,8 +481,8 @@ Terms added sequentially (first to last)
 
 Model: cca(formula = dune ~ A1 + Management, data = dune.env)
            Df  Chisq      F N.Perm Pr(>F)   
-A1          1 0.2248 2.5245    199  0.015 * 
-Management  3 0.5550 2.0780    199  0.010 **
+A1          1 0.2248 2.5245    199   0.01 **
+Management  3 0.5550 2.0780    199   0.01 **
 Residual   15 1.3355                        
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
@@ -508,8 +502,8 @@ Marginal effects of terms
 
 Model: cca(formula = dune ~ A1 + Management, data = dune.env)
            Df  Chisq      F N.Perm Pr(>F)   
-A1          1 0.1759 1.9761    399 0.0225 * 
-Management  3 0.5550 2.0780    199 0.0100 **
+A1          1 0.1759 1.9761    199  0.010 **
+Management  3 0.5550 2.0780    199  0.005 **
 Residual   15 1.3355                        
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
@@ -525,12 +519,12 @@ Moreover, it is possible to analyse significance of each axis:
 Permutation test for cca under reduced model
 
 Model: cca(formula = dune ~ A1 + Management, data = dune.env)
-         Df  Chisq      F N.Perm Pr(>F)   
-CCA1      1 0.3187 3.5801    199  0.010 **
-CCA2      1 0.2372 2.6640    499  0.066 . 
-CCA3      1 0.1322 1.4845     99  0.300   
-CCA4      1 0.0917 1.0297     99  0.370   
-Residual 15 1.3355                        
+         Df  Chisq      F N.Perm Pr(>F)  
+CCA1      1 0.3187 3.5801    199  0.015 *
+CCA2      1 0.2372 2.6640    499  0.058 .
+CCA3      1 0.1322 1.4845     99  0.270  
+CCA4      1 0.0917 1.0297     99  0.430  
+Residual 15 1.3355                       
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 \end{Soutput}
@@ -586,7 +580,7 @@ Terms added sequentially (first to last)
 
 Model: cca(formula = dune ~ A1 + Management + Condition(Moisture), data = dune.env)
            Df  Chisq      F N.Perm Pr(>F)  
-A1          1 0.1154 1.4190     99   0.14  
+A1          1 0.1154 1.4190     99   0.11  
 Management  3 0.3954 1.6205     99   0.02 *
 Residual   12 0.9761                       
 ---
@@ -607,7 +601,7 @@ Permutations stratified within 'Moisture'
 
 Model: cca(formula = dune ~ A1 + Management + Condition(Moisture), data = dune.env)
            Df  Chisq      F N.Perm Pr(>F)   
-A1          1 0.1154 1.4190     99   0.27   
+A1          1 0.1154 1.4190     99   0.33   
 Management  3 0.3954 1.6205     99   0.01 **
 Residual   12 0.9761                        
 ---
