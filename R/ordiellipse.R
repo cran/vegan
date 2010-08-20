@@ -4,9 +4,6 @@
               w = weights(ord, display),
               show.groups, label = FALSE,  ...)
 {
-    ## Define Circle for an ellipse: taken from the 'car' package
-    theta <- (0:51) * 2 * pi/51
-    Circle <- cbind(cos(theta), sin(theta))
     weights.default <- function(object, ...) NULL
     kind <- match.arg(kind)
     draw <- match.arg(draw)
@@ -31,6 +28,8 @@
     out <- seq(along = groups)
     inds <- names(table(groups))
     res <- list()
+    if (label)
+        cntrs <- names <- NULL
     for (is in inds) {
         gr <- out[groups == is]
         if (length(gr) > 2) {
@@ -42,17 +41,25 @@
             if (missing(conf))
                 t <- 1
             else t <- sqrt(qchisq(conf, 2))
-            xy <- t(mat$center + t * t(Circle %*% chol(mat$cov)))
+            xy <- veganCovEllipse(mat$cov, mat$center, t)
             if (draw == "lines")
                 ordiArgAbsorber(xy, FUN = lines, ...)
             else if (draw == "polygon") 
                 ordiArgAbsorber(xy[, 1], xy[, 2], FUN = polygon, ...)
-            if (label && draw != "none")
-                ordiArgAbsorber(mat$center[1], mat$center[2], labels=is,
-                               FUN = text, ...)
+            if (label && draw != "none") {
+                cntrs <- rbind(cntrs, mat$center)
+                names <- c(names, is)
+            }
             mat$scale <- t
             res[[is]] <- mat
         }
+    }
+    if (label && draw != "none") {
+        if (draw == "lines")
+            ordiArgAbsorber(cntrs[,1], cntrs[,2], labels=names, 
+                            FUN = text, ...)
+        else
+            ordiArgAbsorber(cntrs, labels = names, FUN = ordilabel, ...)
     }
     class(res) <- "ordiellipse"
     invisible(res)

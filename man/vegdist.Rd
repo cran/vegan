@@ -53,14 +53,16 @@
     \cr
     \code{gower}
     \tab \eqn{d_{jk} = (1/M) \sum_i \frac{|x_{ij}-x_{ik}|}{\max x_i-\min
-	x_i}}{d[jk] = (1/M) sum (abs(x[ij]-x[ik])/(max(x[i])-min(x[i]))}
+	x_i}}{d[jk] = (1/M) sum (abs(x[ij]-x[ik])/(max(x[i])-min(x[i])))}
     \cr
-    \tab where \eqn{M} is the number of columns (excluding missing
+    \tab where \eqn{M} is the number of rows (excluding missing
     values)
     \cr
     \code{altGower}
-    \tab like \code{gower}, but \eqn{M} is the number of pairs with at least
-    one non-zero value (excluding double zeros)
+    \tab \eqn{d_{jk} = (1/NZ) \sum_i |x_{ij} - x_{ik}|}{d[jk] = (1/NZ) sum(abs(x[ij] - x[ik]))}
+    \cr
+    \tab where \eqn{NZ} is the number of non-zero rows excluding
+    double-zeros (Anderson et al. 2006). 
     \cr
     \code{canberra}
     \tab \eqn{d_{jk}=\frac{1}{NZ} \sum_i
@@ -110,28 +112,27 @@
   limit, but can vary among sites with no shared species. For further
   discussion, see Anderson & Millar (2004).
   
-  Mountford index is defined as \eqn{M = 1/\alpha} where \eqn{\alpha} is
-  the parameter of Fisher's logseries assuming that the compared
+  Mountford index is defined as \eqn{M = 1/\alpha} where \eqn{\alpha}
+  is the parameter of Fisher's logseries assuming that the compared
   communities are samples from the same community
   (cf. \code{\link{fisherfit}}, \code{\link{fisher.alpha}}). The index
   \eqn{M} is found as the positive root of equation \eqn{\exp(aM) +
   \exp(bM) = 1 + \exp[(a+b-j)M]}{exp(a*M) + exp(b*M) = 1 +
   exp((a+b-j)*M)}, where \eqn{j} is the number of species occurring in
-  both communities, and \eqn{a} and \eqn{b} are the number of species in
-  each separate community (so the index uses presence--absence
+  both communities, and \eqn{a} and \eqn{b} are the number of species
+  in each separate community (so the index uses presence--absence
   information). Mountford index is usually misrepresented in the
   literature: indeed Mountford (1962) suggested an approximation to be
-  used as starting
-  value in iterations, but the proper index is defined as the root of
-  the equation
-  above. The function \code{vegdist} solves \eqn{M} with the Newton
-  method. Please note that if either \eqn{a} or \eqn{b} are equal to
-  \eqn{j}, one of the communities could be a subset of other, and the
-  dissimilarity is \eqn{0} meaning that non-identical objects may be
-  regarded as similar and the index is non-metric. The Mountford index
-  is in the range \eqn{0 \dots \log(2)}, but the dissimilarities are
-  divided by \eqn{\log(2)} 
-  so that the results will be in the conventional range \eqn{0 \dots 1}.
+  used as starting value in iterations, but the proper index is
+  defined as the root of the equation above. The function
+  \code{vegdist} solves \eqn{M} with the Newton method. Please note
+  that if either \eqn{a} or \eqn{b} are equal to \eqn{j}, one of the
+  communities could be a subset of other, and the dissimilarity is
+  \eqn{0} meaning that non-identical objects may be regarded as
+  similar and the index is non-metric. The Mountford index is in the
+  range \eqn{0 \dots \log(2)}{0 \dots log(2)}, but the dissimilarities
+  are divided by \eqn{\log(2)}{log(2)} so that the results will be in
+  the conventional range \eqn{0 \dots 1}.
 
   Raup--Crick dissimilarity (\code{method = "raup"}) is a probabilistic
   index based on presence/absence data.  It is defined as \eqn{1 - prob(j)},
@@ -150,17 +151,18 @@
   below one, and two identical communities may have dissimilarity
   slightly above zero.
   
-  Chao index tries to take into account the number of unseen species
-  pairs, similarly as Chao's method in
-  \code{\link{specpool}}. Function \code{vegdist} implements a Jaccard
-  type index defined as \eqn{d_{jk} = U_j U_k/(U_j + U_k - U_j U_k)}, where
-  \eqn{U_j = C_j/N_j + (N_k - 1)/N_k \times a_1/(2 a_2) \times S_j/N_j}. Here
-  \eqn{C_j} is the total number of individuals in species shared with
-  site \eqn{k}, \eqn{N} is the total number of individuals, \eqn{a_1}
-  and \eqn{a_2} are number of species occurring only with one or two
-  individuals in another site, and \eqn{S_j} is the number of
-  individuals in species that occur only with one individual in
-  another site (Chao et al. 2005).  
+  Chao index  tries to  take into account  the number of  unseen species
+  pairs, similarly as  Chao's method in \code{\link{specpool}}. Function
+  \code{vegdist} implements a Jaccard  type index defined as \eqn{d_{jk}
+  = U_j  U_k/(U_j +  U_k -  U_j U_k)}{d[jk] =  U[j]*U[k]/(U[j] +  U[k] -
+  U[j]*U[k])}, where  \eqn{U_j = C_j/N_j  + (N_k - 1)/N_k  \times a_1/(2
+  a_2) \times S_j/N_j}{U[j]  = C[j]/N[j] + (N[k] -1)/N[k]  * a1/(2*a2) *
+  S[j]/N[j]}. Here \eqn{C_j}{C[j]} is the total number of individuals in
+  species  shared with  site \eqn{k},  \eqn{N}  is the  total number  of
+  individuals,  \eqn{a_1}{a1} and  \eqn{a_2}{a2} are  number  of species
+  occurring  only with  one  or  two individuals  in  another site,  and
+  \eqn{S_j}{S[j]}  is the number  of individuals  in species  that occur
+  only with one individual in another site (Chao et al. 2005).
 
   Morisita index can be used with genuine count data (integers) only. Its
   Horn--Morisita variant is able to handle any abundance data.
@@ -229,24 +231,26 @@
 \author{ Jari Oksanen, with contributions from Tyler Smith (Gower index)
   and Michael Bedward (Raup--Crick index). }
 
-\note{The  function is an alternative to \code{\link{dist}} adding
-  some ecologically meaningful indices.  Both methods should produce
-  similar types of objects which can be interchanged in any method
-  accepting either.  Manhattan and Euclidean dissimilarities should be
-  identical in both methods. Canberra index is divided by the
-  number of variables in \code{vegdist}, but not in \code{\link{dist}}.
-  So these differ by a constant multiplier, and the alternative in
-  \code{vegdist} is in range (0,1).  Function \code{\link[cluster]{daisy}}
-  (package \pkg{cluster}) provides alternative implementation of Gower
-  index that also can handle mixed data of numeric and class variables. 
-  There are two versions of Gower distance (\code{"gower"}, 
-  \code{"altGower"}) which differ in scaling: \code{"gower"} divides
-  all distances by the number of observations (rows), but 
-  \code{"altGower"} omits double-zeros and divides by the number of 
-  pairs with at least one above-zero value. Gower (1971) suggested this for
-  presences, but it is often taken as the general feature of the Gower 
-  distances. See Examples for implementing the Anderson et al. (2006)
-  variant of the Gower index.
+\note{The function is an alternative to \code{\link{dist}} adding some
+  ecologically meaningful indices.  Both methods should produce similar
+  types of objects which can be interchanged in any method accepting
+  either.  Manhattan and Euclidean dissimilarities should be identical
+  in both methods. Canberra index is divided by the number of variables
+  in \code{vegdist}, but not in \code{\link{dist}}.  So these differ by
+  a constant multiplier, and the alternative in \code{vegdist} is in
+  range (0,1).  Function \code{\link[cluster]{daisy}} (package
+  \pkg{cluster}) provides alternative implementation of Gower index that
+  also can handle mixed data of numeric and class variables.  There are
+  two versions of Gower distance (\code{"gower"}, \code{"altGower"})
+  which differ in scaling: \code{"gower"} divides all distances by the
+  number of observations (rows) and scales each column to unit range,
+  but \code{"altGower"} omits double-zeros and divides by the number of
+  pairs with at least one above-zero value, and does not scale columns
+  (Anderson et al. 2006).  You can use \code{\link{decostand}} to add
+  range standardization to \code{"altGower"} (see Examples). Gower
+  (1971) suggested omitting double zeros for presences, but it is often
+  taken as the general feature of the Gower distances. See Examples for
+  implementing the Anderson et al. (2006) variant of the Gower index.
 
   Most dissimilarity indices in \code{vegdist} are designed for
   community data, and they will give misleading values if there are
@@ -270,7 +274,9 @@ data(varespec)
 vare.dist <- vegdist(varespec)
 # Orlóci's Chord distance: range 0 .. sqrt(2)
 vare.dist <- vegdist(decostand(varespec, "norm"), "euclidean")
-# Anderson et al. version of Gower
+# Anderson et al.  (2006) version of Gower
 vare.dist <- vegdist(decostand(varespec, "log"), "altGower")
+# Range standardization with "altGower" (that excludes double-zeros)
+vare.dist <- vegdist(decostand(varespec, "range"), "altGower")
 }
 \keyword{ multivariate }
