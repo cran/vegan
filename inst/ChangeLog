@@ -1,6 +1,92 @@
-$Date: 2010-08-19 15:13:41 +0300 (Thu, 19 Aug 2010) $
+$Date: 2010-12-17 15:03:40 +0200 (Fri, 17 Dec 2010) $
 
 VEGAN RELEASE VERSIONS at http://cran.r-project.org/
+
+Version 1.17-5 (released December 17, 2010)
+
+	* based on development version 1.18-18 at
+	http://vegan.r-forge.r-project.org/ 
+
+	* copied ordiR2step.R from pkg/vegan and merged docs to
+	ordistep.Rd. 
+
+	* merge r1109, 1121: more diffable permatfull.Rd and fixes in
+	markup. 
+
+	* merge r1273, 1275: permutest.cca 99 permutation & saves its
+	call. 
+
+	* merge r1277: biplot.CCorA resets par.
+
+	* merge r1278:1279: vegdist.Rd update.
+
+	* merge r1280: deviance.cca/rda return 0 in overparamerized models
+	with no unconstrained component.
+
+	* merge r1281: fix anova.ccanull df.
+
+	* merge r1284, 1324: ordistep has new formatting of formula and is
+	more robust.
+	
+	* merge r1288:1290, 1305: rankindex takes a list of indices.
+
+	* merge r1296: example on unbiased Simpson in diversity.Rd.
+
+	* merge r1300, 1369:1371: FAQ and vignette updates.
+
+	* merge r1301:1304: metaMDSdist update.
+
+	* merge r1311: plot.decorana uses points if no text available. 
+
+	* merge r1312:1314: ordilabel and ordiellipse text uses border
+	colour. 
+
+	* merge r1315: fix swan infinite loop.
+
+	* merge r1319: decorana internal (rowSums/colSums)
+
+	* merge r1320: decorana prints warning.
+
+	* merge r1328, 1341: Gustavo Carvalho's nestednodf upgrade.
+
+	* merge r1329: treedive handles trivial trees.
+
+	* merge r1330:1331: oecosimu NA handling and takes care that
+	binary statistic is used with binary null models.
+
+	* merge r1332: anova.ccabyaxis really uses marginal models.
+
+	* merged r1332:1385 (or current head) except fitspecaccum.R and
+	related SSarrhenius.R & friends. Earlier merges skipped
+	ordiR2step.R and related functions. Otherwise this release branch
+	is now mainly in sync with the pkg/vegan branch. This set of
+	merges fixes issues with cmdscale changes and negative eigenvalues
+	in capscale, wcmdscale, isomap & eigenvals, fixes translation
+	parameter in procrustes and introduces predict.procrustes,
+	introduces new code for prc() by Cajo ter Braak, fixes no. of
+	permutations in mantel.correlog, fixes R bug (pre 2.12.1) in
+	pivoting aliased variables with qr.X() in vif.cca, intersetcor,
+	and as.mlm.cca/rda, introduces two scaling constants for
+	scores.rda, makes treedist to work with zero-height trees and
+	introduces unscaled tree distance, fixes NA handling in capscale
+	with fix in ordiParseFormula(), makes eigenvals to know pcnm and
+	new cmdscale in R 2.12.1, introduces printing of proportional
+	inertia in print.cca, makes pcnm return its truncated distance
+	matrix. 
+
+	* merged r1390: fix to plot.betadisper when plotting any axes other
+	than 1 and 2.
+
+	* merged r1407: diffable and updated contribdiv.Rd.
+
+	* merged r1415: Gower legend fix in vegdist.Rd.
+
+	* merged r1418: Almeida-Neto & Ulrich got published.
+
+	* merged r1423: fix to p-values in mantel.correlog.
+
+	* sipoo.rda got row names and decision-vegan.Rnw changed
+	accordingly in parallel to pkg/vegan devel branch.
 
 Version 1.17-4 (released August 20, 2010)
 

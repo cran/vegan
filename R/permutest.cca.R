@@ -5,8 +5,9 @@ permutest.default <- function(x, ...)
     stop("No default permutation test defined")
 
 `permutest.cca` <-
-    function (x, permutations = 100, model = c("reduced", "direct", 
-                                     "full"), first = FALSE, strata, ...) 
+    function (x, permutations = 99,
+              model = c("reduced", "direct", "full"), first = FALSE,
+              strata, ...) 
 {
     model <- match.arg(model)
     isCCA <- !inherits(x, "rda")
@@ -100,9 +101,10 @@ permutest.default <- function(x, ...)
     ## numerical inaccuracy
     F.0 <- round(F.0, 12)
     F.perm <- round(F.perm, 12)
-    sol <- list(call = x$call, model = model, F.0 = F.0, F.perm = F.perm, 
-                chi = c(Chi.z, Chi.xz), num = num, den = den, df = c(q, 
-                                                              r), nperm = permutations, method = x$method, first = first,  Random.seed = seed)
+    sol <- list(call = match.call(), testcall = x$call, model = model,
+                F.0 = F.0, F.perm = F.perm,  chi = c(Chi.z, Chi.xz),
+                num = num, den = den, df = c(q, r), nperm = permutations,
+                method = x$method, first = first,  Random.seed = seed)
     if (!missing(strata)) {
         sol$strata <- deparse(substitute(strata))
         sol$stratum.values <- strata
