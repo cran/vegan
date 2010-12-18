@@ -10,15 +10,19 @@
     function(x, ...)
 {
     ## svd and eigen return unspecified 'list', see if this could be
-    ## either of them
+    ## either of them (like does cmdscale)
     out <- NA
     if (is.list(x)) {
         ## eigen
         if (length(x) == 2 && all(names(x) %in% c("values", "vectors")))
             out <- x$values
         ## svd: return squares of singular values
-        if (length(x) == 3 && all(names(x) %in% c("d", "u", "v")))
+        else if (length(x) == 3 && all(names(x) %in% c("d", "u", "v")))
             out <- x$d^2
+        ## cmdscale() will return all eigenvalues from R  2.12.1
+        else if (getRversion() > "2.12.0" &&
+                 all(c("points","eig","GOF") %in% names(x)))
+            out <- x$eig
     }
     class(out) <- "eigenvals"
     out
@@ -52,7 +56,7 @@
    else
        out <- c(x$CCA$eig, x$CA$eig)
    if (!is.null(out))
-       class(out) <- c("eigenvals")
+       class(out) <- "eigenvals"
    out
 }
 
@@ -61,24 +65,35 @@
     function(x, ...)
 {
     out <- x$eig
-    class(out) <-"eigenvals"
+    class(out) <- "eigenvals"
+    out
+}
+
+## pcnm (in vegan)
+`eigenvals.pcnm` <-
+    function(x, ...)
+{
+    out <- x$values
+    class(out) <- "eigenvals"
     out
 }
 
 `print.eigenvals` <-
     function(x, ...)
 {
-    print(unclass(x), ...)
+    print(zapsmall(unclass(x), ...))
     invisible(x)
 }
 
 `summary.eigenvals` <-
     function(object, ...)
 {
-    vars <- object/sum(object)
+    ## abs(object) is to handle neg eigenvalues of wcmdscale and
+    ## capscale
+    vars <- object/sum(abs(object))
     importance <- rbind(`Eigenvalue` = object,
                         `Proportion Explained` = round(vars, 5),
-                        `Cumulative Proportion`= round(cumsum(vars), 5))
+                        `Cumulative Proportion`= round(cumsum(abs(vars)), 5))
     out <- list(importance = importance)
     class(out) <- c("summary.eigenvals", "summary.prcomp")
     out

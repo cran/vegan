@@ -3,6 +3,110 @@
 			VEGAN RELEASE VERSIONS 
 		       	======================
 
+	      NEW FEATURES AND BUG FIXES IN VEGAN 1.17-5				   		    	    
+    - anova.cca: Empty models with no constrained component have
+      correct degrees of freedom. Tests 'by = "axis"' are really
+      marginal for all axes (first axis used to be non-marginal to
+      latter axes).
+
+    - as.mlm.cca/rda, intersetcor, vif.cca: avoid bug in qr.X in R
+      2.12.0 which use wrong variable names in aliased models (fixed
+      also in R 2.12.1).
+
+    - betadisper: plot did not allow selecting axes. Reported by Sarah
+      Goslee. 
+
+    - capscale: failed with NA action (reported by Nevil Amos). Total
+      inertia is defined as the sum of absolute values of all
+      eigenvalues consistently with cmdscale (from R 2.12.1) and other
+      vegan functions.
+
+    - cca/rda/capscale: print proportions of inertia components. 
+
+    - decorana: Fortran code prints warnings of failed convergence.
+      Default plot() uses points if items have no name labels to be
+      plotted.
+
+    - deviance.cca/rda: return 0 (instead of NA) for over-paremetrized
+      models with no unconstrained component.
+
+    - eigenvals: uses sum of absolute values of eigenvalues in models
+      that may have negative eigenvalues (cmdscale, wcmdscale,
+      capscale). Can extract eigenvalues of pcnm() and cmdscale() of R
+      2.12.1. Uses zapsmall() to print near-zero
+      eigenvalues.
+
+    - mantel.correlog: P-values could slightly off. The function uses
+      internally mantel() to evaluate the statistic and its
+      significance. The mantel() function adds one both to the
+      denominator and numerator, but mantel.correlog() did not notice
+      this and made the addition for the second time. When the
+      mantel.correlog() reported a positive value of the statistic, it
+      reversed the direction of the one-sided test of mantel(), but
+      did not handle tied values correctly in this reversal.
+   
+    - nestednodf: Gustavo Carvalho's new version that also implements
+      a new quantitative method of Almeida-Neto & Ulrich (Env Mod
+      Software, 26, 173-178; 2011).
+
+    - oecosimu: takes care that the statistic is evaluated with binary
+      data when null models are binary (regression introduced in vegan
+      1.17-0). Can handle NA values in permutations (as na.rm = TRUE).
+
+    - ordilabel: gained new argument 'col' to set the text colour of
+      the labels separately from 'border'. Function ordiellipse() uses
+      this in filled polygons to set the colour of labels to that of
+      borders or foreground instead of the colour of the fill.
+
+    - ordiR2step: new function to model selection in rda() and
+      capscale() based on adjusted R2 following the recommendations of
+      Blanchet, Legendre & Borcard (Ecology 89, 2623-2632; 2008).
+
+    - ordistep: correct a name clash when the fitted model had term or
+      item called 'mod'. Reported by Richard Telford (Bergen, Norway).
+
+    - pcnm: returns the truncated distanced matrix with argument
+      'dist.ret'.
+      
+    - prc: rewritten by Cajo ter Braak with a fix to scaling of
+      coefficients for full compatibility with Canoco. 
+
+    - procrustes: Fixed translation following the report and fix by
+      Christian Dudel (Bochum, Germany). New predict() method to
+      rotate 'newdata' points to the target. Graphics with plot()
+      select the direction of arrows with new argument 'to.target',
+      and use ordilabel() to display the labels with 'type = "t"'.
+
+    - rankindex: can take a list of dissimilarity functions as the
+      argument to allow the use of other dissimilarity functions than
+      vegdist() of vegan.
+ 
+    - rda/capscale: the scores() can take two scaling constants
+      ('const'). One is used for species, second for WA and LC scores
+      of sites. This allows using scalings of prcomp(), princomp() or
+      Canoco (like documented in the design decisions vignette).
+
+    - swan: disconnected data caused infinite loop. Now zeros are left
+      to the result with disconnected data.
+
+    - treedist: can handle empty or one-node trees. Gained new
+      argument 'relative' (defaults TRUE): if FALSE, finds raw
+      dissimilarities of tree heights.  Help page tells that relative
+      tree distances are in range 0..2 instead of 0..1, since
+      combining two trees may add a new common root.
+
+    - treedive: handles trivial cases of zero (diversity NA) or one
+      species (diversity 0).
+
+    - vegdist: help page gives now binary variants of the indices
+      using designdist() notation.
+
+    - vif.cca: can handle models with aliased terms.
+
+    - wcmdscale: returns goodness of fit statistic (item GOF) and
+      handles negative eigenvalues consistently with cmdscale() and
+      capscale().
+
 	      NEW FEATURES AND BUG FIXES IN VEGAN 1.17-4
 
     - MOStest: a new set of functions to implement generalized

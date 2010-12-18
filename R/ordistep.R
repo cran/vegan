@@ -33,14 +33,17 @@
         }
     }
     scope <- factor.scope(ffac, list(add = fadd, drop = fdrop))
-    mod <- object
     ## 'anotab' collects the changes into 'anova' object in the output
     anotab <- NULL
+    if (trace) {
+        cat("\n")
+        cat(pasteCall(formula(object), prefix = "Start:"))
+    }
     for (i in 1:steps){
         change <- NULL
         ## Consider dropping
         if (backward && length(scope$drop)) {
-            aod <- drop1(mod, scope = scope$drop, test="perm", pstep = pstep,
+            aod <- drop1(object, scope = scope$drop, test="perm", pstep = pstep,
                          perm.max = perm.max, alpha = Pout, trace = trace, ...)
             aod <- aod[-1,]
             o <- order(-aod[,5], aod[,4], aod[,2])
@@ -53,18 +56,18 @@
             if (aod[1,5] > Pout) {
                 anotab <- rbind(anotab, aod[1,])
                 change <- rownames(aod)[1]
-                mod <- eval.parent(update(mod, paste("~  .", change)))
-                scope <- factor.scope(attr(terms(mod), "factors"),
+                object <- eval.parent(update(object, paste("~  .", change)))
+                scope <- factor.scope(attr(terms(object), "factors"),
                                       list(add = fadd, drop = fdrop))
                 if (trace) {
                     cat("\n")
-                    print(mod$call)
+                    cat(pasteCall(formula(object), prefix = "Step:"))
                 }
             }
         }
         ## Consider adding
         if (forward && length(scope$add)) {
-            aod <- add1(mod, scope = scope$add, test = "perm", pstep = pstep,
+            aod <- add1(object, scope = scope$add, test = "perm", pstep = pstep,
                         perm.max = perm.max, alpha = Pin, trace = trace, ...)
             aod <- aod[-1,]
             o <- order(aod[,5], aod[,4], aod[,2])
@@ -77,12 +80,12 @@
             if (aod[1,5] <= Pin) {
                 anotab <- rbind(anotab, aod[1,])
                 change <- rownames(aod)[1]
-                mod <- eval.parent(update(mod, paste( "~  .",change)))
-                scope <- factor.scope(attr(terms(mod), "factors"),
+                object <- eval.parent(update(object, paste( "~  .",change)))
+                scope <- factor.scope(attr(terms(object), "factors"),
                                       list(add = fadd, drop = fdrop))
                 if (trace) {
                     cat("\n")
-                    print(mod$call)
+                    cat(pasteCall(formula(object), prefix="Step:"))
                 }
             }
         }
@@ -91,6 +94,6 @@
             break
     }
     cat("\n")
-    mod$anova <- anotab
-    mod
+    object$anova <- anotab
+    object
 }

@@ -20,8 +20,11 @@
         method <- "custom"
     }
     quant <- method %in% c("r2dtable", "custom")
-
+    ## binarize data with binary null models before getting statistics
+    if (!quant)
+        comm <- ifelse(comm > 0, 1, 0)
     ind <- nestfun(comm, ...)
+
     if (is.list(ind))
         indstat <- ind[[statistic]]
     else
@@ -31,7 +34,6 @@
 
     ## permutation for binary data
     if (!quant) {
-        comm <- ifelse(comm > 0, 1, 0)
         if (method %in% c("swap", "tswap")){
             checkbrd <- 1
             if (method == "tswap") {
@@ -95,12 +97,16 @@
         }
     }
     ## end of addition
-    sd <- apply(simind, 1, sd)
-    z <- (indstat - rowMeans(simind))/sd
+    sd <- apply(simind, 1, sd, na.rm = TRUE)
+    z <- (indstat - rowMeans(simind, na.rm = TRUE))/sd
     if (any(sd < sqrt(.Machine$double.eps)))
         z[sd < sqrt(.Machine$double.eps)] <- 0
-    pless <- rowSums(indstat <= simind)
-    pmore <- rowSums(indstat >= simind)
+    pless <- rowSums(indstat <= simind, na.rm = TRUE)
+    pmore <- rowSums(indstat >= simind, na.rm = TRUE)
+    if (any(is.na(simind))) {
+        warning("some simulated values were NA and were removed")
+        nsimul <- nsimul - rowSums(is.na(simind))
+    }
     p <- switch(alternative,
                 two.sided = 2*pmin(pless, pmore),
                 less = pless,
