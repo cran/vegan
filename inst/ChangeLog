@@ -1,6 +1,25 @@
-$Date: 2010-12-17 15:03:40 +0200 (Fri, 17 Dec 2010) $
+$Date: 2011-01-10 11:02:30 +0200 (Mon, 10 Jan 2011) $
 
 VEGAN RELEASE VERSIONS at http://cran.r-project.org/
+
+Version 1.17-6 (released January 10, 2011)
+
+	* merged revs 1427:1441 (versions 1.18-19 and 1.18-20) or
+	everything after release 1.17-5. 
+
+	* capscale, print.cca, summary.cca, eigenvals: handling negative
+	eigenvalues.
+
+	* capscale: robustness of add = TRUE in stats:::cmdscale.
+
+	* metaMDS: check negative data and adjust arguments.
+
+	* wascores: check negative weights and stop.
+
+	* CCorA: change scaling, tiny fixes.
+
+	* decision vignette: typos and removing text on Canoco 3 which
+	needs checking.
 
 Version 1.17-5 (released December 17, 2010)
 

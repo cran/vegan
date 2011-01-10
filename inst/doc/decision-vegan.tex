@@ -16,9 +16,9 @@
 
 \author{Jari Oksanen}
 \title{Design decisions and implementation details in vegan}
-\date{$ $Id: decision-vegan.Rnw 1405 2010-12-09 14:08:15Z jarioksa $ $
+\date{$ $Id: decision-vegan.Rnw 1442 2011-01-08 07:54:53Z jarioksa $ $
   processed with vegan
-1.17-5
+1.17-6
 in R version 2.12.1 (2010-12-16) on \today}
 
 \usepackage{Sweave}
@@ -223,15 +223,16 @@ weighted averaging scores have somewhat wider dispersion.
 
 \begin{table}
   \caption{\label{tab:scales} Alternative scalings for \textsc{rda} used
-    in the functions \texttt{prcomp} and \texttt{princomp} (package
-    \texttt{mva}), and the one used in the \texttt{vegan} function \texttt{rda}
+    in the functions \texttt{prcomp} and \texttt{princomp}, and the
+    one used in the \texttt{vegan} function \texttt{rda} 
     and the proprietary software \texttt{Canoco}
     scores in terms of orthonormal species ($u_{ik}$) and site scores
     ($v_{jk}$), eigenvalues ($\lambda_k$), number of sites  ($n$) and
     species standard deviations ($s_j$). In \texttt{rda},
     $\mathrm{const} = \sqrt[4]{(n-1) \sum \lambda_k}$.  Corresponding
     negative scaling in \texttt{vegan}
-    and corresponding positive scaling in \texttt{Canoco 3}  is derived
+   % and corresponding positive scaling in \texttt{Canoco 3}  
+    is derived
     dividing each  species by its standard deviation $s_j$ (possibly
     with some additional constant multiplier).  }
 \begin{tabular}{lcc}
@@ -253,17 +254,17 @@ $v_{jk} \sqrt[4]{\lambda_k/ \sum \lambda_k} \times \mathrm{const}$ \\
 \texttt{rda, scaling < 0} &
 $u_{ik}^*$ &
 $\sqrt{\sum \lambda_k /(n-1)} s_j^{-1} v_{jk}^*$
-\\
-\texttt{Canoco 3, scaling=-1} &
-$u_{ik} \sqrt{n} \sqrt{\lambda_k / \sum \lambda_k}$ &
-$v_{jk} \sqrt{n}$ \\
-\texttt{Canoco 3, scaling=-2} &
-$u_{ik} \sqrt{n}$ &
-$v_{jk} \sqrt{n} \sqrt{\lambda_k / \sum \lambda_k}$
-\\
-\texttt{Canoco 3, scaling=-3} &
-$u_{ik} \sqrt{n} \sqrt[4]{\lambda_k / \sum \lambda_k}$ &
-$v_{jk} \sqrt{n} \sqrt[4]{\lambda_k / \sum \lambda_k}$
+% \\
+% \texttt{Canoco 3, scaling=-1} &
+% $u_{ik} \sqrt{n-1} \sqrt{\lambda_k / \sum \lambda_k}$ &
+% $v_{jk} \sqrt{n}$ \\
+% \texttt{Canoco 3, scaling=-2} &
+% $u_{ik} \sqrt{n-1}$ &
+% $v_{jk} \sqrt{n} \sqrt{\lambda_k / \sum \lambda_k}$
+% \\
+% \texttt{Canoco 3, scaling=-3} &
+% $u_{ik} \sqrt{n-1} \sqrt[4]{\lambda_k / \sum \lambda_k}$ &
+% $v_{jk} \sqrt{n} \sqrt[4]{\lambda_k / \sum \lambda_k}$
 \end{tabular}
 \end{table}
 
@@ -275,14 +276,15 @@ satisfy $x_{ij} = c \sum_k u_{ij}^* v_{jk}^*$ where $c$ is a scaling
 constant.  In functions \texttt{princomp}, \texttt{prcomp} and
 \texttt{rda}, $c=1$ and the plotted scores are a biplot so that the
 singular values (or eigenvalues) are expressed for sites, and species
-are left unscaled.  For \texttt{Canoco 3} $c = n^{-1} \sqrt{n-1}
-\sqrt{\sum \lambda_k}$ with negative \texttt{Canoco} scaling
-values. All these $c$ are constants for a matrix, so these are all
-biplots with different internal scaling of species and site scores
-with respect to each other.  For \texttt{Canoco} with positive scaling
-values and \texttt{vegan} with negative scaling values, no constant
-$c$ can be found, but the correction is dependent on species standard
-deviations $s_j$, and these scores do not define a biplot.
+are left unscaled.  
+% For \texttt{Canoco 3} $c = n^{-1} \sqrt{n-1}
+% \sqrt{\sum \lambda_k}$ with negative \texttt{Canoco} scaling
+% values. All these $c$ are constants for a matrix, so these are all
+% biplots with different internal scaling of species and site scores
+% with respect to each other.  For \texttt{Canoco} with positive scaling
+% values and \texttt{vegan} with negative scaling values, no constant
+% $c$ can be found, but the correction is dependent on species standard
+% deviations $s_j$, and these scores do not define a biplot.
 
 There is no natural way of scaling species and site scores to each
 other.  The eigenvalues in redundancy and principal components
@@ -297,7 +299,7 @@ graphical biplots we should be able to fix the relations of row and
 column scores to be invariant against scaling of data.  The solution
 in R standard function \texttt{biplot} is to scale site and species
 scores independently, and typically very differently, but plot each
-independenty to fill the graph area.  The solution in \texttt{Canoco} and 
+independently to fill the graph area.  The solution in \texttt{Canoco} and 
 and \texttt{rda} is to use proportional eigenvalues $\lambda_k / \sum
 \lambda_k$ instead of original eigenvalues.  These proportions are
 invariant with scale changes, and typically they have a nice range for
@@ -382,7 +384,7 @@ in environmental variables \cite{McCune97}.  All environmental
 measurements contain some errors, and therefore it is safer to use WA
 scores.
 \end{itemize}
-This articles studies mainly the first point.  The users of
+This article studies mainly the first point.  The users of
 \texttt{vegan} have a choice of either LC or WA (default) scores, but
 after reading this article, I believe that most of them do not want to
 use LC scores, because they are not what they were looking for in
@@ -501,17 +503,17 @@ Call: cca(formula = varespec[i, ] ~ Al + K, data = varechem)
 
               Inertia Proportion Rank
 Total          2.0832     1.0000     
-Constrained    0.2454     0.1178    2
-Unconstrained  1.8378     0.8822   21
+Constrained    0.2115     0.1015    2
+Unconstrained  1.8717     0.8985   21
 Inertia is mean squared contingency coefficient 
 
 Eigenvalues for constrained axes:
-  CCA1   CCA2 
-0.1485 0.0969 
+   CCA1    CCA2 
+0.13908 0.07244 
 
 Eigenvalues for unconstrained axes:
     CA1     CA2     CA3     CA4     CA5     CA6     CA7     CA8 
-0.45629 0.31633 0.21490 0.18291 0.14970 0.10447 0.09545 0.08445 
+0.49233 0.30014 0.20549 0.19047 0.14791 0.11924 0.11211 0.08588 
 (Showed only 8 of all 21 unconstrained eigenvalues)
 \end{Soutput}
 \end{Schunk}
@@ -539,11 +541,11 @@ remain within numerical accuracy:
 > max(residuals(proc))
 \end{Sinput}
 \begin{Soutput}
-[1] 2.224273e-14
+[1] 2.346041e-14
 \end{Soutput}
 \end{Schunk}
 In \texttt{cca} the difference would be somewhat larger than now
-observed 2.2243e-14 because site
+observed 2.3460e-14 because site
 weights used for environmental variables are shuffled with the species
 data.
 
