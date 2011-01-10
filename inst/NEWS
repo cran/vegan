@@ -3,6 +3,29 @@
 			VEGAN RELEASE VERSIONS 
 		       	======================
 
+		       CHANGES IN VEGAN 1.17-6
+
+    - capscale: vegan 1.17-5 defined total inertia as the sum of
+      absolute values of eigenvalues which changed the total inertia
+      from previous versions. This is changed so that the total
+      inertia is the sum of all eigenvalues, i.e., negative
+      eigenvalues are subtracted from the total which was the
+      definition in 1.17-4 and earlier. The proportions of inertia
+      components are now expressed for non-negative eigenvalues only,
+      and a new item "Real Total" (sum of positive eigenvalues) is
+      added to the output if there are negative eigenvalues
+      ("Imaginary" component). The function no longer returns the
+      negative eigenvalues.
+
+    - CCorA: scaling of object scores changed: they are no longer
+      divided with sqrt(n-1). Minor fixes for improved robustness.
+
+    - metaMDS: automatically changes some arguments to non-default
+      values if input data contains negative entries. Help page gives
+      advice to do so for non-community data.
+
+    - wascores: checks that input weights are non-negative.
+
 	      NEW FEATURES AND BUG FIXES IN VEGAN 1.17-5				   		    	    
     - anova.cca: Empty models with no constrained component have
       correct degrees of freedom. Tests 'by = "axis"' are really
@@ -1004,9 +1027,6 @@ DOCUMENTS
       formatting.
 
     - Added these NEWS.
-
-
-
 
 			 OLDER VEGAN VERSIONS
 

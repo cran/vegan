@@ -67,8 +67,12 @@
     ## handle negative eigenvalues and therefore we normally use
     ## wcmdscale. If we have 'add = TRUE' there will be no negative
     ## eigenvalues and this is not a problem.
-    if (add)
+    if (add) {
         X <- cmdscale(X, k = k, eig = TRUE, add = add)
+        ## All eigenvalues *should* be positive, but see that they are
+        X$points <- X$points[, X$eig[-(k+1)] > 0]
+        X$eig <- X$eig[X$eig > 0]
+    }
     else
         X <- wcmdscale(X, eig = TRUE)
     if (is.null(rownames(X$points))) 
@@ -76,9 +80,7 @@
     X$points <- adjust * X$points
     if (adjust == 1)
         X$eig <- X$eig/k
-    neig <- min(which(X$eig < 0) - 1, sum(X$eig > EPS))
-    sol <- X$points[, 1:neig]
-    sol <- rda.default(sol, d$Y, d$Z, ...)
+    sol <- rda.default(X$points, d$Y, d$Z, ...)
     if (!is.null(sol$CCA)) {
         colnames(sol$CCA$u) <- colnames(sol$CCA$biplot) <- names(sol$CCA$eig) <-
             colnames(sol$CCA$wa) <- colnames(sol$CCA$v) <-
@@ -87,14 +89,12 @@
     if (!is.null(sol$CA)) {
         colnames(sol$CA$u) <- names(sol$CA$eig) <- colnames(sol$CA$v) <-
             paste("MDS", 1:ncol(sol$CA$u), sep = "")
-        ## Add negative eigenvalues to the list and update tot.chi
+        ## update for negative eigenvalues
         poseig <- length(sol$CA$eig)
         if (any(X$eig < 0)) {
             negax <- X$eig[X$eig < 0]
-            names(negax) <- paste("NEG", seq_along(negax), sep="")
-            sol$CA$eig <- c(sol$CA$eig, negax)
             sol$CA$imaginary.chi <- sum(negax)
-            sol$tot.chi <- sol$tot.chi + abs(sol$CA$imaginary.chi)
+            sol$tot.chi <- sol$tot.chi + sol$CA$imaginary.chi
             sol$CA$imaginary.rank <- length(negax)
             sol$CA$imaginary.u.eig <- X$negaxes
         }
