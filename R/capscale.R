@@ -1,7 +1,7 @@
 `capscale` <-
     function (formula, data, distance = "euclidean", sqrt.dist = FALSE,
               comm = NULL, add = FALSE, dfun = vegdist,
-              metaMDSdist = FALSE, na.action = na.fail, ...) 
+              metaMDSdist = FALSE, na.action = na.fail, subset = NULL, ...) 
 {
     EPS <- sqrt(.Machine$double.eps)
     if (!inherits(formula, "formula")) 
@@ -44,12 +44,18 @@
     ## deleted due to missing values)
     fla <- update(formula, X ~ .)
     environment(fla) <- environment()
-    d <- ordiParseFormula(fla, data, envdepth = 1, na.action = na.action)
+    d <- ordiParseFormula(fla,
+                          if(is.data.frame(data) && !is.null(comm)) cbind(data, comm)
+                          else data,
+                          envdepth = 1, na.action = na.action,
+                          subset = substitute(subset))
+    ## ordiParseFormula subsets rows of dissimilarities: do the same
+    ## for columns ('comm' is handled later)
+    if (!is.null(d$subset))
+        d$X <- d$X[, d$subset, drop = FALSE]
     ## Delete columns if rows were deleted due to missing values
     if (!is.null(d$na.action)) {
         d$X <- d$X[, -d$na.action, drop = FALSE]
-        if (!is.null(comm))
-            comm <- comm[-d$na.action,,drop=FALSE]
     }
     X <- as.dist(d$X)
     k <- attr(X, "Size") - 1
@@ -102,6 +108,12 @@
     if (!is.null(comm)) {
         comm <- scale(comm, center = TRUE, scale = FALSE)
         sol$colsum <- sd(comm)
+        ## take a 'subset' of the community after scale()
+        if (!is.null(d$subset))
+            comm <- comm[d$subset, , drop = FALSE]
+        ## NA action after 'subset'
+        if (!is.null(d$na.action))
+            comm <- comm[-d$na.action, , drop = FALSE]
         if (!is.null(sol$pCCA)) 
             comm <- qr.resid(sol$pCCA$QR, comm)
         if (!is.null(sol$CCA)) {
@@ -131,9 +143,13 @@
     sol$call$formula <- formula(d$terms, width.cutoff = 500)
     sol$call$formula[[2]] <- formula[[2]]
     sol$method <- "capscale"
+    if (add)
+        sol$ac <- X$ac
+    sol$adjust <- adjust
     sol$inertia <- inertia
     if (metaMDSdist)
         sol$metaMDSdist <- commname
+    sol$subset <- d$subset
     sol$na.action <- d$na.action
     class(sol) <- c("capscale", class(sol))
     if (!is.null(sol$na.action))

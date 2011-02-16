@@ -48,8 +48,9 @@ function (formula, data, xlev = NULL, envdepth = 2, na.action = na.fail,
     ## Select a subset of data and species
     if (!is.null(subset)) {
         subset <- eval(subset,
-                       if (inherits(data, "data.frame")) cbind(data, X) else X,
-                       parent.frame())
+                       if (inherits(data, "data.frame")) cbind(data, X)
+                       else as.data.frame(X),
+                       parent.frame(2))
         X <- X[subset, , drop = FALSE]
         if (NROW(mf) > 0)
             mf <- mf[subset, , drop = FALSE]
@@ -98,5 +99,5 @@ function (formula, data, xlev = NULL, envdepth = 2, na.action = na.fail,
     }
     list(X = X, Y = Y, Z = Z, terms = terms(fla, width.cutoff = 500), 
          terms.expand = terms(flapart, width.cutoff = 500), modelframe = mf,
-         na.action = nas, excluded = excluded)
+         subset = subset, na.action = nas, excluded = excluded)
 }

@@ -30,8 +30,14 @@
                          newdata = newdata, rank = take)
         }
         if (inherits(object, "capscale")) {
-            if (take > 0)
-                out <- dist(u %*% slam/sqrt(nr))
+            if (take > 0) {
+                out <- u %*% slam/sqrt(nr)
+                if (type == "response") {
+                    out <- dist(out)
+                    if (!is.null(object$ac))
+                        out <- out - object$ac
+                }
+            }
         } else {
             if (take > 0) 
                 out <- u %*% slam %*% t(v)

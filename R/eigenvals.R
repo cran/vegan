@@ -78,6 +78,42 @@
     out
 }
 
+## dudi objects of ade4
+
+`eigenvals.dudi` <-
+    function(x, ...)
+{
+    out <- x$eig
+    class(out) <- "eigenvals"
+    out
+}
+
+## labdsv::pco
+
+`eigenvals.pco` <-
+    function(x, ...)
+{
+    out <- x$eig
+    class(out) <- "eigenvals"
+    out
+}
+
+## labdsv::pca
+
+`eigenvals.pca` <-
+    function(x, ...)
+{
+    out <- x$sdev^2
+    ## pca() may return only some first eigenvalues
+    if ((seig <- sum(out)) < x$totdev) {
+        names(out) <- paste("PC", seq_along(out), sep="")
+        out <- c(out, "Rest" = x$totdev - seig)
+    }
+    class(out) <- "eigenvals"
+    out
+}
+        
+
 `print.eigenvals` <-
     function(x, ...)
 {
