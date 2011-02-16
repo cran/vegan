@@ -25,14 +25,17 @@
     pchi[ntrm, ] <- sim$num
     df[ntrm:(ntrm + 1)] <- sim$df
     chi[ntrm:(ntrm + 1)] <- sim$chi
-    modelframe <- model.frame(object)
-    environment(object$terms) <- environment()
+    if (!is.null(object$call$data))
+        modelframe <- ordiGetData(object$call, NULL)
+    else
+        modelframe <- NULL
     for (.ITRM in ntrm:2) {
         if (ntrm < 2) 
             break
         assign(".Random.seed", sim$Random.seed, envir = .GlobalEnv)
         fla <- as.formula(paste(" . ~ . -", trmlab[.ITRM]))
-        object <- update(object, fla, data = modelframe)
+        object <- update(object, fla,
+                         if (!is.null(modelframe)) data = modelframe)
         ## Change in data set due to missing values?
         if (length(object$residuals) != n0)
             stop("number of rows has changed: remove missing values?")

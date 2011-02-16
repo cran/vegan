@@ -15,8 +15,8 @@
 specaccum(comm, method = "exact", permutations = 100,
           conditioned =TRUE, gamma = "jack1",  ...)
 \method{plot}{specaccum}(x, add = FALSE, ci = 2, ci.type = c("bar", "line", "polygon"), 
-    col = par("fg"), ci.col = col, ci.lty = 1, xlab = "Sites", 
-    ylab = x$method, ylim, ...)
+    col = par("fg"), ci.col = col, ci.lty = 1, xlab, 
+    ylab = x$method, ylim, xvar = c("sites", "individuals"), ...)
 \method{boxplot}{specaccum}(x, add = FALSE, ...)
 }
 
@@ -49,8 +49,12 @@ specaccum(comm, method = "exact", permutations = 100,
     \code{"polygon"}.}
   \item{ci.lty}{Line type for confidence intervals or border of the
     \code{"polygon"}.}
-  \item{xlab,ylab}{Labels for \code{x} and \code{y} axis.}
+  \item{xlab,ylab}{Labels for \code{x} (defaults \code{xvar}) and
+    \code{y} axis.}
   \item{ylim}{the y limits of the plot.}
+  \item{xvar}{Variable used for the horizontal axis:
+    \code{"individuals"} can be used only with
+    \code{method = "rarefaction"}. }
   \item{...}{Other parameters to functions.}
 }
 \details{
@@ -138,7 +142,7 @@ specaccum(comm, method = "exact", permutations = 100,
 
 \seealso{\code{\link{rarefy}} and \code{\link{rrarefy}} are related
   individual based models. Other accumulation models are
-  \code{\link{poolaccum}} for extrapoltated richness, and
+  \code{\link{poolaccum}} for extrapolated richness, and
   \code{\link{renyiaccum}} and \code{\link{tsallisaccum}} for
   diversity indices.  Underlying graphical functions are
   \code{\link{boxplot}}, \code{\link{matlines}},

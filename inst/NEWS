@@ -3,6 +3,30 @@
 			VEGAN RELEASE VERSIONS 
 		       	======================
 
+                       CHANGES IN VEGAN 1.17-7
+
+    - anova.cca: more robust when models were fitted without 'data'
+      argument, or when 'na.action' or 'subset' was used.
+
+    - capscale: implemented 'subset' in model definition. Additive
+      constant with 'add = TRUE' is taken into account in predict()
+      and fitted(). Implemented simulate() which returns a
+      dissimilarity matrix with random error about predicted values. 
+
+    - eigenvals: can now extract eigenvalues of some ade4 and labdsv
+      result objects. 
+
+    - nestednodf: did not use binary data when weighted = FALSE was
+      used together with order = FALSE. Reported by Daniel Spitale.
+
+    - prestonfit: gained option to split tied frequencies (1, 2, 4, 8,
+      etc.) between adjacent octaves.
+
+    - specaccum: implemented choice of using either "individuals" or
+      "sites" as x-axis in plot(). Corrected a typo in the result
+      object: now returns indeed "individuals".
+
+ 
 		       CHANGES IN VEGAN 1.17-6
 
     - capscale: vegan 1.17-5 defined total inertia as the sum of

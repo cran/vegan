@@ -1,6 +1,35 @@
-$Date: 2011-01-10 11:02:30 +0200 (Mon, 10 Jan 2011) $
+$Date: 2011-02-16 12:47:38 +0200 (Wed, 16 Feb 2011) $
 
 VEGAN RELEASE VERSIONS at http://cran.r-project.org/
+
+Version 1.17-7 (released February 16, 2011)
+
+	* merged r1489: nestednodf with weighted = FALSE.
+
+	* merged r1482-4: eigenvals for ade4 and labdsv.
+
+	* merged r1476: zip data files.
+
+	* merged r1475: partially matched argunments in functions.
+
+	* merged r1471,3,4: split "ties" in prestonfit (and allies).
+
+	* merged revs 1444 to 1467:
+
+	* fixes in anova.cca scope, subset and NA handling:
+	anova.ccabyaxis, anova.ccabyterm, ordiParseFormula, rda.formula
+	cca.formula, capscale.
+
+	* implemented subset in capscale.
+
+	* implemented simulate.capscale. 
+
+	* removed additive constant 'ac' in predict.rda() for capscale and
+	fitted.capscale().
+
+	* fixed typo in specaccum() result.
+
+	* added choice of 'individuals' or 'sites' in plot.specaccum()
 
 Version 1.17-6 (released January 10, 2011)
 

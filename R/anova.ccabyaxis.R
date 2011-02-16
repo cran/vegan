@@ -7,12 +7,23 @@ function (object, cutoff = 1,  ...)
         stop("Needs a constrained ordination")
     if (is.null(object$terms)) 
         stop("Analysis is only possible for models fitted using formula")
-    lc <- object$CCA$u
     ## Handle missing values in scores, both "omit" and "exclude" to
     ## match dims with data.
     if (!is.null(object$na.action)) {
-        lc <- stats:::napredict.exclude(object$na.action, lc)
+        u <- stats:::napredict.exclude(object$na.action, object$CCA$u)
+    } else {
+        u <- object$CCA$u
     }
+    ## pad with NA rows if there is a subset
+    if (!is.null(object$subset)) {
+        lc <- matrix(NA, nrow=length(object$subset),
+                     ncol = ncol(u))
+        lc[object$subset,]  <- u
+        object$call$subset <- object$subset
+    } else {
+        lc <- u
+    }
+    lc <- as.data.frame(lc)
     axnam <- colnames(lc)
     df <- c(rep(1, rnk), object$CA$rank)
     chi <- c(object$CCA$eig, Residual = object$CA$tot.chi)
@@ -21,8 +32,10 @@ function (object, cutoff = 1,  ...)
     Pval <- rep(NA, rnk+1)
     out <- data.frame(df, chi, Fval, nperm, Pval)
     environment(object$terms) <- environment()
-    fla <- update(formula(object), . ~ lc[,1] + Condition(lc[,-1]))
-    sol <- anova(update(object, fla),  ...)
+    fla <- paste(". ~ ", axnam[1], "+ Condition(",
+                 paste(axnam[-1], collapse="+"),")")
+    fla <- update(formula(object), fla)
+    sol <- anova(update(object, fla, data=lc),  ...)
     out[c(1, rnk + 1), ] <- sol
     seed <- attr(sol, "Random.seed")
     attr(out, "names") <- attr(sol, "names")
@@ -33,8 +46,10 @@ function (object, cutoff = 1,  ...)
     bigperm <- out$N.Perm[1]
     if (rnk > 1) {
         for (.ITRM in 2:rnk) {
-            fla <- update(formula(object),  .~ lc[, .ITRM] + Condition(lc[,-(.ITRM)]) )
-            sol <- update(object, fla)
+            fla <- paste(".~", axnam[.ITRM], "+Condition(",
+                         paste(axnam[-(.ITRM)], collapse="+"),")")
+            fla <- update(formula(object),  fla) 
+            sol <- update(object, fla, data = lc)
             assign(".Random.seed", seed, envir = .GlobalEnv)
             out[.ITRM, ] <- as.matrix(anova(sol, ...))[1, 
                 ]
