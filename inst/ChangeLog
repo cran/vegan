@@ -1,6 +1,21 @@
-$Date: 2011-02-16 12:47:38 +0200 (Wed, 16 Feb 2011) $
+$Date: 2011-03-02 14:38:06 +0200 (Wed, 02 Mar 2011) $
 
 VEGAN RELEASE VERSIONS at http://cran.r-project.org/
+
+Version 1.17-8 (released March 2, 2011)
+
+	* merged r1494: no return.
+
+	* merged r1495: procrustes checks input.
+
+	* merged r1496,7: FAQ updates.
+
+	* merged r1501: as.preston 'tiesplit = TRUE' bug.
+
+	* merged r1500,4: decorana zero-eigenvalue fix.
+
+	* merged r1510 thru 1515: documentation fixes in beals.Rd,
+	plot.cca.Rd, scores.Rd, and vegdist.Rd.
 
 Version 1.17-7 (released February 16, 2011)
 

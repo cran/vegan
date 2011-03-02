@@ -6,7 +6,7 @@
         axes <- seq_len(NCOL(vectors))
         spMedPos <- ordimedian(vectors, group, choices = axes[pos])
         spMedNeg <- ordimedian(vectors, group, choices = axes[!pos])
-        return(cbind(spMedPos, spMedNeg))
+        cbind(spMedPos, spMedNeg)
     }
     ## Tolerance for zero Eigenvalues
     TOL <- 1e-7
