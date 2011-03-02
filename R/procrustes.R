@@ -1,8 +1,11 @@
-"procrustes" <-
+`procrustes` <-
     function (X, Y, scale = TRUE, symmetric = FALSE,  scores = "sites", ...) 
 {
     X <- scores(X, display = scores, ...)
     Y <- scores(Y, display = scores, ...)
+    if (nrow(X) != nrow(Y))
+        stop("Matrices have different number of rows: ",
+             nrow(X), " and ", nrow(Y))
     if (ncol(X) < ncol(Y)) {
         warning("X has fewer axes than Y: X adjusted to comform Y\n")
         addcols <- ncol(Y) - ncol(X)
@@ -38,5 +41,5 @@
                   symmetric = symmetric, call = match.call())
     reslt$svd <- sol
     class(reslt) <- "procrustes"
-    return(reslt)
+    reslt
 }
