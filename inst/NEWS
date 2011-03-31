@@ -3,6 +3,43 @@
 			VEGAN RELEASE VERSIONS 
 		       	======================
 
+                       CHANGES IN VEGAN 1.17-9
+
+    - anova of cca/rda/capscale results gave wrong results in partial
+      models. The bug was introduced in vegan 1.17-7. 
+
+    - diversity and related functions rarefy, rrarefy and specnumber
+      now accept vector input. Earlier a single site had to be
+      analysed either as a single-row matrix or using the non-default
+      setting MARGIN = 2.
+
+    - drarefy: new function that returns a matrix of probabilities
+      that a species occurs in a rarefied sample of a given size.
+
+    - metaMDS: it is possible to supply a starting configuration with
+      argument 'previous.best'. A previous metaMDS or isoMDS result can
+      also be given as a starting configuration. If the starting
+      configuration has a higher number of dimensions than requested,
+      the extra ones are dropped, and if the starting configuration
+      has fewer dimensions, random scores for extra dimensions will be
+      added. This may help in running metaMDS over a range of
+      dimensionalities. 
+
+    - metaMDSrotate: can now rotate metaMDS solutions with any number
+      of dimensions so that the first axis is parallel to a fitted
+      environmental vector. Previously, only two dimensional solutions
+      worked.
+
+    - ordilabel: gained argument 'xpd' that allows labels outside the
+      plot area. This allows labels above axes, for instance.
+
+    - ordisurf: gained several new arguments to control the mgcv::gam
+      fitting. Also gained an argument to suppress plotting, and a new
+      plot method. The fitted model can be specified with a formula. 
+
+    - prestonfit and friends: default is now 'tiesplit = TRUE' (which
+      was a new feature introduced in vegan 1.17-8).
+
                        CHANGES IN VEGAN 1.17-8
 
     - prestonfit: fixed a bug in as.preston(): the largest octave

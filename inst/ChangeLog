@@ -1,6 +1,35 @@
-$Date: 2011-03-02 14:38:06 +0200 (Wed, 02 Mar 2011) $
+$Date: 2011-03-31 16:22:53 +0300 (Thu, 31 Mar 2011) $
 
 VEGAN RELEASE VERSIONS at http://cran.r-project.org/
+
+Version 1.17-9 (released March 31, 2011)
+
+	* merged 1551,2: anova.cca(..., by = "axis") failed in partial
+	models. 
+	
+	* merged 1550: ordilabel gained arg 'xpd'.
+	
+	* merged 1541,8: metaMDSiter got more flexible 'previous.tries. 
+
+	* merged 1538,9, 1542,5: ordisurf gaine new arguments and got a
+	new plot method.
+
+	* merged 1534: typo in vegdist.Rd.
+
+	* merged r1533,7, 1544,7: metaMDSrotate works with > 2 dim.
+
+	* merged r1532: fix gettextf in d/r/rarefy.
+
+	* merged r1531,4: ordisurf got formula interface.
+
+	* merged r1527,8: doc updates in CCorA.Rd & ordihull.Rd.
+
+	* merged r1522 thru r1526: implement drarefy; drarefy, rrarefy,
+	specnumber, diversity accept vector input.
+
+	* merged r1521: clarify envfit.Rd.
+	
+	* merged r1499: as.preston, preston default to 'tiesplit = TRUE'.
 
 Version 1.17-8 (released March 2, 2011)
 
