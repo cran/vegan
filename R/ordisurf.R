@@ -1,13 +1,31 @@
 `ordisurf` <-
-    function (x, y, choices = c(1, 2), knots = 10, family = "gaussian", 
-              col = "red", thinplate = TRUE, add = FALSE, display = "sites", 
+    function(...) UseMethod("ordisurf")
+
+`ordisurf.formula` <-
+    function(formula, data, ...)
+{
+    if (missing(data))
+        data <- parent.frame()
+    x <- formula[[2]]
+    x <- eval.parent(x)
+    formula[[2]] <- NULL
+    y <- drop(as.matrix(model.frame(formula, data, na.action = na.pass)))
+    if (NCOL(y) > 1)
+        stop(gettextf("only one fitted variable allowed in the formula"))
+    ordisurf(x, y, ...)
+}
+
+`ordisurf.default` <-
+    function (x, y, choices = c(1, 2), knots = 10, family = "gaussian",
+              col = "red", thinplate = TRUE, add = FALSE, display = "sites",
               w = weights(x), main, nlevels = 10, levels, labcex = 0.6,
-              bubble = FALSE, cex = 1, ...) 
+              bubble = FALSE, cex = 1, select = FALSE,
+              method = "GCV.Cp", gamma = 1, plot = TRUE, ...)
 {
     weights.default <- function(object, ...) NULL
     GRID = 31
     w <- eval(w)
-    if (!is.null(w) && length(w) == 1) 
+    if (!is.null(w) && length(w) == 1)
         w <- NULL
     require(mgcv)  || stop("Requires package 'mgcv'")
     X <- scores(x, choices = choices, display = display, ...)
@@ -26,15 +44,17 @@
         mod <- gam(y ~ x1 + x2, family = family, weights = w)
     else if (knots == 1)
         mod <- gam(y ~ poly(x1, 1) + poly(x2, 1),
-                   family = family, weights = w)
+                   family = family, weights = w, method = method)
     else if (knots == 2)
         mod <- gam(y ~ poly(x1, 2) + poly(x2, 2) + poly(x1, 1):poly(x2, 1),
-                   family = family, weights = w)
-    else if (thinplate) 
-        mod <- gam(y ~ s(x1, x2, k = knots), family = family, 
-                   weights = w)
-    else mod <- gam(y ~ s(x1, k = knots) + s(x2, k = knots), 
-                    family = family, weights = w)
+                   family = family, weights = w, method = method)
+    else if (thinplate)
+        mod <- gam(y ~ s(x1, x2, k = knots), family = family,
+                   weights = w, select = select, method = method,
+                   gamma = gamma)
+    else mod <- gam(y ~ s(x1, k = knots) + s(x2, k = knots), family = family,
+                    weights = w, select = select, method = method,
+                   gamma = gamma)
     xn1 <- seq(min(x1), max(x1), len=GRID)
     xn2 <- seq(min(x2), max(x2), len=GRID)
     newd <- expand.grid(x1 = xn1, x2 = xn2)
@@ -51,25 +71,28 @@
                  as.integer(np), as.double(newd[,1]), as.double(newd[,2]),
                  inpoly = as.integer(inpoly), PACKAGE="vegan")$inpoly
     is.na(fit) <- inpoly == 0
-    if (!add) {
-        if (bubble) {
-            if (is.numeric(bubble))
-                cex <- bubble
-            cex <- (y -  min(y))/diff(range(y)) * (cex-0.4) + 0.4
+    if(plot) {
+        if (!add) {
+            if (bubble) {
+                if (is.numeric(bubble))
+                    cex <- bubble
+                cex <- (y -  min(y))/diff(range(y)) * (cex-0.4) + 0.4
+            }
+            plot(X, asp = 1, cex = cex, ...)
         }
-        plot(X, asp = 1, cex = cex, ...)
+        if (!missing(main) || (missing(main) && !add)) {
+            if (missing(main))
+                main <- yname
+            title(main = main)
+        }
+        if (missing(levels))
+            levels <- pretty(range(fit, finite = TRUE), nlevels)
+        ## Only plot surface is select is FALSE or (TRUE and EDF is diff from 0)
+        if(!select || (select && !isTRUE(all.equal(as.numeric(summary(mod)$edf), 0))))
+            contour(xn1, xn2, matrix(fit, nrow=GRID), col = col, add = TRUE,
+                    levels = levels, labcex = labcex,
+                    drawlabels = !is.null(labcex) && labcex > 0)
     }
-    if (!missing(main) || (missing(main) && !add)) {
-        if (missing(main)) 
-            main <- yname
-        title(main = main)
-    }
-    if (missing(levels)) 
-        levels <- pretty(range(fit, finite = TRUE), nlevels)
-    
-    contour(xn1, xn2, matrix(fit, nrow=GRID), col = col, add = TRUE,
-            levels = levels, labcex = labcex,
-            drawlabels = !is.null(labcex) && labcex > 0)
     mod$grid <- list(x = xn1, y = xn2, z = matrix(fit, nrow = GRID))
     class(mod) <- c("ordisurf", class(mod))
     mod

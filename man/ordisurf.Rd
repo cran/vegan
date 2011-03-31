@@ -1,6 +1,9 @@
 \name{ordisurf}
 \alias{ordisurf}
+\alias{ordisurf.default}
+\alias{ordisurf.formula}
 \alias{calibrate.ordisurf}
+\alias{plot.ordisurf}
 
 \title{ Fit and Plot Smooth Surfaces of Variables on Ordination. }
 \description{
@@ -8,16 +11,26 @@
   plots the result on ordination diagram.
 }
 \usage{
-ordisurf(x, y, choices=c(1, 2), knots=10, family="gaussian", col="red",
+\method{ordisurf}{default}(x, y, choices=c(1, 2), knots=10, family="gaussian", col="red",
      thinplate = TRUE, add = FALSE, display = "sites",
      w = weights(x), main, nlevels = 10, levels, labcex = 0.6,
-     bubble = FALSE, cex = 1, ...)
+     bubble = FALSE, cex = 1, select = FALSE, method = "GCV.Cp",
+     gamma = 1, plot = TRUE, ...)
+
+\method{ordisurf}{formula}(formula, data, ...)
+
 \method{calibrate}{ordisurf}(object, newdata, ...)
+
+\method{plot}{ordisurf}(x, what = c("contour","persp","gam"),
+     add = FALSE, bubble = FALSE, col = "red", cex = 1,
+     nlevels = 10, levels, labcex = 0.6, \dots)
 }
 
 \arguments{
-  \item{x}{Ordination configuration, either a matrix or a result known
-    by \code{\link{scores}}. }
+  \item{x}{For \code{ordisurf} an ordination configuration, either a
+    matrix or a result known by \code{\link{scores}}. For
+    \code{plot.ordisurf} and object of class \code{"ordisurf"} as
+    returned by \code{ordisurf}.}
   \item{y}{ Variable to be plotted. }
   \item{choices}{Ordination axes. }
   \item{knots}{Number of initial knots in \code{\link[mgcv]{gam}} (one
@@ -47,19 +60,71 @@ ordisurf(x, y, choices=c(1, 2), knots=10, family="gaussian", col="red",
     the maximum. The minimum size will always be \code{cex = 0.4}.  The
     option only has an effect if \code{add = FALSE}.}
   \item{cex}{Character expansion of plotting symbols.}
+  \item{select}{Logical; specify \code{\link[mgcv]{gam}} argument
+    \code{"select"}. If this is \code{TRUE} then \code{\link[mgcv]{gam}} can
+    add an extra  penalty to each term so that it can be penalized to
+    zero. This means that the smoothing parameter estimation that is part
+    of fitting can completely remove terms from the model. If the
+    corresponding smoothing parameter is estimated as zero then the extra
+    penalty has no effect.}
+  \item{method}{character; the smoothing parameter estimation
+    method. Options allowed are: \code{"GCV.Cp"} uses GCV for models with
+    unknown scale parameter and Mallows' Cp/UBRE/AIC for models with
+    known scale; \code{"GACV.Cp"} as for \code{"GCV.Cp"} but uses GACV
+    (Generalised Approximate CV) instead of GCV; \code{"REML"} and
+    \code{"ML"} use restricted maximum likelihood or maximum likelihood
+    estimation for both known and unknown scale; and \code{"P-REML"} and
+    \code{"P-ML"} use REML or ML estimation but use a Pearson estimate
+    of the scale.}
+  \item{gamma}{Multiplier to inflate model degrees of freedom in GCV or
+    UBRE/AIC score by. This effectively places an extra penalty on
+    complex models. An oft used value if \code{gamma = 1.4}.}
+  \item{plot}{logical; should any plotting be done by
+    \code{ordisurf}? Useful if all you want is the fitted response
+    surface model.}
+  \item{formula, data}{Alternative definition of the fitted model as
+    \code{x ~ y}, or left-hand side is the ordination \code{x} and
+    right-hand side the single fitted continuous variable
+    \code{y}. The variable \code{y} must be in the working environment
+    or in the data frame or environment given by \code{data}. All
+    other arguments of are passed to the default method.}
   \item{object}{An \code{ordisurf} result object.}
-  \item{newdata}{Coordinates in two-dimensional ordination for new points.}
-  \item{\dots}{ Other graphical parameters. }
+  \item{newdata}{Coordinates in two-dimensional ordination for new
+    points.}
+  \item{what}{character; what type of plot to produce. \code{"contour"}
+    produces a contour plot of the response surface, see
+    \code{\link{contour}} for details. \code{"persp"} produces a
+    perspective plot of the same, see \code{\link{persp}} for
+    details. \code{"gam"} plots the fitted GAM model, an object that
+    inherits from class \code{"gam"} returned by \code{ordisurf}, see
+    \code{\link[mgcv]{plot.gam}}.} 
+  \item{\dots}{Other parameters passed to \code{\link[mgcv]{gam}}, or
+    to the graphical functions. See Note below for exceptions.}
 }
+
 \details{
   Function \code{ordisurf} fits a smooth surface using thinplate splines
   in \code{\link[mgcv]{gam}}, and uses \code{\link[mgcv]{predict.gam}}
-  to find fitted values in a regular grid.
-  Function plots the fitted contours with convex hull of data points 
-  either over an existing ordination diagram or draws a new plot
-  The function uses
-  \code{\link{scores}} to extract ordination scores, and \code{x} can be
-  any result object known by that function.
+  to find fitted values in a regular grid. The smooth surface can be
+  fitted with an extra penalty that allows the entire smoother to be
+  penalized back to 0 degrees of freedom, effectively removing the term
+  from the model. The addition of this extra penalty is invoked by
+  setting argument \code{select} to \code{TRUE}. The function plots the
+  fitted contours with convex hull of data points either over an
+  existing ordination diagram or draws a new plot. If \code{select ==
+    TRUE} and the smooth is effectively penalised out of the model, no
+  contours will be plotted.
+
+  \code{\link[mgcv]{gam}} determines the degree of smoothness for the
+  fitted response surface during model fitting. Argument \code{method}
+  controls how \code{\link[mgcv]{gam}} performs this smoothness
+  selection. See \code{\link[mgcv]{gam}} for details of the available
+  options. Using \code{"REML"} or \code{"ML"} yields p-values for
+  smooths with the best coverage properties if such things matter to
+  you.
+
+  The function uses \code{\link{scores}} to extract ordination scores,
+  and \code{x} can be any result object known by that function.
 
   User can supply a vector of prior weights \code{w}. If the ordination
   object has weights, these will be used. In practise this means that
@@ -92,11 +157,22 @@ ordisurf(x, y, choices=c(1, 2), knots=10, family="gaussian", col="red",
   predicting new values (see \code{\link[mgcv]{predict.gam}}).
 }
 
-\author{ Dave Roberts and Jari Oksanen }
+\author{ Dave Roberts, Jari Oksanen and Gavin L. Simpson }
 \note{   
   The default is to use thinplate splines.  These make sense in
   ordination as they have equal smoothing in all directions and are
-  rotation invariant. 
+  rotation invariant.
+
+  Graphical arguments supplied to \code{plot.ordisurf} are passed on to
+  the underlying plotting functions, \code{contour}, \code{persp}, and
+  \code{\link[mgcv]{plot.gam}}. The exception to this is that arguments
+  \code{col} and \code{cex} can not currently be passed to
+  \code{\link[mgcv]{plot.gam}} because of a bug in the way that function
+  evaluates arguments when arranging the plot.
+
+  A work-around is to call \code{\link[mgcv]{plot.gam}} directly on the
+  result of a call to \code{ordisurf}. See the Examples for an
+  illustration of this.  
 }
 
 \seealso{ For basic routines \code{\link[mgcv]{gam}},
@@ -111,10 +187,24 @@ library(MASS)
 vare.dist <- vegdist(varespec)
 vare.mds <- isoMDS(vare.dist)
 with(varechem, ordisurf(vare.mds, Baresoil, bubble = 5))
+
+## as above but with extra penalties on smooth terms:
+with(varechem, ordisurf(vare.mds, Baresoil, bubble = 5, col = "blue",
+                        add = TRUE, select = TRUE))
+
 ## Cover of Cladina arbuscula
 fit <- with(varespec, ordisurf(vare.mds, Cla.arb, family=quasipoisson)) 
 ## Get fitted values
 calibrate(fit)
+
+## Plot method
+plot(fit, what = "contour")
+
+## Plotting the "gam" object
+plot(fit, what = "gam") ## 'col' and 'cex' not passed on
+## or via plot.gam directly
+plot.gam(fit, cex = 2, pch = 1, col = "blue")
+## 'col' effects all objects drawn...
 }
 \keyword{ multivariate }
 \keyword{ aplot }

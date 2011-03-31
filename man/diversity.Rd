@@ -3,6 +3,7 @@
 \alias{diversity}
 \alias{rarefy}
 \alias{rrarefy}
+\alias{drarefy}
 \alias{fisher.alpha}
 \alias{specnumber}
 
@@ -13,18 +14,15 @@ and rarefied species richness for community ecologists.  }
 
 \usage{
 diversity(x, index = "shannon", MARGIN = 1, base = exp(1))
-
 rarefy(x, sample, se = FALSE, MARGIN = 1)
-
 rrarefy(x, sample)
-
+drarefy(x, sample)
 fisher.alpha(x, MARGIN = 1, se = FALSE, ...)
-
 specnumber(x, MARGIN = 1)
 }
 
 \arguments{
-  \item{x}{Community data, a matrix-like object.}
+  \item{x}{Community data, a matrix-like object or a vector.}
   \item{index}{Diversity index, one of \code{"shannon"},
     \code{"simpson"} or \code{"invsimpson"}.}
   \item{MARGIN}{Margin for which the index is computed. }
@@ -49,20 +47,25 @@ specnumber(x, MARGIN = 1)
   Function \code{rarefy} gives the expected species richness in random
   subsamples of size \code{sample} from the community. The size of
   \code{sample} should be smaller than total community size, but the
-  function will  silently work for larger \code{sample} as well and
+  function will silently work for larger \code{sample} as well and
   return non-rarefied species richness (and standard error = 0). If
-  \code{sample} is a vector, rarefaction is performed for each sample
-  size separately.
-  Rarefaction can be performed only with genuine counts of individuals.
-  The function \code{rarefy} is based on Hurlbert's (1971) formulation,
-  and the standard errors on Heck et al. (1975).
+  \code{sample} is a vector, rarefaction of all observations is
+  performed for each sample size separately.  Rarefaction can be
+  performed only with genuine counts of individuals.  The function
+  \code{rarefy} is based on Hurlbert's (1971) formulation, and the
+  standard errors on Heck et al. (1975).
 
   Function \code{rrarefy} generates one randomly rarefied community data
   frame or vector of given \code{sample} size. The \code{sample} can be
-  a vector, and its values must be less or equal to observed number of
-  individuals. The random rarefaction is made without replacement so
-  that the variance of rarefied communities is rather related to
-  rarefaction proportion than to to the size of the \code{sample}.  
+  a vector giving the sample sizes for each row, and its values must be
+  less or equal to observed number of individuals. The random
+  rarefaction is made without replacement so that the variance of
+  rarefied communities is rather related to rarefaction proportion than
+  to to the size of the \code{sample}.
+
+  Function \code{drarefy} returns probabilities that species occur in a
+  rarefied community of size \code{sample}. The \code{sample} can be a
+  vector giving the sample sizes for each row.
 
   \code{fisher.alpha} estimates the \eqn{\alpha} parameter of
   Fisher's logarithmic series (see \code{\link{fisherfit}}). 
