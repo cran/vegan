@@ -1,6 +1,23 @@
-$Date: 2011-03-31 16:22:53 +0300 (Thu, 31 Mar 2011) $
+$Date: 2011-04-27 14:30:32 +0300 (Wed, 27 Apr 2011) $
 
 VEGAN RELEASE VERSIONS at http://cran.r-project.org/
+
+Version 1.17-10 (opened April 10, 2011)
+
+	* merged 1591:R 2.14.0 test warnings in decision-vegan.Rnw.
+
+	* merged r1590: capscale failed in rank-deficit cases with option
+	add = TRUE due to changes in cmdsscale() in R 2.13.0, and this
+	made BiodiversityR fail the tests.
+
+	* merged r1204, 1206, 1209, 1568: speed-up of examples in Rd
+	files. 
+
+	* merged 1555: #include's in vegdist.c.
+
+	* merged 1564: missing definitionin ordering.f.
+
+	* merged 1570: na.rm in metaMDSrotate.
 
 Version 1.17-9 (released March 31, 2011)
 

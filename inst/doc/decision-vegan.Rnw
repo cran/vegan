@@ -16,13 +16,13 @@
 
 \author{Jari Oksanen}
 \title{Design decisions and implementation details in vegan}
-\date{$ $Id: decision-vegan.Rnw 1442 2011-01-08 07:54:53Z jarioksa $ $
+\date{$ $Id: decision-vegan.Rnw 1592 2011-04-27 11:30:32Z jarioksa $ $
   processed with vegan
 \Sexpr{packageDescription("vegan", field="Version")}
 in \Sexpr{R.version.string} on \today}
 
 \begin{document}
-\SweaveOpts{strip.white=TRUE}
+\SweaveOpts{strip.white=true}
 \setkeys{Gin}{width=0.55\linewidth}
 <<echo=false,results=hide>>=
 figset <- function() par(mar=c(4,4,1,1)+.1)
