@@ -46,13 +46,22 @@
     values). This is a vector of indices of missing value rows in the
     original data and a class of the action, usually either
     \code{"omit"} or \code{"exclude"}.}
-\item{pCCA, CCA, CA}{Actual ordination results for conditioned
+
+  \item{pCCA, CCA, CA}{Actual ordination results for conditioned
     (partial), constrained and unconstrained components of the
-    model. Any of these can be \code{NULL} if there is no corresponding
-    component.
-    Items \code{pCCA}, \code{CCA} and \code{CA} have similar
-    structure, and contain following items:
-    \describe{
+    model. If constraints or conditions are not given, the
+    corresponding components \code{CCA} and \code{pCCA} are
+    \code{NULL}. If they are specified but have zero rank and zero
+    eigenvalue (e.g., due to aliasing), they have a standard structure
+    like described below, but the result scores have zero columns, but
+    the correct number of rows. The residual component is never
+    \code{NULL}, and if there is no residual variation (like in
+    overdefined model), its scores have zero columns. The standard
+    \code{print} command does not show \code{NULL} components, but it
+    prints zeros for zeroed components. Items \code{pCCA}, \code{CCA}
+    and \code{CA} contain following items:
+
+\describe{
     \item{\code{alias}}{The names of the aliased constraints or conditions.
       Function \code{\link{alias.cca}} does not access this item
       directly, but it finds the aliased variables and their defining
@@ -140,10 +149,11 @@
       is applied after \code{subset} so that the indices refer to the subset
       data.}
   \item{\code{residuals.zombie}}{A zombie vector of the length of
-    number of rows in the residual ordination. Some standard \R
-    functions find the number of valid observations from this vector,
-    and it is provided for their use although this is useless in
-    \pkg{vegan}.}
+    number of rows in the residual ordination. \R versions before 2.13.0
+    may use this vector to find the number of valid observations,
+    and it is provided for their use although this is useless in \R 2.13.0
+    and in \pkg{vegan}. Currently \R uses \code{\link{nobs.cca}} to find
+    the number of observations.}
   \item{\code{rowsum.excluded}}{Row sums of removed observations. Only
     in \code{\link{cca}}.}
   \item{\code{CCA$wa.excluded}}{The WA scores for sites (found from

@@ -1,8 +1,51 @@
-$Date: 2011-04-27 14:30:32 +0300 (Wed, 27 Apr 2011) $
+$Date: 2011-06-14 09:42:27 +0300 (Tue, 14 Jun 2011) $
 
 VEGAN RELEASE VERSIONS at http://cran.r-project.org/
 
-Version 1.17-10 (opened April 10, 2011)
+Version 1.17-11 (opened April 29, 2011)
+
+	* merged r1629,30: added anova.prc().
+	
+	* merged r1625,6: Ref to our MEE paper in anova.cca.Rd.
+	
+	* merged r1624: doc vegdist(..., "raup") not using unequal
+	sampling probabilities for species.
+
+	* merged r1622: document zeroed components in cca.object.Rd. 
+
+	* merged r1620: print.cca does not show "Proportions" in
+	unconstrained models with only one component.
+
+	* merged r1617 thru 1619: zero components in rda() and capscale()
+	similarly as r1517 for cca().
+
+	* merged r1615: inconsistent notatation in MOStest.Rd.
+
+	* merged r1614: ordiR2step more informative.
+
+	* merged r1609: specnumber gained 'groups'.
+
+	* merged r1608, 10, 11, 13: capscale() sets species scores to NA
+	if input were dissimilarities and no 'comm' was given.
+
+	* merged r1603: cca/rda support functions failed with prc() and
+	now refuse its results.
+
+	* merged r1602: scores.cca/rda failed if user asked only for
+	non-existing type of scores.
+
+	* merged r1600: anova.cccanull checks that seed exists before
+	trying to get it.
+
+	* merged r1598: doc of nobs in cca.object.Rd.
+
+	* merged r1588: speed-up of examples.
+
+	* merged r1517: zero components in cca().
+
+	* nobs: copied nobs() methods for vegan from r1596.
+	
+Version 1.17-10 (released April 27, 2011)
 
 	* merged 1591:R 2.14.0 test warnings in decision-vegan.Rnw.
 

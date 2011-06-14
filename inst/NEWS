@@ -3,6 +3,32 @@
 			VEGAN RELEASE VERSIONS 
 		       	======================
 
+                       CHANGES IN VEGAN 1.17-11
+
+    - This is a maintenance release which improves the robustness of
+      several functions but introduces no new important features.
+
+    - cca/rda/capscale: handling of aliased and other zero-rank
+      components changed. They are no longer made NULL and left
+      undisplayed, but now they are shown as zero rank. The general
+      output also changed so that proportions of inertia are only
+      shown if there are conditions or constraints, but not for
+      unconstrained analysis. The capscale() function no longer shows
+      species scores if these are unavailable. Several support
+      functions more robust.
+
+    - nobs: R 2.13.0 introduced generic function nobs() to find the
+      number of observations, and this release provides nobs() for
+      several vegan results. (This does not make vegan dependent on R
+      2.13.0, but vegan works with older R as well.)
+
+    - prc: allows anova(..., by = "axis") and other 'by' cases for
+      prc() results. Some rda() support functions still fail, but now
+      they stop informatively.
+
+    - specaccum: gained argument 'groups' which can be used to find
+      the number of species in subsets of the data.
+
 		       CHANGES IN VEGAN 1.17-10
 
     - This is minor revision that mainly fixes vegan with respect to

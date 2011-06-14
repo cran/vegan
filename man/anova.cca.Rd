@@ -4,6 +4,7 @@
 \alias{anova.ccabyaxis}
 \alias{anova.ccabyterm}
 \alias{anova.ccabymargin}
+\alias{anova.prc}
 \alias{permutest}
 \alias{permutest.default}
 \alias{permutest.cca}
@@ -109,7 +110,8 @@ permutest(x, ...)
   significance tests for each constrained axis.  All previous
   constrained axes will be used as conditions (\dQuote{partialled
   out}) and a test for the first constrained eigenvalues is
-  performed. You can stop permutation tests after exceeding a given
+  performed (Legendre et al. 2011). 
+  You can stop permutation tests after exceeding a given
   significance level with argument \code{cutoff} to speed up
   calculations in large models. Setting \code{by = "terms"} will
   perform separate significance test for each term (constraining
@@ -150,8 +152,12 @@ permutest(x, ...)
   only when \code{model = "direct"}.  
 }
 \references{
-  Legendre, P. and Legendre, L. (1998). \emph{Numerical Ecology}. 2nd English
-  ed. Elsevier.
+  Legendre, P. and Legendre, L. (1998). \emph{Numerical Ecology}. 2nd
+  English ed. Elsevier.
+
+  Legendre, P., Oksanen, J. and ter Braak, C.J.F. (2011). Testing the
+  significance of canonical axes in redundancy analysis. 
+  \emph{Methods in Ecology and Evolution} 2, 269--277.
 }
 \author{Jari  Oksanen}
 \seealso{\code{\link{cca}}, \code{\link{rda}}, \code{\link{capscale}}
