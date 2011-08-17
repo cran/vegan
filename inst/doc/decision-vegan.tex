@@ -18,7 +18,7 @@
 \title{Design decisions and implementation details in vegan}
 \date{$ $Id: decision-vegan.Rnw 1592 2011-04-27 11:30:32Z jarioksa $ $
   processed with vegan
-1.17-11
+1.17-12
 in R version 2.13.0 (2011-04-13) on \today}
 
 \usepackage{Sweave}
@@ -503,17 +503,17 @@ Call: cca(formula = varespec[i, ] ~ Al + K, data = varechem)
 
               Inertia Proportion Rank
 Total         2.08320    1.00000     
-Constrained   0.17726    0.08509    2
-Unconstrained 1.90594    0.91491   21
+Constrained   0.16985    0.08154    2
+Unconstrained 1.91334    0.91846   21
 Inertia is mean squared contingency coefficient 
 
 Eigenvalues for constrained axes:
    CCA1    CCA2 
-0.12897 0.04829 
+0.12003 0.04983 
 
 Eigenvalues for unconstrained axes:
     CA1     CA2     CA3     CA4     CA5     CA6     CA7     CA8 
-0.51017 0.32326 0.22600 0.19219 0.16720 0.12014 0.08771 0.06985 
+0.45421 0.33357 0.23089 0.19059 0.15665 0.11689 0.10654 0.08501 
 (Showed only 8 of all 21 unconstrained eigenvalues)
 \end{Soutput}
 \end{Schunk}
@@ -541,11 +541,11 @@ remain within numerical accuracy:
 > max(residuals(proc))
 \end{Sinput}
 \begin{Soutput}
-[1] 2.03505e-14
+[1] 2.516303e-14
 \end{Soutput}
 \end{Schunk}
 In \texttt{cca} the difference would be somewhat larger than now
-observed 2.035e-14 because site
+observed 2.5163e-14 because site
 weights used for environmental variables are shuffled with the species
 data.
 

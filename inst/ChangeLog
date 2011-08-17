@@ -1,8 +1,45 @@
-$Date: 2011-06-14 09:42:27 +0300 (Tue, 14 Jun 2011) $
+$Date: 2011-08-17 11:27:16 +0300 (Wed, 17 Aug 2011) $
 
 VEGAN RELEASE VERSIONS at http://cran.r-project.org/
 
-Version 1.17-11 (opened April 29, 2011)
+Version 1.17-12 (opened August 7, 2011)
+
+	* Most minor changes and fixes since the release of 1.17-11 (rev
+	1634). Basically everything except 'permute' dependence and
+	monoMDS. Also adds the minimal NAMESPACE file of 1695 (without S3
+	method registration and later revs).
+	* tolerance (generic), tolerance.cca: copy from devel at 1558.
+	* merged 1722: ordiplot gains 'cex'.
+	* merged 1721, 1723: plot.isomap upgrade.
+	* merged 1704, 1713: better axis limits in plot.envfit to allow
+	space for vector and centroid labels.
+	* partially merged 1700: model.{frame,matrix}.cca scoping,
+	tolerance.Rd. 
+	* merged 1699: ade2vegancca typo.
+	* partially merged r1696: superfluous aliases in deviance.cca.Rd
+	and predict.cca.Rd, scoping in anova.ccabyterm.R.
+	* merged 1695: minimal NAMESPACE and zzz.R.
+	* merged 1690: make.cepnames upgrade.
+	* merged 1689: NA in orditorp.
+	* merged 1688: duplicated aliases in RsquareAdj.Rd and
+	varpart.Rd. 
+	* merged 1687: ordilabel gained 'select'.
+	* merged 1686: better handling of graphical args in ordiplot.
+	* merged 1685: zero CCA component in anova.ccanull, calibrate.cca,
+	deviance.cca, deviance.rda, ordiplot3d, ordiresids, ordirgl,
+	ordixypplot. 
+	* merged 1684: zero CCA component in bstick.cca, goodness.cca,
+	predict.cca, predict.rda, screeplot.cca.
+	* merged 1683: zero CCA component in anova.cca.
+	* merged 1682: swan upgrade.
+	* merged 1681: split ordiarrows/segments/grid docs.
+	* merged 1680: NA in metaMDSrotate.
+	* merged 1679: NA in ordiellipse/hull/spider.
+	* merged 1678: rename 'index' to 'method' in betadiver.
+	* merged 1652: embeddable capscale (fix 1613).
+	* rev 1635 (1636): speed-up of adonis
+	
+Version 1.17-11 (released June 14, 2011)
 
 	* merged r1629,30: added anova.prc().
 	
