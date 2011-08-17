@@ -3,7 +3,53 @@
 			VEGAN RELEASE VERSIONS 
 		       	======================
 
-                       CHANGES IN VEGAN 1.17-11
+		       CHANGES IN VEGAN 1.17-12
+
+    - This is a maintenance release which improves robustness of
+      several functions. A major release is expected soon.
+
+    - tolerance.cca: a new function to find the species response
+      widths (a.k.a. tolerances) and sample heteregeneities from a
+      cca() result.
+
+    - adonis: much faster.
+
+    - betadiver: argument 'index' was renamed to 'method' so that the
+      function can be used similarly as dist(), vegdist() and other
+      distance functions. This allows using betadiver() as a distance
+      function in metaMDS().
+
+    - cca/rda/capscale: handling of aliased and other zero-rank
+      components changed in vegan 1.17-11, but not all support
+      functions were adapted to these changes in that release. Now the
+      following functions cope with the changes and are more robust:
+      capscale, anova.cca, bstick.cca, goodness.cca, predict.cca,
+      screeplot.cca, calibrate.cca, deviance.cca/rda, ordiplot3d,
+      ordiresids, ordirgl, ordixytplot.
+
+    - isomap: text or points are plotted more cleanly, and text uses
+      ordilabel(). 
+
+    - make.cepnames: a bit more flexible and robust, with a new
+      argument that allows selecting first and second name component
+      instead of first and last.
+
+    - metaMDSrotate: rotation could be slightly off with more than two
+      dimensions when there are NA scores.
+
+    - ordiellipse, ordihull, ordispider, orditorp: accept NA scores.
+
+    - ordilabel: gained argument 'select'. 
+
+    - ordiplot: better handling of graphical arguments, arg 'cex' can
+      be set by the user.
+
+    - swan: gained new argument 'maxit' that allows setting maximum
+      number of iterations. Defaults 'maxit = Inf' or the current
+      behaviour of continuing as long as there are zeros that can be
+      filled. 
+
+                      CHANGES IN VEGAN 1.17-11
 
     - This is a maintenance release which improves the robustness of
       several functions but introduces no new important features.
