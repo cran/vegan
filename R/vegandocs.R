@@ -1,16 +1,30 @@
-"vegandocs" <-
-    function (doc = c("NEWS", "ChangeLog", "FAQ-vegan.pdf", "intro-vegan.pdf",
-              "diversity-vegan.pdf", "decision-vegan.pdf",
-              "partitioning.pdf")) 
+`vegandocs` <-
+    function (doc = c("NEWS", "ONEWS", "ChangeLog", "FAQ-vegan.pdf",
+              "intro-vegan.pdf", "diversity-vegan.pdf",
+              "decision-vegan.pdf", "partitioning.pdf", "permutations.pdf")) 
 {
     doc <- match.arg(doc)
     if (length(grep(".pdf", doc)) > 0) {
-        doc <- file.path(system.file(package="vegan"), "doc", doc)
+        if (doc == "permutations.pdf")
+            doc <- file.path(system.file(package="permute"), "doc", doc)
+        else
+            doc <- file.path(system.file(package="vegan"), "doc", doc)
         if (.Platform$OS.type == "windows")
             shell.exec(doc)
         else system(paste(getOption("pdfviewer"), doc, "&"))
-    }
-    else {
+    } else if (doc == "NEWS") {
+        ## Try html
+        helptype <- getOption("help_type")
+        if (length(helptype) && helptype == "html") {
+            if (!tools:::httpdPort)
+                tools:::startDynamicHelp()
+            browseURL(paste("http://127.0.0.1:", tools:::httpdPort,
+                            "/library/vegan/doc/NEWS.html", sep=""))
+        } else {
+            file.show(tools:::Rd2txt(file.path(system.file(package="vegan"),
+                                               "NEWS.Rd"), tempfile()))
+        }
+    } else {
         file.show(system.file(package="vegan", doc))
     } 
 }

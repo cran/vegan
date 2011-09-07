@@ -4,6 +4,10 @@
 \alias{summary.specaccum}
 \alias{plot.specaccum}
 \alias{boxplot.specaccum}
+\alias{fitspecaccum}
+\alias{plot.fitspecaccum}
+\alias{predict.specaccum}
+\alias{predict.fitspecaccum}
 
 \title{Species Accumulation Curves }
 \description{
@@ -18,6 +22,11 @@ specaccum(comm, method = "exact", permutations = 100,
     col = par("fg"), ci.col = col, ci.lty = 1, xlab, 
     ylab = x$method, ylim, xvar = c("sites", "individuals"), ...)
 \method{boxplot}{specaccum}(x, add = FALSE, ...)
+fitspecaccum(object, model, method = "random", ...)
+\method{plot}{fitspecaccum}(x, col = par("fg"), lty = 1, xlab = "Sites", 
+    ylab = x$method, ...) 
+\method{predict}{specaccum}(object, newdata, interpolation = c("linear", "spline"), ...)
+\method{predict}{fitspecaccum}(object, newdata, ...)
 }
 
 \arguments{
@@ -55,6 +64,16 @@ specaccum(comm, method = "exact", permutations = 100,
   \item{xvar}{Variable used for the horizontal axis:
     \code{"individuals"} can be used only with
     \code{method = "rarefaction"}. }
+  \item{object}{Either a community data set or fitted \code{specaccum} model.}
+  \item{model}{Nonlinear regression model (\code{\link{nls}}). See Details.}
+  \item{lty}{line type code (see \code{\link{par}}.}
+  
+  \item{newdata}{Optional data used in prediction interpreted as
+    number of sampling units (sites). If missing, fitted values are
+    returned. }
+  
+  \item{interpolation}{Interpolation method used with \code{newdata}.}
+
   \item{...}{Other parameters to functions.}
 }
 \details{
@@ -83,11 +102,47 @@ specaccum(comm, method = "exact", permutations = 100,
   corresponding to average number of individuals per site.
 
   The function has a \code{plot} method. In addition, \code{method =
-    "random"} has \code{summary} and \code{boxplot} methods. 
+  "random"} has \code{summary} and \code{boxplot} methods. 
+
+  Function \code{predict} can return the values corresponding to
+  \code{newdata} using linear (\code{\link{approx}}) or spline
+  (\code{\link{spline}}) interpolation. The function cannot
+  extrapolate with linear interpolation, and with spline the type and
+  sensibility of the extrapolation depends on argument \code{method}
+  which is passed to \code{\link{spline}}.  If \code{newdata} is not
+  given, the function returns the values corresponding to the data.
+
+  Function \code{fitspecaccum} fits a nonlinear (\code{\link{nls}})
+  self-starting species accumulation model. The input \code{object}
+  can be a result of \code{specaccum} or a community in data frame. In
+  the latter case the function first fits a \code{specaccum} model and
+  then proceeds with fitting the a nonlinear model. The function can
+  apply a limited set of nonlinear regression models suggested for
+  species-area relationship (Dengler 2009). All these are
+  \code{\link{selfStart}} models. The permissible alternatives are
+  \code{"arrhenius"} (\code{\link{SSarrhenius}}), \code{"gleason"}
+  (\code{\link{SSgleason}}), \code{"gitay"} (\code{\link{SSgitay}}),
+  \code{"lomolino"} (\code{\link{SSlomolino}}) of \pkg{vegan}
+  package. In addition the following standard \R models are available:
+  \code{"asymp"} (\code{\link{SSasymp}}), \code{"gompertz"}
+  (\code{\link{SSgompertz}}), \code{"michaelis-menten"})
+  (\code{\link{SSmicmen}}), \code{"logis"} (\code{\link{SSlogis}}),
+  \code{"weibull"} (\code{\link{SSweibull}}). See these functions for
+  model specification and details.
+
+  Function \code{predict} uses \code{\link{predict.nls}}, and you can
+  pass all arguments to that function. In addition, \code{fitted},
+  \code{residuals} and \code{coef} work on the result object.
+
+  Nonlinear regression may fail for any reason, and some of the
+  \code{fitspecaccum} models are fragile and may not succeed.  
 }
 
-\value{
-  The function returns an object of class \code{"specaccum"} with items:
+\value{ Function \code{specaccum} returns an object of class
+  \code{"specaccum"}, and \code{fitspecaccum} a model of class
+  \code{"fitspecaccum"} that adds a few items to the
+  \code{"specaccum"} (see the end of the list below):
+
   \item{call }{Function call.}
   \item{method}{Accumulator method.}
   \item{sites}{Number of sites.  For \code{method = "rarefaction"} this
@@ -104,7 +159,17 @@ specaccum(comm, method = "exact", permutations = 100,
   \item{perm}{Permutation results with \code{method = "random"} and
     \code{NULL} in other cases. Each column in \code{perm} holds one
     permutation.}
+
+  \item{fitted, residuals, coefficients}{Only in \code{fitspecacum}:
+     fitted values, residuals and nonlinear model coefficients. For
+     \code{method = "random"} these are matrices with a column for
+     each random accumulation.}
+
+  \item{models}{Only in \code{fitspecaccum}: list of fitted
+    \code{\link{nls}} models (see Examples on accessing these models).} 
+
 }
+
 \references{
   Coleman, B.D, Mares, M.A., Willis, M.R. & Hsieh,
   Y. (1982). Randomness, area and species richness. \emph{Ecology} 63:
@@ -112,7 +177,11 @@ specaccum(comm, method = "exact", permutations = 100,
 
   Colwell, R.K., Mao, C.X. & Chang, J. (2004). Interpolating,
   extrapolating, and comparing incidence-based species accumulation
-  curves. \emph{Ecology} 85: 2717--2727.  
+  curves. \emph{Ecology} 85: 2717--2727.
+
+  Dengler, J. (2009). Which function describes the species-area
+  relationship best? A review and empirical evaluation. 
+  \emph{Journal of Biogeography} 36, 728--744.
 
   Gotellli, N.J. & Colwell, R.K. (2001). Quantifying biodiversity:
   procedures and pitfalls in measurement and comparison of species
@@ -156,6 +225,20 @@ sp2
 summary(sp2)
 plot(sp1, ci.type="poly", col="blue", lwd=2, ci.lty=0, ci.col="lightblue")
 boxplot(sp2, col="yellow", add=TRUE, pch="+")
+## Fit Lomolino model to the exact accumulation
+mod1 <- fitspecaccum(sp1, "lomolino")
+coef(mod1)
+fitted(mod1)
+plot(sp1)
+## Add Lomolino model using argument 'add'
+plot(mod1, add = TRUE, col=2, lwd=2)
+## Fit Arrhenius models to all random accumulations
+mods <- fitspecaccum(sp2, "arrh")
+plot(mods, col="hotpink")
+boxplot(sp2, col = "yellow", border = "blue", lty=1, cex=0.3, add= TRUE)
+## Use nls() methods to the list of models
+sapply(mods$models, AIC)
 }
-\keyword{univar }
+\keyword{univar}
+\keyword{models}
 

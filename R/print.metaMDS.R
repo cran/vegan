@@ -3,11 +3,20 @@
 {
     cat("\nCall:\n")
     cat(deparse(x$call), "\n\n")
-    cat("Nonmetric Multidimensional Scaling using isoMDS (MASS package)\n\n")
+    if (x$engine == "monoMDS")
+        cat(x$model, "Multidimensional Scaling using monoMDS\n\n")
+    else if (x$engine == "isoMDS")
+        cat("non-metric Multidimensional Scaling using isoMDS (MASS package)\n\n")
     cat("Data:    ", x$data, "\n")
     cat("Distance:", x$distance, "\n\n")
-    cat("Dimensions:", x$dims, "\n")
+    cat("Dimensions:", x$ndim, "\n")
     cat("Stress:    ", x$stress, "\n")
+    if (inherits(x, "monoMDS")) {
+        cat("Stress type", x$isform)
+        if(x$model != "linear")
+            cat(", ", c("weak", "strong")[x$ities], " ties", sep = "")
+        cat("\n")
+    }
     if (x$converged) 
         cat("Two convergent solutions found after", x$tries, 
             "tries\n")
@@ -28,11 +37,7 @@
             cat("Species: non-expanded scores ")
         else
             cat("Species: expanded scores ")
-        if(attr(x$species, "old.wa"))
-            cat("based on untransformed data\n")
-        else
-            cat("based on", sQuote(x$data), "\n")
-        
+        cat("based on", sQuote(x$data), "\n")
     }
     cat("\n")
     invisible(x)

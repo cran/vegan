@@ -2,9 +2,7 @@
 \alias{bioenv}
 \alias{bioenv.default}
 \alias{bioenv.formula}
-\alias{print.bioenv}
 \alias{summary.bioenv}
-\alias{print.summary.bioenv}
 
 \title{Best Subset of Environmental Variables with
   Maximum (Rank) Correlation with Community Dissimilarities }
@@ -92,10 +90,10 @@
   tests based on \emph{a priori} selection of variables are biased. 
   }
 
-\seealso{\code{\link{vegdist}},
-  \code{\link{dist}}, \code{\link{cor}} for underlying routines,
-  \code{\link[MASS]{isoMDS}} for ordination, \code{\link{procrustes}}
-  for Procrustes analysis, \code{\link{protest}} for an alternative, and
+\seealso{\code{\link{vegdist}}, \code{\link{dist}}, \code{\link{cor}}
+  for underlying routines, \code{\link{monoMDS}} and
+  \code{\link{metaMDS}} for ordination, \code{\link{procrustes}} for
+  Procrustes analysis, \code{\link{protest}} for an alternative, and
   \code{\link{rankindex}} for studying alternatives to the default
   Bray-Curtis index.}
 
