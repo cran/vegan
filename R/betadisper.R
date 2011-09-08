@@ -8,11 +8,22 @@
         spMedNeg <- ordimedian(vectors, group, choices = axes[!pos])
         cbind(spMedPos, spMedNeg)
     }
+    ## inline function for distance computation
+    Resids <- function(x, c) {
+        if(is.matrix(c))
+            d <- x - c
+        else
+            d <- sweep(x, 2, c)
+        rowSums(d^2)
+    }
     ## Tolerance for zero Eigenvalues
     TOL <- 1e-7
     ## uses code from stats:::cmdscale by R Core Development Team
     if(!inherits(d, "dist"))
         stop("distances 'd' must be a 'dist' object")
+    ## Someone really tried to analyse correlation like object in range -1..+1
+    if (any(d < -TOL, na.rm = TRUE))
+        stop("dissimilarities 'd' must be non-negative")
     if(missing(type))
         type <- "median"
     type <- match.arg(type)
@@ -64,28 +75,15 @@
                )
     ## for each of the groups, calculate distance to centroid for
     ## observation in the group
-    if(is.matrix(centroids)) {
-        dist.pos <- vectors[, pos, drop=FALSE] -
-            centroids[group, pos, drop=FALSE]
-        dist.pos <- rowSums(dist.pos^2)
-        if (any(!pos)) {
-            dist.neg <- vectors[, !pos, drop=FALSE] -
-                centroids[group, !pos, drop=FALSE]
-            dist.neg <- rowSums(dist.neg^2)
-        } else {
-            dist.neg <- 0
-        }
-    } else {
-        dist.pos <- sweep(vectors[, pos, drop=FALSE], 2, centroids[pos])
-        dist.pos <- rowSums(dist.pos^2)
-        if (any(!pos)) {
-            dist.neg <- sweep(vectors[, !pos, drop=FALSE], 2,
-                              centroids[!pos])
-            dist.neg <- rowSums(dist.neg^2)
-        } else {
-            dist.neg <- 0
-        }
-    }
+    ## Uses in-line Resids function as we want LAD residuals for
+    ## median method, and LSQ residuals for centroid method
+    dist.pos <- Resids(vectors[, pos, drop=FALSE],
+                       centroids[group, pos, drop=FALSE])
+    dist.neg <- 0
+    if(any(!pos))
+        dist.neg <- Resids(vectors[, !pos, drop=FALSE],
+                           centroids[group, !pos, drop=FALSE])
+
     ## zij are the distances of each point to its group centroid
     zij <- sqrt(abs(dist.pos - dist.neg))
     ## add in correct labels

@@ -1,4 +1,4 @@
-"anosim" <-
+`anosim` <-
     function (dat, grouping, permutations = 999,
               distance = "bray", strata) 
 {
@@ -10,13 +10,15 @@
         attr(x, "method") <- "user supplied square matrix"
     }
     else x <- vegdist(dat, method = distance)
+    if (any(x < -sqrt(.Machine$double.eps)))
+        warning("some dissimilarities are negative -- is this intentional?")
     sol <- c(call = match.call())
     grouping <- as.factor(grouping)
     matched <- function(irow, icol, grouping) {
         grouping[irow] == grouping[icol]
     }
     x.rank <- rank(x)
-    N <- attributes(x)$Size
+    N <- attr(x, "Size")
     div <- length(x)/2
     irow <- as.vector(as.dist(row(matrix(nrow = N, ncol = N))))
     icol <- as.vector(as.dist(col(matrix(nrow = N, ncol = N))))

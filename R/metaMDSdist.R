@@ -1,6 +1,6 @@
 `metaMDSdist` <-
     function (comm, distance = "bray", autotransform = TRUE, noshare = 0.1, 
-              trace = 1, commname, zerodist = "fail", distfun = vegdist, 
+              trace = 1, commname, zerodist = "ignore", distfun = vegdist, 
               ...) 
 {
     ## metaMDSdist should get a raw data matrix, but if it gets a
@@ -32,7 +32,7 @@
     call <- attr(dis, "call")
     call[[1]] <- as.name(distname)
     attr(dis, "call") <- call
-    if (any(dis <= 0, na.rm = TRUE)) {
+    if (zerodist != "ignore" && any(dis <= 0, na.rm = TRUE)) {
         if (zerodist == "fail") 
             stop("Zero dissimilarities are not allowed")
         else if (zerodist == "add") {
@@ -48,7 +48,9 @@
     ## has distance = 1.
     maxdis <- abs(distfun(matrix(c(7,0,0,3), 2, 2),
                       method = distance, ...) - 1) < 1e-4
-    if (noshare > 0 && sum(tmp <- no.shared(comm))/length(dis) > noshare) {
+    if ((isTRUE(noshare) && any(tmp <- no.shared(comm))) ||
+        (noshare > 0 &&
+         sum(tmp <- no.shared(comm))/length(dis) > noshare)) {
         if (trace) 
             cat("Using step-across dissimilarities:\n")
         rn <- range(dis[tmp], na.rm = TRUE)

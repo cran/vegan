@@ -1,6 +1,5 @@
 \name{decorana}
 \alias{decorana}
-\alias{print.decorana}
 \alias{summary.decorana}
 \alias{print.summary.decorana}
 \alias{plot.decorana}
@@ -8,7 +7,6 @@
 \alias{scores.decorana}
 \alias{points.decorana}
 \alias{text.decorana}
-\concept{ordination}
 
 \title{Detrended Correspondence Analysis and Basic Reciprocal Averaging }
 \description{
@@ -167,7 +165,7 @@ downweight(veg, fraction = 5)
 
 \seealso{
   For unconstrained ordination, non-metric multidimensional scaling in
-  \code{\link[MASS]{isoMDS}} may be more robust (see also
+  \code{\link{monoMDS}} may be more robust (see also
   \code{\link{metaMDS}}).  Constrained (or
   \sQuote{canonical}) correspondence analysis can be made with
   \code{\link{cca}}.  Orthogonal correspondence analysis can be

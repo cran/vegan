@@ -11,7 +11,7 @@
 @ifnottex
 This document contains answers to some of the most frequently asked
 questions about R package vegan. 
-This is version of $Date: 2011-02-20 12:51:10 +0200 (Sun, 20 Feb 2011) $.
+This is version of $Date: 2011-09-07 15:06:12 +0300 (Wed, 07 Sep 2011) $.
 @end ifnottex
 
 @quotation
@@ -35,7 +35,7 @@ Copyright @copyright{} 2008-2011 Jari Oksanen
 @titlepage
 @title vegan @acronym{FAQ}
 @subtitle Frequently Asked Questions on R package vegan
-@subtitle Version of $Date: 2011-02-20 12:51:10 +0200 (Sun, 20 Feb 2011) $ 
+@subtitle Version of $Date: 2011-09-07 15:06:12 +0300 (Wed, 07 Sep 2011) $ 
 @author Jari Oksanen
 
 @vskip 0pt plus 1filll

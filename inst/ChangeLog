@@ -1,420 +1,1174 @@
-$Date: 2011-08-17 11:27:16 +0300 (Wed, 17 Aug 2011) $
+$Date: 2011-09-07 19:04:10 +0300 (Wed, 07 Sep 2011) $
 
 VEGAN RELEASE VERSIONS at http://cran.r-project.org/
+ 
+Version 2.0-0 (released September 7, 2011)
 
-Version 1.17-12 (opened August 7, 2011)
+	* opened the release candidate of vegan_2.0-0 on September 3,
+	2011 in the devel branch pkg/vegan at r1785.
+	* Release: Copied the devel pkg/vegan branch to release
+	branches/2.0 at r1796 (inst/doc/vegan.bib at r1798), and removed
+	tests/ directory.
+	* merge r1800: Abstract to diversity-vegan.Rnw.
+	* some old functions used attributes(x)$which instead of more
+	correct attr(x, "which"), and in addition postMDS() used
+	attributes(x)$names instead of names(). Concerns anosim(),
+	initMDS(), postMDS(), mantel(), mantel.partial() and
+	mso(). initMDS() was one of the two functions that was unchanged
+	since the first vegan release on 6/9/01, and it was changed day
+	before it turned ten-years-old. After this, wisconsin() is the
+	only unchanged function from the first release.
+	* vegan-defunct: put definitions of removed "new" permutation
+	functions to vegan-defunct and have a vegan-defunct.Rd for them. 
 
-	* Most minor changes and fixes since the release of 1.17-11 (rev
-	1634). Basically everything except 'permute' dependence and
-	monoMDS. Also adds the minimal NAMESPACE file of 1695 (without S3
-	method registration and later revs).
-	* tolerance (generic), tolerance.cca: copy from devel at 1558.
-	* merged 1722: ordiplot gains 'cex'.
-	* merged 1721, 1723: plot.isomap upgrade.
-	* merged 1704, 1713: better axis limits in plot.envfit to allow
-	space for vector and centroid labels.
-	* partially merged 1700: model.{frame,matrix}.cca scoping,
-	tolerance.Rd. 
-	* merged 1699: ade2vegancca typo.
-	* partially merged r1696: superfluous aliases in deviance.cca.Rd
-	and predict.cca.Rd, scoping in anova.ccabyterm.R.
-	* merged 1695: minimal NAMESPACE and zzz.R.
-	* merged 1690: make.cepnames upgrade.
-	* merged 1689: NA in orditorp.
-	* merged 1688: duplicated aliases in RsquareAdj.Rd and
-	varpart.Rd. 
-	* merged 1687: ordilabel gained 'select'.
-	* merged 1686: better handling of graphical args in ordiplot.
-	* merged 1685: zero CCA component in anova.ccanull, calibrate.cca,
-	deviance.cca, deviance.rda, ordiplot3d, ordiresids, ordirgl,
-	ordixypplot. 
-	* merged 1684: zero CCA component in bstick.cca, goodness.cca,
-	predict.cca, predict.rda, screeplot.cca.
-	* merged 1683: zero CCA component in anova.cca.
-	* merged 1682: swan upgrade.
-	* merged 1681: split ordiarrows/segments/grid docs.
-	* merged 1680: NA in metaMDSrotate.
-	* merged 1679: NA in ordiellipse/hull/spider.
-	* merged 1678: rename 'index' to 'method' in betadiver.
-	* merged 1652: embeddable capscale (fix 1613).
-	* rev 1635 (1636): speed-up of adonis
+VEGAN DEVEL VERSIONS at http://vegan.r-forge.r-project.org/
+
+Version 1.92-2 (closed September 3, 2011)
+
+	* monoMDS: saves and displays info on the dissimilarities used,
+	and displays the number of points. Checks that input is
+	dissimilarities, and warns on negative ones.
+
+	* MDSrotate: metaMDSrotate() was renamed to MDSrotate(), and
+	metaMDSrotate() was .Deprecated. 
+
+	* meandist: warns if some dissimilarities are negative (small
+	negative values are tolerated).
+
+	* vegandocs: copied branches/1.17/inst/NEWS as ONEWS (old news),
+	and adapted vegandocs. Expanded documentation of vegandocs().
 	
-Version 1.17-11 (released June 14, 2011)
+Version 1.92-1 (closed August 28, 2011)
 
-	* merged r1629,30: added anova.prc().
+	* adonis, betadisper, mrpp: check that dissimilarities are
+	non-negative (small negative values are tolerated). The test was
+	not added to meandist: there may be legitimate usages for
+	correlation-like objects although summary.meandist() is
+	invalid. The addition was triggered by a user who tried to analyse
+	Chase et al. Raup-Crick values in the range -1 .. +1 in
+	betadisper().
+
+	* anosim: warn if some dissimilarities are negative. Function can
+	handle negative dissimilarities because it is based on ranks, but
+	probably this is a user error (but can be intentional and
+	correct).
+
+	* metaMDSrotate: can rotate monoMDS() results.
+
+	* monoMDS: gained argument 'pc' (defaults TRUE) to rotate the
+	final scores to principal components.
+
+	* specaccum, fitspecaccum: gained predict() methods. With
+	specaccum() predict(..., newdata) can estimate values for
+	'newdata' with linear or spline interpolation if necessary.
+	Without 'newdata' the function returns the the fitted expected
+	richness.  With fitspecaccum(), the predict.nls() is performed to
+	each fitted model. Function fitspecaccum() is written so that
+	default fitted(), residuals() and coef() work.
+
+	* specpool: failed if 'pool' had NA values or empty factor
+	levels. Checks that 'pool' length matches nrow of data.
+
+	* NAMESPACE: imports nobs from permute_0.5-3 in R 2.12.2 and older
+	which do not yet have nobs() generic. Do not export orderingKM &
+	ordimedian. Remove aliases to non-exported and non-documented
+	print and print.summary methods in Rd files (but leave documented
+	ones).
+
+	* vegandocs: shows the permutation vignette of the 'permute'
+	package. 
 	
-	* merged r1625,6: Ref to our MEE paper in anova.cca.Rd.
+Version 1.92-0 (closed August 23, 2011)
+
+	* open new version with the release of vegan_1.17-12 on August 17,
+	2011. 
+
+	* fitspecaccum: a typo and a condition was never true.
+
+	* monoMDS & metaMDS: always print types of stress and ties.
+
+	* NAMESPACE: export pasteCall for analogue.
+
+	* NEWS: added file NEWS.Rd for vegan release 2.0 news in Rd format.
+	Keeping neat formatting of this file may be challenging to many
+	text editors, but it is worth trying. This file should list the
+	important items for regular vegan users, whereas this ChangeLog
+	should explain the changes to other vegan developers. If
+	getOption("help_type") == "html", should start a browser to show
+	the NEWS, and use text console otherwise ("html" tested on MacOS
+	R.App GUI, text mode in Linux and MacOS bash shells, no testing on
+	Windows yet). Although the browser knows how to display NEWS.Rd,
+	it does not format the page properly (\code{foo} shows as ordinary
+	text etc). As a kluge we now make a NEWS.html file in the inst/doc
+	directory. NEWS.html cannot be made in the inst/ directory since
+	browser only agrees to show NEWS (plain) in the main directory or
+	files in doc directory.
 	
-	* merged r1624: doc vegdist(..., "raup") not using unequal
-	sampling probabilities for species.
+Version 1.91-0 (closed August 18, 2011)
 
-	* merged r1622: document zeroed components in cca.object.Rd. 
+	* NAMESPACE: added namespace to vegan. Currently hides all that
+	can be hidden, and exports only main functions: Some method
+	functions will be probably exported later. Superfluous aliases
+	were removed with the registration of S3 methods, and scoping was
+	changed a bit in anova.ccabyterm, model.matrix.cca and
+	model.frame.cca. as.mcmc is not yet registred: it need changes in
+	Imports field of DESCRIPTION (same with vif.cca: vif is defined in
+	car, but we could have our private vif generic here?).
 
-	* merged r1620: print.cca does not show "Proportions" in
-	unconstrained models with only one component.
+	* Vignettes: use now jss.cls shipped with R instead of amsart.cls
+	for better consistency with R and permute style.
 
-	* merged r1617 thru 1619: zero components in rda() and capscale()
-	similarly as r1517 for cca().
+	* plot.envfit: When `add == FALSE`, make sure we leave enough room
+	around the plotting locations to contain the arrow and centroid
+	labels.
 
-	* merged r1615: inconsistent notatation in MOStest.Rd.
+	* plot.isomap: will always plot points or text above net so that
+	they are visible. Gained argument 'type'.
 
-	* merged r1614: ordiR2step more informative.
+	* ordiplot: expose arg 'cex' so that user can change its value.
+	Age shows in this function, and it is badly in need of complete
+	re-writing to improve its flexibility.
 
-	* merged r1609: specnumber gained 'groups'.
+Version 1.90-2 (closed August 6, 2011)
 
-	* merged r1608, 10, 11, 13: capscale() sets species scores to NA
-	if input were dissimilarities and no 'comm' was given.
+	* ordilabel: gained argument 'select'.
 
-	* merged r1603: cca/rda support functions failed with prc() and
-	now refuse its results.
+	* orditorp: works with NA scores.
 
-	* merged r1602: scores.cca/rda failed if user asked only for
-	non-existing type of scores.
-
-	* merged r1600: anova.cccanull checks that seed exists before
-	trying to get it.
-
-	* merged r1598: doc of nobs in cca.object.Rd.
-
-	* merged r1588: speed-up of examples.
-
-	* merged r1517: zero components in cca().
-
-	* nobs: copied nobs() methods for vegan from r1596.
+	* make.cepnames: ignores duplicated and trailing dots. It is
+	assumed that the names to be changed came via R make.names()
+	mechanism which changes all blanks and non-accepted characters to
+	dots, and this may give extra dots in names. Gained argument to
+	take the second item of the name instead of the last which may
+	help in names like "Vaccinium vitis-idaea" (which becomes
+	"Vaccinium.vitis.idaea" -> "Vaccidae") or names which have authors
+	or other rubbish at the end.
 	
-Version 1.17-10 (released April 27, 2011)
+Version 1.90-1 (closed July 23, 2011)
 
-	* merged 1591:R 2.14.0 test warnings in decision-vegan.Rnw.
+	* cca/rda/capscale support functions: cca/rda/capscale were
+	changed to return zero components instead of NULL for completely
+	aliased constraints (CCA) or saturated models (CA), but several
+	support functions still checked for is.null() only, although they
+	also should check if rank == 0. Some functions failed, and these
+	are fixed here: anova.cca, bstick.cca, goodness.cca/rda,
+	predict.cca/rda, screeplot.cca. The following functions did not
+	fail, but were fixed: anova.ccanull, calibrate.cca, ordirgl,
+	ordiresids, ordiplot3d, deviance.cca/rda (simplified),
+	ordixyplot.
 
-	* merged r1590: capscale failed in rank-deficit cases with option
-	add = TRUE due to changes in cmdsscale() in R 2.13.0, and this
-	made BiodiversityR fail the tests.
+	* swan: gained argument 'maxit' that can be used to restrict the
+	number of beals() passes on zeros. The default is 'maxit = Inf'
+	which is the old behaviour: beals() passes on zero entries
+	continue until there are no zeros or the number of zeros does not
+	change. Probably only 'maxit = 1' makes any sense (in addition to
+	the default 'maxit = Inf'), but all values are allowed.
 
-	* merged r1204, 1206, 1209, 1568: speed-up of examples in Rd
-	files. 
+	* metaMDSrotate: results could be a bit off with NA in
+	environmental vector and >2D solution. The starting scores must be
+	orthogonal, but the initial orthogonalizing PCA was run without
+	removing NA cases.
 
-	* merged 1555: #include's in vegdist.c.
+	* ordiellipse, ordihull, ordispider: will remove NA scores that
+	can appear with na.action in cca/rda/capscale (and perhaps in
+	other cases).
 
-	* merged 1564: missing definitionin ordering.f.
+	* betadiver: argument 'index' was renamed to 'method' for
+	compatibility with dist() objects. Argument 'index' is
+	still recognized with a warning.
 
-	* merged 1570: na.rm in metaMDSrotate.
+	* metaMDS: Documentation and interface adapted to monoMDS().
+	Argument 'noshare' defaults to FALSE with monoMDS(), since tie
+	breaking seem to handle tied maximum dissimilarities even better
+	than stepacross(). For 'engine = "monoMDS"' 'noshare' defaults to
+	TRUE. The 'noshare' argument now accepts logical arguments in
+	addition to old numeric (FALSE worked previously because it was
+	interpreted as numeric 0, but TRUE has now meaningful
+	interpretation). Remove argument 'old.wa' introduced in rev280 on
+	24/3/08 for backward compatibility when calculating WA scores
+	started to use the same transformed data as analysed.
 
-Version 1.17-9 (released March 31, 2011)
+	* ordiplot: Now handles non-par arguments to plot.default without
+	warnings. Things like `axes = FALSE` in the call now just work!
 
-	* merged 1551,2: anova.cca(..., by = "axis") failed in partial
-	models. 
+Version 1.90-0 (closed July 3, 2011)
+
+	* vegan now depends on the permute package for new permutation
+	designs. This initially version strips out all the old "new"
+	permutation code from the R and Rd files, and patches up
+	permutest.betadisper to use shuffle() to generate permutations.
+
+	The 1.90-0 devel series will lead the way to vegan 2.0-0. There
+	may well be build problems as we iron out permute / vegan
+	meshing.
+
+	* capscale: could not be embedded in another function after fixing
+	the update() in 1.18-31 -- problems were anticipated in ChangeLog,
+	and they were realized.
+
+	* monoMDS: text for a proper help (Rd file). Other help files
+	updated for monoMDS. Stress type 2 is printed both in monoMDS and
+	metaMDS. stressplot() prints now R2 for monoMDS() results, and
+	docs tell that "linear fit" of stressplot() is related to "stress
+	2".
+
+Version 1.18-33 (closed June 21, 2011)
+
+	* adonis: made faster (much faster in tests) by polishing the
+	f.test() in the innermost loop.
+
+Version 1.18-32 (closed June 14, 2011)
+
+	* closed with the release of vegan_1.17-11.
+
+	* anova.prc: new function that casts prc() result to a
+	corresponding rda() and submits this to anova.cca(). With this is
+	it is possible to analyse anova(..., by = "axis"). Other cases are
+	possible as well, but not very useful as "margin" and "term" only
+	analyse all constraints as a single matrix. Now some functions
+	that were made refuse prc() results in 1.18-30 work again, and
+	anova.ccabyaxis() even makes sense. This fixes a problem Jae
+	Pasari raised in his email.
+
+	* vegdist docs: Brian Inouye informed us that we are not
+	calculating the Raup-Crick index like originally suggested: we use
+	equal probabilities for all species, but the species probabilities
+	should vary with their frequencies. Doing this would break
+	vegdist.c design, and require Fisher's non-central hypergeometric
+	distribution, and that is not available in base R. However, it
+	seems that a simulation version could be implemented in
+	oecosimu(). Now we document the problems in vegdist.Rd, but do not
+	correct the behaviour. The key paper is available over
+	http://www.esajournals.org/doi/full/10.1890/ES10-00117.1
+
+	* rda & capscale: similar changes as in cca in r1517 (version
+	1.18-24). CA component is always returned, even with zero rank,
+	and CCA and pCCA components are NULL only if they were not
+	specified originally, and if they become zero rank because of
+	aliasing etc, they are returned as zero components (instead of
+	NULL). 
+
+	* print of cca/rda/capscale: do not "Proportion" column in
+	unconstrained ordination which only has one component. However,
+	this will be printed also with zero pCCA or CCA (but not with
+	NULL). 
 	
-	* merged 1550: ordilabel gained arg 'xpd'.
+Version 1.18-31 (closed May 30, 2011)
+
+	* ordiR2step: more informative about rejecting 'scope': partial
+	models are not (currently) accepted due to the design of
+	RsquareAdj.rda().
+
+	* specnumber: gained argument 'groups' to find total richness
+	within each group. An example shows how to use this to find one
+	index that Whittaker suggested to estimate beta diversity.
+
+	* capscale: species scores will be NA if input data were
+	dissimilarities and no 'comm' was given. update(capscale_result)
+	failed because LHS data were evaluated in the
+	environment(formula).  Now removed the explicit environment: I ran
+	some tests and found no problems, but let's see what the real life
+	brings along. The changed point is commented so that this change
+	can be reconsidered if necessary.
 	
-	* merged 1541,8: metaMDSiter got more flexible 'previous.tries. 
+	* oecosimu: reverted r1557 of version 1.18-26, or splitting tied
+	values. This was introduced because Chase et al. (Ecosphere 2011,
+	http://www.esajournals.org/doi/pdf/10.1890/ES10-00117.1) used this
+	in their Raup-Crick index. This is against established practice in
+	order statistics and therefore we cancelled this.
 
-	* merged 1538,9, 1542,5: ordisurf gaine new arguments and got a
-	new plot method.
+	* specaccum: reverted r1505 & 1507, or introduction of weighted
+	species accumulation model in version 1.18-23. The method was
+	introduced because of user request, but these persons lost their
+	interest and therefore there is no reason to see the trouble that
+	finalizing these functions would require (see comments on version
+	1.18-23 about some of the work needed, and there is more).
 
-	* merged 1534: typo in vegdist.Rd.
+Version 1.18-30 (closed May 26, 2011)
 
-	* merged r1533,7, 1544,7: metaMDSrotate works with > 2 dim.
+	* opened with the release of vegan 1.17-10 on April 27, 2011.
 
-	* merged r1532: fix gettextf in d/r/rarefy.
+	* nobs: documented nobs() methods for vegan. These seem to be
+	needed in R 2.13.0 and should be released soon (there is no need
+	to add R >= 2.13.0 dependence as long as we do not use these
+ 	functions ourselves within released vegan code).
 
-	* merged r1531,4: ordisurf got formula interface.
+	* treeheight: dramatic simplification and speed-up of the code.
 
-	* merged r1527,8: doc updates in CCorA.Rd & ordihull.Rd.
+	* scores.cca/rda: failed if user requested only non-existing
+	scores. Now return an empty list of scores instead (with possible
+	attributes). 
 
-	* merged r1522 thru r1526: implement drarefy; drarefy, rrarefy,
-	specnumber, diversity accept vector input.
-
-	* merged r1521: clarify envfit.Rd.
+	* prc: several support methods did not work with 'prc' results,
+	and these now stop with an informative error instead of an
+	uniformative error. Concerns anova.ccabymargin, anova.ccabyaxis,
+	drop1.cca, add1.cca, model.frame.cca, model.matrix.cca. This was
+	found out after a private user query about having signficance test
+	for the sencond PRC axis.
 	
-	* merged r1499: as.preston, preston default to 'tiesplit = TRUE'.
+Version 1.18-29 (closed April 27, 2011)
 
-Version 1.17-8 (released March 2, 2011)
+	* capscale: could fail with add = TRUE in R 2.13.0. A kluge was
+	necessary in cmdscale() pre 2.13.0, but the feature was fixed in R
+	2.13.0 and unnecessary fix failed. Now the kluge is used only in
+	older versions of R and capscale should be working both in 2.13.0
+	and older R.
 
-	* merged r1494: no return.
+	* adipart.Rd, multipart.Rd: cancelled some excessive speed-ups in
+	example code made in r1204. Some of these speed-ups never made to
+	the release version, but were only made in the devel branch. The
+	sped-up examples were also merged to the release (adipart.Rd,
+	kendall.global.Rd, multipart.Rd, mantel.correlog.Rd,
+	pertmatfull.Rd, radfit.Rd). Also reverted r1224 so that
+	Guillaume's original r1206 (49 permutations instead of 99) is used
+	again. Probably we should speed up some other examples. The five
+	worst cases (timing in MacBook Air) are: ordistep (19.0 sec),
+	add1.cca (7.2 sec), tsallis (7.0 sec), prc (5.6 sec),
+	vegan-package (5.2 sec).
 
-	* merged r1495: procrustes checks input.
+	* vegan-package.Rd, ordistep.Rd: speed up examples.
+	
+Version 1.18-28 (closed April 11, 2011)
 
-	* merged r1496,7: FAQ updates.
+	* Peter Minchin joined the vegan team.
 
-	* merged r1501: as.preston 'tiesplit = TRUE' bug.
+	* monoMDS: a new function with Peter Minchin's Fortran90 code for
+	NMDS. The full Fortran90 code has global, local, linear and hybrid
+	MDS, configurable and valid tie treatment, handles missing values,
+	and allows adding new points to existing ordinations. The Fortran
+	code is highly tuned, and much faster than other alternatives in
+	R. The R interfaces allows access to most features of the Fortan90
+	code, except adding new points to the ordination (which will need
+	a separate function). The missing values in dissimilarities are
+	also handled in the R interface. The function will eventually
+	replace isoMDS() of the MASS package as the main NMDS engine in
+	metaMDS().
 
-	* merged r1500,4: decorana zero-eigenvalue fix.
+	* metaMDS: uses monoMDS() as its default engine (and gained
+	argument 'engine' to select either monoMDS() or isoMDS()).
 
-	* merged r1510 thru 1515: documentation fixes in beals.Rd,
-	plot.cca.Rd, scores.Rd, and vegdist.Rd.
+	* stressplot: is generic with a specific method for "monoMDS"
+	objects, and the old function as the default method.
 
-Version 1.17-7 (released February 16, 2011)
+	* goodness: got a new method for "monoMDS" objects. The function
+	handles all monoMDS() models, but does not take into account
+	possible missing values in input dissimilarities.
 
-	* merged r1489: nestednodf with weighted = FALSE.
+	* metaMDSrotate: gained argument 'na.rm' (defaults FALSE) to
+	remove missing data from the continuous vector.
+	
+Version 1.18-27 (closed April 1, 2011)
 
-	* merged r1482-4: eigenvals for ade4 and labdsv.
+	* orderingKM: Kurt Hornik found a problem when inspecting the
+	Fortran subroutines with gcc 4.6 tools when checking vegan release
+	1.17-9. 
+	
+Version 1.18-26 (closed March 31, 2011)
 
-	* merged r1476: zip data files.
+	* version closed with the release of vegan 1.17-9.
 
-	* merged r1475: partially matched argunments in functions.
+	* oecosimu: added argument 'tiesplit' (defaults FALSE). If TRUE,
+	simulated values tied with the observed statistic are split so
+	that half of them are regarded as satisfying the condition, and
+	removed from those cases which are greater or less (as given by
+	'alternative'). This is usually *not* done, but implementing
+	Raup-Crick dissimilarity in oecosimu() following
+	http://www.esajournals.org/doi/pdf/10.1890/ES10-00117.1 (Chase et
+	al., Ecosphere 2011) uses this option. However, cross-checking
+	the "r0" null model against the vegdist(..., "raup") indicates
+	that the options should be set FALSE (and this would mean that the
+	change is reverted).
 
-	* merged r1471,3,4: split "ties" in prestonfit (and allies).
+	* anova.ccabyaxis: I (JO) noticed in an ORDNEWS message that
+	anova(..., by = "axis") ignores the original Conditions in partial
+	models and so gives wrong results in partial models. The fix finds
+	the conditioning matrix as qr.X(object$pCCA$QR), and uses this as
+	a Condition in updated models. Added a regression test that checks
+	that statistics and residual df match.
 
-	* merged revs 1444 to 1467:
+	* tolerance: new function to compute species tolerances and sample
+	heterogeneities as Canoco does. Includes a method for objects of
+	class "cca".
 
-	* fixes in anova.cca scope, subset and NA handling:
-	anova.ccabyaxis, anova.ccabyterm, ordiParseFormula, rda.formula
-	cca.formula, capscale.
+	* plot.contribdiv: plot now draws axes and box *after* doing the
+	drawing - stops polygons overplotting the axis and box.
 
-	* implemented subset in capscale.
+Version 1.18-25 (closed March 23, 2011)
 
-	* implemented simulate.capscale. 
+	* ordilabel: gained argument 'xpd' to draw labels outside the plot
+	region.
 
-	* removed additive constant 'ac' in predict.rda() for capscale and
-	fitted.capscale().
+	* ordisurf: got a formula interface as an alternative to define
+	the model. Also now accepts `gam()` argument `select` to add an
+	extra penalty to smooths so they can be penalized to zero (i.e.
+	removed from the model). This is a form of model selection.
+	Estimation of smoothing parameters can now be determined via
+	argument `method`. Both `select` and `method` have been set to
+	defaults that were implied in previous versions of the function.
+	If smooth is penalized to (effectively) 0, countour plotting is
+	suppressed. New argument `gamma` can be used to increase the cost
+	of each degree of freedom used by a model in the GCV or UBRE/AIC
+	scores used in smoothness selection. New argument `plot` can be
+	used to stop ordisurf producing any graphical output.
+	A plot method is now provided that can draw contour or perspective
+	plots of ordisurf results, or plot the fitted GAM surface.
 
-	* fixed typo in specaccum() result.
+	* metaMDSrotate: can now rotate > 2-dim solutions so that the
+	first axis is parallel to a given vector and all others are
+	orthogonal to the vector (and rotated to PC if they were
+	originally). Earlier had argument 'choices' which was supposed to
+	select only two axes to be rotated (but failed before rev 1533),
+	but now lost 'choices' and always uses all dimensions, and
+	orthogonalies dim 2 and beyond against the given vector. There was
+	a query in R-sig-ecology on having two vectors in 3-dim ordination
+	which triggered the current changes, but this does not still
+	answer to the question of
+	https://stat.ethz.ch/pipermail/r-sig-ecology/2011-March/001947.html.
+	It would be possible to have this with recursive metaMDSrotate for
+	1..N for first 'vec', then 2..N for the second 'vec', but the
+	later 'vec's could be correlated with previous axes.
 
-	* added choice of 'individuals' or 'sites' in plot.specaccum()
+	* metaMDS: 'previous.best' can now be a user-supplied
+	configuration, or a result of isoMDS(). If 'previous.best' is an
+	isoMDS() or a metaMDS() result, it can have different number of
+	dimensions than the current 'k': extra dimensions are dropped off,
+	or noisy extra dimensions are added as needed. This may help in
+	running metaMDS() with a range of 'k'. Not yet documented.
 
-Version 1.17-6 (released January 10, 2011)
+Version 1.18-24 (closed March 10, 2011)
 
-	* merged revs 1427:1441 (versions 1.18-19 and 1.18-20) or
-	everything after release 1.17-5. 
+	* cca: will return NULL item for CCA only if constraints were not
+	given. If the CCA component has zero rank (= constraints were
+	aliased or were orthogonal to the data), will still return a CCA
+	item with zero eigenvalue, rank, scores etc plus info on
+	"alias". The residual component will never be NULL, but similar
+	zero-containing component is returned even when there is no
+	residual variation.  Usually these changes only manifest in
+	arbitrary data sets, but we have had email queries in R-sig-eco on
+	completely aliased constrainsts when users assumed that model
+	cca(y ~ A + Condition(A)) would be similar to a random effects
+	model and A could be analysed both as a Condition and as a
+	Constraint instead of being aliased. Naturally, overfitted models
+	with empty residual components do appear often. Currently the
+	printed output includes these zero items with Inertia and Rank 0,
+	whereas NULL components are not displayed. The changes so far only
+	concern cca(); rda() and capscale() are only changed after (and
+	if) this change appears sensible and correct in cca().
 
-	* capscale, print.cca, summary.cca, eigenvals: handling negative
+	* drarefy: a new function to return the probabilities that a
+	species occurs in a rarefied sample (= sampled without
+	replacement) of a given size, (or given sizes specified
+	separately for each row if 'sample' is a vector)..
+
+	* diversity, rarefy, rrarefy, specnumber: accept vector input. All
+	functions documented in ?diversity now accept vector input.
+	Function fisher.alpha and drararefy already accepted vectors.
+
+Version 1.18-23 (closed February 28, 2011)
+
+	* opened with the release of 1.17-7 based on version 1.18-22 on
+	February 16, 2011.
+
+	* does not use unnecessary return() plus other stylistic
+	twitches. This touches 24 functions, but users should see no
+	difference. 
+
+	* procrustes: checks and reports different number of rows instead
+	of failing in crossprod() with incompatible arguments.
+
+	* prestonfit, as.preston: default now 'tiesplit = TRUE'.
+
+	* as.preston (prestonfit, prestondistr): uppermost octave could be
+	NA with 'tiesplit = TRUE' (a bug).
+
+	* decorana: Cajo ter Braak notified about false expansion of
+	computed zero eigenvalues in rescaling which then are used in
+	estimating eigenvalues. They are now zeroed. Cajo's example was a
+	6x5 petrie matrix:
+
+	petrie <- matrix(0, 6, 5)
+	diag(petrie) <- 1
+	petrie[row(petrie) - 1 == col(petrie)] <- 1
+	decorana(petrie)
+
+	Gavin Simpson had another failing case:
+
+	dummy <- matrix(c(1,3,1,0,0,0,0,0,0,
+                   0,0,0,1,3,1,0,0,0,
+                   0,0,0,0,0,0,1,3,1), nrow = 3, byrow = TRUE)
+
+	which also failed in orthogonal CA ('ira = 1'). Now the zeroing is
+	done after estimating each axis, and the results are similar as in
+	Canoco. However, the results of orthogonal CA with 'dummy' are
+	wrong in both: there should be two eigenvalues of 1, but only one
+	is reported. This is a fundamental problem in the
+	orthogonalization algorithm in the Fortran code presumably shared
+	between vegan:decorana and Canoco.
+
+	* specaccum: first step in implementing weights on
+	method="random".  Not yet documented nor supported.  Issues that
+	must be solved are plotting (all lines? summaries?), summarizing
+	(use approx to get average predictions?) and the very natural link
+	to fitspecaccum models.
+
+	* nobs: R 2.13.0 will introduce new generic nobs() that will
+	return the number of observations. This is at least needed in
+	functions to evaluate BIC and in step() and functions it
+	calls. Implemented nobs() for several vegan classes -- some of
+	these may be unnecessary. Not yet documented but aliases in
+	vegan-internal.Rd. 
+
+	* FAQ updates: using 'select' in ordination text() and points(),
+	using 'xlim' to flip axes or zoom into ordination plot(), the
+	non-effects of 'strata' in adonis(). All these indeed are
+	frequently asked.
+
+	* scores.default: clarified documentation (PR#1300).
+
+	* vegdist: rephrased Chao index following PL.
+	
+Version 1.18-22 (closed February 16, 2011)
+
+	* nestednodf: did not go to 'weighted = FALSE' with quantitative
+	data if 'order = FALSE'. Reported by Daniel Spitale.  
+
+	* eigenvals: learnt to know 'dudi' objects of the ade4 package,
+	and 'pco' an 'pca' obejct of the labdsv package.
+
+	* betadisper: streamlined code somewhat.
+
+	* prestonfit: implemented splitting "tied" counts (1, 2, 4, 8 etc)
+	between octaves following Williamson & Gaston (J Anim Ecol 43,
+	381-399; 2005) with argument 'tiesplit = TRUE'
+	
+	* specaccum: fixed typo -- 'individuals' instead of
+	'invidividuals'. plot() gained argument to use "individuals" as
+	x-axis instead of "sites" with method = "rarefaction".
+	
+Version 1.18-21 (closed January 19, 2011)
+
+	* Fixes bug report #945 at R-Forge: anova.cca should now work with
+	subset, missing data, functions of constraints (like log(x)),
+	constraints or subset variables in data=, attached data frames or
+	in working environments. 
+
+	* capscale: return additive constant ('ac') when 'add = TRUE'. 
+
+	* fitted.capscale, predict.rda: additive constant ('ac')
+	subtracted from the estimated distances when 'add = TRUE' was used
+	in capscale().
+
+	* predict.rda: type = "working" for capscale returns now scaled
+	scores that produce the dissimilarities as Euclidean distances --
+	like was claimed in the help page.
+
+	* simulate.capscale: implemented simulate() for capscale. This
+	uses internal metric scaling mapping to simulate data and add
+	error, but returns Euclidean distances adjusted to the original
+	scale of input dissimilarities. The function uses only the real
+	axes, and imaginary dimensions are ignored.
+
+	* anova.cca: by = "term" and by = "axis" work now both with the
+	data= statement and with variables in the GlobalEnv and subset=
+	both in cca/rda. It seems that 'subset' is not implemented for
+	capscale(), but otherwise models work.
+
+	* cca/rda: added item 'subset' that is the subset argument
+	evaluated to a logical vector.
+
+	* capscale: implemented 'subset' (and this also works with
+	anova.cca). It looks like all anova.cca tests pass also with
+	capscale (but more thorough test will be run before closeing the
+	anova.cca bug in vegan-forge). It seems that subset and na.action
+	also work. 
+
+	* anova.cca: most cases work now when terms are given in
+	attach()ed data frame after changes to anova.ccabyterm() and
+	ordiParseFormula(). 
+
+	* anova.cca: works (mostly) when there are missing values. The
+	exception found was 'by = "term"' when the data frame is not given
+	as a 'data=' argument, but as an attached data.frame. In this case
+	'by = "term"' detects a change in the number of rows and stops
+	with a message.
+
+Version 1.18-20 (closed January 9, 2011)
+
+	* base of vegan release 1.17-6 (released on Jan 10, 2011).
+
+	* capscale: the total inertia was defined as the sum of absolute
+	values of inertia so that negative eigenvalues of imaginary
+	dimensions increase inertia (changes in 1.18-17 and release
+	1.17-5). Torsten Hauffe reported this as a bug in vegan
+	open-discussion forum in R-Forge on Dec 22, 2010. I (JO) answered
+	on Jan 1, 2011 and justified the change, and said this is a design
+	decision, and not a bug. Now I have reconsidered this design
+	decision, and it really seems to me that it was wrong. Now the
+	negative eigenvalues again reduce the total inertia, and are
+	similar as in vegan 1.17-4 and earlier. The capscale() output got
+	a new item of "Real Total" that gives the sum of eigenvalues
+	without the imaginary component, and the proportions are given
+	only within this real component (if there are negative
+	eigenvalues).  The eigenvalues of negative eigenvalues are not
+	added to the result, because they are not strictly for the
+	unconstrained component only like previously indicated. However,
+	summary.eigenvals() estimates the proportions explained using
+	absolute values of eigenvalues since this seems to make sense
+	there (the proportion explained is now based on absolute
+	eigenvalues to give more sensible output).
+
+Version 1.18-19 (closed January 3, 2011)
+
+	* new version opened with the release of vegan 1.17-5 (submitted
+	Dec 17, 2010, released at CRAN on on Dec 18, 2010).
+
+	* CCorA: Pierre Legendre's minor fixes, including scaling of
+	scores Cy an Cx, and removing requirement of MASS.
+
+	* wascores: checks input -- weights (species abundances) must be
+	non-negative and not all zero.
+ 
+	* metaMDS: function was written for community data with all
+	entries non-negative, but it is used increasingly often with other
+	data types with a risk of failure (especially in wascores()). Now
+	data are checked for negative entries, and arguments wascores,
+	autotransform and noshare are set to FALSE with negative data
+	entries. Triggered by email queries and problem reports.
+
+Version 1.18-18 (closed December 17, 2010)
+
+	* mantel.correlog: proper treatment of ties in permutation
+	statistics. Function uses mantel() to evaluate p-values, and this
+	uses one-sided test. If the statistic is negative, the test
+	direction is reversed, but then p-value cannot be directly
+	complemented if there are ties: the observed statistic must be
+	switchec to another side of the tied block. Therefore
+	mantel.correlog() now evaluates the p-value directly in reversed
+	test.
+
+	* nestedtemp: updated the literature reference to Almeida-Neto &
+	Ulrich (2011).
+
+	* vegdist.Rd: fixed legends to Gower indices and checked binary
+	formualations (ok).
+
+	* vegan-package.Rd: added a package intro file (to be merged to
+	the release version 1.17-5).
+
+	* sipoo.rda: got island names, and decision-vegan.Rnw vignette was
+	changed accordingly.
+
+	* ordistep: Pierre Legendre's edits of the help page.
+
+	* prc: got back the formula interface and with that the na.action
+	lost in r1356 (9 Nov, 2010).
+
+	* plot.procrustes: user can select the direction of the arrow with
+	argument 'to.target', and the 'type' of the plot. With 'type =
+	"text"', ordilabel() is used to mark the tails of the arrows.
+
+	* plot.betadisper: would fail when plotting anything other than
+	axes 1 and 2. Now fixed and an example included in the Rd file to
+	make sure this doesn't happen again. Reported by Sarah Goslee.
+
+Version 1.18-17 (closed December 1, 2010)
+	
+	* predict.procrustes: gained 'truemean' so that new points can be
+	added to the plot.procrustes() graph.
+
+	* alpha release version: preparing release (1.17-5) of
+	vegan. Mainly clean up and checking of functions intended for the
+	release. 
+
+	* mantel.correlog: vegan mantel() was used standard order
+	statistics or (hits+1)/(nperm+1) since May 2009, but
+	mantel.correlog() did not notice the change and still tried to
+	correct the mantel() result.
+
+	* as.mlm.cca/rda and intersector: should get the pivoting of names
+	in qr.X() correct both in the current buggy R and hopefully fixed
+	next version 2.12.1.
+
+	* vif.cca: aliased terms must be removed when calculating
+	VIFs. Test case vif.cca(cca(dune ~ Manure + Management, dune.env))
+	should give decent values all below <100 (used to give magnitude
+	10^31). VIF of aliased terms is NA. Pierre Legendre noticed this.
+
+	* print.eigenvals uses zapsmall.
+	
+Version 1.18-16 (closed November 17, 2010)
+
+	* procrustes: fixed centring of fitted(). Added predict() method
+	that can be used to add new rotated coordinates to the target. The
+	function cannot be used for symmetric analysis with 'newdata'.
+
+	* vignette on design decision: updated to changes in 'const' in
+	scores.rda()  in 1.18-15 and to Canoco 4. Explains now 'const'
+	more thoroughly.
+
+	* pcnm: gained argument 'dist.ret' to return the distance matrix
+	on which PCNMs were based.
+
+	* cca/rda/capscale: JO yielded to the pressure, and added
+	proportions of inertia components in the printed output.
+
+	* capscale: failed with na.action -- fix in ordiParseFormula().
+	na.action was introduced in rev1002 (Sept 11, 2009), and then
+	ruined with a change in ordiParseFormula() in rev1007 (Sept 15,
+	2009) so it lived four days and was broken when released. The
+	problem was reported by Nevil Amos.
+
+	* SSgleason: a new SS-species-area-model.
+
+	* SSlomolino: improved starting values for 'xmid' (and
+	'Asym'). Now fitspecaccum(..., "lomolino") works in several cases,
+	including BCI and bryceveg (but fails in <1% of cases). Now 'Asym'
+	and 'xmid' are estimated from Arrhenius at log-log scale: 'Asym'
+	is the predicted value at max(x), and 'xmid' is the value of x
+	giving 'Asym/2'.
+
+	* capscale: defines total inertia as the sum of absolute values of
+	eigenvalues to be consistent with cmdscale(), wcmdscale(),
+	eigenvals(), Gower and Mardia, Kent & Bibby.
+
+	* eigenvals: added a method for "pcnm" and docs discuss handling
+	negative eigenvalues in summary.eigenvals(). Function is ready for
+	the new version of cmdscale() in R 2.12.1.
+
+	* prc: Cajo ter Braak wrote new code for more direct
+	implementation of PRC. This drops formula interface and directly
+	finds model matrices avoiding aliased terms.
+	
+Version 1.18-15 (closed November 9, 2010)
+
+	* procrustes: 'translation' needs to take into account 'scale',
+	although Mardia et al. omit it. Reported, analysed and fix
+	suggested by Christian Dudel (Bochum). 
+
+	* fitspecaccum: uses now new SS-models for species-area
+	relationship and several of standard SS-models for
+	nls(). Placeholders for documentation added. Has a plot()
+	function. 
+
+	* Self-starting nls() models for species-area relationship: added
+	Gitay and Lomolino models from Dengler 2009 (J Biogeog 36,
+	728-744). Some more should be added, but these were among the best
+	in Dengler's simulation. The starting values of the Lomolino model
+	(SSlomolino) need work, as do several other candidate models. The
+	purpose is to use these also in fitspecaccum(). 
+
+	* rda: the scaling 'const' can now be a vector of two items: the
+	first is used for species and the second for sites. This allows
+	compatibility with Canoco 3.x (but Canoco 4 changed scaling): if
+	'mod' is an rda() result, and 'nr' is the number of rows in data,
+	then "scaling = -2, const = c(sqrt(nr-1), sqrt(nr))" in scores(),
+	summary() or plot() will use default scaling of Canoco 3.x. Help
+	page now points to decision vignette explaining scaling and
+	'const' (and the vignette needs updating).
+
+	* prc: coefficients folded in a wrong way. Diagnosed, reported and
+	fixed by Cajo ter Braak. CtB also fixed the scaling of species
+	scores and coefficients to be more consistent with Canoco and
+	common standards. The function now ignores user settings of
+	contrasts and will always use treatment contrasts. Cajo ter Braak
+	is now recognized as a co-author of the function.
+
+	* nestednodf: breaks ties in column and row totals by row sums and
+	column sums in quantitative data ('weighted = TRUE'). Version
+	submitted by Gustavo Carvalho in a follow-up to Feature Request
+	#1097. 
+
+Version 1.18-14 (closed November 1, 2010)
+
+	* treedist: works now with zero-height trees (for instance, only
+	one item in a tree).  Function gained a new argument 'relative'
+	(defaults TRUE): if FALSE, finds raw dissimilarities of tree
+	heights.  Help page now tells that relative tree distances are in
+	range 0..2 instead of 0..1, since combining two trees may add a
+	new common root.
+
+	* isomap: returns only axes associated with positive eigenvalues.
+
+	* wcmdscale: give two goodness of fit statistics for 'k' axes: one
+	is for the real part and based on the sum of positive eigenvalues,
+	and second is for all axes and based for the sum of absolute
+	values of all eigenvalues.
+
+	* summary.eigenvals: handle now possible negative eigenvalues from
+	capscale() or wcmdscale(): cumulative sum and proportions are now
+	based on the sum of absolute values of eigenvalues, and all real
+	eigenvalues explain less than 100% if there are negative
 	eigenvalues.
 
-	* capscale: robustness of add = TRUE in stats:::cmdscale.
+Version 1.18-13 (closed October 15, 2010)
 
-	* metaMDS: check negative data and adjust arguments.
+	* anova.cca(..., by = "axis"): now really uses marginal tests for
+	every axis. Significance of axis k with LC scores lc is from model
+	update(object, . ~ lc[,k] + Condition(lc[,-k])). That is, axis k
+	is used as constraint and all other axes as conditions, when axis
+	k is analysed. This also solves the failure of anova(..., by =
+	"ax") of rda(dune ~ poly(pH, 2) + Baresoil, varechem) of PR#945,
+	but no other problems of the same report.
 
-	* wascores: check negative weights and stop.
+	* treedive: handles trivial cases of zero (diversity NA) or one
+	species (diversity 0). 
 
-	* CCorA: change scaling, tiny fixes.
+	* oecosimu: handles NA values as na.rm = TRUE in simulations for
+	cases where these are produced by the function to evaluate
+	statistics.
 
-	* decision vignette: typos and removing text on Canoco 3 which
-	needs checking.
+	* oecosimu: takes care that the statistic is evaluated with binary
+	data when null models are binary. This was a one-year old bug
+	introduced in rev 967 on Aug 31, 2009. Previous time this bug was
+	corrected in rev 438 on June 28, 2008.
 
-Version 1.17-5 (released December 17, 2010)
+	* nestednodf: Gustavo Carvalho sent a new upgraded version which
+	also implements a new quantitative method of Almeida-Neto & Ulrich
+	(Env Mod Software, in press; 2010). Based on feature request #1097
+	in R-Forge. 
 
-	* based on development version 1.18-18 at
-	http://vegan.r-forge.r-project.org/ 
+	* ordistep: name clash if the fitted model contained item or term
+	called 'mod'. Reported by Richard Telford (Bergen, Norway).
 
-	* copied ordiR2step.R from pkg/vegan and merged docs to
-	ordistep.Rd. 
+	* fitspecaccum: Stephen Sefick suggested adding Michaelis-Menten
+	fit to random species accumulation and sent his model function.
+	These ideas were used to add a new more general function. In
+	addition, there is an option of fitting Arrhenius model S = c*A^z
+	with a new self starting function SSarrhenius() for nls(). No
+	documentation yet: needs work.
 
-	* merge r1109, 1121: more diffable permatfull.Rd and fixes in
-	markup. 
-
-	* merge r1273, 1275: permutest.cca 99 permutation & saves its
-	call. 
-
-	* merge r1277: biplot.CCorA resets par.
-
-	* merge r1278:1279: vegdist.Rd update.
-
-	* merge r1280: deviance.cca/rda return 0 in overparamerized models
-	with no unconstrained component.
-
-	* merge r1281: fix anova.ccanull df.
-
-	* merge r1284, 1324: ordistep has new formatting of formula and is
-	more robust.
+	* decorana: gives a warning if residual is bigger than tolerance.
 	
-	* merge r1288:1290, 1305: rankindex takes a list of indices.
+Version 1.18-12 (closed September 26, 2010)
 
-	* merge r1296: example on unbiased Simpson in diversity.Rd.
+	* swan: no eternal loop with disconnected data where zeros will
+	remain in the matrix.
 
-	* merge r1300, 1369:1371: FAQ and vignette updates.
+	* ordilabel: gained argument 'col' to set the text colour of the
+	labels separately from 'border' (default action is to use 'border'
+	colour). 
 
-	* merge r1301:1304: metaMDSdist update.
+	* ordiellipse: gained argument 'col'. For draw = "lines" this
+	works similarly as previously when 'col' was passed on. For draw =
+	"polygon" 'col' sets only the polygon fill, and the text of the
+	labels will use the colour of the border or of the foreground.
 
-	* merge r1311: plot.decorana uses points if no text available. 
+	* ordiR2step: gained argument 'direction = c("both", "response")',
+	and with "both" gives also adjusted R2 when dropping terms. I have
+	not yet seen a case where a term is dropped. Abandoned dangerous
+	practice of getting the R2.all directly from a fitted model of the
+	'scope' since this may have different lhs.
 
-	* merge r1312:1314: ordilabel and ordiellipse text uses border
-	colour. 
-
-	* merge r1315: fix swan infinite loop.
-
-	* merge r1319: decorana internal (rowSums/colSums)
-
-	* merge r1320: decorana prints warning.
-
-	* merge r1328, 1341: Gustavo Carvalho's nestednodf upgrade.
-
-	* merge r1329: treedive handles trivial trees.
-
-	* merge r1330:1331: oecosimu NA handling and takes care that
-	binary statistic is used with binary null models.
-
-	* merge r1332: anova.ccabyaxis really uses marginal models.
-
-	* merged r1332:1385 (or current head) except fitspecaccum.R and
-	related SSarrhenius.R & friends. Earlier merges skipped
-	ordiR2step.R and related functions. Otherwise this release branch
-	is now mainly in sync with the pkg/vegan branch. This set of
-	merges fixes issues with cmdscale changes and negative eigenvalues
-	in capscale, wcmdscale, isomap & eigenvals, fixes translation
-	parameter in procrustes and introduces predict.procrustes,
-	introduces new code for prc() by Cajo ter Braak, fixes no. of
-	permutations in mantel.correlog, fixes R bug (pre 2.12.1) in
-	pivoting aliased variables with qr.X() in vif.cca, intersetcor,
-	and as.mlm.cca/rda, introduces two scaling constants for
-	scores.rda, makes treedist to work with zero-height trees and
-	introduces unscaled tree distance, fixes NA handling in capscale
-	with fix in ordiParseFormula(), makes eigenvals to know pcnm and
-	new cmdscale in R 2.12.1, introduces printing of proportional
-	inertia in print.cca, makes pcnm return its truncated distance
-	matrix. 
-
-	* merged r1390: fix to plot.betadisper when plotting any axes other
-	than 1 and 2.
-
-	* merged r1407: diffable and updated contribdiv.Rd.
-
-	* merged r1415: Gower legend fix in vegdist.Rd.
-
-	* merged r1418: Almeida-Neto & Ulrich got published.
-
-	* merged r1423: fix to p-values in mantel.correlog.
-
-	* sipoo.rda got row names and decision-vegan.Rnw changed
-	accordingly in parallel to pkg/vegan devel branch.
-
-Version 1.17-4 (released August 20, 2010)
-
-	* merged r1263: mrpp.Rd polish.
-
-	* merged changes 1235:1259 from the main devel branch plus copied
-	MOStest and support and predict.cca7rda update from earlier
-	revisions. Changed procedures include:
-
-	* decorana order of input check (r1243)
-
-	* predict.cca/rda: 'newdata' with types "response" and "working"
-	(r1180). 
-
-	* MOStest: copied from pkg/vegan.
-
-	* ordigrid: two line types (r1246)
-
-	* veganCovEllipse: copied from pkg/vegan.
-
-	* msoplot: legend fix (r1250). Reported by Daniel Borcard.
-
-	* adonis: cleaner print (r1247)
-
-	* mrpp bug fix: remove CS from mrpp, and correct weight type of CS
-	in meandist. Reported by John Van Sickle (US EPA, Corvallis OR). 
-
-	* ordiellipse: internal changes (r1237) and fix labels on filled
-	polygons (r1242).
-
-	* vegdist: fix Anderson variant of Gower ("altGower"). Reported as
-	bug #1002 by Sergio Garcia.
-
-	* Rd files cleanup, mainly removing visible backslash \ (r1253,
-	1254, 1257).
-
-	* vignettes updated (r1239, 1244, 1245, 1259).
-
-Version 1.17-3 (released June 16, 2010)
-
-	* copied permutations.Rd from devel version (added there in r1229
-	and updated in r1230).
-
-	* copied treedist.R from the devel version and merged its
-	documentation (r1205 plus fixes and speed-up r1207:1209).
-
-	* merge r1211:1213: mantel and mantel.partial speed-ups.
-
-	* merge r1210: tsallis a bit faster.
-
-	* merge r1197:1203: 'label' argument in ordispider, ordisegments
-	and ordiarrows.
-
-	* merge r1200: cca, rda failed when Condition() was a factor, but
-	constraints had no factors.
+	* anova.ccalist: removed. Revisions were 1273, 1274, 1276. Could
+	not make this work consistently with other anova models, except
+	with 'model = "direct"'. The function would also change the API so
+	that "..." come as the second argument breaking partial matching
+	of other arguments.
 	
-	* merge r1190: RsquareAdj.default handles vector arguments.
+Version 1.18-11 (closed September 17, 2010)
 
-	* merge r1189: ordiellipse checks that it gets the 2d it can use. 
+	* diversity: example says that rarefy(x, 2) - 1 is the same as
+	unbiased Simpson of a true random sample of Hurlbert (1971,
+	eq. 5). Added after several wishes to have this function.
 
-	* merge r1188: ordiresids de-weights *CA.
+	* metaMDS: more verbose about connectivity. Use na.rm = TRUE in
+	metaMDSdist(). 
 
-	* merge r1186: envfit defaults to 999 permutations (was 0).
+	* FAQ: entry on ade4:cca name clash triggered by an invalid bug
+	report #1066 and queries in r-sig-ecology.
+	
+Version 1.18-10 (closed August 31, 2010)
 
-	* merge r1185: metaMDS handles NA distances.
+	* New version opened with the release of vegan_1.17-4 on August
+	20, 2010.
 
-	* merge r1182 (r1184 for Rd) r1187: mantel.correlog upgrades.
+	* rankindex: can take a list of dissimilarity functions as an
+	argument.
 
-	* merge r1181: RsquareAdj.rda used wrong df in rank-deficit
-	models. 
+	* deviance.cca/rda: return 0 (instead of NULL) if there is no
+	residual variation.
 
-	* merge r1179: tie handling in adonis.
+	* vegdist: help page gives equations for binary variants of the
+	indices. 
 
-	* merge r1177: print.permutest.cca uses correct order statistic.
+	* biplot.CCorA: resets par that it sets.
 
-	* merge r1176: permutest.cca speed-up in CCA re-weighting.
+	* ordiR2step: can go to the end and include all variables of the
+	scope (and checks there is a scope).  Additional stopping
+	criterion of exceeding P-value. Looks like being up to specs and
+	left for approval.
 
-	* merge r1174:1175: scores.cca/rda always have names.
+	* permutest.cca: defaults to 99 permutations instead of 100 (to
+	be consistent). Item 'call' now stores the call to permutest()
+	instead of the call of the ordination which is now saved in
+	'testcall'.  This means that update() works now.
+
+	* anova.cca: use correct degrees of freedom when there is no
+	constrained or no residual component.
+
+	* anova.ccalist: Started to work on the concept of permutation
+	test comparison of several cca/ rda/ capscale models. The basic
+	function was added to the R-Forge (undocumented!).  First idea is
+	to run permutest.cca with the same RNG seed and collect the
+	permutations from the differences of these models.  This won't be
+	consistent with other anova.cca* because permuted residuals differ
+	from the corresponding partial model (except with model =
+	"direct").  Another option that I have on my mind is that I use
+	model.matrix.cca to reconstruct a matrix of RHS of each model, and
+	then run a series of partial model ANOVAs. Here the problem is
+	that the statistics will be sequential, i.e., the residual of each
+	model is from the next model and not from the final model, and the
+	models must be in increasing order or ordered programmatically;
+	the current test will study differences of any sequence.
+	Naturally, we have to figure out how the permutation should be
+	done. Probably a note to R-Devel to open up discussion on the
+	issue. NOTE: there is no automatic delegation to this function. If
+	you try this, you must explicitly write "anova.ccalist(model1,
+	model2, model3). NOTE2: There are no tests of the sanity of the
+	input: be careful. NOTE3: Does not work with saturated model with
+	null residual variance.
+	
+Version 1.18-9 (closed August 20, 2010)
+
+	* mrpp & meandist: John Van Sickle notified us that his
+	Classification Strength (CS) uses 'weight.type = 1' (or n)
+	insteaad of 'weight.type = 3' (or n(n-1)/2).  Calculation of CS
+	was dropped from mrpp(), because with this weighting it no longer
+	has an exact relation to the corresponding MRPP statistic and the
+	function mrpp() cannot provide a significance test for both
+	statistics together. CS is kept in meandist(), where its
+	calculation is corrected for the correct weight type.
+
+	* vegdist: Anderson et al. (Ecol Lett 9, 683-693; 2006) defined
+	their "alternative Gower" without range standardization of
+	columns.  Reported as bug #1002 in http://r-forge.r-project.org/
+	by Sergio Garcia. Also some small edits of vegdist man page.
+
+	* msoplot: legend mixed symbols and labels. 
+
+	* Rd (help) files: removed some superfluous \-characters that were
+	visible in rendering text (accented letters, Latex notation in
+	wrong places).
+
+	* predict.rda/cca: document 'newdata' with 'type = "response"' or
+	'type = "working"'. The feature was added in vegan
+	1.18-4 (rev1180, April 15, 2010).
+
+Version 1.18-8 (closed August 12, 2010)
+
+	* DESCRIPTION: does not suggest package 'ellipse'.
+
+	* FAQ: new entry on negative or non-numeric data, and updates of
+	variance explained by ordination.
+
+	* intro: ordispider uses label.
+
+	* adonis: uses print.anova for cleaner output.
+
+	* plot.MOStest: uses veganCovEllipse instead of
+	ellipse:::ellipse.glm.
+
+	* ordiellipse: failed to plot labels with filled polygons, since
+	the same colour was used for polygon filling and labels. Now uses
+	ordilabel() with draw == "polygon" (but still text() with draw ==
+	"lines").
+
+	* decorana: change order of data checks so that non-numeric data
+	is detected (by rowSums()) before checking negative data entries.
+
+	* ordigrid: arguments lty, col and lwd to use different lines for
+	levels and replicate of the grid.
+
+Version 1.18-7 (closed July 19, 2010)
+
+	* new version opened with the release of vegan_1.17-3.
+
+	* veganCovEllipse: new internal function for drawing covariance
+	ellipses (to be used both with ordiellipse() and plot.MOStest()).
+
+	* ordiellipse: uses veganCovEllipse.
+	
+Version 1.18-6 (closed June 16, 2010)
+
+	* Version 1.18-6 closed simultaneously with the release of
+	vegan_1.17-3 on June 16, 2010).
+
+	* mantel, mantel.partial: considerable speed up by cleaning
+	innermost loop and replacing as.dist() with direct extraction of
+	lower diagonal.
+
+	* treedist: documenting tree dissimilarity function that has been
+	in vegan devel since Aug 17, 2009 (rev928).
 
 	* betadisper: 'type = "median"', the default, was not computing
 	the spatial median on the real and imaginary axes separately.
 	Reported by Marek Omelka.
 
-Version 1.17-2 (released March 8, 2010)
+	* permutations: First attempt to document within Vegan the general
+	workings of permutation tests. See ?permutations for details.
 
-	* ordistep: merged r1131, 1165 (adds 'anova' item to the result
-	object). 
+Version 1.18-5 (closed May 31, 2010)
 
-	* densityplot.oecosimu: merged r1164 (warnings when there was only
-	one statistic and hence one lattice panel).
+	* cca, rda: plot() failed if Condition() had factors, but
+	constraints had no factors. An example of failure:
 
-	* nesteddisc: failed if the most species rich sites were tied. Is
-	no faster but slacker. Revs 1158, 1159, 1163.
+	m <- cca(dune ~ A1 + Condition(Management), dune.env)
+	plot(m) ## failed
 
-	* permutest.betadisper: print method got ordering of permutation
-	p-values wrong in displaying the matrix of pairwise tests. The
-	computed values were correct. The formatting for printing contained
-	the bug. Reported by Dan O'Shea.
+	* ordiarrows: gained 'label' argument which uses ordilabel() on
+	arrow starts.
+
+	* ordisegments: gained 'label' argument which uses ordilabel() on
+	both ends of the segment.
+
+	* ordispider: gained 'label' argument (uses ordilabel()). Can now
+	handle ordihull() result objects: connects points in the line to
+	the hull centroid. Extended examples.
+	
+	* ordiR2step: new function to perform forward model selection
+	following Blanchet, Legendre & Borcard (Ecology 89, 2623-2632;
+	2008) or by adjusted R2 until the adjusted R2 of the full model
+	(scope) is exceeded or adjusted R2 starts to decrease.
+
+	* RsquareAdj.default: handles vector arguments.
+
+	* ordiellipse: works only with 2D data, and now uses only first
+	two dimensions of input if more given. For instance, the following
+	works now, but gave very cryptic error message previously:
+
+	m <- decorana(dune)
+	plot(m)
+	with(dune.env, ordiellipse(m, Management))
+
+	* ordiresids: removes now the row weights from Residuals and
+	Fitted in CA. Now shows the same values that are shuffled or
+	resampled in simulate.cca() where they are again weighted after
+	being added to the new fitted value.
+
+	* mantel.correlog: changes the Sturges rule to conform with the
+	standard R nclass.Sturges ('ceiling' instead of 'round'). Extends
+	and corrects documentation and messages.
+
+Version 1.18-4 (closed May 21, 2010)
+
+	* envfit: defaults now to 999 permutations. Used to be 0 or no
+	permutations. 
+
+	* metaMDS: can handle NA values in dissimilarities (but I do not
+	know if isoMDS can handle them correctly).
+
+	* mantel.correlog: accepts now user supplied breakpoints or number
+	of classes like intended.
+
+	* RsquareAdj.rda: uses now correct model df in rank deficit RDA
+	models. 
+
+	* adonis: implemented tie handling in permutations. 
+
+	* predict.cca/rda: implemented 'newdata' for type =
+	"response". For CCA, 'newdata' must be constraints (environmental
+	data), and for CA they must be community data. Test version, not
+	yet documented (except here).
+
+Version 1.18-3 (closed April 15, 2010)
+
+	* new version opened with the release of vegan 1.17-2 (March 8,
+	2010). 
+
+	* DESCRIPTION: Corrected the name of Bob O'Hara (also in release
+	1.17-2). 
+
+	* scores.cca/scores.rda: scores will always have names even if the
+	input data have no names. This fixes some display issues that
+	Pierre Legendre had with biplot.rda(), and makes redundant the
+	name checking code in summary.cca (the redundant code was not yet
+	removed, but I see that this fix here was sound).
+
+	* permutest.cca: re-weighting of permuted CCA data matrix is now
+	done with compiled code using existing C function 'wcentre' (in
+	goffactor.c). This may give huge speed-up (>50% time save in first
+	tests) both in CCA and pCCA.  The print function of permutest puts
+	now the observed statistic among permutations (the P-value is only
+	evaluated at printing so that this does not influence any
+	anova.cca function using permutest.cca).
+	
+Version 1.18-2 (closed March 8, 2010)
+
+	* ordistep: documented the 'anova' component added to the result
+	object. 
+
+	* densityplot.oecosimu: gives no warning if there is only one
+	statistic and hence only one panel.
+
+	* nesteddisc: failed if highest species frequencies were tied. The
+	error message was "Error: dims [prodcut 15] do not match the
+	length of object [0]". Found by Eric Fuchs in the help forum of
+	vegan.r-forge.r-project.org. The function does not try as hard to
+	optimize the index, and hence it is much faster (but slacker).
 
 	* screeplot: New argument 'legend' for all methods (except
 	'decorana') to draw a legend if the observed and broken stick
 	distribution are both plotted. Now also respects 'pch' for the
 	broken stick line.
 
-Version 1.17-1 (released February 18, 2010)
+	* permutest.betadisper: print method got ordering of permutation
+	p-values wrong in displaying the matrix of pairwise tests. The
+	computed values were correct. The formatting for printing contained
+	the bug. Reported by Dan O'Shea.
 
-	* merged and edited r1133: update FAQ.
+Version 1.18-1 (closed February 18, 2010)
 
-	* copied multipart.R & print.multipart.R from the devel branch. 
+	* closed with the release of vegan 1.17-1. The release contains
+	bug fixes and multipart of 1.18-1, but excludes MOStest and 1.18-1
+	upgrades to ordistep.
 
-	* merged r1124: envfit() weights fixed for cca().
+	* ordistep: saves model changes in the 'anova' item similarly as
+	standard step(). Experimental feature: not yet documented.
 
-	* merged r1123: CCorA() output fixes plus upgrades of
-	biplot.CCorA(). 
+	* envfit: did not pass weights to factorfit or to vectorfit when
+	the environmental variable was a single vector. Reported for
+	vectors by Richard Telford. Broken in rev1004 (Sep 12, 2009).
 
-	* merged r1118, r1119: predict.cca/rda match 'newdata' by dim
-	names and gained new choice 'type = "working"'.
+	* CCorA: Fixed bug in presentation of variables in plots. Adds new
+	biplot types. General improvement in checking exceptional cases
+	improve stability.
 
-	* merged r1120, 1122: simulate.rda/cca gained argument 'rank'. 
+	* predict.cca, predict.rda: match 'newdata' by row names or column
+	names in type = "wa" and type = "sp". This is similar as
+	predict.prcomp/princomp. Gained choice type = "working" for
+	working residuals (as fitted.cca/rda).
 
-	* merged r1102: isompadist() need not require 'vegan'.
-	
-Version 1.17-0 (released January 11, 2010)
+	* simulate.rda, simulate.cca: gained argument rank passed to
+	predict.rda() or predict.rda(). This also allows simulation under
+	null model by setting rank = 0.
 
-	* Copied from vegan/pkg/vegan version 1.16-34 (rev1087).
+	* permatfull.Rd: fixed braces in the help file + mark-up.
 
-	* removed treedist().
+Version 1.18-0 (closed January 11, 2010 with release 1.17-0)
 
-	* Documented na.action in cca.object (copied from 1.18-0). 
+	* Documented na.action in cca.object.
 
-	* removed MOStest.
+	* Opened concurrently with copying 1.16-34 (at rev 1087) to
+	branches/1.17 for a new release.
 
-	* removed multipart.
+	* betadisper: 'type = "median"' is now the default type of
+	analysis.
 
-	* merged betadisper updates (rev1096 & 1114). 
+	* fieller.MOStest: removed erroneous multiplication of variances
+	by overdispersion, because this was already done in cov.scaled,
+	and therefore was doubled and gave much too wide (up to Infinite)
+	limits.
 
-VEGAN DEVEL VERSIONS at http://r-forge.r-project.org/
+	* MOStest uses now ANODEV of free model and model where the
+	hump/pit is forced to a given location instead of the test based
+	on the Wald statistic (coefficient/sd) of the coefficient of the
+	linear term. The ANODEV and Wald statistic are equivalent in
+	Gaussian models, but in with other error families the ANODEV is
+	more correct. This fix removes the conflict between the basic
+	MOStest() and its profile() and confint() methods in non-Gaussian
+	families.
 
-Version 1.16-34 (closed January 2, 2010) -- (codename: Lucia)
+Version 1.16-34 (closed January 2, 2009) -- (codename: Lucia)
 
 	* twostagechao: deleted, because question regarding the
 	notation in the original article remained unanswered.
@@ -595,7 +1349,7 @@ Version 1.16-30 (closed October 3, 2009)
 	zero, and z became NaN. Now z = 0 for these cases. A response to
 	the query of Martin Kopecky at the vegan-help forum in R-Forge.
 
-	* densityplot.oecosimu: panels keep the order of statistics. The
+	* densitplot.oecosimu: panels keep the order of statistics. The
 	panels were ordered alphabetically, but the vertical line for the
 	observed statistic was in the original order (and thus often in
 	the wrong panel).

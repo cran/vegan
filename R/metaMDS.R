@@ -1,8 +1,11 @@
 `metaMDS` <-
-    function (comm, distance = "bray", k = 2, trymax = 20, autotransform = TRUE, 
-              noshare = 0.1, wascores = TRUE, expand = TRUE, trace = 1,
-              plot = FALSE, previous.best, old.wa = FALSE, ...) 
+    function (comm, distance = "bray", k = 2, trymax = 20,
+              engine = c("monoMDS", "isoMDS"), 
+              autotransform = TRUE, noshare = (engine == "isoMDS"),
+              wascores = TRUE, expand = TRUE, trace = 1,
+              plot = FALSE, previous.best,  ...) 
 {
+    engine <- match.arg(engine)
     commname <- deparse(substitute(comm))
     ## metaMDS was written for community data which should be all
     ## positive. Check this here, and set arguments so that they are
@@ -32,15 +35,15 @@
     if (missing(previous.best)) 
         previous.best <- NULL
     out <- metaMDSiter(dis, k = k, trymax = trymax, trace = trace, 
-                       plot = plot, previous.best = previous.best, ...)
+                       plot = plot, previous.best = previous.best,
+                       engine = engine, ...)
     points <- postMDS(out$points, dis, plot = max(0, plot - 1), ...)
     if (is.null(rownames(points))) 
         rownames(points) <- rownames(comm)
     if (wascores) {
-        if (!old.wa)
-            comm <- eval.parent(parse(text=attr(dis, "commname")))
+        ## transformed data
+        comm <- eval.parent(parse(text=attr(dis, "commname")))
         wa <- wascores(points, comm, expand = expand)
-        attr(wa, "old.wa") <- old.wa
     }
     else
         wa <- NA
@@ -49,6 +52,6 @@
     out$call <- match.call()
     if (is.null(out$data))
         out$data <- commname
-    class(out) <- "metaMDS"
+    class(out) <- c("metaMDS", class(out))
     out
 }

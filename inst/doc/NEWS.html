@@ -1,0 +1,219 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><title>R: vegan News</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="R.css">
+</head><body>
+
+<table width="100%" summary="page for NEWS"><tr><td>NEWS</td><td align="right">R Documentation</td></tr></table>
+
+<h2>vegan News</h2>
+
+<h3>Changes in version 2.0-0</h3>
+
+<p>
+
+
+<h4>GENERAL</h4>
+
+<p>
+
+</p>
+<p>
+<ul>
+<li> Peter Minchin joins the <span class="pkg">vegan</span> team.
+</p>
+<p>
+</li>
+<li><span class="pkg">vegan</span> implements standard <font face="Courier New,Courier" color="#666666"><b>R</b></font> <code>NAMESPACE</code>. In
+general, <code>S3</code> methods are not exported which means that you
+cannot directly use or see contents of functions like
+<code>cca.default</code>, <code>plot.cca</code> or <code>anova.ccabyterm</code>. To
+use these functions you should rely on <font face="Courier New,Courier" color="#666666"><b>R</b></font> delegation and simply
+use <code>cca</code> and for its result objects use <code>plot</code> and
+<code>anova</code> without suffix <code>.cca</code>. To see the contents of
+the function you can use <code>:::</code>, such as
+<code>vegan:::cca.default</code>. This change may break packages,
+documents or scripts that rely on non-exported names.
+</p>
+<p>
+</li>
+<li><span class="pkg">vegan</span> depends on the <span class="pkg">permute</span> package. This
+package provides powerful tools for restricted permutation
+schemes. All <span class="pkg">vegan</span> permutation will gradually move to use
+<span class="pkg">permute</span>, but currently only <code>betadisper</code> uses the new
+feature. 
+</p>
+<p>
+</ul>
+
+</p>
+ 
+</p>
+<p>
+
+
+<h4>NEW FUNCTIONS</h4>
+
+<p>
+
+</p>
+<p>
+<ul>
+<li> <code>monoMDS</code>: a new function for non-metric
+multidimensional scaling (NMDS). This function replaces
+<code>MASS::isoMDS</code> as the default method in
+<code>metaMDS</code>. Major advantages of <code>monoMDS</code> are that it
+has &lsquo;weak&rsquo; (&lsquo;primary&rsquo;) tie treatment which means
+that it can split tied observed dissimilarities.  &lsquo;Weak&rsquo;
+tie treatment improves ordination of heterogeneous data sets,
+because maximum dissimilarities of <i>1</i> can be split. In
+addition to global NMDS, <code>monoMDS</code> can perform local and
+hybrid NMDS and metric MDS.  It can also handle missing and zero
+dissimilarities.  Moreover, <code>monoMDS</code> is faster than
+previous alternatives. The function uses <code>Fortran</code> code
+written by Peter Minchin.
+</p>
+<p>
+</li>
+<li><code>MDSrotate</code> a new function to replace
+<code>metaMDSrotate</code>. This function can rotate both <code>metaMDS</code>
+and <code>monoMDS</code> results so that the first axis is parallel to
+an environmental vector.
+</p>
+<p>
+</li>
+<li><code>eventstar</code> finds the minimum of the evenness profile
+on the Tsallis entropy, and uses this to find the corresponding
+values of diversity, evenness and numbers equivalent following
+Mendes et al. (<EM>Ecography</EM> 31, 450-456; 2008). The code was
+contributed by Eduardo Ribeira Cunha and Heloisa Beatriz Antoniazi
+Evangelista and adapted to <span class="pkg">vegan</span> by Peter Solymos.
+</p>
+<p>
+</li>
+<li><code>fitspecaccum</code> fits non-linear regression models to
+the species accumulation results from <code>specaccum</code>. The
+function can use new self-starting species accumulation models
+in <span class="pkg">vegan</span> or other self-starting non-linear regression
+models in <font face="Courier New,Courier" color="#666666"><b>R</b></font>. The function can fit Arrhenius, Gleason, Gitay,
+Lomolino (in <span class="pkg">vegan</span>), asymptotic, Gompertz,
+Michaelis-Menten, logistic and Weibull (in base <font face="Courier New,Courier" color="#666666"><b>R</b></font>) models. The
+function has <code>plot</code> and <code>predict</code> methods.
+</p>
+<p>
+</li>
+<li>Self-starting non-linear species accumulation models
+<code>SSarrhenius</code>, <code>SSgleason</code>, <code>SSgitay</code> and
+<code>SSlomolino</code>. These can be used with <code>fitspecaccum</code> or
+directly in non-linear regression with <code>nls</code>. These functions
+were implemented because they were found good for species-area
+models by Dengler (<EM>J. Biogeogr.</EM> 36, 728-744; 2009).
+</p>
+<p>
+</ul>
+
+</p>
+ 
+</p>
+<p>
+
+
+<h4>NEW FEATURES</h4>
+
+<p>
+
+</p>
+<p>
+<ul>
+<li> <code>adonis</code>, <code>anosim</code>, <code>meandist</code> and
+<code>mrpp</code> warn on negative dissimilarities, and
+<code>betadisper</code> refuses to analyse them. All these functions
+expect dissimilarities, and giving something else (like
+correlations) probably is a user error.
+</p>
+<p>
+</li>
+<li><code>betadisper</code> uses restricted permutation of the
+<span class="pkg">permute</span> package. 
+</p>
+<p>
+</li>
+<li><code>metaMDS</code> uses <code>monoMDS</code> as its default ordination
+engine. Function gains new argument <code>engine</code> that can be used
+to alternatively select <code>MASS::isoMDS</code>.  The default is not
+to use <code>stepacross</code> with <code>monoMDS</code> because its
+&lsquo;weak&rsquo; tie treatment can cope with tied maximum
+dissimilarities of one. However, <code>stepacross</code> is the default
+with <code>isoMDS</code> because it cannot handle adequately these tied
+maximum dissimilarities.
+</p>
+<p>
+</li>
+<li><code>specaccum</code> gained <code>predict</code> method which uses
+either linear or spline interpolation for data between observed
+points. Extrapolation is possible with spline interpolation, but
+may make little sense.
+</p>
+<p>
+</li>
+<li><code>specpool</code> can handle missing values or empty factor
+levels in the grouping factor <code>pool</code>.  Now also checks that
+the length of the <code>pool</code> matches the number of
+observations.
+</p>
+<p>
+</ul>
+
+</p>
+ 
+</p>
+<p>
+
+
+<h4>DEPRECATED AND DEFUNCT</h4>
+
+<p>
+
+</p>
+<p>
+<ul>
+<li> <code>metaMDSrotate</code> was replaced with <code>MDSrotate</code>
+that can also handle the results of <code>monoMDS</code>.
+</p>
+<p>
+</li>
+<li><code>permuted.index2</code> and other &ldquo;new&rdquo; permutation
+code was removed in favour of the <span class="pkg">permute</span> package. This code
+was not intended for normal use, but packages depending on that
+code in <span class="pkg">vegan</span> should instead depend on <span class="pkg">permute</span>.
+</p>
+<p>
+</ul>
+  
+</p>
+<p>
+</p>
+ 
+</p>
+<p>
+
+
+<h4>ANALYSES</h4>
+
+<p>
+
+</p>
+<p>
+<ul>
+<li> <code>treeheight</code> uses much snappier code. The results
+should be unchanged.
+</p>
+<p>
+</ul>
+
+</p>
+ 
+</p>
+
+
+</body></html>

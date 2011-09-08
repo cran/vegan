@@ -129,6 +129,34 @@ c for the blocks of 3.
    35 z(k)=(zbar(k-1)+zbar(k)+zbar(k+1))/3.0
       do 40 i=1,mi
       k=ix(i)
+ 40   x(i)=x(i)-z(k)
+      return
+      end
+
+c Function segfit is identical to detrnd, but it also returns the fitted
+c values z. x is respone in input, and residuals in output. --Added by
+c J. Oksanen 1 Oct, 2010.
+      subroutine segfit(x,aidot,ix,mi,mk,fit)
+      implicit double precision (a-h,o-z)
+      double precision x(mi),z(50),zn(50),zbar(50),aidot(mi)
+      double precision fit(mi)
+      integer ix(mi)
+      do 10 k=1,mk
+      z(k)=0.0
+   10 zn(k)=0.0
+      do 20 i=1,mi
+      k=ix(i)
+      z(k)=z(k)+x(i)*aidot(i)
+   20 zn(k)=zn(k)+aidot(i)
+      mmk=mk-1
+      do 30 k=2,mmk
+   30 zbar(k)=(z(k-1)+z(k)+z(k+1))/(zn(k-1)+zn(k)+zn(k+1)+1.0e-12)
+      mmk=mmk-1
+      do 35 k=3,mmk
+   35 z(k)=(zbar(k-1)+zbar(k)+zbar(k+1))/3.0
+      do 40 i=1,mi
+      k=ix(i)
+      fit(i) = z(k)
    40 x(i)=x(i)-z(k)
       return
       end
@@ -149,9 +177,9 @@ c (subroutine strtch).
       double precision xeig1(mi),xeig2(mi),xeig3(mi),aidot(mi),adotj(n)
       double precision qidat(nid)
       integer ibegin(mi),iend(mi),idat(nid),ix1(mi),ix2(mi),ix3(mi)
-c string to print R warnings: this must be long enough to fit format
-c statement 1012
+c strings to print R warnings
       character*64 warning
+      character*2 axnam
       tot=0.0
       do 10 j=1,n
       tot=tot+adotj(j)
@@ -303,9 +331,11 @@ c     1', which is',f10.6)
 c R version of the above warning. You must change the length of
 c character*n warning definition if you change the warning text
       if (a12 .gt. tol) then
-         write(warning, 1012) a12, tol, neig+1
- 1012    format("residual", f10.7, " bigger than tolerance", f10.7, 
-     1 " for axis ", i1)
+         if (neig .eq. 0) axnam = "1"
+         if (neig .eq. 1) axnam = "2"
+         if (neig .eq. 2) axnam = "3"
+         if (neig .eq. 3) axnam = "4"
+         warning = "residual bigger than tolerance on axis "//axnam
          call rwarn(warning)
       end if
 c we calculate x from y, and set x to unit length if reciprocal
