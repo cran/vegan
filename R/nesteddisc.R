@@ -10,7 +10,7 @@
 
     ## starting values and CONSTANTS
     NALL <- 7
-    NITER <- 1000
+    NITER <- 200
     ties <- FALSE
     trace <- FALSE
     ## Code
@@ -42,7 +42,7 @@
                 perm <- matrix(allPerms(le[i]), ncol=le[i]) + cle[i]
                 ## Take at maximum NITER cases from complete enumeration
                 if (nrow(perm) >= NITER) {
-                    perm <- perm[sample(nrow(perm), NITER),]
+                    perm <- perm[sample.int(nrow(perm), NITER),]
                     ties <- TRUE
                 }
             }
