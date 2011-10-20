@@ -21,10 +21,10 @@ another document.
  \Keywords{nestdness, matrix temperature, community null models, scaling of PCA and RDA, WA
    and LC scores}
 %% hijack Address for version info
-\Address{$ $Id: decision-vegan.Rnw 1799 2011-09-07 12:06:12Z jarioksa $ $
+\Address{$ $Id: decision-vegan.Rnw 1709 2011-08-10 15:48:21Z jarioksa $ $
   processed with vegan
-2.0-1
-in R version 2.14.0 beta (2011-10-20 r57344) on \today}
+2.0-2
+in R version 2.14.0 Patched (2011-11-07 r57600) on \today}
 \Footername{About this version}
 
 %% need no \usepackage{Sweave.sty}
@@ -499,18 +499,18 @@ R> shuff
 Call: cca(formula = varespec[i, ] ~ Al + K, data = varechem)
 
               Inertia Proportion Rank
-Total          2.0832     1.0000     
-Constrained    0.2274     0.1091    2
-Unconstrained  1.8558     0.8909   21
+Total         2.08320    1.00000     
+Constrained   0.11442    0.05493    2
+Unconstrained 1.96877    0.94507   21
 Inertia is mean squared contingency coefficient 
 
 Eigenvalues for constrained axes:
    CCA1    CCA2 
-0.13677 0.09059 
+0.06777 0.04666 
 
 Eigenvalues for unconstrained axes:
     CA1     CA2     CA3     CA4     CA5     CA6     CA7     CA8 
-0.49456 0.26354 0.21358 0.19160 0.17298 0.11709 0.08979 0.08342 
+0.52168 0.34246 0.21642 0.18929 0.16301 0.10875 0.09479 0.08826 
 (Showed only 8 of all 21 unconstrained eigenvalues)
 \end{Soutput}
 \end{Schunk}
@@ -537,11 +537,11 @@ R> proc <- procrustes(scores(tmp1, dis="lc", choi=1:14), scores(tmp2, dis="lc", 
 R> max(residuals(proc))
 \end{Sinput}
 \begin{Soutput}
-[1] 2.663056e-14
+[1] 3.138267e-14
 \end{Soutput}
 \end{Schunk}
 In \code{cca} the difference would be somewhat larger than now
-observed 2.6631e-14 because site
+observed 3.1383e-14 because site
 weights used for environmental variables are shuffled with the species
 data.
 

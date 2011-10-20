@@ -1,6 +1,21 @@
-$Date: 2011-10-19 22:06:33 +0300 (Wed, 19 Oct 2011) $
+$Date: 2011-11-12 17:59:29 +0000 (Sat, 12 Nov 2011) $
 
 VEGAN RELEASE VERSIONS at http://cran.r-project.org/
+
+Version 2.0-2 (opened October 20, 2011)
+
+	* merge r1985: ordiarrows, ordisegments gained arg 'order.by'.
+	* merge r1974,1975,1980,1982: FAQ update.
+	* merge r1970: ordispider returns invisible plotting structure.
+	* merge r1969: ordiplot3d.Rd tells about xyz.convert().
+	* merge r1964: clarify stress scaling in iso/monoMDS.
+	* merge r1961: consinstent 'noshrink' defaults in metaMDSdist()
+	and metaMDS(..., engine="isoMDS")
+	* merge r1959: capscale zero-rank constraints bug fix.
+	* merge r1988 by hand: calling f.test without transposed matrix
+	bug in adonis.
+	* merge r1991 by hand: change sapply(H.s t) to use lapply in adonis
+	to fix a further bug in implementing speed-ups in f.test
 
 Version 2.0-1 (released October 20, 2011)
 
