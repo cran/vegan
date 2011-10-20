@@ -2,13 +2,87 @@
 \title{vegan News}
 \encoding{UTF-8}
 
+\section{Changes in version 2.0-1}{
+  \subsection{NEW FUNCTIONS}{
+    \itemize{
+  
+      \item \code{clamtest}: new function to classify species as
+      generalists and specialists in two distinct habitats (CLAM test of
+      Chazdon et al., \emph{Ecology} 92, 1332--1343; 2011).  The test is
+      based on multinomial distribution of individuals in two habitat
+      types or sampling units, and it is applicable only to count data
+      with no over-dispersion.
+
+      \item \code{as.preston} gained \code{plot} and \code{lines}
+      methods, and \code{as.fisher} gained \code{plot} method (which
+      also can add items to existing plots). These are similar as
+      \code{plot} and \code{lines} for \code{prestonfit} and
+      \code{fisherfit}, but display only data without the fitted lines.
+
+      \item \code{raupcrick}: new function to implement Raup-Crick
+      dissimilarity as a probability of number of co-occurring species
+      with occurrence probabilities proportional to species
+      frequencies.  \pkg{Vegan} has Raup-Crick index as a choice in
+      \code{vegdist}, but that uses equal sampling probabilities for
+      species and analytic equations. The new \code{raupcrick}
+      function uses simulation with \code{oecosimu}. The function
+      follows Chase et al. (2011) \emph{Ecosphere} 2:art24
+      [doi:10.1890/ES10-00117.1], and was developed with the
+      consultation of Brian Inouye.
+
+    }
+  } % end NEW FUNCTIONS
+
+  \subsection{BUG FIXES}{
+    \itemize{
+
+      \item Function \code{meandist} can scramble items and give wrong
+      results, especially when the \code{grouping} was numerical. The
+      problem was reported by Dr Miguel Alvarez (Univ. Bonn).
+
+      \item \code{metaMDS} did not reset \code{tries} when a new model
+      was started with a \code{previous.best} solution from a different
+      model. 
+
+      \item Function \code{permatswap} for community null models using
+      quantitative swap never swapped items in a \eqn{2 \times 2}{2 by 2}
+      submatrix if all cells were filled.
+
+      \item The result from \code{permutest.cca} could not be
+      \code{update}d because of a \file{NAMESPACE} issue.
+
+      \item \R 2.14.0 changed so that it does not accept using
+      \code{sd()} function for matrices (which was the behaviour at
+      least since \R 1.0-0), and several \pkg{vegan} functions were
+      changed to adapt to this change (\code{rda}, \code{capscale},
+      \code{simulate} methods for \code{rda}, \code{cca} and
+      \code{capscale}). The change in \R 2.14.0 does not influence the
+      results but you probably wish to upgrade \pkg{vegan} to avoid
+      annoying warnings.
+
+    }	
+  } % end BUG FIXES
+
+  \subsection{ANALYSES}{
+    \itemize{
+
+      \item \code{nesteddisc} is slacker and hence faster when trying
+      to optimize the statistic for tied column frequencies. Tracing
+      showed that in most cases an improved ordering was found rather
+      early in tries, and the results are equally good in most cases.
+
+    }
+  } % end ANALYSES 
+
+} % end version 2.0-1
+
 \section{Changes in version 2.0-0}{
   \subsection{GENERAL}{
     \itemize{
       
       \item Peter Minchin joins the \pkg{vegan} team.
       
-      \item \pkg{vegan} implements standard \R \code{NAMESPACE}. In
+      \item \pkg{vegan} implements standard \R \file{NAMESPACE}. In
       general, \code{S3} methods are not exported which means that you
       cannot directly use or see contents of functions like
       \code{cca.default}, \code{plot.cca} or \code{anova.ccabyterm}. To

@@ -31,8 +31,8 @@
 
 %% misuse next for scm data
 \Address{$ $Id: diversity-vegan.Rnw 1801 2011-09-07 16:04:10Z jarioksa $ $
-  processed with vegan 2.0-0
-  in R version 2.13.1 (2011-07-08) on \today}
+  processed with vegan 2.0-1
+  in R version 2.14.0 beta (2011-10-20 r57344) on \today}
 \Footername{About this version}
 
 %% need no \usepackage{Sweave}
@@ -122,7 +122,7 @@ We select a random subset of five sites for R\'{e}nyi diversities:
 \begin{Schunk}
 \begin{Sinput}
 R> k <- sample(nrow(BCI), 6)
-R> R <- renyi(BCI[k, ])
+R> R <- renyi(BCI[k,])
 \end{Sinput}
 \end{Schunk}
 We can really regard a site more diverse if all of its R\'{e}nyi
@@ -220,7 +220,7 @@ sample variant of Simpson's diversity index (or, more precisely of
 $D_1 + 1$), and these two are almost identical in BCI:
 \begin{Schunk}
 \begin{Sinput}
-R> range(diversity(BCI, "simp") - (S2 - 1))
+R> range(diversity(BCI, "simp") - (S2 -1))
 \end{Sinput}
 \begin{Soutput}
 [1] -0.002868298 -0.001330663
@@ -290,7 +290,7 @@ but there is such a table for the Dune meadow data (Fig. \ref{fig:taxondive}):
 \begin{Sinput}
 R> data(dune)
 R> data(dune.taxon)
-R> taxdis <- taxa2dist(dune.taxon, varstep = TRUE)
+R> taxdis <- taxa2dist(dune.taxon, varstep=TRUE)
 R> mod <- taxondive(dune, taxdis)
 \end{Sinput}
 \end{Schunk}
@@ -348,21 +348,21 @@ log-series for a randomly selected plot is (Fig. \ref{fig:fisher}):
 \begin{Schunk}
 \begin{Sinput}
 R> k <- sample(nrow(BCI), 1)
-R> fish <- fisherfit(BCI[k, ])
+R> fish <- fisherfit(BCI[k,])
 R> fish
 \end{Sinput}
 \begin{Soutput}
 Fisher log series model
-No. of species: 93 
+No. of species: 86 
 
       Estimate Std. Error
-alpha   36.404      4.723
+alpha   32.087     4.2841
 \end{Soutput}
 \end{Schunk}
 \begin{SCfigure}
 \includegraphics{diversity-vegan-018}
 \caption{Fisher's log-series fitted to one randomly selected site
-  (50).}
+  (33).}
 \label{fig:fisher}
 \end{SCfigure}
 We already saw $\alpha$ as a diversity index.  Now we also obtained
@@ -380,7 +380,7 @@ R> confint(fish)
 \end{Sinput}
 \begin{Soutput}
    2.5 %   97.5 % 
-28.08008 46.71359 
+24.55251 41.45628 
 \end{Soutput}
 \end{Schunk}
 
@@ -404,26 +404,26 @@ the lower octave.
 Function \code{prestondistr} directly
 maximizes truncated log-normal likelihood without binning data, and it
 is the recommended alternative.  Log-normal models  usually fit poorly
-to the BCI data, but here our random plot (number 50):
+to the BCI data, but here our random plot (number 33):
 \begin{Schunk}
 \begin{Sinput}
-R> prestondistr(BCI[k, ])
+R> prestondistr(BCI[k,])
 \end{Sinput}
 \begin{Soutput}
 Preston lognormal model
 Method: maximized likelihood to log2 abundances 
-No. of species: 93 
+No. of species: 86 
 
-      mode      width         S0 
- 0.8251737  1.8272779 24.1411729 
+     mode     width        S0 
+ 0.857103  1.869954 21.850718 
 
 Frequencies by Octave
-                0        1        2       3         4        5
-Observed 18.50000 28.00000 19.50000 10.0000 11.500000 4.500000
-Fitted   21.80095 24.03093 19.63344 11.8892  5.336294 1.775241
+                0        1        2        3        4        5
+Observed 17.00000 23.50000 19.00000 12.00000 8.500000 4.000000
+Fitted   19.67186 21.78701 18.12799 11.33187 5.321736 1.877608
                  6
-Observed 1.0000000
-Fitted   0.4377291
+Observed 2.0000000
+Fitted   0.4976869
 \end{Soutput}
 \end{Schunk}
 
@@ -457,25 +457,25 @@ and the default Poisson error looks appropriate, and our example data
 set gives (Fig. \ref{fig:rad}):
 \begin{Schunk}
 \begin{Sinput}
-R> rad <- radfit(BCI[k, ])
+R> rad <- radfit(BCI[k,])
 R> rad
 \end{Sinput}
 \begin{Soutput}
 RAD models, family poisson 
-No. of species 93, total abundance 432
+No. of species 86, total abundance 436
 
-           par1      par2     par3    Deviance AIC      BIC     
-Null                                   66.6294 333.2959 333.2959
-Preemption  0.047311                   51.5143 320.1808 322.7134
-Lognormal   0.90656   1.1413           21.2540 291.9205 296.9857
-Zipf        0.13567  -0.83199          38.8722 309.5387 314.6039
-Mandelbrot  3.2893   -1.632    8.7019   9.3815 282.0480 289.6458
+           par1      par2     par3   Deviance AIC      BIC     
+Null                                  90.8682 340.1742 340.1742
+Preemption  0.054899                  77.0177 328.3237 330.7780
+Lognormal   0.88968   1.2361          18.0569 271.3629 276.2716
+Zipf        0.16203  -0.90143         23.2245 276.5305 281.4392
+Mandelbrot  0.87494  -1.3583   3.478   4.7472 260.0532 267.4163
 \end{Soutput}
 \end{Schunk}
 \begin{SCfigure}
 \includegraphics{diversity-vegan-022}
 \caption{Ranked abundance distribution models for a random plot
-  (no. 50).  The best model has the lowest \textsc{aic}.}
+  (no. 33).  The best model has the lowest \textsc{aic}.}
 \label{fig:rad}
 \end{SCfigure}
 
@@ -538,7 +538,7 @@ The recommended is Kindt's exact method (Fig. \ref{fig:sac}):
 \begin{Schunk}
 \begin{Sinput}
 R> sac <- specaccum(BCI)
-R> plot(sac, ci.type = "polygon", ci.col = "yellow")
+R> plot(sac, ci.type="polygon", ci.col="yellow")
 \end{Sinput}
 \end{Schunk}
 \begin{SCfigure}
@@ -594,7 +594,7 @@ for all sites using \pkg{vegan} function \code{vegdist} with
 binary data:
 \begin{Schunk}
 \begin{Sinput}
-R> beta <- vegdist(BCI, binary = TRUE)
+R> beta <- vegdist(BCI, binary=TRUE)
 R> mean(beta)
 \end{Sinput}
 \begin{Soutput}
@@ -608,7 +608,7 @@ eq. \ref{eq:beta}.  All commonly used indices can be found using
 to by subscript name, or index number:
 \begin{Schunk}
 \begin{Sinput}
-R> betadiver(help = TRUE)
+R> betadiver(help=TRUE)
 \end{Sinput}
 \begin{Soutput}
 1 "w" = (b+c)/(2*a+b+c)
@@ -777,11 +777,11 @@ the plots (but this is rarely true):
 \begin{Schunk}
 \begin{Sinput}
 R> s <- sample(nrow(BCI), 25)
-R> specpool(BCI[s, ])
+R> specpool(BCI[s,])
 \end{Sinput}
 \begin{Soutput}
-    Species chao  chao.se  jack1 jack1.se  jack2     boot  boot.se  n
-All     206  222 8.537499 229.04 5.963086 235.25 217.2387 3.472669 25
+    Species  chao  chao.se  jack1 jack1.se   jack2     boot boot.se  n
+All     210 234.3 12.29414 235.92 7.194665 247.535 222.2565 4.09324 25
 \end{Soutput}
 \end{Schunk}
 
@@ -795,15 +795,15 @@ species with low frequencies.  Function \code{estimateR} implements
 two of these methods:
 \begin{Schunk}
 \begin{Sinput}
-R> estimateR(BCI[k, ])
+R> estimateR(BCI[k,])
 \end{Sinput}
 \begin{Soutput}
-                 50
-S.obs     93.000000
-S.chao1  126.300000
-se.chao1  15.641279
-S.ACE    142.122824
-se.ACE     6.779004
+                 33
+S.obs     86.000000
+S.chao1  126.071429
+se.chao1  20.714568
+S.ACE    126.656885
+se.ACE     6.133431
 \end{Soutput}
 \end{Schunk}
 Chao's method is similar as above, but uses another, ``unbiased''
@@ -842,18 +842,18 @@ if raw site data are given.  Log-normal model may fit poorly, but we
 can try:
 \begin{Schunk}
 \begin{Sinput}
-R> veiledspec(prestondistr(BCI[k, ]))
+R> veiledspec(prestondistr(BCI[k,]))
 \end{Sinput}
 \begin{Soutput}
 Extrapolated     Observed       Veiled 
-   110.57397     93.00000     17.57397 
+   102.42045     86.00000     16.42045 
 \end{Soutput}
 \begin{Sinput}
-R> veiledspec(BCI[k, ])
+R> veiledspec(BCI[k,])
 \end{Sinput}
 \begin{Soutput}
 Extrapolated     Observed       Veiled 
-   123.56762     93.00000     30.56762 
+   114.73502     86.00000     28.73502 
 \end{Soutput}
 \end{Schunk}
 
@@ -879,9 +879,7 @@ the target species in the smoothing (Fig. \ref{fig:beals}):
 \begin{Schunk}
 \begin{Sinput}
 R> j <- which(colnames(BCI) == "Ceiba.pentandra")
-R> plot(beals(BCI, species = j, include = FALSE), BCI[, j], 
-+      main = "Ceiba pentandra", xlab = "Probability of occurrence", 
-+      ylab = "Occurrence")
+R> plot(beals(BCI, species=j, include=FALSE), BCI[,j], main="Ceiba pentandra", xlab="Probability of occurrence", ylab="Occurrence")
 \end{Sinput}
 \end{Schunk}
 \begin{SCfigure}

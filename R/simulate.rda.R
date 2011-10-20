@@ -22,7 +22,7 @@
         ftd <- ftd + object$pCCA$Fit
     if (is.null(indx))
         ans <- as.data.frame(ftd + matrix(rnorm(length(ftd), 
-               sd = outer(rep(1,nrow(ftd)), sd(object$CA$Xbar))), 
+               sd = outer(rep(1,nrow(ftd)), apply(object$CA$Xbar, 2, sd))), 
                nrow = nrow(ftd)))
     else
         ans <- as.data.frame(ftd + object$CA$Xbar[indx,])
@@ -67,8 +67,8 @@
     Xbar <- sweep(object$CA$Xbar, 1, sq.r, "*")
     if (is.null(indx)) {
         ans <- matrix(rnorm(length(ftd), 
-               sd = outer(rep(1,nrow(ftd)), sd(Xbar))), 
-               nrow = nrow(ftd))
+               sd = outer(rep(1,nrow(ftd)), apply(Xbar, 2, sd))), 
+                          nrow = nrow(ftd))
         ans <- as.data.frame(ftd + sweep(ans, 1, sq.r, "/"))
     }
     else 
@@ -127,7 +127,7 @@
         ftd <- ftd + object$pCCA$Fit
     if (is.null(indx))
         ans <- as.data.frame(ftd + matrix(rnorm(length(ftd), 
-               sd = outer(rep(1,nrow(ftd)), sd(object$CA$Xbar))), 
+               sd = outer(rep(1,nrow(ftd)), apply(object$CA$Xbar, 2, sd))), 
                nrow = nrow(ftd)))
     else
         ans <- ftd + object$CA$Xbar[indx,]

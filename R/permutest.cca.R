@@ -86,7 +86,7 @@ permutest.default <- function(x, ...)
         }
         tmp <- qr.fitted(Q, Y)
         if (first) 
-            cca.ev <- svd(tmp, nv = 0, nu = 0)$d[1]^2
+            cca.ev <- La.svd(tmp, nv = 0, nu = 0)$d[1]^2
         else cca.ev <- sum(tmp * tmp)
         if (isPartial || first) {
             tmp <- qr.resid(Q, Y)
@@ -101,7 +101,9 @@ permutest.default <- function(x, ...)
     ## numerical inaccuracy
     F.0 <- round(F.0, 12)
     F.perm <- round(F.perm, 12)
-    sol <- list(call = match.call(), testcall = x$call, model = model,
+    Call <- match.call()
+    Call[[1]] <- as.name("permutest")
+    sol <- list(call = Call, testcall = x$call, model = model,
                 F.0 = F.0, F.perm = F.perm,  chi = c(Chi.z, Chi.xz),
                 num = num, den = den, df = c(q, r), nperm = permutations,
                 method = x$method, first = first,  Random.seed = seed)

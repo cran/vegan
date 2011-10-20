@@ -8,23 +8,114 @@
 
 <h2>vegan News</h2>
 
+<h3>Changes in version 2.0-1</h3>
+
+
+
+
+<h4>NEW FUNCTIONS</h4>
+
+
+
+<ul>
+<li> <p><code>clamtest</code>: new function to classify species as
+generalists and specialists in two distinct habitats (CLAM test of
+Chazdon et al., <EM>Ecology</EM> 92, 1332&ndash;1343; 2011).  The test is
+based on multinomial distribution of individuals in two habitat
+types or sampling units, and it is applicable only to count data
+with no over-dispersion.
+</p>
+</li>
+<li> <p><code>as.preston</code> gained <code>plot</code> and <code>lines</code>
+methods, and <code>as.fisher</code> gained <code>plot</code> method (which
+also can add items to existing plots). These are similar as
+<code>plot</code> and <code>lines</code> for <code>prestonfit</code> and
+<code>fisherfit</code>, but display only data without the fitted lines.
+</p>
+</li>
+<li> <p><code>raupcrick</code>: new function to implement Raup-Crick
+dissimilarity as a probability of number of co-occurring species
+with occurrence probabilities proportional to species
+frequencies.  <span class="pkg">Vegan</span> has Raup-Crick index as a choice in
+<code>vegdist</code>, but that uses equal sampling probabilities for
+species and analytic equations. The new <code>raupcrick</code>
+function uses simulation with <code>oecosimu</code>. The function
+follows Chase et al. (2011) <EM>Ecosphere</EM> 2:art24
+[doi:10.1890/ES10-00117.1], and was developed with the
+consultation of Brian Inouye.
+</p>
+</ul>
+
+ 
+
+
+<h4>BUG FIXES</h4>
+
+
+
+<ul>
+<li><p> Function <code>meandist</code> can scramble items and give wrong
+results, especially when the <code>grouping</code> was numerical. The
+problem was reported by Dr Miguel Alvarez (Univ. Bonn).
+</p>
+</li>
+<li> <p><code>metaMDS</code> did not reset <code>tries</code> when a new model
+was started with a <code>previous.best</code> solution from a different
+model. 
+</p>
+</li>
+<li><p> Function <code>permatswap</code> for community null models using
+quantitative swap never swapped items in a <i>2 by 2</i>
+submatrix if all cells were filled.
+</p>
+</li>
+<li><p> The result from <code>permutest.cca</code> could not be
+<code>update</code>d because of a &lsquo;<span class="file">NAMESPACE</span>&rsquo; issue.
+</p>
+</li>
+<li> <p><font face="Courier New,Courier" color="#666666"><b>R</b></font> 2.14.0 changed so that it does not accept using
+<code>sd()</code> function for matrices (which was the behaviour at
+least since <font face="Courier New,Courier" color="#666666"><b>R</b></font> 1.0-0), and several <span class="pkg">vegan</span> functions were
+changed to adapt to this change (<code>rda</code>, <code>capscale</code>,
+<code>simulate</code> methods for <code>rda</code>, <code>cca</code> and
+<code>capscale</code>). The change in <font face="Courier New,Courier" color="#666666"><b>R</b></font> 2.14.0 does not influence the
+results but you probably wish to upgrade <span class="pkg">vegan</span> to avoid
+annoying warnings.
+</p>
+</ul>
+	
+ 
+
+
+<h4>ANALYSES</h4>
+
+
+
+<ul>
+<li> <p><code>nesteddisc</code> is slacker and hence faster when trying
+to optimize the statistic for tied column frequencies. Tracing
+showed that in most cases an improved ordering was found rather
+early in tries, and the results are equally good in most cases.
+</p>
+</ul>
+
+ 
+
+
 <h3>Changes in version 2.0-0</h3>
 
-<p>
+
 
 
 <h4>GENERAL</h4>
 
-<p>
 
-</p>
-<p>
+
 <ul>
-<li> Peter Minchin joins the <span class="pkg">vegan</span> team.
+<li><p> Peter Minchin joins the <span class="pkg">vegan</span> team.
 </p>
-<p>
 </li>
-<li><span class="pkg">vegan</span> implements standard <font face="Courier New,Courier" color="#666666"><b>R</b></font> <code>NAMESPACE</code>. In
+<li> <p><span class="pkg">vegan</span> implements standard <font face="Courier New,Courier" color="#666666"><b>R</b></font> &lsquo;<span class="file">NAMESPACE</span>&rsquo;. In
 general, <code>S3</code> methods are not exported which means that you
 cannot directly use or see contents of functions like
 <code>cca.default</code>, <code>plot.cca</code> or <code>anova.ccabyterm</code>. To
@@ -35,31 +126,24 @@ the function you can use <code>:::</code>, such as
 <code>vegan:::cca.default</code>. This change may break packages,
 documents or scripts that rely on non-exported names.
 </p>
-<p>
 </li>
-<li><span class="pkg">vegan</span> depends on the <span class="pkg">permute</span> package. This
+<li> <p><span class="pkg">vegan</span> depends on the <span class="pkg">permute</span> package. This
 package provides powerful tools for restricted permutation
 schemes. All <span class="pkg">vegan</span> permutation will gradually move to use
 <span class="pkg">permute</span>, but currently only <code>betadisper</code> uses the new
 feature. 
 </p>
-<p>
 </ul>
 
-</p>
  
-</p>
-<p>
 
 
 <h4>NEW FUNCTIONS</h4>
 
-<p>
 
-</p>
-<p>
+
 <ul>
-<li> <code>monoMDS</code>: a new function for non-metric
+<li> <p><code>monoMDS</code>: a new function for non-metric
 multidimensional scaling (NMDS). This function replaces
 <code>MASS::isoMDS</code> as the default method in
 <code>metaMDS</code>. Major advantages of <code>monoMDS</code> are that it
@@ -73,25 +157,22 @@ dissimilarities.  Moreover, <code>monoMDS</code> is faster than
 previous alternatives. The function uses <code>Fortran</code> code
 written by Peter Minchin.
 </p>
-<p>
 </li>
-<li><code>MDSrotate</code> a new function to replace
+<li> <p><code>MDSrotate</code> a new function to replace
 <code>metaMDSrotate</code>. This function can rotate both <code>metaMDS</code>
 and <code>monoMDS</code> results so that the first axis is parallel to
 an environmental vector.
 </p>
-<p>
 </li>
-<li><code>eventstar</code> finds the minimum of the evenness profile
+<li> <p><code>eventstar</code> finds the minimum of the evenness profile
 on the Tsallis entropy, and uses this to find the corresponding
 values of diversity, evenness and numbers equivalent following
 Mendes et al. (<EM>Ecography</EM> 31, 450-456; 2008). The code was
 contributed by Eduardo Ribeira Cunha and Heloisa Beatriz Antoniazi
 Evangelista and adapted to <span class="pkg">vegan</span> by Peter Solymos.
 </p>
-<p>
 </li>
-<li><code>fitspecaccum</code> fits non-linear regression models to
+<li> <p><code>fitspecaccum</code> fits non-linear regression models to
 the species accumulation results from <code>specaccum</code>. The
 function can use new self-starting species accumulation models
 in <span class="pkg">vegan</span> or other self-starting non-linear regression
@@ -100,45 +181,36 @@ Lomolino (in <span class="pkg">vegan</span>), asymptotic, Gompertz,
 Michaelis-Menten, logistic and Weibull (in base <font face="Courier New,Courier" color="#666666"><b>R</b></font>) models. The
 function has <code>plot</code> and <code>predict</code> methods.
 </p>
-<p>
 </li>
-<li>Self-starting non-linear species accumulation models
+<li><p> Self-starting non-linear species accumulation models
 <code>SSarrhenius</code>, <code>SSgleason</code>, <code>SSgitay</code> and
 <code>SSlomolino</code>. These can be used with <code>fitspecaccum</code> or
 directly in non-linear regression with <code>nls</code>. These functions
 were implemented because they were found good for species-area
 models by Dengler (<EM>J. Biogeogr.</EM> 36, 728-744; 2009).
 </p>
-<p>
 </ul>
 
-</p>
  
-</p>
-<p>
 
 
 <h4>NEW FEATURES</h4>
 
-<p>
 
-</p>
-<p>
+
 <ul>
-<li> <code>adonis</code>, <code>anosim</code>, <code>meandist</code> and
+<li> <p><code>adonis</code>, <code>anosim</code>, <code>meandist</code> and
 <code>mrpp</code> warn on negative dissimilarities, and
 <code>betadisper</code> refuses to analyse them. All these functions
 expect dissimilarities, and giving something else (like
 correlations) probably is a user error.
 </p>
-<p>
 </li>
-<li><code>betadisper</code> uses restricted permutation of the
+<li> <p><code>betadisper</code> uses restricted permutation of the
 <span class="pkg">permute</span> package. 
 </p>
-<p>
 </li>
-<li><code>metaMDS</code> uses <code>monoMDS</code> as its default ordination
+<li> <p><code>metaMDS</code> uses <code>monoMDS</code> as its default ordination
 engine. Function gains new argument <code>engine</code> that can be used
 to alternatively select <code>MASS::isoMDS</code>.  The default is not
 to use <code>stepacross</code> with <code>monoMDS</code> because its
@@ -147,73 +219,53 @@ dissimilarities of one. However, <code>stepacross</code> is the default
 with <code>isoMDS</code> because it cannot handle adequately these tied
 maximum dissimilarities.
 </p>
-<p>
 </li>
-<li><code>specaccum</code> gained <code>predict</code> method which uses
+<li> <p><code>specaccum</code> gained <code>predict</code> method which uses
 either linear or spline interpolation for data between observed
 points. Extrapolation is possible with spline interpolation, but
 may make little sense.
 </p>
-<p>
 </li>
-<li><code>specpool</code> can handle missing values or empty factor
+<li> <p><code>specpool</code> can handle missing values or empty factor
 levels in the grouping factor <code>pool</code>.  Now also checks that
 the length of the <code>pool</code> matches the number of
 observations.
 </p>
-<p>
 </ul>
 
-</p>
  
-</p>
-<p>
 
 
 <h4>DEPRECATED AND DEFUNCT</h4>
 
-<p>
 
-</p>
-<p>
+
 <ul>
-<li> <code>metaMDSrotate</code> was replaced with <code>MDSrotate</code>
+<li> <p><code>metaMDSrotate</code> was replaced with <code>MDSrotate</code>
 that can also handle the results of <code>monoMDS</code>.
 </p>
-<p>
 </li>
-<li><code>permuted.index2</code> and other &ldquo;new&rdquo; permutation
+<li> <p><code>permuted.index2</code> and other &ldquo;new&rdquo; permutation
 code was removed in favour of the <span class="pkg">permute</span> package. This code
 was not intended for normal use, but packages depending on that
 code in <span class="pkg">vegan</span> should instead depend on <span class="pkg">permute</span>.
 </p>
-<p>
 </ul>
   
-</p>
-<p>
-</p>
  
-</p>
-<p>
 
 
 <h4>ANALYSES</h4>
 
-<p>
 
-</p>
-<p>
+
 <ul>
-<li> <code>treeheight</code> uses much snappier code. The results
+<li> <p><code>treeheight</code> uses much snappier code. The results
 should be unchanged.
 </p>
-<p>
 </ul>
 
-</p>
  
-</p>
 
 
 </body></html>

@@ -36,8 +36,8 @@
 %% misuse of the address field for revision data
 \Address{$ $Id: intro-vegan.Rnw 1799 2011-09-07 12:06:12Z jarioksa $ $
   processed with vegan
-2.0-0
-in R version 2.13.1 (2011-07-08) on \today}
+2.0-1
+in R version 2.14.0 beta (2011-10-20 r57344) on \today}
 \Footername{About this version}
 
 %% need no \usepackage{Sweave}
@@ -128,8 +128,9 @@ R> ord <- metaMDS(dune)
 \end{Sinput}
 \begin{Soutput}
 Run 0 stress 0.1192691 
-Run 1 stress 0.1192693 
-... procrustes: rmse 0.0007240573  max resid 0.001887997 
+Run 1 stress 0.1192679 
+... New best solution
+... procrustes: rmse 0.0005663806  max resid 0.001720675 
 *** Solution reached
 \end{Soutput}
 \begin{Sinput}
@@ -145,7 +146,7 @@ Data:     dune
 Distance: bray 
 
 Dimensions: 2 
-Stress:     0.1192691 
+Stress:     0.1192679 
 Stress type 1, weak ties
 Two convergent solutions found after 1 tries
 Scaling: centring, PC rotation, halfchange scaling 
@@ -184,9 +185,8 @@ sizes freely (Fig. \ref{fig:plot.args}):
 \begin{Schunk}
 \begin{Sinput}
 R> plot(ord, type = "n")
-R> points(ord, display = "sites", cex = 0.8, pch = 21, col = "red", 
-+      bg = "yellow")
-R> text(ord, display = "spec", cex = 0.7, col = "blue")
+R> points(ord, display = "sites", cex = 0.8, pch=21, col="red", bg="yellow")
+R> text(ord, display = "spec", cex=0.7, col="blue")
 \end{Sinput}
 \end{Schunk}
 \begin{SCfigure}
@@ -261,12 +261,11 @@ R> attach(dune.env)
 \end{Schunk}
 \begin{Schunk}
 \begin{Sinput}
-R> plot(ord, disp = "sites", type = "n")
-R> ordihull(ord, Management, col = "blue")
-R> ordiellipse(ord, Management, col = 3, lwd = 2)
-R> ordispider(ord, Management, col = "red", label = TRUE)
-R> points(ord, disp = "sites", pch = 21, col = "red", bg = "yellow", 
-+      cex = 1.3)
+R> plot(ord, disp="sites", type="n")
+R> ordihull(ord, Management, col="blue")
+R> ordiellipse(ord, Management, col=3,lwd=2)
+R> ordispider(ord, Management, col="red", label = TRUE)
+R> points(ord, disp="sites", pch=21, col="red", bg="yellow", cex=1.3)
 \end{Sinput}
 \end{Schunk}
 \begin{SCfigure}
@@ -301,15 +300,14 @@ interface, and it optionally can assess the ``significance'' of the
 variables using permutation tests:
 \begin{Schunk}
 \begin{Sinput}
-R> ord.fit <- envfit(ord ~ A1 + Management, data = dune.env, 
-+      perm = 1000)
+R> ord.fit <- envfit(ord ~ A1 + Management, data=dune.env, perm=1000)
 R> ord.fit
 \end{Sinput}
 \begin{Soutput}
 ***VECTORS
 
-     NMDS1   NMDS2   r2  Pr(>r)  
-A1 0.99055 0.13712 0.38 0.02098 *
+     NMDS1   NMDS2     r2  Pr(>r)   
+A1 0.98992 0.14160 0.3797 0.00999 **
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 P values based on 1000 permutations.
@@ -318,14 +316,14 @@ P values based on 1000 permutations.
 
 Centroids:
                NMDS1   NMDS2
-ManagementBF -0.4478 -0.0190
-ManagementHF -0.2695 -0.1255
-ManagementNM  0.2995  0.5797
-ManagementSF  0.1490 -0.4656
+ManagementBF -0.4473 -0.0195
+ManagementHF -0.2688 -0.1257
+ManagementNM  0.2972  0.5800
+ManagementSF  0.1505 -0.4654
 
 Goodness of fit:
                r2   Pr(>r)   
-Management 0.4142 0.004995 **
+Management 0.4133 0.002997 **
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 P values based on 1000 permutations.
@@ -335,7 +333,7 @@ The result can be drawn directly or added to an ordination diagram
 (Fig. \ref{fig:envfit}):
 \begin{Schunk}
 \begin{Sinput}
-R> plot(ord, dis = "site")
+R> plot(ord, dis="site")
 R> plot(ord.fit)
 \end{Sinput}
 \end{Schunk}
@@ -345,7 +343,7 @@ ordination, but it returns the result of the fitted thinplate spline
 \code{gam} (Fig. \ref{fig:envfit}):
 \begin{Schunk}
 \begin{Sinput}
-R> ordisurf(ord, A1, add = TRUE)
+R> ordisurf(ord, A1, add=TRUE)
 \end{Sinput}
 \begin{Soutput}
 Family: gaussian 
@@ -353,12 +351,12 @@ Link function: identity
 
 Formula:
 y ~ s(x1, x2, k = knots)
-<environment: 0x1026cf228>
+<environment: 0x1033131f8>
 
 Estimated degrees of freedom:
 2  total = 3 
 
-GCV score: 3.871584
+GCV score: 3.873554
 \end{Soutput}
 \end{Schunk}
 \begin{SCfigure}
@@ -383,7 +381,7 @@ hand side gives the community data frame and the right hand side lists
 the constraining variables:
 \begin{Schunk}
 \begin{Sinput}
-R> ord <- cca(dune ~ A1 + Management, data = dune.env)
+R> ord <- cca(dune ~ A1 + Management, data=dune.env)
 R> ord
 \end{Sinput}
 \begin{Soutput}
@@ -431,7 +429,7 @@ However, if you really want to do so, it is possible with the
 following shortcut in \code{formula}:
 \begin{Schunk}
 \begin{Sinput}
-R> cca(dune ~ ., data = dune.env)
+R> cca(dune ~ ., data=dune.env)
 \end{Sinput}
 \begin{Soutput}
 Call: cca(formula = dune ~ A1 + Moisture + Management + Use +
@@ -491,7 +489,7 @@ will continue long in uncertain cases.  You must set \code{step} and
 It is also possible to analyse terms separately:
 \begin{Schunk}
 \begin{Sinput}
-R> anova(ord, by = "term", permu = 200)
+R> anova(ord, by="term", permu=200)
 \end{Sinput}
 \begin{Soutput}
 Permutation test for cca under reduced model
@@ -499,7 +497,7 @@ Terms added sequentially (first to last)
 
 Model: cca(formula = dune ~ A1 + Management, data = dune.env)
            Df  Chisq      F N.Perm Pr(>F)   
-A1          1 0.2248 2.5245    199  0.035 * 
+A1          1 0.2248 2.5245    199  0.015 * 
 Management  3 0.5550 2.0780    199  0.005 **
 Residual   15 1.3355                        
 ---
@@ -512,7 +510,7 @@ in the order they happen to be in the model. You can also analyse
 significances of marginal effects (``Type III effects''):
 \begin{Schunk}
 \begin{Sinput}
-R> anova(ord, by = "mar")
+R> anova(ord, by="mar")
 \end{Sinput}
 \begin{Soutput}
 Permutation test for cca under reduced model
@@ -520,7 +518,7 @@ Marginal effects of terms
 
 Model: cca(formula = dune ~ A1 + Management, data = dune.env)
            Df  Chisq      F N.Perm  Pr(>F)   
-A1          1 0.1759 1.9761   1099 0.03364 * 
+A1          1 0.1759 1.9761    299 0.01333 * 
 Management  3 0.5550 2.0780    199 0.00500 **
 Residual   15 1.3355                         
 ---
@@ -531,15 +529,15 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 Moreover, it is possible to analyse significance of each axis:
 \begin{Schunk}
 \begin{Sinput}
-R> anova(ord, by = "axis", perm = 500)
+R> anova(ord, by="axis", perm=500)
 \end{Sinput}
 \begin{Soutput}
 Model: cca(formula = dune ~ A1 + Management, data = dune.env)
          Df  Chisq      F N.Perm Pr(>F)   
-CCA1      1 0.3187 3.5801    199  0.010 **
-CCA2      1 0.2372 2.6640    199  0.015 * 
+CCA1      1 0.3187 3.5801    199  0.005 **
+CCA2      1 0.2372 2.6640    399  0.020 * 
 CCA3      1 0.1322 1.4845    199  0.105   
-CCA4      1 0.0917 1.0297     99  0.340   
+CCA4      1 0.0917 1.0297     99  0.420   
 Residual 15 1.3355                        
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
@@ -557,8 +555,7 @@ All constrained ordination methods can have terms that are partialled
 out from the analysis before constraints:
 \begin{Schunk}
 \begin{Sinput}
-R> ord <- cca(dune ~ A1 + Management + Condition(Moisture), 
-+      data = dune.env)
+R> ord <- cca(dune ~ A1 + Management + Condition(Moisture), data=dune.env)
 R> ord
 \end{Sinput}
 \begin{Soutput}
@@ -588,17 +585,17 @@ effects of \code{A1} and \code{Management}.  This also influences
 the significances of the terms:
 \begin{Schunk}
 \begin{Sinput}
-R> anova(ord, by = "term", perm = 500)
+R> anova(ord, by="term", perm=500)
 \end{Sinput}
 \begin{Soutput}
 Permutation test for cca under reduced model
 Terms added sequentially (first to last)
 
 Model: cca(formula = dune ~ A1 + Management + Condition(Moisture), data = dune.env)
-           Df  Chisq      F N.Perm Pr(>F)   
-A1          1 0.1154 1.4190     99   0.11   
-Management  3 0.3954 1.6205     99   0.01 **
-Residual   12 0.9761                        
+           Df  Chisq      F N.Perm Pr(>F)  
+A1          1 0.1154 1.4190     99   0.17  
+Management  3 0.3954 1.6205     99   0.02 *
+Residual   12 0.9761                       
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 \end{Soutput}
@@ -608,7 +605,7 @@ permutations so that the observations only are permuted within levels
 of \code{strata}:
 \begin{Schunk}
 \begin{Sinput}
-R> anova(ord, by = "term", perm = 500, strata = Moisture)
+R> anova(ord, by="term", perm=500, strata=Moisture)
 \end{Sinput}
 \begin{Soutput}
 Permutation test for cca under reduced model
@@ -616,10 +613,10 @@ Terms added sequentially (first to last)
 Permutations stratified within 'Moisture'
 
 Model: cca(formula = dune ~ A1 + Management + Condition(Moisture), data = dune.env)
-           Df  Chisq      F N.Perm Pr(>F)  
-A1          1 0.1154 1.4190     99   0.31  
-Management  3 0.3954 1.6205     99   0.02 *
-Residual   12 0.9761                       
+           Df  Chisq      F N.Perm Pr(>F)   
+A1          1 0.1154 1.4190     99   0.20   
+Management  3 0.3954 1.6205     99   0.01 **
+Residual   12 0.9761                        
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 \end{Soutput}

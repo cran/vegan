@@ -1,8 +1,33 @@
-$Date: 2011-09-07 19:04:10 +0300 (Wed, 07 Sep 2011) $
+$Date: 2011-10-19 22:06:33 +0300 (Wed, 19 Oct 2011) $
 
 VEGAN RELEASE VERSIONS at http://cran.r-project.org/
- 
-Version 2.0-0 (released September 7, 2011)
+
+Version 2.0-1 (released October 20, 2011)
+
+	* merge r1945: add plot & lines for as.preston & as.fisher.
+	* merge r1944: R 2.14.0 (r52709) gives a message() when sd() is
+	used for matrices -- now fixed for rda.default, capscale and
+	simulate.rda/cca/capscale. 
+	* merge r1939: slacker and faster nesteddisc.
+	* merge r1928: permutest.cca result could not be update()d.
+ 	* merge r1927: reset 'tries' when 'previous.best' was a different
+	model.
+	* merge r1916: ordisurf.Rd references.
+	* merge r1914: example speed-up.
+	* r1897, 1840, 1825, 1823: copy clamtest (at r1897),
+	summary.clamtest, print.summary.clamtest, plot.clamtest (all at
+	r1823) and clamtest.Rd (at r1897)
+	* merge r1872: raupcrick doc fixes.
+	* merge r1869: meandist re-ordering bug fix.
+	* merge r1846: tweak speed (a bit).
+	* merge r1845: faster centroids.cca.
+	* merge r1843: tiny speed-up in permutest.cca(..., first=TRUE) 
+	* merge r1838: a bit faster example(MDSrotate).
+	* merge r1835: add raupcrick.
+	* merge r1811: permatswap bug fix in nestedness.c.
+	* merge r1810: -pedatic -Wall fixes in monoMDS.f, ordering.f
+	
+Version 2.0-0 (released September 8, 2011)
 
 	* opened the release candidate of vegan_2.0-0 on September 3,
 	2011 in the devel branch pkg/vegan at r1785.
