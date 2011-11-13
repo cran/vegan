@@ -4,10 +4,12 @@
 {
     TYPES <- c("text", "points", "none")
     g <- scores(x, choices, display, scaling, const)
+    if (length(g) == 0 || all(is.na(g)))
+      stop("nothing to plot: requested scores do not exist")
     if (!is.list(g)) 
         g <- list(default = g)
     ## Take care that there are names
-    for (i in 1:length(g)) {
+    for (i in seq_len(length(g))) {
         if (length(dim(g[[i]])) > 1)
             rownames(g[[i]]) <- rownames(g[[i]], do.NULL = FALSE,
                                          prefix = substr(names(g)[i], 1, 3))
@@ -54,6 +56,8 @@
     if (missing(xlim))
         xlim <- range(g$spe[, 1], g$sit[, 1], g$con[, 1], g$default[,1],
                       na.rm = TRUE)
+    if (!any(is.finite(xlim)))
+        stop("no finite scores to plot")
     if (missing(ylim))
         ylim <- range(g$spe[, 2], g$sit[, 2], g$con[, 2], g$default[,2],
                       na.rm = TRUE)
@@ -81,7 +85,7 @@
         else if (type == "points") 
             points(g$constraints, pch = 2, cex = 0.7, col = "darkgreen")
     }
-    if (!is.null(g$biplot) && type != "none") {
+    if (!is.null(g$biplot) && nrow(g$biplot) > 0 && type != "none") {
         if (length(display) > 1) {
             mul <- ordiArrowMul(g$biplot)
         }

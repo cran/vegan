@@ -4,6 +4,7 @@
 \alias{rarefy}
 \alias{rrarefy}
 \alias{drarefy}
+\alias{rarecurve}
 \alias{fisher.alpha}
 \alias{specnumber}
 
@@ -17,6 +18,8 @@ diversity(x, index = "shannon", MARGIN = 1, base = exp(1))
 rarefy(x, sample, se = FALSE, MARGIN = 1)
 rrarefy(x, sample)
 drarefy(x, sample)
+rarecurve(x, step = 1, sample, xlab = "Sample Size", ylab = "Species",
+   label = TRUE, ...)
 fisher.alpha(x, MARGIN = 1, se = FALSE, ...)
 specnumber(x, groups, MARGIN = 1)
 }
@@ -30,9 +33,13 @@ specnumber(x, groups, MARGIN = 1)
   \item{sample}{Subsample size for rarefying community, either a single
     value or a vector.}
   \item{se}{Estimate standard errors.}
+  \item{step}{Step size for sample sizes in rarefaction curves.}
+  \item{xlab, ylab}{Axis labels in plots of rarefaction curves.}
+  \item{label}{Label rarefaction curves by rownames of \code{x} (logical).}
   \item{groups}{A grouping factor: if given, finds the total number of
     species in each group.}
-  \item{...}{Parameters passed to \code{\link{nlm}}}
+  \item{...}{Parameters passed to \code{\link{nlm}}, or to \code{\link{plot}}, 
+    \code{\link{lines}} and \code{\link{ordilabel}} in \code{rarecurve}.}
 }
 \details{
   Shannon or Shannon--Weaver (or Shannon--Wiener) index is defined as
@@ -68,6 +75,13 @@ specnumber(x, groups, MARGIN = 1)
   Function \code{drarefy} returns probabilities that species occur in a
   rarefied community of size \code{sample}. The \code{sample} can be a
   vector giving the sample sizes for each row.
+
+  Function \code{rarecurve} draws a rarefaction curve for each row of
+  the input data. The rarefaction curves are evaluated using the
+  interval of \code{step} sample sizes, always including 1 and total
+  sample size.  If \code{sample} is specified, a vertical line is
+  drawn at \code{sample} with horizontal lines for the rarefied
+  species richnesses.
 
   \code{fisher.alpha} estimates the \eqn{\alpha} parameter of
   Fisher's logarithmic series (see \code{\link{fisherfit}}). 
@@ -105,6 +119,10 @@ specnumber(x, groups, MARGIN = 1)
   function returns a matrix with a column for each \code{sample} size,
   and if \code{se = TRUE}, rarefied richness and its standard error are
   on consecutive lines.
+
+  Function \code{rarecurve} returns \code{\link{invisible}} list of
+  \code{rarefy} results corresponding each drawn curve.
+
   With option \code{se = TRUE}, function \code{fisher.alpha} returns a
   data frame with items for \eqn{\alpha} (\code{alpha}), its approximate
   standard errors (\code{se}), residual degrees of freedom
@@ -131,8 +149,7 @@ specnumber(x, groups, MARGIN = 1)
 \seealso{Function \code{renyi} for generalized \enc{Rényi}{Renyi}
   diversity and Hill numbers.}
 
-\author{ Jari Oksanen  and  Bob O'Hara \email{bob.ohara@helsinki.fi}
-    (\code{fisher.alpha}).}
+\author{ Jari Oksanen  and  Bob O'Hara (\code{fisher.alpha}).}
 
 \examples{
 data(BCI)
@@ -154,6 +171,12 @@ data(dune.env)
 alpha <- with(dune.env, tapply(specnumber(dune), Management, mean))
 gamma <- with(dune.env, specnumber(dune, Management))
 gamma/alpha - 1
+## Rarefaction
+(raremax <- min(rowSums(BCI)))
+Srare <- rarefy(BCI, raremax)
+plot(S, Srare, xlab = "Observed No. of Species", ylab = "Rarefied No. of Species")
+abline(0, 1)
+rarecurve(BCI, step = 20, sample = raremax, col = "blue", cex = 0.6)
 }
 \keyword{ univar }
 

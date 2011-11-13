@@ -13,6 +13,7 @@ factorfit, fisherfit, fitspecaccum, goodness, hiersimu, humpfit,
 indpower, inertcomp, initMDS, intersetcor, isomapdist, isomap,
 linestack, mantel, meandist, metaMDSdist, metaMDSiter, metaMDSredist,
 MDSrotate, metaMDS, monoMDS, mrpp, msoplot, mso, multipart,
+nestedbetajac, nestedbetasor, 
 nestedchecker, nesteddisc, nestedn0, nestednodf, nestedtemp, oecosimu,
 ordiR2step, ordiarrows, ordicloud, ordicluster,
 ordiellipse, ordigrid, ordihull, ordilabel, ordiplot3d,
@@ -21,10 +22,10 @@ ordispider, ordisplom, ordistep, ordisurf, orditkplot, orditorp,
 ordixyplot, orglpoints, orglsegments, orglspider, orgltext, 
 pcnm, permatfull, permatswap, permutest, poolaccum, postMDS, prc,
 prestondistr, prestonfit, procrustes, protest, radfit, radlattice,
-rankindex, rarefy,raupcrick, rda, renyiaccum, renyi, rrarefy, scores,
-showvarparts, spandepth, spantree, specaccum, specnumber,
-specpool2vect, specpool, spenvcor, stepacross, stressplot, swan,
-taxa2dist, taxondive, tolerance, treedist, treedive, treeheight,
+rankindex, rarecurve, rarefy, raupcrick, rda, renyiaccum, renyi,
+rrarefy, scores, showvarparts, simper, spandepth, spantree, specaccum,
+specnumber, specpool2vect, specpool, spenvcor, stepacross, stressplot,
+swan, taxa2dist, taxondive, tolerance, treedist, treedive, treeheight,
 tsallisaccum, tsallis, varpart, vectorfit, vegandocs, vegdist,
 vegemite, veiledspec, wascores, wcmdscale, wisconsin)
 
@@ -303,6 +304,7 @@ S3method(print, radfit)
 S3method(print, radfit.frame)
 S3method(print, radline)
 S3method(print, specaccum)
+S3method(print, simper)
 S3method(print, summary.bioenv)
 S3method(print, summary.cca)
 S3method(print, summary.clamtest)
@@ -313,6 +315,7 @@ S3method(print, summary.meandist)
 S3method(print, summary.permat)
 S3method(print, summary.prc)
 S3method(print, summary.procrustes)
+S3method(print, summary.simper)
 S3method(print, summary.taxondive)
 S3method(print, taxondive)
 S3method(print, tolerance.cca)
@@ -377,6 +380,7 @@ S3method(summary, poolaccum)
 S3method(summary, prc)
 S3method(summary, procrustes)
 S3method(summary, radfit.frame)
+S3method(summary, simper)
 S3method(summary, specaccum)
 S3method(summary, taxondive)
 # tail: utils

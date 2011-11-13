@@ -49,7 +49,10 @@ commsimulator(x, method, thin=1)
     \code{nestedfun}} 
   \item{alternative}{a character string specifying the alternative
     hypothesis, must be one of \code{"two.sided"} (default), \code{"greater"}
-    or \code{"less"}. You can specify just the initial letter.}
+    or \code{"less"}. Please note that the \eqn{p}-value of two-sided
+    test is approximately two times higher than in the corresponding
+    one-sided test (\code{"greater"} or \code{"less"} depending on the
+    sign of the difference).}
   \item{data}{Ignored argument of the generic function.}
   \item{xlab}{Label of the x-axis.}
   \item{\dots}{Other arguments to functions.}
@@ -179,14 +182,15 @@ commsimulator(x, method, thin=1)
   can be dangerous.
 }
 
-\value{
-  Function \code{oecosimu} returns the result of \code{nestfun}
-  with one added component called \code{oecosimu}. The \code{oecosimu}
+\value{ 
+  Function \code{oecosimu} returns the result of \code{nestfun} added
+  with a component called \code{oecosimu}. The \code{oecosimu}
   component contains the simulated values of the statistic (item
-  \code{simulated}), the name of the \code{method}, two-sided \eqn{P}
-  value and z-value of the statistic based on simulation. The
-  \code{commsimulator} returns a null model matrix or a swap of the
-  input matrix.  }
+  \code{simulated}), the name of the \code{method}, \eqn{P} value
+  (with given \code{alternative}), \eqn{z}-value of the statistic
+  based on simulation (also known as standardized effect size), and
+  the mean of simulations.  
+}
 
 \references{
   Gotelli, N.J. & Entsminger, N.J. (2001). Swap and fill algorithms in

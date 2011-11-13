@@ -5,6 +5,8 @@
 \alias{nestedn0}
 \alias{nesteddisc}
 \alias{nestednodf}
+\alias{nestedbetasor}
+\alias{nestedbetajac}
 \alias{plot.nestedtemp}
 
 \title{ Nestedness Indices for Communities of Islands or Patches }
@@ -19,15 +21,18 @@
 \usage{
 nestedchecker(comm)
 nestedn0(comm)
-nesteddisc(comm)
+nesteddisc(comm, niter = 200)
 nestedtemp(comm, ...)
 nestednodf(comm, order = TRUE, weighted = FALSE)
+nestedbetasor(comm)
+nestedbetajac(comm)
 \method{plot}{nestedtemp}(x, kind = c("temperature", "incidence"),
     col=rev(heat.colors(100)),  names = FALSE, ...)
 }
 
 \arguments{
-  \item{comm}{Community data. }
+  \item{comm}{Community data.}
+  \item{niter}{Number of iterations to reorder tied columns.}			
   \item{x}{Result object for a \code{plot}.}
   \item{col}{Colour scheme for matrix temperatures.}
   \item{kind}{The kind of plot produced.}
@@ -54,18 +59,17 @@ nestednodf(comm, order = TRUE, weighted = FALSE)
   which are richer than the most pauperate site species occurs
   (Patterson & Atmar 1986).
 
-  Function \code{nesteddisc} implements
-  discrepancy index which is the number of ones that should be shifted
-  to fill a row with ones in a table arranged by species frequencies
-  (Brualdi & Sanderson 1999). The original definition arranges species
-  (columns) by their frequencies, but did not have any method of
-  handling tied frequencies.
-
-  The \code{nesteddisc} function tries to
-  order tied columns to minimize the discrepancy statistic but this is
-  rather slow, and with a large number of tied columns there is no
-  guarantee that the best ordering was found. In that case a warning
-  of tied columns will be issued.
+  Function \code{nesteddisc} implements discrepancy index which is the
+  number of ones that should be shifted to fill a row with ones in a
+  table arranged by species frequencies (Brualdi & Sanderson
+  1999). The original definition arranges species (columns) by their
+  frequencies, but did not have any method of handling tied
+  frequencies.  The \code{nesteddisc} function tries to order tied
+  columns to minimize the discrepancy statistic but this is rather
+  slow, and with a large number of tied columns there is no guarantee
+  that the best ordering was found (argument \code{niter} gives the
+  maximum number of tried orders). In that case a warning of tied
+  columns will be issued.
 
   Function \code{nestedtemp} finds the matrix temperature which is
   defined as the sum of \dQuote{surprises} in arranged matrix.  In
@@ -106,7 +110,27 @@ nestednodf(comm, order = TRUE, weighted = FALSE)
   al. 2008). With \code{weighted = TRUE}, the function finds the
   weighted version of the index (Almeida-Neto & Ulrich,
   2011). However, this requires quantitative null models for adequate
-  testing.}
+  testing.
+
+  Functions \code{nestedbetasor} and \code{nestedbetajac} find
+  multiple-site dissimilarities and decompose these into components of
+  turnover and nestedness following Baselga (2010). This can be seen
+  as a decomposition of beta diversity (see \code{\link{betadiver}}).
+  Function \code{nestedbetasor} uses \enc{Sørensen}{Sorensen}
+  dissimilarity and the turnover component is Simpson dissimilarity
+  (Baselga 2010), and \code{nestedbetajac} uses analogous methods with
+  the Jaccard index. The functions return a vector of three items:
+  turnover, nestedness and their sum which is the multiple
+  \enc{Sørensen}{Sorensen} or Jaccard dissimilarity. The last one is
+  the total beta diversity (Baselga 2010). The functions will treat
+  data as presence/absence (binary) and they can be used with binary
+  null models (see \code{\link{commsimulator}}). The overall
+  dissimilarity is constant in all null models that fix species
+  (column) frequencies (\code{"c0"}), and all components are constant
+  if row columns are also fixed (e.g., model \code{"quasiswap"}), and
+  the functions are not meaningful with these null models.
+
+}
 
 \value{
   The result returned by a nestedness function contains an item called
@@ -129,6 +153,10 @@ nestednodf(comm, order = TRUE, weighted = FALSE)
   Atmar, W. & Patterson, B.D. (1993). The measurement of order and
   disorder in the distribution of species in fragmented
   habitat. \emph{Oecologia} 96, 373--382.
+
+  Baselga, A. (2010). Partitioning the turnover and nestedness
+  components of beta diversity. \emph{Global Ecol. Biogeog.} 19,
+  134--143.
 
   Brualdi, R.A. & Sanderson, J.G. (1999). Nested species subsets, gaps,
   and discrepancy. \emph{Oecologia} 119, 256--264.

@@ -98,7 +98,8 @@
     }
     ## end of addition
     sd <- apply(simind, 1, sd, na.rm = TRUE)
-    z <- (indstat - rowMeans(simind, na.rm = TRUE))/sd
+    means <- rowMeans(simind, na.rm = TRUE)
+    z <- (indstat - means)/sd
     if (any(sd < sqrt(.Machine$double.eps)))
         z[sd < sqrt(.Machine$double.eps)] <- 0
     pless <- rowSums(indstat <= simind, na.rm = TRUE)
@@ -124,7 +125,8 @@
         ind <- list(statistic = ind)
     if (method == "custom")
         attr(method, "permfun") <- permfun
-    ind$oecosimu <- list(z = z, pval = p, simulated=simind, method=method,
+    ind$oecosimu <- list(z = z, means = means, pval = p, simulated=simind,
+                         method=method,
                          statistic = indstat, alternative = alternative)
     class(ind) <- c("oecosimu", class(ind))
     ind
