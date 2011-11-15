@@ -8,6 +8,67 @@
 
 <h2>vegan News</h2>
 
+<h3>Changes in version 2.0-2</h3>
+
+
+
+
+<h4>BUG FIXES</h4>
+
+
+
+<ul>
+<li><p> Function <code>capscale</code> failed if constrained component
+had zero rank. This happened most likely in partial models when
+the conditions aliased constraints. The problem was observed in
+<code>anova(..., by ="margin")</code> which uses partial models to
+analyses the marginal effects, and was reported in an email
+message to
+<a href="https://stat.ethz.ch/pipermail/r-help/2011-October/293077.html">R-News
+mailing list</a>.
+</p>
+</li>
+<li> <p><code>stressplot</code> and <code>goodness</code> sometimes failed when
+<code>metaMDS</code> was based on <code>isoMDS</code> (<span class="pkg">MASS</span> package)
+because <code>metaMDSdist</code> did not use the same defaults for
+step-across (extended) dissimilarities as <code>metaMDS(...,
+     engine = "isoMDS")</code>. The change of defaults can also influence
+triggering of step-across in <code>capscale(..., metaMDSdist =
+     TRUE)</code>.
+</p>
+</li>
+<li> <p><code>adonis</code> contained a minor bug resulting from incomplete
+implementation of a speed-up that did not affect the results. In
+fixing this bug, a further bug was identified in transposing the hat
+matrices. This second bug was only active following fixing of the
+first bug. In fixing both bugs, a speed-up in the internal f.test()
+function is fully realised. Reported by Nicholas Lewin-Koh.
+</p>
+</ul>
+
+  
+
+
+<h4>NEW FEATURES</h4>
+
+
+
+<ul>
+<li> <p><code>ordiarrows</code> and <code>ordisegments</code> gained argument
+<code>order.by</code> that gives a variable to sort points within
+<code>groups</code>. Earlier the points were assumed to be in order.
+</p>
+</li>
+<li><p> Function <code>ordispider</code> invisibly returns the
+coordinates to which the points were connected.  Typically these
+are class centroids of each point, but for constrained ordination
+with no <code>groups</code> they are the LC scores.
+</p>
+</ul>
+		 
+  
+
+
 <h3>Changes in version 2.0-1</h3>
 
 
@@ -41,8 +102,8 @@ frequencies.  <span class="pkg">Vegan</span> has Raup-Crick index as a choice in
 species and analytic equations. The new <code>raupcrick</code>
 function uses simulation with <code>oecosimu</code>. The function
 follows Chase et al. (2011) <EM>Ecosphere</EM> 2:art24
-[doi:10.1890/ES10-00117.1], and was developed with the
-consultation of Brian Inouye.
+[<a href="http://www.esajournals.org/doi/abs/10.1890/ES10-00117.1">doi:10.1890/ES10-00117.1</a>],
+and was developed with the consultation of Brian Inouye.
 </p>
 </ul>
 
@@ -54,9 +115,10 @@ consultation of Brian Inouye.
 
 
 <ul>
-<li><p> Function <code>meandist</code> can scramble items and give wrong
-results, especially when the <code>grouping</code> was numerical. The
-problem was reported by Dr Miguel Alvarez (Univ. Bonn).
+<li><p> Function <code>meandist</code> could scramble items and give
+wrong results, especially when the <code>grouping</code> was
+numerical. The problem was reported by Dr Miguel Alvarez
+(Univ. Bonn).
 </p>
 </li>
 <li> <p><code>metaMDS</code> did not reset <code>tries</code> when a new model
