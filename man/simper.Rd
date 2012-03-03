@@ -1,0 +1,86 @@
+\encoding{UTF-8}
+\name{simper}
+\alias{simper}
+\alias{summary.simper}
+\title{Similarity Percentages}
+
+\description{
+  Discriminating species between two groups using
+  Bray-Curtis dissimilarities
+}
+
+\usage{
+simper(comm, group,  ...)
+\method{summary}{simper}(object, ordered = TRUE, 
+     digits = max(3, getOption("digits") - 3), ...)
+}
+
+\arguments{
+  \item{comm}{Community data matrix.}
+  \item{group}{Factor describing the group structure. Must have at
+    least 2 levels.}
+  \item{object}{an object returned by \code{simper}.}
+  \item{ordered}{Logical; Should the species be ordered by their
+    average contribution?}
+  \item{digits}{Number of digits in output.}
+  \item{...}{Parameters passed to other functions.}
+}
+
+\details{ Similarity percentage, \code{simper} (Clarke 1993) is based
+  on the decomposition of Bray-Curtis dissimilarity index (see
+  \code{\link{vegdist}}, \code{\link{designdist}}). The contribution
+  of individual species \eqn{i} to the overall Bray-Curtis dissimilarity
+  \eqn{d_{jk}}{d[jk]} is given by
+
+  \deqn{d_{ijk} = \frac{|x_{ij}-x_{ik}|}{\sum_{i=1}^S (x_{ij}+x_{ik})}}{d[ijk] = abs(x[ij]-x[ik])/sum(x[ij]+x[ik])}
+  
+  where \eqn{x} is the abundance of species \eqn{i} in sampling units
+  \eqn{j} and \eqn{k}. The overall index is the sum of the individual
+  contributions over all \eqn{S} species 
+  \eqn{d_{jk}=\sum_{i=1}^S d_{ijk}}{d[jk] = sum(i=1..S) d[ijk]}. 
+  
+  The \code{simper} functions performs pairwise comparisons of groups
+  of sampling units and finds the average contributions
+  of each species to the average overall Bray-Curtis dissimilarity.
+
+  The function displays most important species for each pair of
+  \code{groups}.  These species contribute at least to 70 \% of the
+  differences between groups.  The function returns much more
+  extensive results which can be accessed directly from the result
+  object (see section Value). Function \code{summary} transforms the
+  result to a list of data frames. With argument \code{ordered = TRUE}
+  the data frames also include the cumulative contributions and
+  are ordered by species contribution.
+
+}
+
+\value{
+  A list of class \code{"simper"} with following items:
+  \item{species}{The species names.}
+  \item{average}{Average contribution to overall dissimilarity.}
+  \item{overall}{The overall between-group dissimilarity.} 
+  \item{sd}{Standard deviation of contribution.} 
+  \item{ratio}{Average to sd ratio.}
+  \item{ava, avb}{Average abundances per group.}
+  \item{ord}{An index vector to order vectors by their contribution or
+    order \code{cusum} back to the original data order.}
+  \item{cusum}{Ordered cumulative contribution.}
+}
+
+\examples{
+data(dune)
+data(dune.env)
+(sim <- with(dune.env, simper(dune, Management)))
+summary(sim)
+}
+\author{
+  Eduard Szöcs \email{szoe8822@uni-landau.de}
+}
+
+\references{
+  Clarke, K.R. 1993. Non-parametric multivariate analyses of changes
+    in community structure. \emph{Australian Journal of Ecology}, 18,
+    117–143.
+}
+\keyword{multivariate}
+

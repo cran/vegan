@@ -12,7 +12,7 @@
                        two.sided = "not equal to",
                        less = "less than",
                        greater = "greater than")
-    cat("\nalternative hypothesis: true mean is", alt.char, "the statistic")
+    cat("\nalternative hypothesis: simulated median is", alt.char, "the statistic")
     ## dim attribute is always there, but print all others
 
     cat("\n\n")
@@ -27,9 +27,9 @@
                     greater = c(0.05, 0.5, 1))
     qu <- apply(x$oecosimu$simulated, 1, quantile, probs=probs, na.rm = TRUE)
     m <- cbind("statistic" = x$oecosimu$statistic,
-               "z" = x$oecosimu$z, t(qu),
+               "z" = x$oecosimu$z, "mean" = x$oecosimu$means, t(qu),
                "Pr(sim.)"=x$oecosimu$pval)
-    printCoefmat(m, ...)
+    printCoefmat(m, cs.ind = 3:6, ...)
     if (any(is.na(x$oecosimu$simulated))) {
         nacount <- rowSums(is.na(x$oecosimu$simulated))
         cat("\nNumber of NA cases removed from simulations:\n",
