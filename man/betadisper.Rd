@@ -1,3 +1,4 @@
+\encoding{UTF-8}
 \name{betadisper}
 \alias{betadisper}
 \alias{scores.betadisper}
@@ -25,7 +26,7 @@
   Tukey's 'Honest Significant Difference' method.
 }
 \usage{
-betadisper(d, group, type = c("median","centroid"))
+betadisper(d, group, type = c("median","centroid"), bias.adjust = FALSE)
 
 \method{anova}{betadisper}(object, \dots)
 
@@ -38,7 +39,7 @@ betadisper(d, group, type = c("median","centroid"))
 \method{boxplot}{betadisper}(x, ylab = "Distance to centroid", ...)
 
 \method{TukeyHSD}{betadisper}(x, which = "group", ordered = FALSE,
-         conf.level = 0.95, \ldots)
+         conf.level = 0.95, \dots)
 }
 
 \arguments{
@@ -50,7 +51,8 @@ betadisper(d, group, type = c("median","centroid"))
     \code{\link[base]{as.factor}}. Can consist of a factor with a single
     level (i.e.~one group).}
   \item{type}{the type of analysis to perform. Use the spatial median or
-  the group centroid? The spatial median is now the default.}
+    the group centroid? The spatial median is now the default.}
+  \item{bias.adjust}{logical: adjust for small sample bias in beta diversity estimates?}
   \item{display}{character; partial match to access scores for
     \code{"sites"} or \code{"species"}.}
   \item{object, x}{an object of class \code{"betadisper"}, the result of a
@@ -133,6 +135,14 @@ betadisper(d, group, type = c("median","centroid"))
   One additional use of these functions is in assessing beta diversity
   (Anderson \emph{et al} 2006). Function \code{\link{betadiver}}
   provides some popular dissimilarity measures for this purpose.
+
+  As noted in passing by Anderson (2001) and in a related
+  context by O'Neill (2000), estimates of dispersion around a
+  central location (median or centroid) that is calculated from the same data
+  will be biased downward. This bias matters most when comparing diversity
+  among treatments with small, unequal numbers of samples.  Setting
+  \code{bias.adjust=TRUE} when using \code{betadisper} imposes a 
+  \eqn{\sqrt{n/(n-1)}}{sqrt(n/(n-1))} correction (Stier et al. 2012).
 }
 \value{
   The \code{anova} method returns an object of class \code{"anova"}
@@ -184,14 +194,25 @@ betadisper(d, group, type = c("median","centroid"))
   error rates.
 }
 \references{
+  Anderson, M. J. (2001) A new method for non-parametric multivariate 
+  analysis of variance. \emph{Austral Ecology} \strong{26}, 32--46.
+
   Anderson, M.J. (2006) Distance-based tests for homogeneity of
-  multivariate dispersions. \emph{Biometrics} \strong{62(1)}, 245--253.
+  multivariate dispersions. \emph{Biometrics} \strong{62}, 245--253.
 
   Anderson, M.J., Ellingsen, K.E. & McArdle, B.H. (2006) Multivariate
   dispersion as a measure of beta diversity. \emph{Ecology Letters}
-  \strong{9(6)}, 683--693.
+  \strong{9}, 683--693.
+
+  O'Neill, M.E. (2000) A Weighted Least Squares Approach to Levene's 
+  Test of Homogeneity of Variance. \emph{Australian & New Zealand Journal of 
+  Statistics} \strong{42}, 81-–100.
+
+  Stier, A.C., Geange, S.W., Hanson, K.M., & Bolker, B.M. (2012) Predator 
+  density and timing of arrival affect reef fish community assembly. Ms.
+  in revision, \emph{Oikos}.
 }
-\author{Gavin L. Simpson}
+\author{Gavin L. Simpson; bias correction by Adrian Stier and Ben Bolker.}
 \seealso{\code{\link{permutest.betadisper}}, \code{\link[stats]{anova.lm}},
   \code{\link{scores}}, \code{\link[graphics]{boxplot}},
   \code{\link{TukeyHSD}}. Further measure of beta diversity
@@ -230,6 +251,7 @@ plot(mod, axes = c(3,1))
 boxplot(mod)
 
 ## simulate missing values in 'd' and 'group'
+## using spatial medians
 groups[c(2,20)] <- NA
 dis[c(2, 20)] <- NA
 mod2 <- betadisper(dis, groups) ## warnings
@@ -240,14 +262,18 @@ plot(mod2)
 boxplot(mod2)
 plot(TukeyHSD(mod2))
 
-## Using spatial median
-mod3 <- betadisper(dis, groups, type = "median")
+## Using group centroids
+mod3 <- betadisper(dis, groups, type = "centroid")
 mod3
 permutest(mod3, control = permControl(nperm = 100))
 anova(mod3)
 plot(mod3)
 boxplot(mod3)
 plot(TukeyHSD(mod3))
+
+## try out bias correction; compare with mod3
+(mod3B <- betadisper(dis, groups, type = "median", bias.adjust=TRUE))
+
 }
 \keyword{methods}
 \keyword{multivariate}

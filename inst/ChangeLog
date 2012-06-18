@@ -1,11 +1,60 @@
-$Date: 2012-03-03 16:57:09 +0200 (Sat, 03 Mar 2012) $
+$Date: 2012-06-17 21:05:31 +0300 (Sun, 17 Jun 2012) $
 
 VEGAN RELEASE VERSIONS at http://cran.r-project.org/
 
-Version 2.0-3 (opened November 13, 2011)
+Version 2.0-4 (released June 18, 2012)
+
+	* merge r2215: plot.envfit() gains args 'bg' for background colour
+	of labels.
+	* cherry-pick from r2213: warn on empty rows in simper (picked
+	github revision cce42b3).
+	* merge r2206,7: check 'newdata' dims in predict(..., type =
+	"response"|"working") for CA results.
+	* merge r2195-7, 2204: bias adjusted betadisper.
+	* merge r2191-2193: standardise handling of 'select' arg in
+	those plotting functions that support it. Adds non-exported
+	function .checkSelect().
+	* merge r2182,2182,2199,2201: FAQ about data size in NMDS.
+	* merge r2178, 2180: ordipointlabel gains 'select' argument.
+	* merge r2173-2176, 2185: ordihull labels, semintransparent
+	colours in ordihull & ordiellipse.
+	* merge r2172,2179,2181,2184,2186,2187: metaMDS warns about too
+	good stress.
+	* merge r2170: bioenv accepts dissimilarities as input.
+	* merge r2167: warn about unequal aspect ratio in ordiplot3d.
+	* merge r2162: set equal axis scales for ordiplot3d.
+	* merge r2157:2160,2167,2168,2208: ordiplot3d returns
+	envfit.convert().
+	* merge r2156: betadisper example adapted for default spatial
+	median.
+	* merge r2150: monoMDS checks that the number of dissimilarities
+	is sufficient for the requested analysis. The decostand.Rd fix of
+	r2150 was not yet merged.
+	* merge r2149: drarefy & rrarefy check that input data are
+	integers.
+	* merge r2148 (partial): format references. However, scoverage()
+	was not merged yet, and its changes have not been merged.
+	* merge r2144: hiersimu and multipart do not assume constant
+	gamma.  Similar change was made in r2132 to adipart.
+	* merge r2143: formula method for adipart/hiersimu/multipart.
+	NAMESPACE needed manual merge (edited patch from diff).
+	* merge r2139: clamtest coverage threshold fix.
+	* merge r2137: explain data transformation in pyrifos.Rd.
+	* merge r2135: print.adipart displays null model method.
+	* merge r2132: adipart bug fix: assumed constant gamma in
+	permutations.
+	* merge r2129: envfit failed with empty factor levels.
+	* merge r2128: anova(<prc-object>, by = ...) failed.
+	* merge r2127: more configurable msoplot.
+	* merge r2125: typo in anova.cca.Rd.
+	* merge r2123: r2121 for adonis.
+	* merge r2121: doc location/dispersion mix-up in simper, mrpp &
+	anosim.
+
+Version 2.0-3 (released March 3, 2012)
 
 	* merge r2115: simper fixes from github EDiLD/vegan pull request
-	#6 by Eduard Szöcz (proportions instead of percentages etc.)
+	#6 by Eduard Szöcs (proportions instead of percentages etc.)
 	* merge r2113: tweak simper.Rd formatting.
 	* commit r2112: deactivate permutation tests in simper.
 	* merge r2110: centroids.cca fix for 2-level factors as the only
@@ -27,7 +76,7 @@ Version 2.0-3 (opened November 13, 2011)
 	* merge r2078, 2084: simper NAMESPACE.
 	* merge r2071,2: dimnames fix in indopower & expand example.
 	* merge r2068: broken url in renyi.Rd.
-	* merge r2065: number of iterations is an arguent in nesteddisc.
+	* merge r2065: number of iterations is an argument in nesteddisc.
 	* merge r2060: adonis tells terms were added sequentially.
 	* mrege r2057: add .Rinstignore to silense R 2.15.0 checks.
 	* merge r2056: use inconsolata fonts in vignettes.

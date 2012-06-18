@@ -34,7 +34,7 @@
   vector, fitted environmental surface, permutation tests}
 
 %% misuse of the address field for revision data
-\Address{$ $Id: intro-vegan.Rnw 1799 2011-09-07 12:06:12Z jarioksa $ $
+\Address{$ $Id: intro-vegan.Rnw 1709 2011-08-10 15:48:21Z jarioksa $ $
   processed with vegan
 \Sexpr{packageDescription("vegan", field="Version")}
 in \Sexpr{R.version.string} on \today}
