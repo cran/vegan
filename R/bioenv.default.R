@@ -33,7 +33,18 @@ function (comm, env, method = "spearman", index = "bray", upto = ncol(env),
     }
     x <- scale(env)
     best <- list()
-    comdis <- vegdist(comm, method = index)
+    if (inherits(comm, "dist")) {
+        comdis <- comm
+        index <- attr(comdis, "method")
+        if (is.null(index))
+            index <- "unspecified"
+    } else if (is.matrix(comm) && nrow(comm) == ncol(comm) &&
+             isTRUE(all.equal(comm, t(comm)))) {
+        comdis <- as.dist(comm)
+        index <- "supplied square matrix"
+    } else {
+        comdis <- vegdist(comm, method = index)
+    }
     for (i in 1:upto) {
         if (trace) {
             nvar <- choose(n, i)

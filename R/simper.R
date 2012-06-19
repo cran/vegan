@@ -1,6 +1,8 @@
 `simper` <-
     function(comm, group, ...)
 {
+    if (any(rowSums(comm, na.rm = TRUE) == 0)) 
+        warning("you have empty rows: results may be meaningless")
     permutations <- 0
     trace <- FALSE
     comm <- as.matrix(comm)

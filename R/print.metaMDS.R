@@ -17,11 +17,13 @@
             cat(", ", c("weak", "strong")[x$ities], " ties", sep = "")
         cat("\n")
     }
-    if (x$converged) 
+    if (x$converged) { 
         cat("Two convergent solutions found after", x$tries, 
             "tries\n")
-    else cat("No convergent solutions - best solution after", 
-             x$tries, "tries\n")
+    } else {
+        cat("No convergent solutions - best solution after", 
+            x$tries, "tries\n")
+    }
     z <- x$points
     scal <- c(if (attr(z, "centre")) "centring",
               if (attr(z, "pc")) "PC rotation",

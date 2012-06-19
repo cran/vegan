@@ -89,7 +89,7 @@
         iregn <- 3
         nobj <- nrow(mat)
     }
-    ## ndis: number dissimilarities
+    ## ndis: number of >0 dissimilarities (distinct points)
     ndis <- length(dist)
     ## starting configuration
     if (missing(y)) {
