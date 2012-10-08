@@ -1,6 +1,6 @@
-multipart.default <-
-function(y, x, index=c("renyi", "tsallis"), scales = 1,
-    global = FALSE, relative = FALSE, nsimul=99, ...)
+`multipart.default` <-
+    function(y, x, index=c("renyi", "tsallis"), scales = 1,
+             global = FALSE, relative = FALSE, nsimul=99, ...)
 {
     if (length(scales) > 1)
         stop("length of 'scales' must be 1")
@@ -23,7 +23,7 @@ function(y, x, index=c("renyi", "tsallis"), scales = 1,
         colnames(rhs) <- paste("level", 1:nlevs, sep="_")
     tlab <- colnames(rhs)
 
-     ## part check proper design of the model frame
+     ## check proper design of the model frame
     l1 <- sapply(rhs, function(z) length(unique(z)))
     if (!any(sapply(2:nlevs, function(z) l1[z] <= l1[z-1])))
         stop("number of levels are inapropriate, check sequence")
@@ -123,13 +123,15 @@ function(y, x, index=c("renyi", "tsallis"), scales = 1,
     nam <- c(paste("alpha", 1:(nlevs-1), sep="."), "gamma",
         paste("beta", 1:(nlevs-1), sep="."))
     names(sim$statistic) <- attr(sim$oecosimu$statistic, "names") <- nam
-    attr(sim, "call") <- match.call()
-    attr(sim, "index") <- index
-    attr(sim, "scales") <- scales
-    attr(sim, "global") <- TRUE
+    call <- match.call()
+    call[[1]] <- as.name("multipart")
+    attr(sim, "call") <- call
+    attr(sim$oecosimu$simulated, "index") <- index
+    attr(sim$oecosimu$simulated, "scales") <- scales
+    attr(sim$oecosimu$simulated, "global") <- TRUE
     attr(sim, "n.levels") <- nlevs
     attr(sim, "terms") <- tlab
     attr(sim, "model") <- rhs
-    class(sim) <- c("multipart", "list")
+    class(sim) <- c("multipart", class(sim))
     sim
 }

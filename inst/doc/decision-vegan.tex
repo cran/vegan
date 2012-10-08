@@ -23,8 +23,8 @@ another document.
 %% hijack Address for version info
 \Address{$ $Id: decision-vegan.Rnw 1709 2011-08-10 15:48:21Z jarioksa $ $
   processed with vegan
-2.0-4
-in R Under development (unstable) (2012-06-18 r59572) on \today}
+2.0-5
+in R Under development (unstable) (2012-10-08 r60901) on \today}
 \Footername{About this version}
 
 %% need no \usepackage{Sweave.sty}
@@ -500,17 +500,17 @@ Call: cca(formula = varespec[i, ] ~ Al + K, data = varechem)
 
               Inertia Proportion Rank
 Total         2.08320    1.00000     
-Constrained   0.19245    0.09238    2
-Unconstrained 1.89075    0.90762   21
+Constrained   0.13087    0.06282    2
+Unconstrained 1.95233    0.93718   21
 Inertia is mean squared contingency coefficient 
 
 Eigenvalues for constrained axes:
    CCA1    CCA2 
-0.10480 0.08764 
+0.07534 0.05553 
 
 Eigenvalues for unconstrained axes:
     CA1     CA2     CA3     CA4     CA5     CA6     CA7     CA8 
-0.46635 0.33696 0.23103 0.18183 0.14526 0.12137 0.09830 0.08624 
+0.49651 0.34903 0.23403 0.18364 0.17438 0.11899 0.10508 0.08591 
 (Showed only 8 of all 21 unconstrained eigenvalues)
 \end{Soutput}
 \end{Schunk}
@@ -537,11 +537,11 @@ R> proc <- procrustes(scores(tmp1, dis="lc", choi=1:14), scores(tmp2, dis="lc", 
 R> max(residuals(proc))
 \end{Sinput}
 \begin{Soutput}
-[1] 2.703843e-14
+[1] 2.572443e-14
 \end{Soutput}
 \end{Schunk}
 In \code{cca} the difference would be somewhat larger than now
-observed 2.7038e-14 because site
+observed 2.5724e-14 because site
 weights used for environmental variables are shuffled with the species
 data.
 

@@ -138,7 +138,8 @@ The function returns a list of class mrpp with following items:
     the dist object.}
   \item{weight.type}{The choice of group weights used.}
   \item{boot.deltas}{The vector of "permuted deltas," the deltas
-    calculated from each of the permuted datasets.}
+    calculated from each of the permuted datasets. The distribution of
+    this item can be inspected with \code{\link{density.mrpp}} function.}
   \item{permutations}{The number of permutations used.}
 }
 \references{

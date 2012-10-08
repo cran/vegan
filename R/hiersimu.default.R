@@ -15,7 +15,7 @@ relative = FALSE, drop.highest = FALSE, nsimul=99, ...)
         colnames(rhs) <- paste("level", 1:nlevs, sep="_")
     tlab <- colnames(rhs)
 
-    ## part check proper design of the model frame
+    ## check proper design of the model frame
     l1 <- sapply(rhs, function(z) length(unique(z)))
     if (!any(sapply(2:nlevs, function(z) l1[z] <= l1[z-1])))
         stop("number of levels are inapropriate, check sequence")
@@ -82,12 +82,14 @@ relative = FALSE, drop.highest = FALSE, nsimul=99, ...)
 #    nam <- paste("level", 1:nlevs, sep=".")
 #    names(sim$statistic) <- attr(sim$oecosimu$statistic, "names") <- nam
     names(sim$statistic) <- attr(sim$oecosimu$statistic, "names") <- tlab[1:nlevs]
-    attr(sim, "call") <- match.call()
+    call <- match.call()
+    call[[1]] <- as.name("hiersimu")
+    attr(sim, "call") <- call
     attr(sim, "FUN") <- FUN
     attr(sim, "location") <- location
     attr(sim, "n.levels") <- nlevs
     attr(sim, "terms") <- tlab
     attr(sim, "model") <- rhs
-    class(sim) <- c("hiersimu", "list")
+    class(sim) <- c("hiersimu", class(sim))
     sim
 }

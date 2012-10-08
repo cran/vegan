@@ -13,9 +13,10 @@
 
 }
 \usage{
-mantel(xdis, ydis, method="pearson", permutations=999, strata)
+mantel(xdis, ydis, method="pearson", permutations=999, strata,
+    na.rm = FALSE)
 mantel.partial(xdis, ydis, zdis, method = "pearson", permutations = 999, 
-    strata)
+    strata, na.rm = FALSE)
 }
 
 \arguments{
@@ -26,6 +27,10 @@ mantel.partial(xdis, ydis, zdis, method = "pearson", permutations = 999,
   \item{strata}{An integer vector or factor specifying the strata for
     permutation. If supplied, observations are permuted only within the
     specified strata.}
+  \item{na.rm}{Remove missing values in calculation of Mantel
+    correlation. Use this option with care: Permutation tests can
+    be biased, in particular if two matrices had missing values in
+    matching positions.}
 }
 \details{
   Mantel statistic is simply a correlation between entries of two
@@ -56,21 +61,23 @@ mantel.partial(xdis, ydis, zdis, method = "pearson", permutations = 999,
     \code{\link{cor.test}}.}
   \item{statistic}{The Mantel statistic.}
   \item{signif}{Empirical significance level from permutations.}
-  \item{perm}{A vector of permuted values.}
+  \item{perm}{A vector of permuted values. The distribution of
+    permuted values can be inspected with \code{\link{density.mantel}} 
+    function.}
   \item{permutations}{Number of permutations.}
 }
 \references{ The test is due to Mantel, of course, but the
   current implementation is based on Legendre and Legendre.
 
-  Legendre, P. and Legendre, L. (1998) \emph{Numerical Ecology}. 2nd English
+  Legendre, P. and Legendre, L. (2012) \emph{Numerical Ecology}. 3rd English
   Edition. Elsevier.
   
 }
 
 \note{
-  Legendre & Legendre (1998) say that partial Mantel correlations 
-  often are difficult to interpret. 
-  }
+  Legendre & Legendre (2012, Box 10.4) warn against using partial
+  Mantel correlations.
+}
 
 \author{Jari Oksanen }
 

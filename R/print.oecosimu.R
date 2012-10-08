@@ -1,12 +1,16 @@
 `print.oecosimu` <-
     function(x, ...)
 {
+    xx <- x ## return unmodified input object
     attr(x$oecosimu$method, "permfun") <- NULL
-    cat("oecosimu with", ncol(x$oecosimu$simulated), "simulations\n")
-    cat("simulation method", x$oecosimu$method)
+    cat(as.character(attr(x,"call")[[1]]), "object\n\n")
+    writeLines(strwrap(pasteCall(attr(x, "call"))))
+    cat("\n")
+    cat("simulation method", x$oecosimu$method, "with",
+        ncol(x$oecosimu$simulated), "simulations\n")
     if (length(att <- attributes(x$oecosimu$simulated)) > 1) {
         att$dim <- NULL
-        cat(" with", paste(names(att), att, collapse=", "))
+        cat("options: ", paste(names(att), att, collapse=", "))
     }
     alt.char <- switch(x$oecosimu$alternative,
                        two.sided = "not equal to",
@@ -17,9 +21,10 @@
 
     cat("\n\n")
     cl <- class(x)
-    if (length(cl) > 1 && cl[2] != "list") {
-        NextMethod("print", x)
-        cat("\n")
+    if ((length(cl) > 1 && cl[2] != "list" ) &&
+        !any(cl %in% c("adipart", "hiersimu", "multipart"))) {
+            NextMethod("print", x)
+            cat("\n")
     }
     probs <- switch(x$oecosimu$alternative,
                     two.sided = c(0.025, 0.5, 0.975),
@@ -35,5 +40,7 @@
         cat("\nNumber of NA cases removed from simulations:\n",
             nacount, "\n")
     }
-    invisible(x)   
+    invisible(xx)   
 }
+
+

@@ -29,8 +29,8 @@ designdist(x, method = "(A+B-2*J)/(A+B)",
   \item{terms}{How shared and total components are found. For vectors
     \code{x} and \code{y} the  \code{"quadratic"} terms are \code{J = sum(x*y)},
     \code{A = sum(x^2)}, \code{B = sum(y^2)}, and \code{"minimum"} terms
-    are \code{J = sum(pmin(x,y))}, \code{A = sum(x)} and \code{B =
-      sum(y)}, and \code{"binary"} terms are either of these after transforming
+    are \code{J = sum(pmin(x,y))}, \code{A = sum(x)} and \code{B = sum(y)}, 
+    and \code{"binary"} terms are either of these after transforming
     data into binary form (shared number of species, and number of
     species for each row). }
   \item{abcd}{Use 2x2 contingency table notation for binary data:
@@ -65,15 +65,15 @@ designdist(x, method = "(A+B-2*J)/(A+B)",
   The function \code{designdist} can implement most dissimilarity
   indices in \code{\link{vegdist}} or elsewhere, and it can also be
   used to implement many other indices, amongst them, most of those
-  described in Legendre & Legendre (1998). It can also be used to
+  described in Legendre & Legendre (2012). It can also be used to
   implement all indices of beta diversity described in Koleff et
   al. (2003), but there also is a specific function
   \code{\link{betadiver}} for the purpose.
 
   If you want to implement binary dissimilarities based on the 2x2
   contingency table notation, you can set \code{abcd = TRUE}. In this
-  notation \code{a = J}, \code{b = A-J}, \code{c = B-J}, \code{d =
-  P-A-B+J}. This notation is often used instead of the more more
+  notation \code{a = J}, \code{b = A-J}, \code{c = B-J}, \code{d = P-A-B+J}. 
+  This notation is often used instead of the more more
   tangible default notation for reasons that are opaque to me. 
 }
 
@@ -85,7 +85,7 @@ designdist(x, method = "(A+B-2*J)/(A+B)",
   diversity for presence--absence data. \emph{J. Animal Ecol.}
   \strong{72}, 367--382. 
   
-  Legendre, P. and Legendre, L. (1998) \emph{Numerical Ecology}. 2nd
+  Legendre, P. and Legendre, L. (2012) \emph{Numerical Ecology}. 3rd
   English ed. Elsevier
   }
 \author{ Jari Oksanen }
