@@ -1,6 +1,40 @@
-$Date: 2012-06-17 21:05:31 +0300 (Sun, 17 Jun 2012) $
+$Date: 2012-10-07 19:50:53 +0300 (Sun, 07 Oct 2012) $
 
 VEGAN RELEASE VERSIONS at http://cran.r-project.org/
+
+Version 2.0-5 (released October 8, 2012)
+
+	* merge r2309: anova.cca.Rd edits.
+	* merge r2307: no line breaks within \code{} in Rd.
+	* merge r2305: proofread Rd files a..b.
+	* merge r2299: fix broken \link{}s in docs. 
+	* merge r2297: upgrade docs for L&L 2012 (3r ed.)
+	* merge r2291 thru 2296, 2298, 2300: radfit upgrade.
+	* merge r2287,8: scoping in anova.ccabyaxis and anova.ccabyterm.
+	* merge r2285: add predict.radfit.
+	* merge r2262, 2268:2270, and also r1950: mantel and
+	mantel.partial gained argument na.rm = FALSE. This needed hand
+	editing of merges, and also merging old r1950: beware and test.
+	* merge r2271: tweak varpart.Rd. (plot coloured circles).
+	* merge r2267: tweak vegdist.Rd (ref to vegdist).
+	* merge r2260: streamline adonis (internal changes).
+	* merge r2258: protect betadisper against changes in R-devel API.
+	* merge r2254: stylistic in examples of Rd files.
+	* merge r2252,56,57,61,64,66: add density methods for vegan
+	permutation functions and add plot.densityvegan to display these.
+	* merge r2250: do not use paste0 in envift.Rd (fails in R 2.14).
+	* merge r2249: fix vignette building with TeXLive 2012.
+	* merge r2246: remove dead code from cIndexKM() and R-devel CMD
+	check warning.
+	* merge r2244: more portable doc/Makefile
+	* merge r2237 thru 2240: add labels.envfit() and "labels" arg to
+	plot.envfit(). 
+	* merge r2227 thru 2235: adipart, hiersimu, multipart code
+	refactoring (especially formula method) and making to inherit from
+	oecosimu in printing the results.  The merge did not apply quite
+	cleanly, but oecosimu, print.oecosimu and NAMESPACE needed manual
+	editing (beware).
+	* merge r2225: biplot.rda 'type' fix.
 
 Version 2.0-4 (released June 18, 2012)
 

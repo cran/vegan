@@ -7,8 +7,8 @@
 \description{
   Function \code{mantel.correlog} computes a multivariate
   Mantel correlogram. Proposed by Sokal (1986) and Oden and Sokal
-  (1986), the method is also described in Legendre and Legendre (1998,
-  pp. 736-738).
+  (1986), the method is also described in Legendre and Legendre (2012,
+  pp. 819--821).
 }
 
 \usage{
@@ -119,7 +119,7 @@ cutoff=TRUE, r.type="pearson", nperm=999, mult="holm", progressive=TRUE)
 
 \references{
 
-  Legendre, P. and L. Legendre. 1998. Numerical ecology, 2nd English
+  Legendre, P. and L. Legendre. 2012. Numerical ecology, 3rd English
   edition. Elsevier Science BV, Amsterdam.
 
   Mantel, N. 1967. The detection of disease clustering and a generalized
@@ -146,10 +146,10 @@ mite.hel <- decostand(mite, "hellinger")
 mite.hel.resid <- resid(lm(as.matrix(mite.hel) ~ ., data=mite.xy))
 
 # Compute the detrended species distance matrix
-mite.hel.D = dist(mite.hel.resid)
+mite.hel.D <- dist(mite.hel.resid)
 
 # Compute Mantel correlogram with cutoff, Pearson statistic
-mite.correlog = mantel.correlog(mite.hel.D, XY=mite.xy, nperm=49)
+mite.correlog <- mantel.correlog(mite.hel.D, XY=mite.xy, nperm=49)
 summary(mite.correlog)
 mite.correlog   
 # or: print(mite.correlog)
@@ -157,8 +157,8 @@ mite.correlog
 plot(mite.correlog)
 
 # Compute Mantel correlogram without cutoff, Spearman statistic
-mite.correlog2 = mantel.correlog(mite.hel.D, XY=mite.xy, cutoff=FALSE, 
-r.type="spearman", nperm=49)
+mite.correlog2 <- mantel.correlog(mite.hel.D, XY=mite.xy, cutoff=FALSE, 
+   r.type="spearman", nperm=49)
 summary(mite.correlog2)
 mite.correlog2
 plot(mite.correlog2)

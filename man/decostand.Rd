@@ -50,8 +50,7 @@ wisconsin(x)
     distance, the distances should be similar to the
     Chi-square distance used in correspondence analysis. However, the
     results from \code{\link{cmdscale}} would still differ, since
-    CA is a weighted ordination method (default \code{MARGIN =
-      1}).
+    CA is a weighted ordination method (default \code{MARGIN = 1}).
     \item \code{hellinger}: square root of \code{method = "total"}
     (Legendre & Gallagher 2001).
     \item \code{log}: logarithmic transformation as suggested by
@@ -61,9 +60,10 @@ wisconsin(x)
      to presences, and \code{logbase = Inf} gives the presence/absence
      scaling. Please note this is \emph{not} \eqn{\log(x+1)}{log(x+1)}.
      Anderson et al. (2006) suggested this for their (strongly) modified
-     Gower distance, but the standardization can be used independently
-     of distance indices.
-   }
+     Gower distance (implemented as \code{method = "altGower"} in 
+     \code{\link{vegdist}}), but the standardization can be used 
+     independently of distance indices. 
+  }
   Standardization, as contrasted to transformation, means that the
   entries are transformed relative to other entries.
 

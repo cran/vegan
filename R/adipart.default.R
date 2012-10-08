@@ -21,7 +21,7 @@ function(y, x, index=c("richness", "shannon", "simpson"),
         colnames(rhs) <- paste("level", 1:nlevs, sep="_")
     tlab <- colnames(rhs)
 
-    ## part check proper design of the model frame
+    ## check proper design of the model frame
     l1 <- sapply(rhs, function(z) length(unique(z)))
     if (!any(sapply(2:nlevs, function(z) l1[z] <= l1[z-1])))
         stop("number of levels are inapropriate, check sequence")
@@ -98,12 +98,14 @@ function(y, x, index=c("richness", "shannon", "simpson"),
     nam <- c(paste("alpha", 1:(nlevs-1), sep="."), "gamma",
              paste("beta", 1:(nlevs-1), sep="."))
     names(sim$statistic) <- attr(sim$oecosimu$statistic, "names") <- nam
-    attr(sim, "call") <- match.call()
-    attr(sim, "index") <- index
-    attr(sim, "weights") <- weights
+    call <- match.call()
+    call[[1]] <- as.name("adipart")
+    attr(sim, "call") <- call
+    attr(sim$oecosimu$simulated, "index") <- index
+    attr(sim$oecosimu$simulated, "weights") <- weights
     attr(sim, "n.levels") <- nlevs
     attr(sim, "terms") <- tlab
     attr(sim, "model") <- rhs
-    class(sim) <- c("adipart", "list")
+    class(sim) <- c("adipart", class(sim))
     sim
 }

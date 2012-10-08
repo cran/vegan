@@ -8,6 +8,115 @@
 
 <h2>vegan News</h2>
 
+<h3>Changes in version 2.0-5</h3>
+
+
+
+
+<h4>BUG FIXES</h4>
+
+
+
+<ul>
+<li> <p><code>anova(&lt;cca_object&gt;, ...)</code> failed with <code>by =
+      "axis"</code> and <code>by = "term"</code>. The bug was reported by Dr Sven
+Neulinger (Christian Albrecht University, Kiel, Germany).
+</p>
+</li>
+<li> <p><code>radlattice</code> did not honour argument <code>BIC = TRUE</code>,
+but always displayed AIC.
+</p>
+</li></ul>
+
+ 
+
+
+<h4>NEW FUNCTIONS</h4>
+
+
+
+<ul>
+<li><p> Most <span class="pkg">vegan</span> functions with permutation tests have now a
+<code>density</code> method that can be used to find empirical
+probability distributions of permutations. There is a new
+<code>plot</code> method for these functions that displays both the
+density and the observed statistic. The <code>density</code> function is
+available for <code>adonis</code>, <code>anosim</code>, <code>mantel</code>,
+<code>mantel.partial</code>, <code>mrpp</code>, <code>permutest.cca</code> and
+<code>procrustes</code>.
+</p>
+<p>Function <code>adonis</code> can return several statistics, and it has
+now a <code>densityplot</code> method (based on <span class="pkg">lattice</span>).
+</p>
+<p>Function <code>oecosimu</code> already had <code>density</code> and
+<code>densityplot</code>, but they are now similar to other <span class="pkg">vegan</span>
+methods, and also work with <code>adipart</code>, <code>hiersimu</code> and
+<code>multipart</code>.
+</p>
+</li>
+<li> <p><code>radfit</code> functions got a <code>predict</code> method that
+also accepts arguments <code>newdata</code> and <code>total</code> for new
+ranks and site totals for prediction.  The functions can also
+interpolate to non-integer &ldquo;ranks&rdquo;, and in some models
+also extrapolate.
+</p>
+</li></ul>
+
+ 
+
+
+<h4>NEW FEATURES</h4>
+
+
+
+<ul>
+<li><p> Labels can now be set in the <code>plot</code> of <code>envfit</code>
+results. The labels must be given in the same order that the
+function uses internally, and new support function <code>labels</code>
+can be used to display the default labels in their correct order.
+</p>
+</li>
+<li><p> Mantel tests (functions <code>mantel</code> and
+<code>mantel.partial</code>) gained argument <code>na.rm</code> which can be
+used to remove missing values. This options should be used with
+care: Permutation tests can be biased if the missing values were
+originally in matching or fixed positions.
+</p>
+</li>
+<li> <p><code>radfit</code> results can be consistently accessed with
+the same methods whether they were a single model for a single
+site, all models for a single site or all models for all sites
+in the data.  All functions now have methods <code>AIC</code>,
+<code>coef</code>, <code>deviance</code>, <code>logLik</code>, <code>fitted</code>,
+<code>predict</code> and <code>residuals</code>.
+</p>
+</li></ul>
+
+ 
+
+
+<h4>INSTALLATION AND BUILDING</h4>
+
+
+
+<ul>
+<li><p> Building of <span class="pkg">vegan</span> vignettes failed with the latest
+version of LaTeX (TeXLive 2012).
+</p>
+</li>
+<li> <p><font face="Courier New,Courier" color="#666666"><b>R</b></font> versions later than 2.15-1 (including development
+version) report warnings and errors when installing and checking
+<span class="pkg">vegan</span>, and you must upgrade <span class="pkg">vegan</span> to this version.
+The warnings concern functions <code>cIndexKM</code> and
+<code>betadisper</code>, and the error occurs in <code>betadisper</code>.
+These errors and warnings were triggered by internal changes in
+<font face="Courier New,Courier" color="#666666"><b>R</b></font>.
+</p>
+</li></ul>
+
+ 
+
+
 <h3>Changes in version 2.0-4</h3>
 
 

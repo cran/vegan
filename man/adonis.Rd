@@ -7,7 +7,7 @@
 \description{Analysis of variance using distance matrices --- for
   partitioning distance matrices among sources of variation and fitting
   linear models (e.g., factors, polynomial regression) to distance 
-  matrices; uses a permutation test with pseudo-F ratios.}
+  matrices; uses a permutation test with pseudo-\eqn{F} ratios.}
 
 \usage{
 adonis(formula, data, permutations = 999, method = "bray",
@@ -60,7 +60,7 @@ variance, Excoffier, Smouse, and Quattro, 1992;
 and nested factors.
 
 If the experimental design has nestedness, then use \code{strata} to
-test hypotheses. For instance, imagine we are testing the whether a
+test hypotheses. For instance, imagine we are testing whether a
 plant community is influenced by nitrate amendments, and we have two
 replicate plots at each of two levels of nitrate (0, 10 ppm). We have
 replicated the experiment in three fields with (perhaps) different
@@ -90,8 +90,8 @@ residuals. Permutations of the raw data may have better small sample
 characteristics. Further, the precise meaning of hypothesis tests will
 depend upon precisely what is permuted. The strata argument keeps groups
 intact for a particular hypothesis test where one does not want to
-permute the data among particular groups. For instance, \code{strata =
-B} causes permutations among levels of \code{A} but retains data within
+permute the data among particular groups. For instance, \code{strata = B} 
+causes permutations among levels of \code{A} but retains data within
 levels of \code{B} (no permutation among levels of \code{B}). See
 \code{\link{permutations}} for additional details on permutation tests
 in Vegan.
@@ -116,8 +116,8 @@ overview of rules.
 
   \item{aov.tab}{Typical AOV table showing sources of variation,
     degrees of freedom, sequential sums of squares, mean squares,
-    \eqn{F} statistics, partial R-squared and \eqn{P} values, based on \eqn{N}
-    permutations. }
+    \eqn{F} statistics, partial \eqn{R^2}{R-squared} and \eqn{P}
+    values, based on \eqn{N} permutations. }
   \item{coefficients}{ matrix of coefficients of the linear model, with
     rows representing sources of variation and columns representing
     species; each column represents a fit of a species abundance to the
@@ -129,10 +129,12 @@ overview of rules.
     sites; each column represents a fit of a sites distances (from all
     other sites) to the  linear model.These are what you get when you
     fit distances of one site to
-    your predictors. } 
+    your predictors. }   
   \item{f.perms}{ an \eqn{N} by \eqn{m} matrix of the null \eqn{F}
-    statistics for each source of variation  based on \eqn{N}
-    permutations of the data.}
+    statistics for each source of variation based on \eqn{N}
+    permutations of the data. The distribution of a single term can be
+    inspected with \code{\link{density.adonis}} function, or all terms
+    simultaneously with \code{densityplot.adonis}.}
   \item{model.matrix}{The \code{\link{model.matrix}} for the right hand
     side of the formula.}
   \item{terms}{The \code{\link{terms}} component of the model.}
@@ -143,7 +145,7 @@ overview of rules.
   by different within-group variation (dispersion) instead of different
   mean values of the groups (see Warton et al. 2012 for a general
   analysis). However, it seems that \code{adonis} is less sensitive to
-  dispersion effects than some of its alternatives (\code{link{anosim}},
+  dispersion effects than some of its alternatives (\code{\link{anosim}},
   \code{\link{mrpp}}). Function \code{\link{betadisper}} is a sister
   function to \code{adonis} to study the differences in dispersion
   within the same geometric framework.
@@ -211,10 +213,10 @@ ordihull(mod, group=dat$NO3, show="10", col=3)
 ordispider(mod, group=dat$field, lty=3, col="red")
 
 ### Correct hypothesis test (with strata)
-adonis(Y ~ NO3, data=dat, strata=dat$field, perm=1e3)
+adonis(Y ~ NO3, data=dat, strata=dat$field, perm=999)
 
 ### Incorrect (no strata)
-adonis(Y ~ NO3, data=dat, perm=1e3)
+adonis(Y ~ NO3, data=dat, perm=999)
 }
 
 \keyword{multivariate }

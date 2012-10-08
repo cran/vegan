@@ -128,6 +128,7 @@
     ind$oecosimu <- list(z = z, means = means, pval = p, simulated=simind,
                          method=method,
                          statistic = indstat, alternative = alternative)
+    attr(ind, "call") <- match.call()
     class(ind) <- c("oecosimu", class(ind))
     ind
 }
