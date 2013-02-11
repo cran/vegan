@@ -8,19 +8,147 @@
 
 <h2>vegan News</h2>
 
-<h3>Changes in version 2.0-5</h3>
-
+<h3>Changes in version 2.0-6</h3>
 
 
 
 <h4>BUG FIXES</h4>
 
 
+<ul>
+<li><p> The species scores were scaled wrongly in
+<code>capscale()</code>. They were scaled correctly only when Euclidean
+distances were used, but usually <code>capscale()</code> is used with
+non-Euclidean distances.  Most graphics will change and should be
+redone.  The change of scaling mainly influences the spread of
+species scores with respect to the site scores.
+</p>
+</li>
+<li><p> Function <code>clamtest()</code> failed to set the minimum
+abundance threshold in some cases. In addition, the output was
+wrong when some of the possible species groups were missing. Both
+problems were reported by Richard Telford (Bergen, Norway).
+</p>
+</li>
+<li><p> Plotting an object fitted by <code>envfit()</code> would fail if
+<code>p.max</code> was used and there were unused levels for one or
+more factors. The unused levels could result from deletion of
+observations with missing values or simply as the result of
+supplying a subset of a larger data set to <code>envfit()</code>.
+</p>
+</li>
+<li> <p><code>multipart()</code> printed wrong information about the
+analysis type (but did the analysis correctly). Reported by
+Valerie Coudrain.
+</p>
+</li>
+<li> <p><code>oecosimu()</code> failed if its <code>nestedfun</code> returned a
+data frame. A more fundamental fix will be in <span class="pkg">vegan</span> 2.2-0,
+where the structure of the <code>oecosimu()</code> result will change.
+</p>
+</li>
+<li><p> The plot of two-dimensional <code>procrustes()</code> solutions
+often draw original axes in a wrong angle. The problem was
+reported by Elizabeth Ottesen (MIT).
+</p>
+</li>
+<li><p> Function <code>treedive()</code> for functional or phylogenetic
+diversity did not correctly match the species names between the
+community data and species tree when the tree contained species
+that did not occur in the data.  Related function
+<code>treedist()</code> for phylogenetic distances did not try to match
+the names at all.
+</p>
+</li></ul>
+
+ 
+
+
+<h4>NEW FEATURES</h4>
+
 
 <ul>
-<li> <p><code>anova(&lt;cca_object&gt;, ...)</code> failed with <code>by =
-      "axis"</code> and <code>by = "term"</code>. The bug was reported by Dr Sven
-Neulinger (Christian Albrecht University, Kiel, Germany).
+<li><p> The output of <code>capscale()</code> displays the value of the
+additive constant when argument <code>add = TRUE</code> was used.
+</p>
+</li>
+<li> <p><code>fitted()</code> functions for <code>cca()</code>, <code>rda()</code> and
+<code>capscale()</code> can now return conditioned (partial) component
+of the response: Argument <code>model</code> gained a new alternative
+<code>model = "pCCA"</code>. 
+</p>
+</li>
+<li> <p><code>dispindmorisita()</code> output gained a new column for
+Chi-squared based probabilities that the null hypothesis (random
+distribution) is true.
+</p>
+</li>
+<li> <p><code>metaMDS()</code> and <code>monoMDS()</code> have new default
+convergence criteria. Most importantly, scale factor of the
+gradient (<code>sfgrmin</code>) is stricter. The former limit was too
+slack with large data sets and iterations stopped early without
+getting close to the solution. In addition, <code>scores()</code>
+ignore now requests to dimensions beyond those calculated
+instead of failing, and <code>scores()</code> for <code>metaMDS()</code>
+results do not drop dimensions.
+</p>
+</li>
+<li> <p><code>msoplot()</code> gained <code>legend</code> argument for
+positioning the legend.
+</p>
+</li>
+<li><p> Nestedness function <code>nestednodf()</code> gained a <code>plot</code>
+method.
+</p>
+</li>
+<li> <p><code>ordiR2step()</code> gained new argument <code>R2scope</code>
+(defaults <code>TRUE</code>) which can be used to turn off the criterion
+of stopping when the adjusted <i>R-squared</i> of the current
+model exceeds that of the scope.  This option allows model
+building when the <code>scope</code> would be overdetermined (number of
+predictors higher than number of observations).
+</p>
+<p><code>ordiR2step()</code> now handles partial redundancy analysis
+(pRDA).
+</p>
+</li>
+<li> <p><code>orditorp()</code> gained argument <code>select</code> to select
+the rows or columns of the results to display.
+</p>
+</li>
+<li> <p><code>protest()</code> prints the standardized residual statistic
+<i>squared m12</i> in addition to the squared Procrustes
+correlation <i>R-squared</i>.  Both were calculated, but only
+the latter was displayed.
+</p>
+<p>Permutation tests are much faster in <code>protest()</code>. Instead
+of calling repeatedly <code>procrustes()</code>, the goodness of fit
+statistic is evaluated within the function. 
+</p>
+</li>
+<li> <p><code>wcmdscale()</code> gained methods for <code>print</code>,
+<code>plot</code> etc. of the results. These methods are only used if
+the full <code>wcmdscale</code> result is returned with, e.g., argument
+<code>eig = TRUE</code>. The default is still to return only a matrix of
+scores similarly as the standard <font face="Courier New,Courier" color="#666666"><b>R</b></font> function <code>cmdscale()</code>,
+and in that case the new methods are not used.
+</p>
+</li></ul>
+
+ 
+
+
+<h3>Changes in version 2.0-5</h3>
+
+
+
+<h4>BUG FIXES</h4>
+
+
+<ul>
+<li> <p><code>anova(&lt;cca_object&gt;, ...)</code> failed with
+<code>by = "axis"</code> and <code>by = "term"</code>. The bug was reported by
+Dr Sven Neulinger (Christian Albrecht University, Kiel, Germany).
 </p>
 </li>
 <li> <p><code>radlattice</code> did not honour argument <code>BIC = TRUE</code>,
@@ -32,7 +160,6 @@ but always displayed AIC.
 
 
 <h4>NEW FUNCTIONS</h4>
-
 
 
 <ul>
@@ -68,7 +195,6 @@ also extrapolate.
 <h4>NEW FEATURES</h4>
 
 
-
 <ul>
 <li><p> Labels can now be set in the <code>plot</code> of <code>envfit</code>
 results. The labels must be given in the same order that the
@@ -98,7 +224,6 @@ in the data.  All functions now have methods <code>AIC</code>,
 <h4>INSTALLATION AND BUILDING</h4>
 
 
-
 <ul>
 <li><p> Building of <span class="pkg">vegan</span> vignettes failed with the latest
 version of LaTeX (TeXLive 2012).
@@ -121,9 +246,7 @@ These errors and warnings were triggered by internal changes in
 
 
 
-
 <h4>BUG FIXES</h4>
-
 
 
 <ul>
@@ -148,8 +271,8 @@ et al. 2011 and <span class="pkg">vegan</span> help page.
 <li> <p><code>envfit</code> failed with unused factor levels.
 </p>
 </li>
-<li> <p><code>predict</code> for <code>cca</code> results with <code>type =
-        "response"</code> or <code>type = "working"</code> failed with
+<li> <p><code>predict</code> for <code>cca</code> results with
+<code>type = "response"</code> or <code>type = "working"</code> failed with
 <code>newdata</code> if the number of rows did not match with the
 original data.  Now the <code>newdata</code> is ignored if it has a
 wrong number of rows.  The number of rows must match because
@@ -164,7 +287,6 @@ Reported by Glenn De'ath.
 
 
 <h4>NEW FEATURES</h4>
-
 
 
 <ul>
@@ -237,9 +359,7 @@ argument can be used only with one set of points.
 
 
 
-
 <h4>NEW FUNCTIONS</h4>
-
 
 
 <ul>
@@ -273,7 +393,6 @@ by Eduard Szöcs (Uni Landau, Germany).
 <h4>BUG FIXES</h4>
 
 
-
 <ul>
 <li> <p><code>betadisper()</code> failed when the <code>groups</code> was a
 factor with empty levels.
@@ -303,7 +422,6 @@ was reported as an error in <code>ordiplot</code> in
 
 
 <h4>NEW FEATURES</h4>
-
 
 
 <ul>
@@ -347,9 +465,7 @@ USA).
 
 
 
-
 <h4>BUG FIXES</h4>
-
 
 
 <ul>
@@ -366,10 +482,10 @@ mailing list</a>.
 <li> <p><code>stressplot</code> and <code>goodness</code> sometimes failed when
 <code>metaMDS</code> was based on <code>isoMDS</code> (<span class="pkg">MASS</span> package)
 because <code>metaMDSdist</code> did not use the same defaults for
-step-across (extended) dissimilarities as <code>metaMDS(...,
-     engine = "isoMDS")</code>. The change of defaults can also influence
-triggering of step-across in <code>capscale(..., metaMDSdist =
-     TRUE)</code>.
+step-across (extended) dissimilarities as
+<code>metaMDS(..., engine = "isoMDS")</code>. The change of defaults can
+also influence triggering of step-across in
+<code>capscale(..., metaMDSdist = TRUE)</code>.
 </p>
 </li>
 <li> <p><code>adonis</code> contained a minor bug resulting from
@@ -386,7 +502,6 @@ realised. Reported by Nicholas Lewin-Koh.
 
 
 <h4>NEW FEATURES</h4>
-
 
 
 <ul>
@@ -409,9 +524,7 @@ with no <code>groups</code> they are the LC scores.
 
 
 
-
 <h4>NEW FUNCTIONS</h4>
-
 
 
 <ul>
@@ -447,7 +560,6 @@ and was developed with the consultation of Brian Inouye.
 
 
 <h4>BUG FIXES</h4>
-
 
 
 <ul>
@@ -488,7 +600,6 @@ annoying warnings.
 <h4>ANALYSES</h4>
 
 
-
 <ul>
 <li> <p><code>nesteddisc</code> is slacker and hence faster when trying
 to optimize the statistic for tied column frequencies. Tracing
@@ -504,9 +615,7 @@ early in tries, and the results are equally good in most cases.
 
 
 
-
 <h4>GENERAL</h4>
-
 
 
 <ul>
@@ -537,7 +646,6 @@ feature.
 
 
 <h4>NEW FUNCTIONS</h4>
-
 
 
 <ul>
@@ -595,7 +703,6 @@ models by Dengler (<EM>J. Biogeogr.</EM> 36, 728-744; 2009).
 <h4>NEW FEATURES</h4>
 
 
-
 <ul>
 <li> <p><code>adonis</code>, <code>anosim</code>, <code>meandist</code> and
 <code>mrpp</code> warn on negative dissimilarities, and
@@ -637,7 +744,6 @@ observations.
 <h4>DEPRECATED AND DEFUNCT</h4>
 
 
-
 <ul>
 <li> <p><code>metaMDSrotate</code> was replaced with <code>MDSrotate</code>
 that can also handle the results of <code>monoMDS</code>.
@@ -654,7 +760,6 @@ code in <span class="pkg">vegan</span> should instead depend on <span class="pkg
 
 
 <h4>ANALYSES</h4>
-
 
 
 <ul>

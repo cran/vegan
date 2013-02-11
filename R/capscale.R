@@ -88,8 +88,13 @@
     if (is.null(rownames(X$points))) 
         rownames(X$points) <- nm
     X$points <- adjust * X$points
-    if (adjust == 1)
+    ## We adjust eigenvalues to variances, and simultaneously the
+    ## possible negative axes must be adjusted similarly
+    if (adjust == 1) {
         X$eig <- X$eig/k
+        if (!is.null(X$negaxes))
+            X$negaxes <- X$negaxes/sqrt(k)
+    }
     sol <- rda.default(X$points, d$Y, d$Z, ...)
     if (!is.null(sol$CCA) && sol$CCA$rank > 0) {
         colnames(sol$CCA$u) <- colnames(sol$CCA$biplot) <- names(sol$CCA$eig) <-
@@ -122,14 +127,12 @@
             comm <- qr.resid(sol$pCCA$QR, comm)
         if (!is.null(sol$CCA) && sol$CCA$rank > 0) {
             sol$CCA$v.eig <- t(comm) %*% sol$CCA$u/sqrt(k)
-            sol$CCA$v <- sweep(sol$CCA$v.eig, 2, sqrt(sol$CCA$eig), 
-                               "/")
+            sol$CCA$v <- decostand(sol$CCA$v.eig, "normalize", MARGIN = 2)
             comm <- qr.resid(sol$CCA$QR, comm)
         }
         if (!is.null(sol$CA) && sol$CA$rank > 0) {
             sol$CA$v.eig <- t(comm) %*% sol$CA$u/sqrt(k)
-            sol$CA$v <- sweep(sol$CA$v.eig, 2, sqrt(sol$CA$eig[1:poseig]), 
-                              "/")
+            sol$CA$v <- decostand(sol$CA$v.eig, "normalize", MARGIN = 2)
         }
     } else {
         ## input data were dissimilarities, and no 'comm' defined:

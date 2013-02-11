@@ -34,7 +34,7 @@
   vector, fitted environmental surface, permutation tests}
 
 %% misuse of the address field for revision data
-\Address{$ $Id: intro-vegan.Rnw 2259 2012-08-23 15:13:58Z jarioksa $ $
+\Address{$ $Id: intro-vegan.Rnw 2346 2013-01-07 11:42:36Z jarioksa $ $
   processed with vegan
 \Sexpr{packageDescription("vegan", field="Version")}
 in \Sexpr{R.version.string} on \today}
@@ -55,7 +55,7 @@ options("prompt" = "R> ", "continue" = "+  ")
 
 \tableofcontents
 
-~\\[2ex]
+\vspace{3ex}
 \noindent \pkg{Vegan} is a package for community ecologists.  This
 documents explains how the commonly used ordination methods can be
 performed in \pkg{vegan}.  The document only is a very basic

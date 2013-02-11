@@ -13,17 +13,18 @@
 \usage{
 treedive(comm, tree, match.force = FALSE)
 treeheight(tree)
-treedist(x, tree, relative = TRUE, ...)
+treedist(x, tree, relative = TRUE, match.force = FALSE, ...)
 }
 
 \arguments{
   \item{comm, x}{Community data frame or matrix.}
   \item{tree}{A dendrogram which for \code{treedive} must be for species
     (columns).}
-  \item{match.force}{Force matching of column names in \code{comm} and
-    labels in \code{tree}. If \code{FALSE}, matching only happens when
-    dimensions differ, and in that case the species must be in identical
-    order in both.}
+  \item{match.force}{Force matching of column names in data
+    (\code{comm}, \code{x}) and labels in \code{tree}. If \code{FALSE},
+    matching only happens when dimensions differ (with a warning or
+    message). The order of data must match to the order in \code{tree}
+    if matching by names is not done.}
   \item{relative}{Use distances relative to the height of combined tree.}
   \item{\dots}{Other arguments passed to functions (ignored).}
 }
@@ -99,8 +100,17 @@ treedist(x, tree, relative = TRUE, ...)
 
 \author{Jari Oksanen}
 
-\seealso{ \code{\link{taxondive}} is something very similar from
-another world. }
+\seealso{
+  Function \code{treedive} is similar to the phylogenetic
+  diversity function \code{\link[picante]{pd}} in \pkg{picante}, but
+  excludes tree root if that is not needed to connect species. Function
+  \code{treedist} is similar to the phylogenetic similarity
+  \code{\link[picante]{phylosor}} in \pkg{picante}, but excludes
+  unneeded tree root and returns distances instead of similarities.
+
+  \code{\link{taxondive}} is something very similar from another world.
+}
+
 \examples{
 ## There is no data set on species properties yet, and therefore
 ## the example uses taxonomy 

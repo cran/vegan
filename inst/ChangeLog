@@ -1,7 +1,49 @@
-$Date: 2012-10-07 19:50:53 +0300 (Sun, 07 Oct 2012) $
+$Date: 2013-02-11 09:35:39 +0200 (Mon, 11 Feb 2013) $
 
 VEGAN RELEASE VERSIONS at http://cran.r-project.org/
 
+Version 2.0-6 (released February 11, 2013)
+
+	* merge 2420, 2425: cca cross references.
+	* merge 2417 thru 2419: predict & fitted upgraded for cca etc.  
+	* merge 2414: adjustment in predict.capscale.
+	* merge 2408: FAQ on random effects in cca etc.
+	* merge 2404,2411: refer Legendre & Legendre for the vegan rda
+	algorithm.
+	* merge 2934 (partial, mc): oecosimu handles nestedfun() returning
+	data.frame. Not merged: checking length of statistic when setting
+	its name.
+	* merge 2932,3: matching names in treedive() and treedist().
+	* merge 2388 (partial), 2389, 2390: faster protest, the part of
+	evaluating the test statistic hand crafted, because
+	parallelizations caused conflicts here.
+	* merge 2385, 7: protest print, faster sum of squares in procrustes. 
+	* merge 2384: new FAQ entries.
+	* merge 2383: remove alias to print.wcmdscale.
+	* merge 2374,2376,2378,2382: orditorp gains argument select
+	* merge 2372: ordilabel uses ordiArgAbsorber when plotting
+	* merge 2369: clamtest fix and border cases.
+	* merge 2367: rectify mantel, summary.anosim print.
+	* merge 2362: doc on r2357 for capscale.
+	* merge 2361: adjust imaginary axes similarly as real eigenvalue.
+	* merge 2358: print etc. for wcmdscale (no stressplot parts of
+	2358). 
+	* merge 2357: print additive constant in capscale.
+	* merge 2350: capscale species score scaling bug fix.
+	* merge 2349: multipart print bug fix.
+	* merge 2345: FAQ update (github, metric NMDS space).
+	* merge 2342: unused factor levels in envfit/factorfit.
+	* merge 2341 (partial): visible space in pdf of Rnw files.
+	* merge 2336: stricter monoMDS convergence criteria.
+	* merge 2334,5: scores.monoMDS,metaMDS updates.
+	* merge 2332: add plot.nestednodf().
+	* merge 2330,1: ordiR2step() gained arg 'R2scope' and handles
+	partial RDA.
+	* merge 2328,9: add 'legend' arg to msoplot().
+	* merge 2325: fix rotation of axes in 2-d plot.procrustes().
+	* merge 2319, 2323: clamtest bug fixes and clarifications.
+	* merge 2318: dispindmorista gains p-values of output.
+	
 Version 2.0-5 (released October 8, 2012)
 
 	* merge r2309: anova.cca.Rd edits.

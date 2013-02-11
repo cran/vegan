@@ -25,15 +25,13 @@
         w <- u
     slam <- diag(sqrt(object[[model]]$eig[1:take] * nr), nrow = take)
     if (type %in% c("response", "working")) {
-        if (!is.null(object$pCCA)) 
-            warning("Conditional ('partial') component ignored")
         if (!missing(newdata)) {
             u <- predict(object, type = if(model == "CCA") "lc" else "wa",
                          newdata = newdata, rank = take)
         }
         if (inherits(object, "capscale")) {
             if (take > 0) {
-                out <- u %*% slam/sqrt(nr)
+                out <- u %*% slam/object$adjust
                 if (type == "response") {
                     out <- dist(out)
                     if (!is.null(object$ac))
