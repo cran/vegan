@@ -206,13 +206,21 @@ capscale(formula, data, distance = "euclidean", sqrt.dist = FALSE,
   \code{squared} is added to the name of distance, unless data were
   square root transformed (argument \code{sqrt.dist = TRUE}). If an
   additive constant was used, keyword \code{euclidified} is added to the
-  the name of inertia (argument \code{add = TRUE}).
+  the name of inertia, and the value of the constant is printed
+ (argument \code{add = TRUE}).
 }
 
 
 \seealso{\code{\link{rda}}, \code{\link{cca}}, \code{\link{plot.cca}},
   \code{\link{anova.cca}}, \code{\link{vegdist}},
-  \code{\link{dist}}, \code{\link{cmdscale}}.}
+  \code{\link{dist}}, \code{\link{cmdscale}}.
+
+  The function returns similar result object as \code{\link{rda}} (see
+  \code{\link{cca.object}}). This section for \code{\link{rda}} gives a
+  more complete list of functions that can be used to access and
+  analyse \code{capscale} results.
+
+}
 \examples{
 data(varespec)
 data(varechem)

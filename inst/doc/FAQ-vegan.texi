@@ -8,7 +8,7 @@
 @setfilename FAQ-@pkg{vegan}.info
 @settitle @pkg{vegan} FAQ
 @setchapternewpage on
-@set FAQ_YEAR 2012
+@set FAQ_YEAR 2013
 @afourpaper
 @c %**end of header
 
@@ -16,7 +16,7 @@
 @ifnottex
 This document contains answers to some of the most frequently asked
 questions about R package @pkg{vegan}. 
-This is version of $Date: 2012-05-27 18:15:38 +0300 (Sun, 27 May 2012) $.
+This is version of $Date: 2013-02-07 19:55:39 +0200 (Thu, 07 Feb 2013) $.
 @end ifnottex
 
 @quotation
@@ -26,7 +26,7 @@ License. To view a copy of this license, visit
 Creative Commons, 543 Howard Street, 5th Floor, San Francisco,
 California, 94105, USA.
 
-Copyright @copyright{} 2008-2012 Jari Oksanen
+Copyright @copyright{} 2008-2013 Jari Oksanen
 @end quotation
 @end copying
 
@@ -40,7 +40,7 @@ Copyright @copyright{} 2008-2012 Jari Oksanen
 @titlepage
 @title @pkg{vegan} @acronym{FAQ}
 @subtitle Frequently Asked Questions on R package @pkg{vegan}
-@subtitle Version of $Date: 2012-05-27 18:15:38 +0300 (Sun, 27 May 2012) $ 
+@subtitle Version of $Date: 2013-02-07 19:55:39 +0200 (Thu, 07 Feb 2013) $ 
 @author Jari Oksanen
 
 @vskip 0pt plus 1fill
@@ -81,9 +81,11 @@ Copyright @copyright{} 2008-2012 Jari Oksanen
 * How to cite @pkg{vegan}?::    
 * How to build @pkg{vegan} from sources?::  
 * Are there binaries for devel versions?::  
+* Can I use @pkg{vegan} in Mac?::  
 * How to report a bug in @pkg{vegan}?::  
 * Is it a bug or a feature?::   
 * Can I contribute to @pkg{vegan}?::  
+* Can I have write access to @pkg{vegan} repository?::  
 @end menu
 
 @node What is @pkg{vegan}?, What is R?, Introduction, Introduction
@@ -230,7 +232,7 @@ documentation.  @pkg{Vegan} contains source files in C and @acronym{FORTRAN},
 and you need appropriate compilers (which may need more work in Windows
 and MacOS X).
 
-@node Are there binaries for devel versions?, How to report a bug in @pkg{vegan}?, How to build @pkg{vegan} from sources?, Introduction
+@node Are there binaries for devel versions?, Can I use @pkg{vegan} in Mac?, How to build @pkg{vegan} from sources?, Introduction
 @section Are there binaries for devel versions?
 
 @uref{http://r-forge.r-project.org/projects/vegan/,,R-Forge} runs daily
@@ -241,7 +243,20 @@ packages within R with command
 If you use GUI menu entry, you must select or define the R-Forge
 repository. 
 
-@node How to report a bug in @pkg{vegan}?, Is it a bug or a feature?, Are there binaries for devel versions?, Introduction
+@node Can I use @pkg{vegan} in Mac?, How to report a bug in @pkg{vegan}?, Are there binaries for devel versions?, Introduction
+@section Can I use @pkg{vegan} in Mac?
+
+Yes, you can, and @pkg{vegan} binaries are available for Mac through
+@uref{http://cran.r-project.org,,CRAN}. However, in some cases you may
+need to install extra tools packages available in
+@uref{http://cran.r-project.org/bin/macosx/tools/,,MacOS tools} pages:
+If you use function such as @code{orditkplot} that need @code{Tcl/Tk}
+you may need to install @code{tcltk} package.  If you use @pkg{vegan}
+binaries from other places than from
+@uref{http://cran.r-project.org,,CRAN}, you may also need to install
+@code{gfortran} package.
+
+@node How to report a bug in @pkg{vegan}?, Is it a bug or a feature?, Can I use @pkg{vegan} in Mac?, Introduction
 @section How to report a bug in @pkg{vegan}?
 
 If you think you have found a bug in @pkg{vegan}, you should report it to
@@ -273,7 +288,7 @@ instance, function @code{vegdist} always calculates quantitative
 indices (when this is possible). If you expect it to calculate a
 binary index, you should use argument @code{binary = TRUE}.
 
-@node Can I contribute to @pkg{vegan}?,  , Is it a bug or a feature?, Introduction
+@node Can I contribute to @pkg{vegan}?, Can I have write access to @pkg{vegan} repository?, Is it a bug or a feature?, Introduction
 @section Can I contribute to @pkg{vegan}?
 
 @pkg{Vegan} is dependent on user contribution.  All feedback is welcome.  If
@@ -288,21 +303,39 @@ Contributed code and functions are welcome and more certain to be
 included than mere requests.  However, not all functions will be added,
 but I they must be suitable for @pkg{vegan}.  We also audit the code, and
 typically we edit the code in @pkg{vegan} style for easier maintenance.  All
-included contributions will be credited.  
+included contributions will be credited.
+
+@node Can I have write access to @pkg{vegan} repository?,  , Can I contribute to @pkg{vegan}?, Introduction
+@section Can I have write access to @pkg{vegan} repository?
+
+The @pkg{vegan} development happens mainly in
+@uref{http://r-forge.r-project.org/,,R-Forge} which uses subversion for
+version control.  Subversion is a centralized version control system,
+and only @pkg{vegan} developers can have write access to the central
+repository. However, the @uref{http://r-forge.r-project.org/,,R-Forge}
+is mirrored in
+@uref{https://github.com/jarioksa/vegan.git,,GitHub}. This is a
+distributed version control system and freely accessible for anybody. We
+suggest you develop your own ideas in
+@uref{https://github.com/jarioksa/vegan.git,,GitHub} and send a pull
+request to us for incorporating your changes in @pkg{vegan} releases.
 
 @node Ordination, Other analysis methods , Introduction, Top
 @chapter Ordination
 
 @menu
-* I have only numeric and positive data but @pkg{vegan} still complaints::  
+* I have only numeric and positive data but @pkg{vegan} still complains::  
 * Can I analyse binary or cover class data?::  
 * Why dissimilarities in @pkg{vegan} differ from other sources?::  
 * Why NMDS stress is sometimes 0.1 and sometimes 10?::  
 * I get zero stress but no convergent solutions in @code{metaMDS}::  
 * Zero dissimilarities in isoMDS::  
+* I have heard that you cannot fit environmental vectors or surfaces to NMDS results which only have rank-order scores::  
+* Where can I find numerical scores of ordination axes?::  
 * How the RDA results are scaled?::  
 * cca fails with ``data.frame expected'' or ``"site.env" missing''::  
 * Variance explained by ordination axes::  
+* Can I have random effects in constrained ordination or in @code{adonis}?::  
 * Is it possible to have passive points in ordination?::  
 * Class variables and dummies::  
 * How are environmental arrows scaled?::  
@@ -316,9 +349,9 @@ included contributions will be credited.
 * Can I zoom into an ordination plot?::  
 @end menu
 
-@node  I have only numeric and positive data but @pkg{vegan} still complaints, Can I analyse binary or cover class data?, Ordination, Ordination
+@node  I have only numeric and positive data but @pkg{vegan} still complains, Can I analyse binary or cover class data?, Ordination, Ordination
 @comment  node-name,  next,  previous,  up
-@section I have only numeric and positive data but @pkg{vegan} still complaints
+@section I have only numeric and positive data but @pkg{vegan} still complains
 
 You are wrong! Computers are painfully pedantic, and if they find
 non-numeric or negative data entries, you really have them. Check your
@@ -329,7 +362,7 @@ were interpreted as data (check argument @code{header = TRUE} in reading
 the data). Another common reason is that you had empty cells in your
 input data, and these were interpreted as missing values.
 
-@node Can I analyse binary or cover class data?, Why dissimilarities in @pkg{vegan} differ from other sources?, I have only numeric and positive data but @pkg{vegan} still complaints, Ordination
+@node Can I analyse binary or cover class data?, Why dissimilarities in @pkg{vegan} differ from other sources?, I have only numeric and positive data but @pkg{vegan} still complains, Ordination
 @section Can I analyse binary or cover class data?
 
 Yes. Most @pkg{vegan} methods can handle binary data or cover abundance data.
@@ -388,7 +421,7 @@ However, higher number of dimensions can be used in metric scaling, both
 with @code{monoMDS} and in principal coordinates analysis
 (@code{cmdscale} in @pkg{stats}, @code{wcmdscale} in @pkg{vegan}).
 
-@node Zero dissimilarities in isoMDS, How the RDA results are scaled?, I get zero stress but no convergent solutions in @code{metaMDS}, Ordination
+@node Zero dissimilarities in isoMDS, I have heard that you cannot fit environmental vectors or surfaces to NMDS results which only have rank-order scores, I get zero stress but no convergent solutions in @code{metaMDS}, Ordination
 @section Zero dissimilarities in isoMDS
 
 Function @code{metaMDS} uses function @code{monoMDS} as its default
@@ -406,7 +439,36 @@ non-unique sites can have zero dissimilarity, and you have to resort to
 the kluge (or work harder with your data). Usually it is better to use
 @code{monoMDS}.
 
-@node How the RDA results are scaled?, cca fails with ``data.frame expected'' or ``"site.env" missing'', Zero dissimilarities in isoMDS, Ordination
+@node I have heard that you cannot fit environmental vectors or surfaces to NMDS results which only have rank-order scores, Where can I find numerical scores of ordination axes?, Zero dissimilarities in isoMDS, Ordination
+@section I have heard that you cannot fit environmental vectors or surfaces to NMDS results which only have rank-order scores
+
+Claims like this have indeed been at large in the Internet, but they are
+based on grave misunderstanding and are plainly wrong. @acronym{NMDS}
+ordination results are strictly metric, and in @pkg{vegan}
+@code{metaMDS} and @code{monoMDS} they are even strictly Euclidean. The
+method is called ``non-metric'' because the Euclidean distances in
+ordination space have a non-metric rank-order relationship to community
+dissimilarities. You can inspect this non-linear step curve using
+function @code{stressplot} in @pkg{vegan}. Because the ordination scores
+are strictly Euclidean, it is correct to use @pkg{vegan} functions
+@code{envfit} and @code{ordisurf} with @acronym{NMDS} results.
+
+@node Where can I find numerical scores of ordination axes?, How the RDA results are scaled?, I have heard that you cannot fit environmental vectors or surfaces to NMDS results which only have rank-order scores, Ordination
+@section Where can I find numerical scores of ordination axes?
+
+Normally you can use function @code{scores} to extract ordination scores
+for any ordination method. The @code{scores} function can also find
+ordination scores for many non-@pkg{vegan} functions such as for
+@code{prcomp} and @code{princomp} and for some @pkg{ade4} functions.
+
+In some cases the ordination result object stores raw scores, and
+the axes are also scaled appropriate when you access them with
+@code{scores}.  For instance, in @code{cca} and @code{rda} the
+ordination object has only so-called normalized scores, and they are
+scaled for ordination plots or for other use when they are accessed with
+@code{scores}. 
+
+@node How the RDA results are scaled?, cca fails with ``data.frame expected'' or ``"site.env" missing'', Where can I find numerical scores of ordination axes?, Ordination
 @section How the @acronym{RDA} results are scaled?
 
 The scaling or @acronym{RDA} results indeed differ from most other
@@ -427,7 +489,7 @@ can use the @pkg{vegan} version using command @code{vegan::cca()}. If
 you do not need package @pkg{ade4}, you can detach it with command
 @code{detach(package:ade4)}.
 
-@node Variance explained by ordination axes, Is it possible to have passive points in ordination?, cca fails with ``data.frame expected'' or ``"site.env" missing'', Ordination
+@node Variance explained by ordination axes, Can I have random effects in constrained ordination or in @code{adonis}?, cca fails with ``data.frame expected'' or ``"site.env" missing'', Ordination
 @section Variance explained by ordination axes.
 
 In general, @pkg{vegan} does not directly give any statistics on the
@@ -486,7 +548,46 @@ nonlinear fit and gives this statistic.
 
 @end itemize
 
-@node Is it possible to have passive points in ordination?, Class variables and dummies, Variance explained by ordination axes, Ordination
+@node Can I have random effects in constrained ordination or in @code{adonis}?, Is it possible to have passive points in ordination?, Variance explained by ordination axes, Ordination
+@section Can I have random effects in constrained ordination or in @code{adonis}?
+
+No. Strictly speaking, this is impossible. However, you can define
+models that respond to similar goals as random effects models, although
+they strictly speaking use only fixed effects.
+
+Constrained ordination functions @code{cca}, @code{rda} and
+@code{capscale} can have @code{Condition()} terms in their formula. The
+@code{Condition()} define partial terms that are fitted before other
+constraints and can be used to remove the effects of background
+variables, and their contribution to decomposing inertia (variance) is
+reported separately.  These partial terms are often regarded as similar
+to random effects, but they are still fitted in the same way as other
+terms and strictly speaking they are fixed terms.
+
+Function @code{adonis} evaluates terms sequentially. In a model with
+right-hand-side @code{~ A + B} the effects of @code{A} are evaluated
+first, and the effects of @code{B} after removing the effects of
+@code{A}. Sequential tests are also available in @code{anova} function
+for constrained ordination results by setting argument @code{by = "term"}.  
+In this way, the first terms can serve in a similar role as
+random effects, although they are fitted in the same way as all other
+terms, and strictly speaking they are fixed terms.
+
+The permutation tests can usually have a @code{strata} argument which
+restricts the permutations within levels of a factor given in the
+argument. This can be used to restrict the permutations within levels of
+factor regarded as a random term.  More structured permutations are
+available with the @pkg{permute} package.
+
+A major reason why real random effects models are impossible in most
+@pkg{vegan} functions is that their tests are based on the permutation
+of the data. The data are given, that is fixed, and therefore
+permutation tests are basically tests of fixed terms on fixed data.
+Random effect terms would require permutations of data with a random
+component instead of the given, fixed data, and such tests are not
+available in @pkg{vegan}.
+
+@node Is it possible to have passive points in ordination?, Class variables and dummies, Can I have random effects in constrained ordination or in @code{adonis}?, Ordination
 @section Is it possible to have passive points in ordination?
 
 @pkg{Vegan} does not have a concept of passive points, or a point that should
