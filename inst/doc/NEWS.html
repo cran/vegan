@@ -8,6 +8,82 @@
 
 <h2>vegan News</h2>
 
+<h3>Changes in version 2.0.7</h3>
+
+
+
+<h4>NEW FUNCTIONS</h4>
+
+
+<ul>
+<li> <p><code>tabasco()</code> is a new function for graphical display
+of community data matrix.  Technically it is an interface to <font face="Courier New,Courier" color="#666666"><b>R</b></font>
+<code>heatmap</code>, but its use is closer to <span class="pkg">vegan</span> function
+<code>vegemite</code>. The function can reorder the community data
+matrix similarly as <code>vegemite</code>, for instance, by ordination
+results. Unlike <code>heatmap</code>, it only displays dendrograms if
+supplied by the user, and it defaults to re-order the
+dendrograms by correspondence analysis.  Species are ordered to
+match site ordering or like determined by the user.
+</p>
+</li></ul>
+
+ 
+
+
+<h4>BUG FIXES</h4>
+
+
+<ul>
+<li><p> Function <code>fitspecaccum(..., model = "asymp")</code> fitted
+logistic model instead of asymptotic model (or the same as 
+<code>model = "logis"</code>).
+</p>
+</li>
+<li> <p><code>nestedtemp()</code> failed with very sparse data (fill
+<i>&lt; 0.38</i>%).
+</p>
+</li></ul>
+
+ 
+
+
+<h4>NEW FEATURES</h4>
+
+
+<ul>
+<li><p> The <code>plot</code> function for constrained ordination
+results (<code>cca</code>, <code>rda</code>, <code>capscale</code>) gained
+argument <code>axis.bp</code> (defaults <code>TRUE</code>) which can be used
+to suppress axis scale for biplot arrays.
+</p>
+</li>
+<li><p> Number of iterations in nonmetric multidimensional scaling
+(NMDS) can be set with keyword <code>maxit</code> (defaults
+<code>200</code>) in <code>metaMDS</code>.
+</p>
+</li></ul>
+
+ 
+
+
+<h4>DEPRECATED</h4>
+
+
+<ul>
+<li><p> The result objects of <code>cca</code>, <code>rda</code> and
+<code>capscale</code> will no longer have scores <code>u.eig</code>,
+<code>v.eig</code> and <code>wa.eig</code> in the future versions of
+<span class="pkg">vegan</span>. This change does not influence normal usage,
+because <span class="pkg">vegan</span> functions do not need these items.  However,
+external scripts and packages may need changes in the future
+versions of <span class="pkg">vegan</span>.
+</p>
+</li></ul>
+   
+ 
+
+
 <h3>Changes in version 2.0-6</h3>
 
 

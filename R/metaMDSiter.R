@@ -1,6 +1,6 @@
 `metaMDSiter` <-
     function (dist, k = 2, trymax = 20, trace = 1, plot = FALSE, 
-              previous.best, engine = "monoMDS", ...) 
+              previous.best, engine = "monoMDS", maxit = 200, ...) 
 {
     engine <- match.arg(engine, c("monoMDS", "isoMDS"))
     if (engine == "isoMDS")
@@ -49,8 +49,10 @@
     } else {
         ## no previous.best: start with cmdscale
         s0 <- switch(engine,
-                 "monoMDS" = monoMDS(dist, y = cmdscale(dist, k = k), k = k, ...),
-                 "isoMDS" = isoMDS(dist, k = k, trace = isotrace))
+                 "monoMDS" = monoMDS(dist, y = cmdscale(dist, k = k), k = k,
+                 maxit = maxit, ...),
+                 "isoMDS" = isoMDS(dist, k = k, trace = isotrace,
+                 maxit = maxit))
     }
     if (trace) 
         cat("Run 0 stress", s0$stress, "\n")
@@ -58,9 +60,9 @@
     while(tries < trymax) {
         tries <- tries + 1
         stry <- switch(engine,
-                       "monoMDS" = monoMDS(dist, k = k, maxit = 200, ...),
+                       "monoMDS" = monoMDS(dist, k = k, maxit = maxit, ...),
                        "isoMDS" = isoMDS(dist, initMDS(dist, k = k), k = k,
-                       maxit = 200, tol = 1e-07, trace = isotrace))
+                       maxit = maxit, tol = 1e-07, trace = isotrace))
         if (trace) {
             cat("Run", tries, "stress", stry$stress, "\n")
         }

@@ -41,7 +41,7 @@ metaMDSdist(comm, distance = "bray", autotransform = TRUE,
     noshare = TRUE, trace = 1, commname, zerodist = "ignore", 
     distfun = vegdist, ...)
 metaMDSiter(dist, k = 2, trymax = 20, trace = 1, plot = FALSE, 
-    previous.best, engine = "monoMDS", ...)   
+    previous.best, engine = "monoMDS", maxit = 200, ...)   
 initMDS(x, k=2)
 postMDS(X, dist, pc=TRUE, center=TRUE, halfchange, threshold=0.8,
     nthreshold=10, plot=FALSE, ...)
@@ -119,6 +119,11 @@ metaMDSredist(object, ...)
  \item{distfun}{Dissimilarity function. Any function returning a
    \code{dist} object and accepting argument \code{method} can be used
    (but some extra arguments may cause name conflicts).}
+
+ \item{maxit}{Maximum number of iterations in the single NMDS run;
+   passed to the \code{engine} function \code{\link{monoMDS}} or
+   \code{\link[MASS]{isoMDS}}.}
+
  \item{dist}{Dissimilarity matrix used in multidimensional scaling. }
   \item{pc}{Rotate to principal components. }
   \item{center}{Centre the configuration. }
