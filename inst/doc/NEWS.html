@@ -8,11 +8,62 @@
 
 <h2>vegan News</h2>
 
-<h3>Changes in version 2.0.7</h3>
+<h3>Changes in version 2.0-8</h3>
+
+
+
+
+<h4>GENERAL</h4>
+
+
+
+<ul>
+<li><p> This is a maintenance release that fixes some issues
+raised by changed in <font face="Courier New,Courier" color="#666666"><b>R</b></font> toolset for processing vignettes.  In
+the same we also fix some typographic issues in the vignettes.
+</p>
+</li></ul>
+
+ 
+
+
+<h4>NEW FEATURES</h4>
+
+
+
+<ul>
+<li> <p><code>ordisurf</code> gained new arguments for more flexible
+definition of fitted models to better utilize the
+<span class="pkg">mgcv</span><code>::gam</code> function. 
+</p>
+<p>The linewidth of contours can
+now be set with the argument <code>lwd</code>.
+</p>
+</li>
+<li><p> Labels to arrows are positioned in a better way in
+<code>plot</code> functions for the results of <code>envfit</code>,
+<code>cca</code>, <code>rda</code> and <code>capscale</code>. The labels should no
+longer overlap the arrow tips.
+</p>
+</li>
+<li><p> The setting test direction is clearer in <code>oecosimu</code>.
+</p>
+</li>
+<li> <p><code>ordipointlabel</code> gained a <code>plot</code> method that can
+be used to replot the saved result.
+</p>
+</li></ul>
+
+ 
+
+
+<h3>Changes in version 2.0-7</h3>
+
 
 
 
 <h4>NEW FUNCTIONS</h4>
+
 
 
 <ul>
@@ -34,6 +85,7 @@ match site ordering or like determined by the user.
 <h4>BUG FIXES</h4>
 
 
+
 <ul>
 <li><p> Function <code>fitspecaccum(..., model = "asymp")</code> fitted
 logistic model instead of asymptotic model (or the same as 
@@ -49,6 +101,7 @@ logistic model instead of asymptotic model (or the same as
 
 
 <h4>NEW FEATURES</h4>
+
 
 
 <ul>
@@ -70,6 +123,7 @@ to suppress axis scale for biplot arrays.
 <h4>DEPRECATED</h4>
 
 
+
 <ul>
 <li><p> The result objects of <code>cca</code>, <code>rda</code> and
 <code>capscale</code> will no longer have scores <code>u.eig</code>,
@@ -88,7 +142,9 @@ versions of <span class="pkg">vegan</span>.
 
 
 
+
 <h4>BUG FIXES</h4>
+
 
 
 <ul>
@@ -141,6 +197,7 @@ the names at all.
 
 
 <h4>NEW FEATURES</h4>
+
 
 
 <ul>
@@ -218,7 +275,9 @@ and in that case the new methods are not used.
 
 
 
+
 <h4>BUG FIXES</h4>
+
 
 
 <ul>
@@ -236,6 +295,7 @@ but always displayed AIC.
 
 
 <h4>NEW FUNCTIONS</h4>
+
 
 
 <ul>
@@ -271,6 +331,7 @@ also extrapolate.
 <h4>NEW FEATURES</h4>
 
 
+
 <ul>
 <li><p> Labels can now be set in the <code>plot</code> of <code>envfit</code>
 results. The labels must be given in the same order that the
@@ -300,6 +361,7 @@ in the data.  All functions now have methods <code>AIC</code>,
 <h4>INSTALLATION AND BUILDING</h4>
 
 
+
 <ul>
 <li><p> Building of <span class="pkg">vegan</span> vignettes failed with the latest
 version of LaTeX (TeXLive 2012).
@@ -322,7 +384,9 @@ These errors and warnings were triggered by internal changes in
 
 
 
+
 <h4>BUG FIXES</h4>
+
 
 
 <ul>
@@ -363,6 +427,7 @@ Reported by Glenn De'ath.
 
 
 <h4>NEW FEATURES</h4>
+
 
 
 <ul>
@@ -435,7 +500,9 @@ argument can be used only with one set of points.
 
 
 
+
 <h4>NEW FUNCTIONS</h4>
+
 
 
 <ul>
@@ -469,6 +536,7 @@ by Eduard Szöcs (Uni Landau, Germany).
 <h4>BUG FIXES</h4>
 
 
+
 <ul>
 <li> <p><code>betadisper()</code> failed when the <code>groups</code> was a
 factor with empty levels.
@@ -498,6 +566,7 @@ was reported as an error in <code>ordiplot</code> in
 
 
 <h4>NEW FEATURES</h4>
+
 
 
 <ul>
@@ -541,7 +610,9 @@ USA).
 
 
 
+
 <h4>BUG FIXES</h4>
+
 
 
 <ul>
@@ -580,6 +651,7 @@ realised. Reported by Nicholas Lewin-Koh.
 <h4>NEW FEATURES</h4>
 
 
+
 <ul>
 <li> <p><code>ordiarrows</code> and <code>ordisegments</code> gained argument
 <code>order.by</code> that gives a variable to sort points within
@@ -600,7 +672,9 @@ with no <code>groups</code> they are the LC scores.
 
 
 
+
 <h4>NEW FUNCTIONS</h4>
+
 
 
 <ul>
@@ -636,6 +710,7 @@ and was developed with the consultation of Brian Inouye.
 
 
 <h4>BUG FIXES</h4>
+
 
 
 <ul>
@@ -676,6 +751,7 @@ annoying warnings.
 <h4>ANALYSES</h4>
 
 
+
 <ul>
 <li> <p><code>nesteddisc</code> is slacker and hence faster when trying
 to optimize the statistic for tied column frequencies. Tracing
@@ -691,7 +767,9 @@ early in tries, and the results are equally good in most cases.
 
 
 
+
 <h4>GENERAL</h4>
+
 
 
 <ul>
@@ -722,6 +800,7 @@ feature.
 
 
 <h4>NEW FUNCTIONS</h4>
+
 
 
 <ul>
@@ -779,6 +858,7 @@ models by Dengler (<EM>J. Biogeogr.</EM> 36, 728-744; 2009).
 <h4>NEW FEATURES</h4>
 
 
+
 <ul>
 <li> <p><code>adonis</code>, <code>anosim</code>, <code>meandist</code> and
 <code>mrpp</code> warn on negative dissimilarities, and
@@ -820,6 +900,7 @@ observations.
 <h4>DEPRECATED AND DEFUNCT</h4>
 
 
+
 <ul>
 <li> <p><code>metaMDSrotate</code> was replaced with <code>MDSrotate</code>
 that can also handle the results of <code>monoMDS</code>.
@@ -836,6 +917,7 @@ code in <span class="pkg">vegan</span> should instead depend on <span class="pkg
 
 
 <h4>ANALYSES</h4>
+
 
 
 <ul>

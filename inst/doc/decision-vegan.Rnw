@@ -8,6 +8,7 @@
 %\usepackage[utf8x]{inputenc}
 %\usepackage[T1]{fontenc}
 \usepackage{sidecap}
+\usepackage[english]{babel} % kluge to avoid visible ~ in Figure~1.
 \renewcommand{\floatpagefraction}{0.8}
 \renewcommand{\cite}{\citep}
 
@@ -21,7 +22,7 @@ another document.
  \Keywords{nestdness, matrix temperature, community null models, scaling of PCA and RDA, WA
    and LC scores}
 %% hijack Address for version info
-\Address{$ $Id: decision-vegan.Rnw 1709 2011-08-10 15:48:21Z jarioksa $ $
+\Address{$ $Id: decision-vegan.Rnw 2544 2013-07-09 13:07:03Z jarioksa $ $
   processed with vegan
 \Sexpr{packageDescription("vegan", field="Version")}
 in \Sexpr{R.version.string} on \today}

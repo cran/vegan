@@ -251,7 +251,11 @@ commsimulator(x, method, thin=1)
 ## Use the first eigenvalue of correspondence analysis as an index
 ## of structure: a model for making your own functions.
 data(sipoo)
-out <- oecosimu(sipoo, decorana, "swap", burnin=100, thin=10, statistic="evals")
+## Traditional nestedness statistics (number of checkerboard units)
+oecosimu(sipoo, nestedchecker, "r0")
+## sequential model, one-sided test, a vector statistic
+out <- oecosimu(sipoo, decorana, "swap", burnin=100, thin=10, 
+   statistic="evals", alt = "greater")
 out
 ## Inspect the swap sequence as a time series object
 plot(as.ts(out))

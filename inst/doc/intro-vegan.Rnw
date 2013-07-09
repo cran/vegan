@@ -7,6 +7,7 @@
 \usepackage[T1]{fontenc}
 \usepackage{sidecap}
 \usepackage{amsmath}
+\usepackage[english]{babel} % kluge to avoid visible ~ in Figure~1
 
 \renewcommand{\floatpagefraction}{0.8}
 
@@ -34,7 +35,7 @@
   vector, fitted environmental surface, permutation tests}
 
 %% misuse of the address field for revision data
-\Address{$ $Id: intro-vegan.Rnw 2346 2013-01-07 11:42:36Z jarioksa $ $
+\Address{$ $Id: intro-vegan.Rnw 2544 2013-07-09 13:07:03Z jarioksa $ $
   processed with vegan
 \Sexpr{packageDescription("vegan", field="Version")}
 in \Sexpr{R.version.string} on \today}

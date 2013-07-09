@@ -7,6 +7,7 @@
 \usepackage[T1]{fontenc}
 \usepackage{sidecap}
 \usepackage{amsmath}
+\usepackage[english]{babel} % kluge to avoid visible ~ in Figure~1
 
 \renewcommand{\floatpagefraction}{0.8}
 
@@ -34,10 +35,10 @@
   vector, fitted environmental surface, permutation tests}
 
 %% misuse of the address field for revision data
-\Address{$ $Id: intro-vegan.Rnw 2346 2013-01-07 11:42:36Z jarioksa $ $
+\Address{$ $Id: intro-vegan.Rnw 2544 2013-07-09 13:07:03Z jarioksa $ $
   processed with vegan
-2.0-7
-in R Under development (unstable) (2013-03-19 r62316) on \today}
+2.0-8
+in R version 2.15.2 (2012-10-26) on \today}
 \Footername{About this version}
 
 %% need no \usepackage{Sweave}
@@ -127,13 +128,13 @@ R> ord <- metaMDS(dune)
 \end{Sinput}
 \begin{Soutput}
 Run 0 stress 0.1192678 
-Run 1 stress 0.1183192 
+Run 1 stress 0.1183186 
 ... New best solution
-... procrustes: rmse 0.02026651  max resid 0.06495143 
-Run 2 stress 0.2341212 
-Run 3 stress 0.1183186 
-... New best solution
-... procrustes: rmse 0.0001039632  max resid 0.0003313083 
+... procrustes: rmse 0.02027255  max resid 0.06496656 
+Run 2 stress 0.2365793 
+Run 3 stress 0.1192679 
+Run 4 stress 0.1183186 
+... procrustes: rmse 2.370994e-05  max resid 7.296709e-05 
 *** Solution reached
 \end{Soutput}
 \begin{Sinput}
@@ -151,7 +152,7 @@ Distance: bray
 Dimensions: 2 
 Stress:     0.1183186 
 Stress type 1, weak ties
-Two convergent solutions found after 3 tries
+Two convergent solutions found after 4 tries
 Scaling: centring, PC rotation, halfchange scaling 
 Species: expanded scores based on ‘dune’ 
 \end{Soutput}
@@ -310,9 +311,9 @@ R> ord.fit
 ***VECTORS
 
      NMDS1   NMDS2     r2  Pr(>r)  
-A1 0.96474 0.26320 0.3649 0.01898 *
+A1 0.96476 0.26313 0.3649 0.02498 *
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 P values based on 1000 permutations.
 
 ***FACTORS:
@@ -322,13 +323,13 @@ Centroids:
 ManagementBF -0.4534 -0.0102
 ManagementHF -0.2636 -0.1282
 ManagementNM  0.2958  0.5790
-ManagementSF  0.1506 -0.4670
+ManagementSF  0.1505 -0.4670
 
 Goodness of fit:
-               r2  Pr(>r)   
-Management 0.4134 0.00999 **
+               r2   Pr(>r)   
+Management 0.4134 0.004995 **
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 P values based on 1000 permutations.
 \end{Soutput}
 \end{Schunk}
@@ -353,13 +354,13 @@ Family: gaussian
 Link function: identity 
 
 Formula:
-y ~ s(x1, x2, k = knots)
-<environment: 0x41bc858>
+y ~ s(x1, x2, k = 10, bs = "tp", fx = FALSE)
+<environment: 0x26ddd70>
 
 Estimated degrees of freedom:
-2  total = 3 
+1.59  total = 2.59 
 
-GCV score: 3.965441
+REML score: 41.58727
 \end{Soutput}
 \end{Schunk}
 \begin{SCfigure}
@@ -475,7 +476,7 @@ Model: cca(formula = dune ~ A1 + Management, data = dune.env)
 Model     4 0.7798 2.1896    199  0.005 **
 Residual 15 1.3355                        
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 \end{Soutput}
 \end{Schunk}
 The function actually used was \code{anova.cca}, but you do not need
@@ -500,11 +501,11 @@ Terms added sequentially (first to last)
 
 Model: cca(formula = dune ~ A1 + Management, data = dune.env)
            Df  Chisq      F N.Perm Pr(>F)   
-A1          1 0.2248 2.5245    199  0.005 **
+A1          1 0.2248 2.5245    199  0.015 * 
 Management  3 0.5550 2.0780    199  0.005 **
 Residual   15 1.3355                        
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 \end{Soutput}
 \end{Schunk}
 In this case, the function is unable to automatically select the
@@ -520,12 +521,12 @@ Permutation test for cca under reduced model
 Marginal effects of terms
 
 Model: cca(formula = dune ~ A1 + Management, data = dune.env)
-           Df  Chisq      F N.Perm  Pr(>F)   
-A1          1 0.1759 1.9761   1399 0.03429 * 
-Management  3 0.5550 2.0780    199 0.00500 **
-Residual   15 1.3355                         
+           Df  Chisq      F N.Perm Pr(>F)   
+A1          1 0.1759 1.9761    199  0.005 **
+Management  3 0.5550 2.0780    199  0.005 **
+Residual   15 1.3355                        
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 \end{Soutput}
 \end{Schunk}
 
@@ -539,11 +540,11 @@ Model: cca(formula = dune ~ A1 + Management, data = dune.env)
          Df  Chisq      F N.Perm Pr(>F)   
 CCA1      1 0.3187 3.5801    199  0.005 **
 CCA2      1 0.2372 2.6640    199  0.010 **
-CCA3      1 0.1322 1.4845     99  0.210   
-CCA4      1 0.0917 1.0297     99  0.370   
+CCA3      1 0.1322 1.4845     99  0.160   
+CCA4      1 0.0917 1.0297     99  0.400   
 Residual 15 1.3355                        
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 \end{Soutput}
 \end{Schunk}
 Now the automatic selection works, but typically some of your axes
@@ -600,7 +601,7 @@ A1          1 0.1154 1.4190     99   0.09 .
 Management  3 0.3954 1.6205     99   0.02 *
 Residual   12 0.9761                       
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 \end{Soutput}
 \end{Schunk}
 If we had a designed experiment, we may wish to restrict the
@@ -616,12 +617,12 @@ Terms added sequentially (first to last)
 Permutations stratified within 'Moisture'
 
 Model: cca(formula = dune ~ A1 + Management + Condition(Moisture), data = dune.env)
-           Df  Chisq      F N.Perm Pr(>F)   
-A1          1 0.1154 1.4190     99   0.38   
-Management  3 0.3954 1.6205     99   0.01 **
-Residual   12 0.9761                        
+           Df  Chisq      F N.Perm Pr(>F)  
+A1          1 0.1154 1.4190     99   0.24  
+Management  3 0.3954 1.6205     99   0.02 *
+Residual   12 0.9761                       
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 \end{Soutput}
 \end{Schunk}
 

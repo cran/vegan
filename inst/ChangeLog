@@ -1,8 +1,27 @@
-$Date: 2013-03-09 17:35:10 +0200 (Sat, 09 Mar 2013) $
+$Date: 2013-07-10 11:04:46 +0300 (Wed, 10 Jul 2013) $
 
 VEGAN RELEASE VERSIONS at http://cran.r-project.org/
 
-Version 2.0-7 (opened February 17, 2013)
+Version 2.0-8 (opened March 19, 2013)
+
+	* merge r2540: remove hard-coded inconsolata fonts.
+	* merge r2539: stressplot return data in input order.
+	* merge r2538: use expression(R^2) in stressplot.
+	* merge r2537, 2541: add plot.ordipointlabel.
+	* merge r2535, 2536: better positioning of arrow labels.
+	* merge r2534: lwd in ordisurf.
+	* merge r2533: ordipointlabel uses ordiArgAbsorber.
+	* merge r2532: clean up ordilabel.
+	* merge r2504: notation in adipart.Rd.
+	* merge r2498: adapt raupcrick to r2495.
+	* merge r2497: avoid visible ~ in .Rnw.
+	* merge r2496: use crossprod() in indpower.
+	* merge r2495: fix twisted test direction in oecosimu.
+	* merge r2490 thru 2493: ordisurf new options.
+	* merge r2484 thru 2486: betadisper fixes (centroid with one
+	group, call it medoid).
+	
+Version 2.0-7 (released March 19, 2013)
 
 	* merge r2476: take back part of 2434 and return matrix from
 	wcmdscale unless eigenvalues are requested.
