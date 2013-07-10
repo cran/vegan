@@ -8,7 +8,7 @@
 \usepackage{sidecap}
 \usepackage{amsmath}
 \usepackage{amssymb} % \gtrapprox
-
+\usepackage[english]{babel} % kluge to avoid visible ~ in Figure~1
 
 \title{Vegan: ecological diversity} \author{Jari Oksanen} 
 
@@ -30,9 +30,9 @@
   pool}
 
 %% misuse next for scm data
-\Address{$ $Id: diversity-vegan.Rnw 2346 2013-01-07 11:42:36Z jarioksa $ $
-  processed with vegan 2.0-7
-  in R Under development (unstable) (2013-03-19 r62316) on \today}
+\Address{$ $Id: diversity-vegan.Rnw 2544 2013-07-09 13:07:03Z jarioksa $ $
+  processed with vegan 2.0-8
+  in R version 2.15.2 (2012-10-26) on \today}
 \Footername{About this version}
 
 %% need no \usepackage{Sweave}
@@ -352,16 +352,16 @@ R> fish
 \end{Sinput}
 \begin{Soutput}
 Fisher log series model
-No. of species: 94 
+No. of species: 86 
 
       Estimate Std. Error
-alpha   34.823     4.4404
+alpha   35.544     4.8547
 \end{Soutput}
 \end{Schunk}
 \begin{SCfigure}
 \includegraphics{diversity-vegan-018}
 \caption{Fisher's log-series fitted to one randomly selected site
-  (10).}
+  (29).}
 \label{fig:fisher}
 \end{SCfigure}
 We already saw $\alpha$ as a diversity index.  Now we also obtained
@@ -379,7 +379,7 @@ R> confint(fish)
 \end{Sinput}
 \begin{Soutput}
    2.5 %   97.5 % 
-26.97514 44.48423 
+27.04365 46.21735 
 \end{Soutput}
 \end{Schunk}
 
@@ -403,7 +403,7 @@ the lower octave.
 Function \code{prestondistr} directly
 maximizes truncated log-normal likelihood without binning data, and it
 is the recommended alternative.  Log-normal models  usually fit poorly
-to the BCI data, but here our random plot (number 10):
+to the BCI data, but here our random plot (number 29):
 \begin{Schunk}
 \begin{Sinput}
 R> prestondistr(BCI[k,])
@@ -411,15 +411,18 @@ R> prestondistr(BCI[k,])
 \begin{Soutput}
 Preston lognormal model
 Method: maximized likelihood to log2 abundances 
-No. of species: 94 
+No. of species: 86 
 
       mode      width         S0 
- 0.9941697  1.8317765 23.7539289 
+ 0.7090315  1.7052549 23.8984091 
 
 Frequencies by Octave
-                0        1        2        3       4        5         6
-Observed 17.50000 25.50000 19.50000 15.50000 8.50000 5.500000 2.0000000
-Fitted   20.50087 23.75381 20.42975 13.04252 6.18057 2.174024 0.5676345
+                0        1        2         3        4        5
+Observed 18.50000 26.00000 18.50000 14.500000 6.000000 0.500000
+Fitted   21.91936 23.55303 17.94385  9.692462 3.711953 1.007908
+                 6
+Observed 2.0000000
+Fitted   0.1940389
 \end{Soutput}
 \end{Schunk}
 
@@ -458,20 +461,20 @@ R> rad
 \end{Sinput}
 \begin{Soutput}
 RAD models, family poisson 
-No. of species 94, total abundance 483
+No. of species 86, total abundance 364
 
-           par1      par2     par3    Deviance AIC      BIC     
-Null                                   77.2737 353.6126 353.6126
-Preemption  0.048132                   62.7210 341.0598 343.6031
-Lognormal   0.97341   1.1723           20.4770 300.8158 305.9024
-Zipf        0.14073  -0.84897          39.7066 320.0454 325.1320
-Mandelbrot  1.9608   -1.522    6.7247   9.8353 292.1741 299.8040
+           par1      par2     par3     Deviance AIC     BIC    
+Null                                   117.880  355.738 355.738
+Preemption  0.052888                   124.438  364.295 366.750
+Lognormal   0.68438   1.2574            36.783  278.640 283.549
+Zipf        0.173    -0.93219           15.446  257.303 262.212
+Mandelbrot  0.24126  -1.0276   0.52084  13.861  257.718 265.081
 \end{Soutput}
 \end{Schunk}
 \begin{SCfigure}
 \includegraphics{diversity-vegan-022}
 \caption{Ranked abundance distribution models for a random plot
-  (no. 10).  The best model has the lowest \textsc{aic}.}
+  (no. 29).  The best model has the lowest \textsc{aic}.}
 \label{fig:rad}
 \end{SCfigure}
 
@@ -683,17 +686,13 @@ Call: betadisper(d = z, group = Management)
 No. of Positive Eigenvalues: 12
 No. of Negative Eigenvalues: 7
 
-Average distance to centroid:
+Average distance to medoid:
     BF     HF     NM     SF 
 0.3080 0.2512 0.4406 0.3635 
 
 Eigenvalues for PCoA axes:
-  PCoA1   PCoA2   PCoA3   PCoA4   PCoA5   PCoA6   PCoA7   PCoA8   PCoA9 
- 1.6547  0.8870  0.5334  0.3744  0.2873  0.2245  0.1613  0.0810  0.0652 
- PCoA10  PCoA11  PCoA12  PCoA13  PCoA14  PCoA15  PCoA16  PCoA17  PCoA18 
- 0.0353  0.0183  0.0040 -0.0042 -0.0194 -0.0369 -0.0429 -0.0536 -0.0602 
- PCoA19 
--0.0828 
+ PCoA1  PCoA2  PCoA3  PCoA4  PCoA5  PCoA6  PCoA7  PCoA8 
+1.6547 0.8870 0.5334 0.3744 0.2873 0.2245 0.1613 0.0810 
 \end{Soutput}
 \end{Schunk}
 \begin{SCfigure}
@@ -776,8 +775,8 @@ R> s <- sample(nrow(BCI), 25)
 R> specpool(BCI[s,])
 \end{Sinput}
 \begin{Soutput}
-    Species chao  chao.se  jack1 jack1.se  jack2     boot  boot.se  n
-All     203  227 12.96148 226.04 8.022369 237.54 213.6789 4.123431 25
+    Species  chao  chao.se  jack1 jack1.se    jack2    boot  boot.se  n
+All     204 218.4 7.702467 227.04 6.575591 231.4867 215.607 3.857472 25
 \end{Soutput}
 \end{Schunk}
 
@@ -794,12 +793,12 @@ two of these methods:
 R> estimateR(BCI[k,])
 \end{Sinput}
 \begin{Soutput}
-                 10
-S.obs     94.000000
-S.chao1  129.000000
-se.chao1  17.243915
-S.ACE    132.601934
-se.ACE     6.153456
+                29
+S.obs     86.00000
+S.chao1  127.62500
+se.chao1  20.23819
+S.ACE    127.05647
+se.ACE     5.85267
 \end{Soutput}
 \end{Schunk}
 Chao's method is similar as above, but uses another, ``unbiased''
@@ -842,14 +841,14 @@ R> veiledspec(prestondistr(BCI[k,]))
 \end{Sinput}
 \begin{Soutput}
 Extrapolated     Observed       Veiled 
-   109.06813     94.00000     15.06813 
+   102.15232     86.00000     16.15232 
 \end{Soutput}
 \begin{Sinput}
 R> veiledspec(BCI[k,])
 \end{Sinput}
 \begin{Soutput}
 Extrapolated     Observed       Veiled 
-   121.08212     94.00000     27.08212 
+    108.8758      86.0000      22.8758 
 \end{Soutput}
 \end{Schunk}
 
