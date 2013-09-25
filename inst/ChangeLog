@@ -1,8 +1,38 @@
-$Date: 2013-07-10 11:04:46 +0300 (Wed, 10 Jul 2013) $
+$Date: 2013-09-25 09:53:42 +0300 (Wed, 25 Sep 2013) $
 
 VEGAN RELEASE VERSIONS at http://cran.r-project.org/
 
-Version 2.0-8 (opened March 19, 2013)
+Version 2.0-9 (released September 25, 2013)
+
+	* merge 2618: a typo.
+	* merge 2613: 'medoid' to 'median' in betadisper output and doc.
+	* merge 2605, 7: FAQ about La.svd errors in cca/rda/capscale.
+	* merge 2604: print.vectorfit zaps zeros.
+	* merge 2600: remove tools::: in vegandocs().
+	* merge 2599: remove workarounds for R <= 2.13.0.
+	* merge 2598: remove workarounds for R <= 2.12.0.
+	* merge 2597: move vignettes from inst/doc to vignettes/; depend
+	on R 2.14.0.
+	* merge 2593: remove stats::: in anova.ccabyaxis().
+	* merge 2592: expand varpart.Rd to avoid questions.
+	* merge 2590: typos.
+	* merge r2588: remove unneeded utils::: in vegandocs (some remain). 
+	* merge 2584,6: vegan Depends on lattice, avoid lattice:::
+	* merge r2583,7: remove cross-references to disappear in R-3.0-2.
+	* merge r2580,1: literature refs in specaccum.Rd and
+	betadisper.Rd.
+	* merge r2571: aspell fixes in Rd files (stressplot.wcmdscale.Rd,
+	commsim.Rd and nullmodel.Rd did not exist in 2.0 and were
+	excluded).
+	* merge r2570: aspell fixes in R files.
+	* merge r2568: aspell fixes in Rd files.
+	* merge r2564: line wrapping in betadiver(help=TRUE).
+	* merge r2562, 2563, 2565-7, 2572-6: edit and reformat Rnw file;
+	decision-vegan.Rnw required hand-editing due to conflicts in
+	text on parallel processing that was not merged.
+	* merge r2558: ordiktplot bmp device in all platforms. 
+	
+Version 2.0-8 (released July 10, 2013)
 
 	* merge r2540: remove hard-coded inconsolata fonts.
 	* merge r2539: stressplot return data in input order.
