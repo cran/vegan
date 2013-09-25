@@ -1,22 +1,31 @@
 % -*- mode: noweb; noweb-default-code-mode: R-mode; -*-
 %\VignetteIndexEntry{Introduction to ordination in vegan}
-\documentclass[article,nojss]{jss}
-\usepackage{veganjss} % vegan settings
-\usepackage{ucs} %% needed for R output: signif stars etc, quotes
-\usepackage[utf8x]{inputenc}
-\usepackage[T1]{fontenc}
-\usepackage{sidecap}
-\usepackage{amsmath}
-\usepackage[english]{babel} % kluge to avoid visible ~ in Figure~1
-
-\renewcommand{\floatpagefraction}{0.8}
-
+\documentclass[a4paper,10pt]{article}
+\usepackage{vegan} % vegan settings
 
 \title{Vegan: an introduction to ordination} 
-
 \author{Jari Oksanen}
 
-\Abstract{The document describes typical, simple work pathways of
+\date{\footnotesize{$ $Id: intro-vegan.Rnw 2597 2013-08-28 08:56:55Z jarioksa $ $
+  processed with vegan
+\Sexpr{packageDescription("vegan", field="Version")}
+in \Sexpr{R.version.string} on \today}}
+
+%% need no \usepackage{Sweave}
+\begin{document}
+
+\SweaveOpts{strip.white=true}
+<<echo=false>>=
+par(mfrow=c(1,1))
+options(width=72)
+figset <- function() par(mar=c(4,4,1,1)+.1)
+options(SweaveHooks = list(fig = figset))
+options("prompt" = "> ", "continue" = "  ")
+@
+
+\maketitle
+\begin{abstract}
+  The document describes typical, simple work pathways of
   vegetation ordination. Unconstrained ordination uses as examples
   detrended correspondence analysis and non-metric multidimensional
   scaling, and shows how to interpret their results by fitting
@@ -28,25 +37,8 @@
   correspondence analysis as an example. It is first shown how a model
   is defined, then the document discusses model building and
   signficance tests of the whole analysis, single constraints and
-  axes.}
-
-\Keywords{ordination, correspondence analysis, non-metric
-  multidimensional scaling, CCA, RDA, NMDS, fitted environmental
-  vector, fitted environmental surface, permutation tests}
-
-%% misuse of the address field for revision data
-\Address{$ $Id: intro-vegan.Rnw 2544 2013-07-09 13:07:03Z jarioksa $ $
-  processed with vegan
-2.0-8
-in R version 2.15.2 (2012-10-26) on \today}
-\Footername{About this version}
-
-%% need no \usepackage{Sweave}
-\begin{document}
-
-\setkeys{Gin}{width=0.55\linewidth}
-
-
+  axes.
+\end{abstract}
 \tableofcontents
 
 \vspace{3ex}
@@ -76,31 +68,15 @@ functions \code{decorana} and \code{metaMDS}.
 
 
 Detrended correspondence analysis (\textsc{dca}) is done like this:
-\begin{Schunk}
-\begin{Sinput}
-R> library(vegan)
-R> data(dune)
-R> ord <- decorana(dune)
-\end{Sinput}
-\end{Schunk}
+<<>>=
+library(vegan)
+data(dune)
+ord <- decorana(dune)
+@
 This saves ordination results in \code{ord}:
-\begin{Schunk}
-\begin{Sinput}
-R> ord
-\end{Sinput}
-\begin{Soutput}
-Call:
-decorana(veg = dune) 
-
-Detrended correspondence analysis with 26 segments.
-Rescaling of axes with 4 iterations.
-
-                  DCA1   DCA2    DCA3    DCA4
-Eigenvalues     0.5117 0.3036 0.12125 0.14266
-Decorana values 0.5360 0.2869 0.08136 0.04814
-Axis lengths    3.7004 3.1166 1.30057 1.47883
-\end{Soutput}
-\end{Schunk}
+<<>>=
+ord
+@
 The display of results is very brief: only eigenvalues and used
 options are listed.  Actual ordination results are not shown, but you
 can see them with command \code{summary(ord)}, or extract the scores
@@ -122,41 +98,10 @@ starting configurations, compares results (function
 stress solution.  Finally it scales and rotates the solution, and adds
 species scores to the configuration as weighted averages (function
 \code{wascores}):
-\begin{Schunk}
-\begin{Sinput}
-R> ord <- metaMDS(dune)
-\end{Sinput}
-\begin{Soutput}
-Run 0 stress 0.1192678 
-Run 1 stress 0.1183186 
-... New best solution
-... procrustes: rmse 0.02027255  max resid 0.06496656 
-Run 2 stress 0.2365793 
-Run 3 stress 0.1192679 
-Run 4 stress 0.1183186 
-... procrustes: rmse 2.370994e-05  max resid 7.296709e-05 
-*** Solution reached
-\end{Soutput}
-\begin{Sinput}
-R> ord
-\end{Sinput}
-\begin{Soutput}
-Call:
-metaMDS(comm = dune) 
-
-global Multidimensional Scaling using monoMDS
-
-Data:     dune 
-Distance: bray 
-
-Dimensions: 2 
-Stress:     0.1183186 
-Stress type 1, weak ties
-Two convergent solutions found after 4 tries
-Scaling: centring, PC rotation, halfchange scaling 
-Species: expanded scores based on ‘dune’ 
-\end{Soutput}
-\end{Schunk}
+<<>>=
+ord <- metaMDS(dune)
+ord
+@
 
 \section{Ordination graphics}
 
@@ -166,16 +111,16 @@ should not be taken too seriously).
 
 All ordination results of \pkg{vegan} can be displayed with a
 \code{plot} command (Fig. \ref{fig:plot}):
-\begin{Schunk}
-\begin{Sinput}
-R> plot(ord)
-\end{Sinput}
-\end{Schunk}
-\begin{SCfigure}
-\includegraphics{intro-vegan-006}
+<<a>>=
+plot(ord)
+@
+\begin{figure}
+<<fig=true,echo=false>>=
+<<a>>
+@
 \caption{Default ordination plot.}
 \label{fig:plot}
-\end{SCfigure}
+\end{figure}
 Default \code{plot} command uses either black circles for sites and
 red pluses for species, or black and red text for sites and species,
 resp.  The choices depend on the number of items in the plot and
@@ -186,19 +131,19 @@ plot (\code{type = "n"}) and then add species and sites separately
 using \code{points} or \code{text} functions.  In this way you can
 combine points and text, and you can select colours and character
 sizes freely (Fig. \ref{fig:plot.args}):
-\begin{Schunk}
-\begin{Sinput}
-R> plot(ord, type = "n")
-R> points(ord, display = "sites", cex = 0.8, pch=21, col="red", bg="yellow")
-R> text(ord, display = "spec", cex=0.7, col="blue")
-\end{Sinput}
-\end{Schunk}
-\begin{SCfigure}
-\includegraphics{intro-vegan-008}
+<<a>>=
+plot(ord, type = "n")
+points(ord, display = "sites", cex = 0.8, pch=21, col="red", bg="yellow")
+text(ord, display = "spec", cex=0.7, col="blue")
+@
+\begin{figure}
+<<fig=true,echo=false>>=
+<<a>>
+@
 \caption{A more colourful ordination plot where sites are points, and
   species are text.}
 \label{fig:plot.args}
-\end{SCfigure}
+\end{figure}
 
 All \pkg{vegan} ordination methods have a specific \code{plot}
 function.  In addition, \pkg{vegan} has an alternative plotting
@@ -257,27 +202,25 @@ Function \code{ordihull} adds convex hulls, \code{ordiellipse}
 adds ellipses of standard deviation, standard error or confidence
 areas, and \code{ordispider} combines items to their centroid
 (Fig. \ref{fig:ordihull}):
-\begin{Schunk}
-\begin{Sinput}
-R> data(dune.env)
-R> attach(dune.env)
-\end{Sinput}
-\end{Schunk}
-\begin{Schunk}
-\begin{Sinput}
-R> plot(ord, disp="sites", type="n")
-R> ordihull(ord, Management, col="blue")
-R> ordiellipse(ord, Management, col=3,lwd=2)
-R> ordispider(ord, Management, col="red", label = TRUE)
-R> points(ord, disp="sites", pch=21, col="red", bg="yellow", cex=1.3)
-\end{Sinput}
-\end{Schunk}
-\begin{SCfigure}
-\includegraphics{intro-vegan-011}
+<<>>=
+data(dune.env)
+attach(dune.env)
+@
+<<a>>=
+plot(ord, disp="sites", type="n")
+ordihull(ord, Management, col="blue")
+ordiellipse(ord, Management, col=3,lwd=2)
+ordispider(ord, Management, col="red", label = TRUE)
+points(ord, disp="sites", pch=21, col="red", bg="yellow", cex=1.3)
+@
+\begin{figure}
+<<fig=true,echo=false>>=
+<<a>>
+@
 \caption{Convex hull, standard error ellipse and a spider web diagram
   for Management levels in ordination.}
 \label{fig:ordihull}
-\end{SCfigure}
+\end{figure}
 In addition, you can overlay a cluster dendrogram from \code{hclust}
 using \code{ordicluster} or a minimum spanning tree from
 \code{spantree} with its \code{lines} function.  Segmented arrows
@@ -302,73 +245,32 @@ variables onto ordination:
 Function \code{envfit} can be called with a \code{formula}
 interface, and it optionally can assess the ``significance'' of the
 variables using permutation tests:
-\begin{Schunk}
-\begin{Sinput}
-R> ord.fit <- envfit(ord ~ A1 + Management, data=dune.env, perm=1000)
-R> ord.fit
-\end{Sinput}
-\begin{Soutput}
-***VECTORS
-
-     NMDS1   NMDS2     r2  Pr(>r)  
-A1 0.96476 0.26313 0.3649 0.02498 *
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
-P values based on 1000 permutations.
-
-***FACTORS:
-
-Centroids:
-               NMDS1   NMDS2
-ManagementBF -0.4534 -0.0102
-ManagementHF -0.2636 -0.1282
-ManagementNM  0.2958  0.5790
-ManagementSF  0.1505 -0.4670
-
-Goodness of fit:
-               r2   Pr(>r)   
-Management 0.4134 0.004995 **
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
-P values based on 1000 permutations.
-\end{Soutput}
-\end{Schunk}
+<<>>=
+ord.fit <- envfit(ord ~ A1 + Management, data=dune.env, perm=1000)
+ord.fit
+@
 The result can be drawn directly or added to an ordination diagram
 (Fig. \ref{fig:envfit}):
-\begin{Schunk}
-\begin{Sinput}
-R> plot(ord, dis="site")
-R> plot(ord.fit)
-\end{Sinput}
-\end{Schunk}
+<<a>>=
+plot(ord, dis="site")
+plot(ord.fit)
+@
 
 Function \code{ordisurf} directly adds a fitted surface onto
 ordination, but it returns the result of the fitted thinplate spline
 \code{gam} (Fig. \ref{fig:envfit}):
-\begin{Schunk}
-\begin{Sinput}
-R> ordisurf(ord, A1, add=TRUE)
-\end{Sinput}
-\begin{Soutput}
-Family: gaussian 
-Link function: identity 
-
-Formula:
-y ~ s(x1, x2, k = 10, bs = "tp", fx = FALSE)
-<environment: 0x26ddd70>
-
-Estimated degrees of freedom:
-1.59  total = 2.59 
-
-REML score: 41.58727
-\end{Soutput}
-\end{Schunk}
-\begin{SCfigure}
-\includegraphics{intro-vegan-015}
+<<b,fig=false>>=
+ordisurf(ord, A1, add=TRUE)
+@
+\begin{figure}
+<<fig=true,echo=false,results=hide>>=
+<<a>>
+<<b>>
+@
 \caption{Fitted vector and smooth surface for the thickness of A1
   horizon (\code{A1}, in cm), and centroids of Management levels.}
 \label{fig:envfit}
-\end{SCfigure}
+\end{figure}
 
 \section{Constrained ordination}
 
@@ -383,42 +285,21 @@ similar commands and can be used in the same way.
 The preferred way is to use \code{formula} interface, where the left
 hand side gives the community data frame and the right hand side lists
 the constraining variables:
-\begin{Schunk}
-\begin{Sinput}
-R> ord <- cca(dune ~ A1 + Management, data=dune.env)
-R> ord
-\end{Sinput}
-\begin{Soutput}
-Call: cca(formula = dune ~ A1 + Management, data = dune.env)
-
-              Inertia Proportion Rank
-Total          2.1153     1.0000     
-Constrained    0.7798     0.3686    4
-Unconstrained  1.3355     0.6314   15
-Inertia is mean squared contingency coefficient 
-
-Eigenvalues for constrained axes:
-   CCA1    CCA2    CCA3    CCA4 
-0.31875 0.23718 0.13217 0.09168 
-
-Eigenvalues for unconstrained axes:
-     CA1      CA2      CA3      CA4      CA5      CA6      CA7      CA8 
-0.362024 0.202884 0.152661 0.134549 0.110957 0.079982 0.076698 0.055267 
-     CA9     CA10     CA11     CA12     CA13     CA14     CA15 
-0.044361 0.041528 0.031699 0.017786 0.011642 0.008736 0.004711 
-\end{Soutput}
-\end{Schunk}
+<<>>=
+ord <- cca(dune ~ A1 + Management, data=dune.env)
+ord
+@
 The results can be plotted with (Fig. \ref{fig:cca}):
-\begin{Schunk}
-\begin{Sinput}
-R> plot(ord)
-\end{Sinput}
-\end{Schunk}
-\begin{SCfigure}
-\includegraphics{intro-vegan-018}
+<<a>>=
+plot(ord)
+@
+\begin{figure}
+<<fig=true,echo=false>>=
+<<a>>
+@
 \caption{Default plot from constrained correspondence analysis.}
 \label{fig:cca}
-\end{SCfigure}
+\end{figure}
 There are three groups of items: sites, species and centroids (and
 biplot arrows) of environmental variables.  All these can be added
 individually to an empty plot, and all previously explained tricks of
@@ -431,32 +312,9 @@ solution similar to unconstrained ordination. In that case it is
 better to use unconstrained ordination with environmental fitting.
 However, if you really want to do so, it is possible with the
 following shortcut in \code{formula}:
-\begin{Schunk}
-\begin{Sinput}
-R> cca(dune ~ ., data=dune.env)
-\end{Sinput}
-\begin{Soutput}
-Call: cca(formula = dune ~ A1 + Moisture + Management + Use +
-Manure, data = dune.env)
-
-              Inertia Proportion Rank
-Total          2.1153     1.0000     
-Constrained    1.5032     0.7106   12
-Unconstrained  0.6121     0.2894    7
-Inertia is mean squared contingency coefficient 
-Some constraints were aliased because they were collinear (redundant)
-
-Eigenvalues for constrained axes:
-   CCA1    CCA2    CCA3    CCA4    CCA5    CCA6    CCA7    CCA8    CCA9 
-0.46713 0.34102 0.17606 0.15317 0.09528 0.07027 0.05887 0.04993 0.03183 
-  CCA10   CCA11   CCA12 
-0.02596 0.02282 0.01082 
-
-Eigenvalues for unconstrained axes:
-    CA1     CA2     CA3     CA4     CA5     CA6     CA7 
-0.27237 0.10876 0.08975 0.06305 0.03489 0.02529 0.01798 
-\end{Soutput}
-\end{Schunk}
+<<>>=
+cca(dune ~ ., data=dune.env)
+@
 
 \subsection{Significance tests}
 
@@ -464,21 +322,9 @@ Eigenvalues for unconstrained axes:
 constraints.  The test mimics standard analysis of variance function
 (\code{anova}), and the default test analyses all constraints
 simultaneously:
-\begin{Schunk}
-\begin{Sinput}
-R> anova(ord)
-\end{Sinput}
-\begin{Soutput}
-Permutation test for cca under reduced model
-
-Model: cca(formula = dune ~ A1 + Management, data = dune.env)
-         Df  Chisq      F N.Perm Pr(>F)   
-Model     4 0.7798 2.1896    199  0.005 **
-Residual 15 1.3355                        
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
-\end{Soutput}
-\end{Schunk}
+<<>>=
+anova(ord)
+@
 The function actually used was \code{anova.cca}, but you do not need
 to give its name in full, because \proglang{R} automatically chooses the
 correct \code{anova} variant for the result of constrained
@@ -491,62 +337,21 @@ will continue long in uncertain cases.  You must set \code{step} and
 \code{perm.max} to same values to override this behaviour.
 
 It is also possible to analyse terms separately:
-\begin{Schunk}
-\begin{Sinput}
-R> anova(ord, by="term", permu=200)
-\end{Sinput}
-\begin{Soutput}
-Permutation test for cca under reduced model
-Terms added sequentially (first to last)
-
-Model: cca(formula = dune ~ A1 + Management, data = dune.env)
-           Df  Chisq      F N.Perm Pr(>F)   
-A1          1 0.2248 2.5245    199  0.015 * 
-Management  3 0.5550 2.0780    199  0.005 **
-Residual   15 1.3355                        
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
-\end{Soutput}
-\end{Schunk}
+<<>>=
+anova(ord, by="term", permu=200)
+@
 In this case, the function is unable to automatically select the
 number of iterations. This test is sequential: the terms are analysed
 in the order they happen to be in the model. You can also analyse
 significances of marginal effects (``Type III effects''):
-\begin{Schunk}
-\begin{Sinput}
-R> anova(ord, by="mar")
-\end{Sinput}
-\begin{Soutput}
-Permutation test for cca under reduced model
-Marginal effects of terms
-
-Model: cca(formula = dune ~ A1 + Management, data = dune.env)
-           Df  Chisq      F N.Perm Pr(>F)   
-A1          1 0.1759 1.9761    199  0.005 **
-Management  3 0.5550 2.0780    199  0.005 **
-Residual   15 1.3355                        
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
-\end{Soutput}
-\end{Schunk}
+<<>>=
+anova(ord, by="mar")
+@
 
 Moreover, it is possible to analyse significance of each axis:
-\begin{Schunk}
-\begin{Sinput}
-R> anova(ord, by="axis", perm=500)
-\end{Sinput}
-\begin{Soutput}
-Model: cca(formula = dune ~ A1 + Management, data = dune.env)
-         Df  Chisq      F N.Perm Pr(>F)   
-CCA1      1 0.3187 3.5801    199  0.005 **
-CCA2      1 0.2372 2.6640    199  0.010 **
-CCA3      1 0.1322 1.4845     99  0.160   
-CCA4      1 0.0917 1.0297     99  0.400   
-Residual 15 1.3355                        
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
-\end{Soutput}
-\end{Schunk}
+<<a>>=
+anova(ord, by="axis", perm=500)
+@
 Now the automatic selection works, but typically some of your axes
 will be very close to the critical value, and it may be useful to set
 a lower \code{perm.max} than the default $10000$ (typically you use
@@ -557,75 +362,26 @@ time when this document is automatically generated with this package).
 
 All constrained ordination methods can have terms that are partialled
 out from the analysis before constraints:
-\begin{Schunk}
-\begin{Sinput}
-R> ord <- cca(dune ~ A1 + Management + Condition(Moisture), data=dune.env)
-R> ord
-\end{Sinput}
-\begin{Soutput}
-Call: cca(formula = dune ~ A1 + Management +
-Condition(Moisture), data = dune.env)
-
-              Inertia Proportion Rank
-Total          2.1153     1.0000     
-Conditional    0.6283     0.2970    3
-Constrained    0.5109     0.2415    4
-Unconstrained  0.9761     0.4615   12
-Inertia is mean squared contingency coefficient 
-
-Eigenvalues for constrained axes:
-   CCA1    CCA2    CCA3    CCA4 
-0.24932 0.12090 0.08160 0.05904 
-
-Eigenvalues for unconstrained axes:
-     CA1      CA2      CA3      CA4      CA5      CA6      CA7      CA8 
-0.306366 0.131911 0.115157 0.109469 0.077242 0.075754 0.048714 0.037582 
-     CA9     CA10     CA11     CA12 
-0.031058 0.021024 0.012542 0.009277 
-\end{Soutput}
-\end{Schunk}
+<<>>=
+ord <- cca(dune ~ A1 + Management + Condition(Moisture), data=dune.env)
+ord
+@
 This partials out the effect of \code{Moisture} before analysing the
 effects of \code{A1} and \code{Management}.  This also influences
 the significances of the terms:
-\begin{Schunk}
-\begin{Sinput}
-R> anova(ord, by="term", perm=500)
-\end{Sinput}
-\begin{Soutput}
-Permutation test for cca under reduced model
-Terms added sequentially (first to last)
-
-Model: cca(formula = dune ~ A1 + Management + Condition(Moisture), data = dune.env)
-           Df  Chisq      F N.Perm Pr(>F)  
-A1          1 0.1154 1.4190     99   0.09 .
-Management  3 0.3954 1.6205     99   0.02 *
-Residual   12 0.9761                       
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
-\end{Soutput}
-\end{Schunk}
+<<>>=
+anova(ord, by="term", perm=500)
+@
 If we had a designed experiment, we may wish to restrict the
 permutations so that the observations only are permuted within levels
 of \code{strata}:
-\begin{Schunk}
-\begin{Sinput}
-R> anova(ord, by="term", perm=500, strata=Moisture)
-\end{Sinput}
-\begin{Soutput}
-Permutation test for cca under reduced model
-Terms added sequentially (first to last)
-Permutations stratified within 'Moisture'
-
-Model: cca(formula = dune ~ A1 + Management + Condition(Moisture), data = dune.env)
-           Df  Chisq      F N.Perm Pr(>F)  
-A1          1 0.1154 1.4190     99   0.24  
-Management  3 0.3954 1.6205     99   0.02 *
-Residual   12 0.9761                       
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
-\end{Soutput}
-\end{Schunk}
+<<>>=
+anova(ord, by="term", perm=500, strata=Moisture)
+@
 
 %%%%%%%%%%%%%%%%%%%
+<<echo=false>>=
+detach(dune.env)
+@
 
 \end{document}
