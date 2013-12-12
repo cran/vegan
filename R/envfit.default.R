@@ -1,4 +1,4 @@
-"envfit.default" <-
+`envfit.default` <-
     function (ord, env, permutations = 999, strata, choices = c(1, 2), 
              display = "sites", w = weights(ord), na.rm = FALSE, ...) 
 {
@@ -17,10 +17,10 @@
         na.action <- structure(seq_along(keep)[!keep], class="omit")
     }
     if (is.data.frame(env)) {
-        facts <- unlist(lapply(env, is.factor))
-        if (sum(facts)) {
-            Pfac <- env[, facts, drop = FALSE]
-            P <- env[, !facts, drop = FALSE]
+        vects <- sapply(env, is.numeric)
+        if (any(!vects)) {  # have factors
+            Pfac <- env[, !vects, drop = FALSE]
+            P <- env[, vects, drop = FALSE]
             if (length(P)) {
                 if (permutations) {
                     if (!exists(".Random.seed", envir = .GlobalEnv, 

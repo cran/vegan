@@ -1,6 +1,28 @@
-$Date: 2013-09-25 09:53:42 +0300 (Wed, 25 Sep 2013) $
+$Date: 2013-12-12 12:06:44 +0200 (Thu, 12 Dec 2013) $
 
 VEGAN RELEASE VERSIONS at http://cran.r-project.org/
+
+Version 2.0-10 (released December 12, 2013)
+
+	* r2815: update email in simper.Rd.
+	* merge 2809,2810: treat all non-numeric variables as factors
+	inenvfit.
+	* merge 2713 man/: remove references to very old R versions in man
+	files (R/ part of this rev not applied)
+	* merge 2708: adapt quantilesto test direction.
+	* merge 2679: add collector curve to renyiaccum.
+	* merge 2678: renyiaccum can plot one scale. 
+	* merge 2641: subset in renyi/spec/tsallisaccum.
+	* merge 2630,1,2: fisherfit new algo and delete profile & confint.
+	* merge 2628,9: plot vectorfit *should* work with constant
+	(non-variable) vectors: partial conflict, needs checking.
+	* merge 2627: zap zeros in print.cca.
+	* merge 2626: nestednodf fill and consinstency in quantitative
+	data.
+	* merge 2527: adapt permutest.betadisper to the CRAN release of
+	permute 0.8-0.
+	* merge 2451, 2454, 2455, 2465: weighted specaccum.
+	* conflicts (not applied): r2625 (oecosimu), 2638 (oecosimu.Rd)
 
 Version 2.0-9 (released September 25, 2013)
 

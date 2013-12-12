@@ -8,6 +8,95 @@
 
 <h2>vegan News</h2>
 
+<h3>Changes in version 2.0-10</h3>
+
+
+
+<h4>GENERAL</h4>
+
+
+<ul>
+<li><p> This version is adapted to the changes in <span class="pkg">permute</span>
+package version 0.8-0 and no more triggers NOTEs in package
+checks.  This release may be the last of the 2.0 series, and the
+next <span class="pkg">vegan</span> release is scheduled to be a major release with
+newly designed <code>oecosimu</code> and community pattern simulation,
+support for parallel processing, and full support of the
+<span class="pkg">permute</span> package. If you are interested in these
+developments, you may try the development versions of
+<span class="pkg">vegan</span> in
+<a href="http://r-forge.r-project.org/projects/vegan/">R-Forge</a> or
+<a href="https://github.com/jarioksa/vegan">GitHub</a> and report the
+problems and user experience to us.  </p>
+</li></ul>
+   
+
+
+<h4>BUG FIXES</h4>
+
+
+<ul>
+<li> <p><code>envfit</code> function assumed that all external variables
+were either numeric or factors, and failed if they were, say,
+character strings. Now only numeric variables are taken as
+continuous vectors, and all other variables (character strings,
+logical) are coerced to factors if possible. The function also
+should work with degenerate data, like only one level of a
+factor or a constant value of a continuous environmental
+variable. The ties were wrongly in assessing permutation
+<i>P</i>-values in <code>vectorfit</code>.
+</p>
+</li>
+<li> <p><code>nestednodf</code> with quantitative data was not
+consistent with binary models, and the fill was wrongly
+calculated with quantitative data.
+</p>
+</li>
+<li> <p><code>oecosimu</code> now correctly adapts displayed quantiles
+of simulated values to the <code>alternative</code> test direction.
+</p>
+</li>
+<li> <p><code>renyiaccum</code> plotting failed if only one level of
+diversity <code>scale</code> was used.
+</p>
+</li></ul>
+
+ 
+
+
+<h4>NEW FEATURES</h4>
+
+ 
+ 
+<ul>
+<li><p> The Kempton and Taylor algorithm was found unreliable in
+<code>fisherfit</code> and <code>fisher.alpha</code>, and now the estimation
+of Fisher <i>alpha</i> is only based on the number of
+species and the number of individuals.  The estimation of
+standard errors and profile confidence intervals also had to be
+scrapped.
+</p>
+</li>
+<li> <p><code>renyiaccum</code>, <code>specaccum</code> and
+<code>tsallisaccum</code> functions gained <code>subset</code> argument.
+</p>
+</li>
+<li> <p><code>renyiaccum</code> can now add a <code>collector</code> curve to
+to the analysis. The collector curve is the diversity
+accumulation in the order of the sampling units. With an
+interesting ordering or sampling units this allows comparing
+actual species accumulations with the expected randomized
+accumulation.
+</p>
+</li>
+<li> <p><code>specaccum</code> can now perform weighted accumulation
+using the sampling effort as weights.
+</p>
+</li></ul>
+
+ 
+
+
 <h3>Changes in version 2.0-9</h3>
 
 

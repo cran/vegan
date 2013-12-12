@@ -17,10 +17,11 @@
 }
 \usage{
 specaccum(comm, method = "exact", permutations = 100,
-          conditioned =TRUE, gamma = "jack1",  ...)
-\method{plot}{specaccum}(x, add = FALSE, ci = 2, ci.type = c("bar", "line", "polygon"), 
-    col = par("fg"), ci.col = col, ci.lty = 1, xlab, 
-    ylab = x$method, ylim, xvar = c("sites", "individuals"), ...)
+          conditioned =TRUE, gamma = "jack1",  w = NULL, subset, ...)
+\method{plot}{specaccum}(x, add = FALSE, random = FALSE, ci = 2, 
+    ci.type = c("bar", "line", "polygon"), col = par("fg"), ci.col = col, 
+    ci.lty = 1, xlab, ylab = x$method, ylim, 
+    xvar = c("sites", "individuals", "effort"), ...)
 \method{boxplot}{specaccum}(x, add = FALSE, ...)
 fitspecaccum(object, model, method = "random", ...)
 \method{plot}{fitspecaccum}(x, col = par("fg"), lty = 1, xlab = "Sites", 
@@ -43,9 +44,14 @@ fitspecaccum(object, model, method = "random", ...)
   \item{conditioned}{ Estimation of standard deviation is conditional on
     the empirical dataset for the exact SAC}
   \item{gamma}{Method for estimating the total extrapolated number of species in the
-    survey area by function \code{\link{specpool}}} 
+    survey area by function \code{\link{specpool}}}
+  \item{w}{Weights giving the sampling effort (an experimental feature
+    that may be removed).}
+  \item{subset}{logical expression indicating sites (rows) to keep: missing
+    values are taken as \code{FALSE}.}
   \item{x}{A \code{specaccum} result object}
   \item{add}{Add to an existing graph.}
+  \item{random}{\dots}
   \item{ci}{Multiplier used to get confidence intervals from standard
     deviation (standard error of the estimate). Value \code{ci = 0}
     suppresses drawing confidence intervals.}
