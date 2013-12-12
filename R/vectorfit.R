@@ -18,6 +18,7 @@
     H <- qr.fitted(Q, Pw)
     heads <- qr.coef(Q, Pw)
     r <- diag(cor(H, Pw)^2)
+    r[is.na(r)] <- 0
     heads <- decostand(heads, "norm", 2)
     heads <- t(heads)
     if (is.null(colnames(X))) 
@@ -36,7 +37,7 @@
             Hperm <- qr.fitted(Q, take)
             permstore[i, ] <- diag(cor(Hperm, take))^2
         }
-        permstore <- sweep(permstore, 2, r, ">")
+        permstore <- sweep(permstore, 2, r, ">=")
         pvals <- (apply(permstore, 2, sum) + 1)/(permutations + 1)
     }
     else pvals <- NULL

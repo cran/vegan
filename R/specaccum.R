@@ -1,7 +1,15 @@
 `specaccum` <-
     function (comm, method = "exact", permutations = 100, conditioned=TRUE,
-              gamma="jack1", ...)
+              gamma="jack1", w = NULL, subset, ...)
 {
+    METHODS <- c("collector", "random", "exact", "rarefaction", "coleman")
+    method <- match.arg(method, METHODS)
+    if (!is.null(w) && !(method %in% c("random", "collector")))
+        stop(gettextf("weights 'w' can be only used with methods 'random' and 'collector'"))
+    if (!missing(subset)) {
+        comm <- subset(comm, subset)
+        w <- subset(w, subset)
+    }
     x <- comm
     x <- as.matrix(x)
     x <- x[, colSums(x) > 0, drop=FALSE]
@@ -15,22 +23,34 @@
     accumulator <- function(x, ind) {
         rowSums(apply(x[ind, ], 2, cumsum) > 0)
     }
-    METHODS <- c("collector", "random", "exact", "rarefaction", "coleman")
-    method <- match.arg(method, METHODS)
     specaccum <- sdaccum <- sites <- perm <- NULL
     if (n == 1 && method != "rarefaction")
         message("No actual accumulation since only 1 site provided")
     switch(method, collector = {
         sites <- 1:n
+        xout <- weights <- cumsum(w)
         specaccum <- accumulator(x, sites)
     }, random = {
         perm <- array(dim = c(n, permutations))
+        if (!is.null(w))
+            weights <- array(dim = c(n, permutations))
         for (i in 1:permutations) {
-            perm[, i] <- accumulator(x, sample(n))
+            perm[, i] <- accumulator(x, ord <- sample(n))
+            if(!is.null(w))
+                weights[,i] <- cumsum(w[ord])
         }
         sites <- 1:n
-        specaccum <- apply(perm, 1, mean)
-        sdaccum <- apply(perm, 1, sd)
+        if (is.null(w)) {
+            specaccum <- apply(perm, 1, mean)
+            sdaccum <- apply(perm, 1, sd)
+        } else {
+            sumw <- sum(w)
+            xout <- seq(sumw/n, sumw, length.out = n)
+            intx <- sapply(seq_len(n), function(i)
+                           approx(weights[,i], perm[,i], xout = xout)$y)
+            specaccum <- apply(intx, 1, mean)
+            sdaccum <- apply(intx, 1, sd)
+        }
     }, exact = {
         freq <- colSums(x > 0)
         freq <- freq[freq > 0]
@@ -87,6 +107,10 @@
     })
     out <- list(call = match.call(), method = method, sites = sites,
                 richness = specaccum, sd = sdaccum, perm = perm)
+    if (!is.null(w)) {
+        out$weights <- weights
+        out$effort <- xout
+    }
     if (method == "rarefaction")
         out$individuals <- ind
     class(out) <- "specaccum"

@@ -118,40 +118,34 @@ plot(fish)
 
 
 ###################################################
-### code chunk number 18: diversity-vegan.Rnw:338-339
-###################################################
-confint(fish)
-
-
-###################################################
-### code chunk number 19: diversity-vegan.Rnw:362-363
+### code chunk number 18: diversity-vegan.Rnw:351-352
 ###################################################
 prestondistr(BCI[k,])
 
 
 ###################################################
-### code chunk number 20: diversity-vegan.Rnw:394-396
+### code chunk number 19: diversity-vegan.Rnw:383-385
 ###################################################
 rad <- radfit(BCI[k,])
 rad
 
 
 ###################################################
-### code chunk number 21: diversity-vegan.Rnw:399-400
+### code chunk number 20: diversity-vegan.Rnw:388-389
 ###################################################
 getOption("SweaveHooks")[["fig"]]()
 print(radlattice(rad))
 
 
 ###################################################
-### code chunk number 22: a
+### code chunk number 21: a
 ###################################################
 sac <- specaccum(BCI)
 plot(sac, ci.type="polygon", ci.col="yellow")
 
 
 ###################################################
-### code chunk number 23: diversity-vegan.Rnw:469-470
+### code chunk number 22: diversity-vegan.Rnw:458-459
 ###################################################
 getOption("SweaveHooks")[["fig"]]()
 sac <- specaccum(BCI)
@@ -159,33 +153,33 @@ plot(sac, ci.type="polygon", ci.col="yellow")
 
 
 ###################################################
-### code chunk number 24: diversity-vegan.Rnw:498-499
+### code chunk number 23: diversity-vegan.Rnw:487-488
 ###################################################
 ncol(BCI)/mean(specnumber(BCI)) - 1
 
 
 ###################################################
-### code chunk number 25: diversity-vegan.Rnw:516-518
+### code chunk number 24: diversity-vegan.Rnw:505-507
 ###################################################
 beta <- vegdist(BCI, binary=TRUE)
 mean(beta)
 
 
 ###################################################
-### code chunk number 26: diversity-vegan.Rnw:525-526
+### code chunk number 25: diversity-vegan.Rnw:514-515
 ###################################################
 betadiver(help=TRUE)
 
 
 ###################################################
-### code chunk number 27: diversity-vegan.Rnw:544-546
+### code chunk number 26: diversity-vegan.Rnw:533-535
 ###################################################
 z <- betadiver(BCI, "z")
 quantile(z)
 
 
 ###################################################
-### code chunk number 28: diversity-vegan.Rnw:556-561
+### code chunk number 27: diversity-vegan.Rnw:545-550
 ###################################################
 data(dune)
 data(dune.env)
@@ -195,46 +189,46 @@ mod
 
 
 ###################################################
-### code chunk number 29: diversity-vegan.Rnw:564-565
+### code chunk number 28: diversity-vegan.Rnw:553-554
 ###################################################
 getOption("SweaveHooks")[["fig"]]()
 boxplot(mod)
 
 
 ###################################################
-### code chunk number 30: diversity-vegan.Rnw:622-623
+### code chunk number 29: diversity-vegan.Rnw:611-612
 ###################################################
 specpool(BCI)
 
 
 ###################################################
-### code chunk number 31: diversity-vegan.Rnw:628-630
+### code chunk number 30: diversity-vegan.Rnw:617-619
 ###################################################
 s <- sample(nrow(BCI), 25)
 specpool(BCI[s,])
 
 
 ###################################################
-### code chunk number 32: diversity-vegan.Rnw:641-642
+### code chunk number 31: diversity-vegan.Rnw:630-631
 ###################################################
 estimateR(BCI[k,])
 
 
 ###################################################
-### code chunk number 33: diversity-vegan.Rnw:678-680
+### code chunk number 32: diversity-vegan.Rnw:667-669
 ###################################################
 veiledspec(prestondistr(BCI[k,]))
 veiledspec(BCI[k,])
 
 
 ###################################################
-### code chunk number 34: diversity-vegan.Rnw:694-695
+### code chunk number 33: diversity-vegan.Rnw:683-684
 ###################################################
 smo <- beals(BCI)
 
 
 ###################################################
-### code chunk number 35: a
+### code chunk number 34: a
 ###################################################
 j <- which(colnames(BCI) == "Ceiba.pentandra")
 plot(beals(BCI, species=j, include=FALSE), BCI[,j], 
@@ -243,7 +237,7 @@ plot(beals(BCI, species=j, include=FALSE), BCI[,j],
 
 
 ###################################################
-### code chunk number 36: diversity-vegan.Rnw:708-709
+### code chunk number 35: diversity-vegan.Rnw:697-698
 ###################################################
 getOption("SweaveHooks")[["fig"]]()
 j <- which(colnames(BCI) == "Ceiba.pentandra")
