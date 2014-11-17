@@ -3,9 +3,11 @@
 \alias{print.specaccum}
 \alias{summary.specaccum}
 \alias{plot.specaccum}
+\alias{lines.specaccum}
 \alias{boxplot.specaccum}
 \alias{fitspecaccum}
 \alias{plot.fitspecaccum}
+\alias{lines.fitspecaccum}
 \alias{predict.specaccum}
 \alias{predict.fitspecaccum}
 
@@ -45,8 +47,7 @@ fitspecaccum(object, model, method = "random", ...)
     the empirical dataset for the exact SAC}
   \item{gamma}{Method for estimating the total extrapolated number of species in the
     survey area by function \code{\link{specpool}}}
-  \item{w}{Weights giving the sampling effort (an experimental feature
-    that may be removed).}
+  \item{w}{Weights giving the sampling effort.}
   \item{subset}{logical expression indicating sites (rows) to keep: missing
     values are taken as \code{FALSE}.}
   \item{x}{A \code{specaccum} result object}
@@ -106,8 +107,28 @@ fitspecaccum(object, model, method = "random", ...)
   achieves this by applying function \code{\link{rarefy}} with number of individuals
   corresponding to average number of individuals per site.
 
-  The function has a \code{plot} method. In addition, \code{method = "random"} 
-  has \code{summary} and \code{boxplot} methods. 
+  Methods \code{"random"} and \code{"collector"} can take weights
+  (\code{w}) that give the sampling effort for each site.  The weights
+  \code{w} do not influence the order the sites are accumulated, but
+  only the value of the sampling effort so that not all sites are
+  equal. The summary results are expressed against sites even when the
+  accumulation uses weights (methods \code{"random"},
+  \code{"collector"}), or is based on individuals
+  (\code{"rarefaction"}).  The actual sampling effort is given as item
+  \code{Effort} or \code{Individuals} in the printed result. For
+  weighted \code{"random"} method the effort refers to the average
+  effort per site, or sum of weights per number of sites. With
+  weighted \code{method = "random"}, the averaged species richness is
+  found from linear interpolation of single random permutations.
+  Therefore at least the first value (and often several first) have
+  \code{NA} richness, because these values cannot be interpolated in
+  all cases but should be extrapolated.  The \code{plot} function
+  defaults to display the results as scaled to sites, but this can be
+  changed selecting \code{xvar = "effort"} (weighted methods) or
+  \code{xvar = "individuals"} (with \code{method = "rarefaction"}).
+ 
+  The \code{summary} and \code{boxplot} methods are available for
+  \code{method = "random"}.
 
   Function \code{predict} can return the values corresponding to
   \code{newdata} using linear (\code{\link{approx}}) or spline
@@ -133,7 +154,12 @@ fitspecaccum(object, model, method = "random", ...)
   (\code{\link{SSgompertz}}), \code{"michaelis-menten"})
   (\code{\link{SSmicmen}}), \code{"logis"} (\code{\link{SSlogis}}),
   \code{"weibull"} (\code{\link{SSweibull}}). See these functions for
-  model specification and details.
+  model specification and details. 
+
+  When weights \code{w} were used the fit is based on accumulated
+  effort and in \code{model = "rarefaction"} on accumulated number of
+  individuals.  The \code{plot} is still based on sites, unless other
+  alternative is selected with \code{xvar}.
 
   Function \code{predict} uses \code{\link{predict.nls}}, and you can
   pass all arguments to that function. In addition, \code{fitted},
@@ -154,6 +180,8 @@ fitspecaccum(object, model, method = "random", ...)
     is the number of sites corresponding to a certain number of
     individuals and generally not an integer, and the average
     number of individuals is also returned in item \code{individuals}.} 
+  \item{effort}{Average sum of weights corresponding to the number of
+    sites when model was fitted with argument \code{w}}
   \item{richness}{The number of species corresponding to number of
     sites.  With \code{method = "collector"} this is the observed
     richness, for other methods the average or expected richness.}
@@ -164,7 +192,9 @@ fitspecaccum(object, model, method = "random", ...)
   \item{perm}{Permutation results with \code{method = "random"} and
     \code{NULL} in other cases. Each column in \code{perm} holds one
     permutation.}
-
+  \item{weights}{Matrix of accumulated weights corresponding to the
+    columns of the \code{perm} matrix when model was fitted with
+    argument \code{w}.}
   \item{fitted, residuals, coefficients}{Only in \code{fitspecacum}:
      fitted values, residuals and nonlinear model coefficients. For
      \code{method = "random"} these are matrices with a column for

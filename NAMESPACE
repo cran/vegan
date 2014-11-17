@@ -5,30 +5,31 @@ useDynLib(vegan)
 
 export(CCorA, MOStest, RsquareAdj, SSarrhenius, SSgitay, SSgleason,
 SSlomolino, adipart, adonis, anosim, beals, betadisper, betadiver,
-bgdispersal, bioenv, bstick, cIndexKM, calibrate, capscale, cascadeKM,
-cca, commsimulator, contribdiv, clamtest, decorana, decostand, designdist,
-coverscale, dispindmorisita, distconnected, diversity, downweight,
-drarefy, eigengrad, eigenvals, envfit, estaccumR, estimateR, eventstar,
-factorfit, fisherfit, fitspecaccum, goodness, hiersimu, humpfit,
-indpower, inertcomp, initMDS, intersetcor, isomapdist, isomap,
-linestack, mantel, meandist, metaMDSdist, metaMDSiter, metaMDSredist,
-MDSrotate, metaMDS, monoMDS, mrpp, msoplot, mso, multipart,
-nestedbetajac, nestedbetasor, 
-nestedchecker, nesteddisc, nestedn0, nestednodf, nestedtemp, oecosimu,
-ordiR2step, ordiarrows, ordicloud, ordicluster,
-ordiellipse, ordigrid, ordihull, ordilabel, ordiplot3d,
-ordiplot, ordipointlabel, ordiresids, ordirgl, ordisegments,
-ordispider, ordisplom, ordistep, ordisurf, orditkplot, orditorp,
-ordixyplot, orglpoints, orglsegments, orglspider, orgltext, 
-pcnm, permatfull, permatswap, permutest, poolaccum, postMDS, prc,
-prestondistr, prestonfit, procrustes, protest, radfit, radlattice,
-rankindex, rarecurve, rarefy, raupcrick, rda, renyiaccum, renyi,
-rrarefy, scores, showvarparts, simper, spandepth, spantree, specaccum,
-specnumber, specpool2vect, specpool, spenvcor, stepacross, stressplot,
-swan, tabasco, taxa2dist, taxondive, tolerance, treedist, treedive, treeheight,
-tsallisaccum, tsallis, varpart, vectorfit, vegandocs, vegdist,
-vegemite, veiledspec, wascores, wcmdscale, wisconsin)
-
+bgdispersal, bioenv, bioenvdist, bstick, cIndexKM, calibrate, capscale,
+cascadeKM, cca, contribdiv, clamtest, commsim, decorana,
+decostand, designdist, coverscale, dispweight, dispindmorisita, distconnected,
+diversity, downweight, drarefy, eigengrad, eigenvals, envfit,
+estaccumR, estimateR, eventstar, factorfit, fisherfit, fitspecaccum,
+gdispweight,goodness, hiersimu, humpfit, indpower, inertcomp, initMDS,
+intersetcor, isomapdist, isomap, linestack, mantel, meandist,
+metaMDSdist, metaMDSiter, metaMDSredist, MDSrotate, metaMDS, monoMDS,
+mrpp, msoplot, mso, multipart, make.commsim, nestedbetajac, nestedbetasor, nestedchecker,
+nesteddisc, nestedn0, nestednodf, nestedtemp, nullmodel, oecosimu,
+ordiareatest,
+ordiR2step, ordiarrows, ordicloud, ordicluster, ordiellipse, ordigrid,
+ordihull, ordilabel, ordiplot, ordipointlabel, ordiresids,
+ordisegments, ordispider, ordisplom, ordistep, ordisurf,
+orditkplot, orditorp, ordixyplot, 
+pcnm, permatfull, permatswap, permustats, permutest,
+poolaccum, postMDS, prc, prestondistr, prestonfit, procrustes,
+protest, radfit, radlattice, rankindex, rarefy, rarecurve, raupcrick,
+rda, renyiaccum, renyi, rrarefy, scores,
+showvarparts, simper, spandepth,
+spantree, specaccum, specnumber, specpool2vect, specpool, spenvcor,
+stepacross, stressplot, swan, tabasco, taxa2dist, taxondive, tolerance,
+treedist, treedive, treeheight, tsallisaccum, tsallis, varpart,
+vectorfit, vegandocs, vegdist, vegemite, veiledspec, wascores,
+wcmdscale, wisconsin)
 ## export pasteCall for 'permute'
 export(pasteCall)
 ## export anova.cca for 'BiodiversityR': this should be fixed there
@@ -36,40 +37,52 @@ export(anova.cca)
 ## Export as.mcmc for coda
 export(as.mcmc.oecosimu, as.mcmc.permat)
 ## DEFUNCT: export names defined in vegan-defunct
-export(permuted.index2, getNumObs)
+export(metaMDSrotate)
 
 ## export regular functions with dot names
 
 export(as.fisher, as.mlm, as.preston, as.rad, fieller.MOStest,
 fisher.alpha, kendall.global, kendall.post, make.cepnames,
 mantel.correlog, mantel.partial, no.shared, rad.lognormal, rad.null,
-rad.preempt, rad.zipf, rad.zipfbrot, read.cep, rgl.isomap,
-rgl.renyiaccum, vif.cca)
+rad.preempt, rad.zipf, rad.zipfbrot, read.cep,
+vif.cca)
 
 ## Export panel functions
-export(panel.ordi, panel.ordi3d, prepanel.ordi3d)
+export(panel.ordi, panel.ordiarrows, panel.ordi3d, prepanel.ordi3d)
 
 ## Export .Depracated functions (to be removed later)
-export(metaMDSrotate)
+export(commsimulator)
+S3method(density, adonis)
+S3method(density, anosim)
+S3method(density, mantel)
+S3method(density, mrpp)
+S3method(density, oecosimu)
+S3method(density, permutest.cca)
+S3method(density, protest)
+S3method(densityplot, adonis)
+S3method(densityplot, oecosimu)
 
 ## do NOT export the following internal functions
 
 ## export(ade2vegancca, orderingKM, ordiArgAbsorber, ordiArrowMul,
 ## ordiGetData, ordimedian, ordiNAexclude, ordiNApredict,
 ## ordiParseFormula, ordiTerminfo, pregraphKM, simpleRDA2, varpart2,
-## varpart3, varpart4, veganCovEllipse)
+## varpart3, varpart4, veganCovEllipse, veganMahatrans)
 
-## Registration of S3 methods
+## Imports
 import(stats)
 import(graphics)
-import(lattice)
 import(permute)
-importFrom(utils, head, tail)
+importFrom(utils, head, tail, str)
 importFrom(tools, Rd2txt, startDynamicHelp)
-## nobs only exists in R 2.13.0 -- import from permute with older R
-if (getRversion() < "2.13.0") {
-    importFrom(permute, nobs)
-}
+import(lattice)
+import(parallel)
+import(tcltk)
+importFrom(MASS, isoMDS, sammon, Shepard, mvrnorm)
+importFrom(cluster, daisy)
+## 's' must be imported in mgcv < 1.8-0 (not needed later)
+importFrom(mgcv, gam, s, te)
+## Registration of S3 methods defined in vegan
 # adipart: vegan
 S3method(adipart, default)
 S3method(adipart, formula)
@@ -82,6 +95,7 @@ S3method(RsquareAdj, default)
 S3method(RsquareAdj, glm)
 S3method(RsquareAdj, lm)
 S3method(RsquareAdj, rda)
+S3method(RsquareAdj, capscale)
 # TukeyHSD: stats
 S3method(TukeyHSD, betadisper)
 # add1: stats
@@ -92,6 +106,8 @@ S3method(alias, cca)
 S3method(anova, betadisper)
 S3method(anova, cca)
 S3method(anova, prc)
+# as.hclust: stats
+S3method(as.hclust, spantree)
 ## Do not export as.mcmc now: would need import(coda)
 # as.mcmc: coda <======= rare
 #S3method(as.mcmc, oecosimu)
@@ -134,16 +150,9 @@ S3method(confint, MOStest)
 # cophenetic: stats
 S3method(cophenetic, spantree)
 # density: stats
-S3method(density, adonis)
-S3method(density, anosim)
-S3method(density, mantel)
-S3method(density, mrpp)
-S3method(density, oecosimu)
-S3method(density, permutest.cca)
-S3method(density, protest)
+S3method(density, permustats)
 # densityplot: lattice
-S3method(densityplot, adonis)
-S3method(densityplot, oecosimu)
+S3method(densityplot, permustats)
 # deviance: stats
 S3method(deviance, cca)
 S3method(deviance, rda)
@@ -152,6 +161,7 @@ S3method(deviance, radfit.frame)
 # drop1: stats
 S3method(drop1, cca)
 # eigenvals: vegan
+S3method(eigenvals, betadisper)
 S3method(eigenvals, cca)
 S3method(eigenvals, default)
 S3method(eigenvals, dudi)
@@ -187,11 +197,15 @@ S3method(head, summary.cca)
 # hiersimu: vegan
 S3method(hiersimu, default)
 S3method(hiersimu, formula)
+# methods for hclust object in base R: these would be better in R
+S3method(reorder, hclust)
+S3method(rev, hclust)
 # identify: graphics
 S3method(identify, ordiplot)
 # labels: base
 S3method(labels, envfit)
 # lines: graphics
+S3method(lines, fitspecaccum)
 S3method(lines, humpfit)
 S3method(lines, permat)
 S3method(lines, preston)
@@ -200,6 +214,7 @@ S3method(lines, procrustes)
 S3method(lines, radline)
 S3method(lines, radfit)
 S3method(lines, spantree)
+S3method(lines, specaccum)
 ## logLik: stats
 S3method(logLik, radfit)
 S3method(logLik, radfit.frame)
@@ -225,6 +240,28 @@ S3method(nobs, wcmdscale)
 # ordisurf: vegan
 S3method(ordisurf, default)
 S3method(ordisurf, formula)
+
+## permustats methods
+S3method(permustats, adonis)
+S3method(permustats, anosim)
+S3method(permustats, mantel)
+S3method(permustats, mrpp)
+S3method(permustats, oecosimu)
+S3method(permustats, ordiareatest)
+S3method(permustats, permutest.betadisper)
+S3method(permustats, permutest.cca)
+S3method(permustats, protest)
+## these return an error: no permutation data
+S3method(permustats, CCorA)
+S3method(permustats, envfit)
+S3method(permustats, factorfit)
+S3method(permustats, vectorfit)
+S3method(permustats, mso)
+
+S3method(print, permustats)
+S3method(summary, permustats)
+S3method(print, summary.permustats)
+
 # permutest: vegan
 S3method(permutest, betadisper)
 S3method(permutest, cca)
@@ -306,6 +343,7 @@ S3method(print, betadisper)
 S3method(print, bioenv)
 S3method(print, capscale)
 S3method(print, cca)
+S3method(print, commsim)
 S3method(print, decorana)
 S3method(print, eigenvals)
 S3method(print, envfit)
@@ -324,7 +362,9 @@ S3method(print, nesteddisc)
 S3method(print, nestedn0)
 S3method(print, nestednodf)
 S3method(print, nestedtemp)
+S3method(print, nullmodel)
 S3method(print, oecosimu)
+S3method(print, ordiareatest)
 S3method(print, permat)
 S3method(print, permutest.betadisper)
 S3method(print, permutest.cca)
@@ -336,11 +376,13 @@ S3method(print, radfit)
 S3method(print, radfit.frame)
 S3method(print, radline)
 S3method(print, specaccum)
+S3method(print, simmat)
 S3method(print, simper)
 S3method(print, summary.bioenv)
 S3method(print, summary.cca)
 S3method(print, summary.clamtest)
 S3method(print, summary.decorana)
+S3method(print, summary.dispweight)
 S3method(print, summary.humpfit)
 S3method(print, summary.isomap)
 S3method(print, summary.meandist)
@@ -359,6 +401,10 @@ S3method(print, wcmdscale)
 # see note on 'confint'
 S3method(profile, MOStest)
 S3method(profile, humpfit)
+## qqmath: lattice
+S3method(qqmath, permustats)
+## qqnorm: stats
+S3method(qqnorm, permustats)
 # radfit: vegan
 S3method(radfit, data.frame)
 S3method(radfit, default)
@@ -376,6 +422,7 @@ S3method(scores, cca)
 S3method(scores, decorana)
 S3method(scores, default)
 S3method(scores, envfit)
+S3method(scores, hclust)
 S3method(scores, lda)
 S3method(scores, metaMDS)
 S3method(scores, monoMDS)
@@ -394,15 +441,25 @@ S3method(screeplot, princomp)
 S3method(simulate, capscale)
 S3method(simulate, cca)
 S3method(simulate, rda)
+S3method(simulate, nullmodel)
+# str: utils
+S3method(str, nullmodel)
 # stressplot: vegan
 S3method(stressplot, default)
 S3method(stressplot, monoMDS)
+S3method(stressplot, wcmdscale)
+S3method(stressplot, capscale)
+S3method(stressplot, cca)
+S3method(stressplot, rda)
+S3method(stressplot, prcomp)
+S3method(stressplot, princomp)
 # summary: base
 S3method(summary, anosim)
 S3method(summary, bioenv)
 S3method(summary, cca)
 S3method(summary, clamtest)
 S3method(summary, decorana)
+S3method(summary, dispweight)
 S3method(summary, eigenvals)
 S3method(summary, humpfit)
 S3method(summary, isomap)
@@ -428,6 +485,8 @@ S3method(text, orditkplot)
 S3method(text, procrustes)
 # tolerance: vegan -- or analogue?? Gav?
 S3method(tolerance, cca)
+# update: stats
+S3method(update, nullmodel)
 # vif: car -- but not used as a S3method within vegan
 # because of car definition: could be defined as exported 'vif' generic
 # in vegan with namespace

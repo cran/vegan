@@ -6,10 +6,10 @@
 \title{Vegan: an introduction to ordination} 
 \author{Jari Oksanen}
 
-\date{\footnotesize{$ $Id: intro-vegan.Rnw 2597 2013-08-28 08:56:55Z jarioksa $ $
+\date{\footnotesize{
   processed with vegan
-2.0-10
-in R Under development (unstable) (2013-12-11 r64449) on \today}}
+2.2-0
+in R Under development (unstable) (2014-11-16 r66991) on \today}}
 
 %% need no \usepackage{Sweave}
 \begin{document}
@@ -81,9 +81,9 @@ Detrended correspondence analysis with 26 segments.
 Rescaling of axes with 4 iterations.
 
                   DCA1   DCA2    DCA3    DCA4
-Eigenvalues     0.5117 0.3036 0.12125 0.14266
+Eigenvalues     0.5117 0.3036 0.12125 0.14267
 Decorana values 0.5360 0.2869 0.08136 0.04814
-Axis lengths    3.7004 3.1166 1.30057 1.47883
+Axis lengths    3.7004 3.1166 1.30055 1.47888
 \end{Soutput}
 \end{Schunk}
 The display of results is very brief: only eigenvalues and used
@@ -113,12 +113,13 @@ species scores to the configuration as weighted averages (function
 \end{Sinput}
 \begin{Soutput}
 Run 0 stress 0.1192678 
-Run 1 stress 0.1183186 
+Run 1 stress 0.1886532 
+Run 2 stress 0.1183186 
 ... New best solution
-... procrustes: rmse 0.02026951  max resid 0.06495418 
-Run 2 stress 0.1886532 
-Run 3 stress 0.1183186 
-... procrustes: rmse 1.293513e-05  max resid 4.605534e-05 
+... procrustes: rmse 0.02026887  max resid 0.06495011 
+Run 3 stress 0.1192678 
+Run 4 stress 0.1183186 
+... procrustes: rmse 6.471967e-05  max resid 0.000210315 
 *** Solution reached
 \end{Soutput}
 \begin{Sinput}
@@ -136,7 +137,7 @@ Distance: bray
 Dimensions: 2 
 Stress:     0.1183186 
 Stress type 1, weak ties
-Two convergent solutions found after 3 tries
+Two convergent solutions found after 4 tries
 Scaling: centring, PC rotation, halfchange scaling 
 Species: expanded scores based on ‘dune’ 
 \end{Soutput}
@@ -288,33 +289,35 @@ interface, and it optionally can assess the ``significance'' of the
 variables using permutation tests:
 \begin{Schunk}
 \begin{Sinput}
-> ord.fit <- envfit(ord ~ A1 + Management, data=dune.env, perm=1000)
+> ord.fit <- envfit(ord ~ A1 + Management, data=dune.env, perm=999)
 > ord.fit
 \end{Sinput}
 \begin{Soutput}
 ***VECTORS
 
-     NMDS1   NMDS2     r2  Pr(>r)  
-A1 0.96474 0.26320 0.3649 0.02298 *
+     NMDS1   NMDS2     r2 Pr(>r)  
+A1 0.96473 0.26325 0.3649  0.017 *
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-P values based on 1000 permutations.
+Permutation: free
+Number of permutations: 999
 
 ***FACTORS:
 
 Centroids:
                NMDS1   NMDS2
-ManagementBF -0.4534 -0.0102
-ManagementHF -0.2636 -0.1282
-ManagementNM  0.2958  0.5790
+ManagementBF -0.4534 -0.0103
+ManagementHF -0.2635 -0.1282
+ManagementNM  0.2957  0.5790
 ManagementSF  0.1506 -0.4670
 
 Goodness of fit:
-               r2   Pr(>r)   
-Management 0.4134 0.004995 **
+               r2 Pr(>r)   
+Management 0.4134  0.009 **
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-P values based on 1000 permutations.
+Permutation: free
+Number of permutations: 999
 \end{Soutput}
 \end{Schunk}
 The result can be drawn directly or added to an ordination diagram
@@ -339,12 +342,12 @@ Link function: identity
 
 Formula:
 y ~ s(x1, x2, k = 10, bs = "tp", fx = FALSE)
-<environment: 0x3c181e8>
+<environment: 0x6e6fa00>
 
 Estimated degrees of freedom:
 1.59  total = 2.59 
 
-REML score: 41.58727
+REML score: 41.58727     
 \end{Soutput}
 \end{Schunk}
 \begin{figure}
@@ -382,14 +385,14 @@ Unconstrained  1.3355     0.6314   15
 Inertia is mean squared contingency coefficient 
 
 Eigenvalues for constrained axes:
-   CCA1    CCA2    CCA3    CCA4 
-0.31875 0.23718 0.13217 0.09168 
+  CCA1   CCA2   CCA3   CCA4 
+0.3187 0.2372 0.1322 0.0917 
 
 Eigenvalues for unconstrained axes:
-     CA1      CA2      CA3      CA4      CA5      CA6      CA7      CA8 
-0.362024 0.202884 0.152661 0.134549 0.110957 0.079982 0.076698 0.055267 
-     CA9     CA10     CA11     CA12     CA13     CA14     CA15 
-0.044361 0.041528 0.031699 0.017786 0.011642 0.008736 0.004711 
+   CA1    CA2    CA3    CA4    CA5    CA6    CA7    CA8    CA9   CA10 
+0.3620 0.2029 0.1527 0.1345 0.1110 0.0800 0.0767 0.0553 0.0444 0.0415 
+  CA11   CA12   CA13   CA14   CA15 
+0.0317 0.0178 0.0116 0.0087 0.0047 
 \end{Soutput}
 \end{Schunk}
 The results can be plotted with (Fig. \ref{fig:cca}):
@@ -431,10 +434,10 @@ Inertia is mean squared contingency coefficient
 Some constraints were aliased because they were collinear (redundant)
 
 Eigenvalues for constrained axes:
-   CCA1    CCA2    CCA3    CCA4    CCA5    CCA6    CCA7    CCA8    CCA9 
-0.46713 0.34102 0.17606 0.15317 0.09528 0.07027 0.05887 0.04993 0.03183 
-  CCA10   CCA11   CCA12 
-0.02596 0.02282 0.01082 
+  CCA1   CCA2   CCA3   CCA4   CCA5   CCA6   CCA7   CCA8   CCA9  CCA10 
+0.4671 0.3410 0.1761 0.1532 0.0953 0.0703 0.0589 0.0499 0.0318 0.0260 
+ CCA11  CCA12 
+0.0228 0.0108 
 
 Eigenvalues for unconstrained axes:
     CA1     CA2     CA3     CA4     CA5     CA6     CA7 
@@ -454,11 +457,13 @@ simultaneously:
 \end{Sinput}
 \begin{Soutput}
 Permutation test for cca under reduced model
+Permutation: free
+Number of permutations: 999
 
 Model: cca(formula = dune ~ A1 + Management, data = dune.env)
-         Df  Chisq      F N.Perm Pr(>F)   
-Model     4 0.7798 2.1896    199  0.005 **
-Residual 15 1.3355                        
+         Df ChiSquare      F Pr(>F)    
+Model     4   0.77978 2.1896  0.001 ***
+Residual 15   1.33549                  
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 \end{Soutput}
@@ -468,47 +473,44 @@ to give its name in full, because \proglang{R} automatically chooses the
 correct \code{anova} variant for the result of constrained
 ordination.
 
-The \code{anova.cca} function tries to be clever and lazy: it
-automatically stops if the observed permutation significance probably
-differs from the targeted critical value ($0.05$ as default), but it
-will continue long in uncertain cases.  You must set \code{step} and
-\code{perm.max} to same values to override this behaviour.
-
 It is also possible to analyse terms separately:
 \begin{Schunk}
 \begin{Sinput}
-> anova(ord, by="term", permu=200)
+> anova(ord, by="term", permutations=199)
 \end{Sinput}
 \begin{Soutput}
 Permutation test for cca under reduced model
 Terms added sequentially (first to last)
+Permutation: free
+Number of permutations: 199
 
 Model: cca(formula = dune ~ A1 + Management, data = dune.env)
-           Df  Chisq      F N.Perm Pr(>F)   
-A1          1 0.2248 2.5245    199  0.015 * 
-Management  3 0.5550 2.0780    199  0.005 **
-Residual   15 1.3355                        
+           Df ChiSquare      F Pr(>F)   
+A1          1   0.22476 2.5245  0.025 * 
+Management  3   0.55502 2.0780  0.010 **
+Residual   15   1.33549                 
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 \end{Soutput}
 \end{Schunk}
-In this case, the function is unable to automatically select the
-number of iterations. This test is sequential: the terms are analysed
+This test is sequential: the terms are analysed
 in the order they happen to be in the model. You can also analyse
 significances of marginal effects (``Type III effects''):
 \begin{Schunk}
 \begin{Sinput}
-> anova(ord, by="mar")
+> anova(ord, by="mar", permutations=199)
 \end{Sinput}
 \begin{Soutput}
 Permutation test for cca under reduced model
 Marginal effects of terms
+Permutation: free
+Number of permutations: 199
 
 Model: cca(formula = dune ~ A1 + Management, data = dune.env)
-           Df  Chisq      F N.Perm  Pr(>F)   
-A1          1 0.1759 1.9761    699 0.02857 * 
-Management  3 0.5550 2.0780    199 0.00500 **
-Residual   15 1.3355                         
+           Df ChiSquare      F Pr(>F)   
+A1          1   0.17594 1.9761   0.06 . 
+Management  3   0.55502 2.0780   0.01 **
+Residual   15   1.33549                 
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 \end{Soutput}
@@ -517,25 +519,25 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 Moreover, it is possible to analyse significance of each axis:
 \begin{Schunk}
 \begin{Sinput}
-> anova(ord, by="axis", perm=500)
+> anova(ord, by="axis", permutations=499)
 \end{Sinput}
 \begin{Soutput}
+Permutation test for cca under reduced model
+Marginal tests for axes
+Permutation: free
+Number of permutations: 499
+
 Model: cca(formula = dune ~ A1 + Management, data = dune.env)
-         Df  Chisq      F N.Perm  Pr(>F)   
-CCA1      1 0.3187 3.5801    199 0.00500 **
-CCA2      1 0.2372 2.6640    299 0.01667 * 
-CCA3      1 0.1322 1.4845    199 0.11500   
-CCA4      1 0.0917 1.0297     99 0.33000   
-Residual 15 1.3355                         
+         Df ChiSquare      F Pr(>F)   
+CCA1      1   0.31875 3.5801  0.002 **
+CCA2      1   0.23718 2.6640  0.004 **
+CCA3      1   0.13217 1.4845  0.102   
+CCA4      1   0.09168 1.0297  0.390   
+Residual 15   1.33549                 
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 \end{Soutput}
 \end{Schunk}
-Now the automatic selection works, but typically some of your axes
-will be very close to the critical value, and it may be useful to set
-a lower \code{perm.max} than the default $10000$ (typically you use
-higher limits than in these examples: we used lower limits to save
-time when this document is automatically generated with this package).
 
 \subsection{Conditioned or partial ordination}
 
@@ -562,10 +564,10 @@ Eigenvalues for constrained axes:
 0.24932 0.12090 0.08160 0.05904 
 
 Eigenvalues for unconstrained axes:
-     CA1      CA2      CA3      CA4      CA5      CA6      CA7      CA8 
-0.306366 0.131911 0.115157 0.109469 0.077242 0.075754 0.048714 0.037582 
-     CA9     CA10     CA11     CA12 
-0.031058 0.021024 0.012542 0.009277 
+    CA1     CA2     CA3     CA4     CA5     CA6     CA7     CA8     CA9 
+0.30637 0.13191 0.11516 0.10947 0.07724 0.07575 0.04871 0.03758 0.03106 
+   CA10    CA11    CA12 
+0.02102 0.01254 0.00928 
 \end{Soutput}
 \end{Schunk}
 This partials out the effect of \code{Moisture} before analysing the
@@ -573,38 +575,46 @@ effects of \code{A1} and \code{Management}.  This also influences
 the significances of the terms:
 \begin{Schunk}
 \begin{Sinput}
-> anova(ord, by="term", perm=500)
+> anova(ord, by="term", permutations=499)
 \end{Sinput}
 \begin{Soutput}
 Permutation test for cca under reduced model
 Terms added sequentially (first to last)
+Permutation: free
+Number of permutations: 499
 
 Model: cca(formula = dune ~ A1 + Management + Condition(Moisture), data = dune.env)
-           Df  Chisq      F N.Perm Pr(>F)   
-A1          1 0.1154 1.4190     99   0.15   
-Management  3 0.3954 1.6205     99   0.01 **
-Residual   12 0.9761                        
+           Df ChiSquare      F Pr(>F)  
+A1          1   0.11543 1.4190  0.122  
+Management  3   0.39543 1.6205  0.012 *
+Residual   12   0.97610                
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 \end{Soutput}
 \end{Schunk}
 If we had a designed experiment, we may wish to restrict the
 permutations so that the observations only are permuted within levels
-of \code{strata}:
+of \code{Moisture}. Restricted permutation is based on the powerful
+\pkg{permute} package. Function \code{how()} can be used to define
+permutation schemes. In the following, we set the levels with
+\code{plots} argument:
 \begin{Schunk}
 \begin{Sinput}
-> anova(ord, by="term", perm=500, strata=Moisture)
+> how <- how(nperm=499, plots = Plots(strata=dune.env$Moisture))
+> anova(ord, by="term", permutations = how)
 \end{Sinput}
 \begin{Soutput}
 Permutation test for cca under reduced model
 Terms added sequentially (first to last)
-Permutations stratified within 'Moisture'
+Plots: dune.env$Moisture, plot permutation: none
+Permutation: free
+Number of permutations: 499
 
 Model: cca(formula = dune ~ A1 + Management + Condition(Moisture), data = dune.env)
-           Df  Chisq      F N.Perm Pr(>F)   
-A1          1 0.1154 1.4190     99   0.30   
-Management  3 0.3954 1.6205     99   0.01 **
-Residual   12 0.9761                        
+           Df ChiSquare      F Pr(>F)   
+A1          1   0.11543 1.4190  0.242   
+Management  3   0.39543 1.6205  0.002 **
+Residual   12   0.97610                 
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 \end{Soutput}

@@ -196,33 +196,33 @@ boxplot(mod)
 
 
 ###################################################
-### code chunk number 29: diversity-vegan.Rnw:611-612
+### code chunk number 29: diversity-vegan.Rnw:639-640
 ###################################################
 specpool(BCI)
 
 
 ###################################################
-### code chunk number 30: diversity-vegan.Rnw:617-619
+### code chunk number 30: diversity-vegan.Rnw:645-647
 ###################################################
 s <- sample(nrow(BCI), 25)
 specpool(BCI[s,])
 
 
 ###################################################
-### code chunk number 31: diversity-vegan.Rnw:630-631
+### code chunk number 31: diversity-vegan.Rnw:658-659
 ###################################################
 estimateR(BCI[k,])
 
 
 ###################################################
-### code chunk number 32: diversity-vegan.Rnw:667-669
+### code chunk number 32: diversity-vegan.Rnw:698-700
 ###################################################
 veiledspec(prestondistr(BCI[k,]))
 veiledspec(BCI[k,])
 
 
 ###################################################
-### code chunk number 33: diversity-vegan.Rnw:683-684
+### code chunk number 33: diversity-vegan.Rnw:714-715
 ###################################################
 smo <- beals(BCI)
 
@@ -237,7 +237,7 @@ plot(beals(BCI, species=j, include=FALSE), BCI[,j],
 
 
 ###################################################
-### code chunk number 35: diversity-vegan.Rnw:697-698
+### code chunk number 35: diversity-vegan.Rnw:728-729
 ###################################################
 getOption("SweaveHooks")[["fig"]]()
 j <- which(colnames(BCI) == "Ceiba.pentandra")

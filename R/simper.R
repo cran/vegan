@@ -1,10 +1,24 @@
 `simper` <-
-    function(comm, group, ...)
+    function(comm, group, permutations = 0, trace = FALSE,  
+             parallel = getOption("mc.cores"), ...)
 {
     if (any(rowSums(comm, na.rm = TRUE) == 0)) 
         warning("you have empty rows: results may be meaningless")
-    permutations <- 0
-    trace <- FALSE
+    pfun <- function(x, comm, comp, i, contrp) {
+        groupp <- group[perm[x,]]
+        ga <- comm[groupp == comp[i, 1], , drop = FALSE] 
+        gb <- comm[groupp == comp[i, 2], , drop = FALSE]
+        n.a <- nrow(ga)
+        n.b <- nrow(gb)
+        for(j in seq_len(n.b)) {
+            for(k in seq_len(n.a)) {
+                mdp <- abs(ga[k, , drop = FALSE] - gb[j, , drop = FALSE])
+                mep <- ga[k, , drop = FALSE] + gb[j, , drop = FALSE]
+                contrp[(j-1)*n.a+k, ] <- mdp / sum(mep)  
+            }
+        }
+        colMeans(contrp)
+    }
     comm <- as.matrix(comm)
     comp <- t(combn(unique(as.character(group)), 2))
     outlist <- NULL
@@ -12,11 +26,7 @@
     P <- ncol(comm)
     nobs <- nrow(comm)
     ## Make permutation matrix
-    if (length(permutations) == 1) {
-        perm <- shuffleSet(nobs, permutations, ...)
-    } else {  # permutations is a matrix
-        perm <- permutations
-    }
+    perm <- getPermuteMatrix(permutations, nobs, ...)
     ## check dims (especially if permutations was a matrix)
     if (ncol(perm) != nobs)
         stop(gettextf("'permutations' have %d columns, but data have %d rows",
@@ -25,39 +35,50 @@
     nperm <- nrow(perm)
     if (nperm > 0)
         perm.contr <- matrix(nrow=P, ncol=nperm)
-    for (i in 1:nrow(comp)) {
-        group.a <- comm[group == comp[i, 1], ]
-        group.b <- comm[group == comp[i, 2], ]
+    ## Parallel processing ?
+    if (is.null(parallel))
+        parallel <- 1
+    hasClus <- inherits(parallel, "cluster")
+    isParal <- (hasClus || parallel > 1) && require(parallel)
+    isMulticore <- .Platform$OS.type == "unix" && !hasClus
+    if (isParal && !isMulticore && !hasClus) {
+        parallel <- makeCluster(parallel)
+    }
+    for (i in seq_len(nrow(comp))) {
+        group.a <- comm[group == comp[i, 1], , drop = FALSE]
+        group.b <- comm[group == comp[i, 2], , drop = FALSE]
         n.a <- nrow(group.a)
         n.b <- nrow(group.b)
         contr <- matrix(ncol = P, nrow = n.a * n.b)
-        for (j in 1:n.b) {
-            for (k in 1:n.a) {
-                md <- abs(group.a[k, ] - group.b[j, ])
-                me <- group.a[k, ] + group.b[j, ]
+        for (j in seq_len(n.b)) {
+            for (k in seq_len(n.a)) {
+                md <- abs(group.a[k, , drop = FALSE] - group.b[j, , drop = FALSE])
+                me <- group.a[k, , drop = FALSE] + group.b[j, , drop = FALSE]
                 contr[(j-1)*n.a+k, ] <- md / sum(me)	
             }
         }
         average <- colMeans(contr)
         
+        ## Apply permutations
         if(nperm > 0){
             if (trace)
                 cat("Permuting", paste(comp[i,1], comp[i,2], sep = "_"), "\n")
             contrp <- matrix(ncol = P, nrow = n.a * n.b)
-            for(p in 1:nperm){
-                groupp <- group[perm[p,]]
-                ga <- comm[groupp == comp[i, 1], ] 
-                gb <- comm[groupp == comp[i, 2], ]
-                for(j in 1:n.b) {
-                    for(k in 1:n.a) {
-                        mdp <- abs(ga[k, ] - gb[j, ])
-                        mep <- ga[k, ] + gb[j, ]
-                        contrp[(j-1)*n.a+k, ] <- mdp / sum(mep)  
-                    }
-                }
-                perm.contr[ ,p] <- colMeans(contrp)
+
+            if (isParal) {
+                if (isMulticore){
+                    perm.contr <- mclapply(seq_len(nperm), function(d) 
+                        pfun(d, comm, comp, i, contrp), mc.cores = parallel)
+                    perm.contr <- do.call(cbind, perm.contr)
+                } else {
+                    perm.contr <- parSapply(parallel, seq_len(nperm), function(d) 
+                        pfun(d, comm, comp, i, contrp))
+                }  
+            } else {
+                perm.contr <- sapply(1:nperm, function(d) 
+                    pfun(d, comm, comp, i, contrp))
             }
-        p <- (apply(apply(perm.contr, 2, function(x) x >= average), 1, sum) + 1) / (nperm + 1)
+            p <- (rowSums(apply(perm.contr, 2, function(x) x >= average)) + 1) / (nperm + 1)
         } 
         else {
           p <- NULL
@@ -75,7 +96,11 @@
                     avb = avb, ord = ord, cusum = cusum, p = p)
         outlist[[paste(comp[i,1], "_", comp[i,2], sep = "")]] <- out
     }
+    ## Close socket cluster if created here
+    if (isParal && !isMulticore && !hasClus)
+        stopCluster(parallel)
     attr(outlist, "permutations") <- nperm
+    attr(outlist, "control") <- attr(perm, "control")
     class(outlist) <- "simper"
     outlist
 }
@@ -99,7 +124,9 @@
     function(object, ordered = TRUE, digits = max(3, getOption("digits") - 3), ...)
 {
     if (ordered) {
-        out <- lapply(object, function(z) data.frame(contr = z$average, sd = z$sd, ratio = z$ratio, av.a = z$ava, av.b = z$avb)[z$ord, ])
+        out <- lapply(object, function(z) 
+            data.frame(contr = z$average, sd = z$sd, ratio = z$ratio, 
+                       av.a = z$ava, av.b = z$avb)[z$ord, ])
         cusum <- lapply(object, function(z) z$cusum)
         for(i in 1:length(out)) {
             out[[i]]$cumsum <- cusum[[i]]
@@ -109,10 +136,13 @@
         } 
     } 
     else {
-        out <- lapply(object, function(z) data.frame(cbind(contr = z$average, sd = z$sd, 'contr/sd' = z$ratio, ava = z$ava, avb = z$avb, p = z$p)))
+        out <- lapply(object, function(z) 
+            data.frame(cbind(contr = z$average, sd = z$sd, 'contr/sd' = z$ratio, 
+                             ava = z$ava, avb = z$avb, p = z$p)))
     }
     attr(out, "digits") <- digits
     attr(out, "permutations") <- attr(object, "permutations")
+    attr(out, "control") <- attr(object, "control")
     class(out) <- "summary.simper"
     out
 }
@@ -139,7 +169,8 @@
                             symbols = c("***", "**", "*", ".", " ")), "legend")
         cat("---\nSignif. codes: ", leg, "\n")
     }
-    if ((np <- attr(x, "permutations")) > 0)
-        cat("P-values based on", np, "permutations\n")
+    if (!is.null(attr(x, "control")))
+        cat(howHead(attr(x, "control")))
     invisible(x)
 }
+

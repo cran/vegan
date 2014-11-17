@@ -1,10 +1,9 @@
 `metaMDSiter` <-
     function (dist, k = 2, trymax = 20, trace = 1, plot = FALSE, 
-              previous.best, engine = "monoMDS", maxit = 200, ...) 
+              previous.best, engine = "monoMDS", maxit = 200,
+              parallel = getOption("mc.cores"), ...) 
 {
     engine <- match.arg(engine, c("monoMDS", "isoMDS"))
-    if (engine == "isoMDS")
-        require(MASS) || stop("Needs package MASS (function isoMDS)")
     EPS <- 0.05
     if (engine == "monoMDS")
         EPS <- EPS/100 # monoMDS stress (0,1), isoMDS (0,100) 
@@ -12,7 +11,19 @@
     RMSELIM <- 0.005
     SOL <- FALSE
     converged <- FALSE
+    ## set tracing for engines
     isotrace <- max(0, trace - 1)
+    monotrace <- engine == "monoMDS" && trace > 1
+    monostop <- function(mod) {
+        if (mod$maxits == 0)
+            return(NULL)
+        lab <- switch(mod$icause,
+                      "no. of iterations >= maxit",
+                      "stress < smin",
+                      "stress ratio > sratmax",
+                      "scale factor of the gradient < sfgrmin")
+        cat("   ", mod$iters, "iterations: ", lab, "\n")
+    }
     ## Previous best or initial configuration 
     if (!missing(previous.best) && !is.null(previous.best)) {
         ## check if previous.best is from metaMDS or isoMDS
@@ -56,38 +67,90 @@
     }
     if (trace) 
         cat("Run 0 stress", s0$stress, "\n")
+    if (monotrace)
+        monostop(s0)
     tries <- 0
-    while(tries < trymax) {
-        tries <- tries + 1
-        stry <- switch(engine,
-                       "monoMDS" = monoMDS(dist, k = k, maxit = maxit, ...),
-                       "isoMDS" = isoMDS(dist, initMDS(dist, k = k), k = k,
-                       maxit = maxit, tol = 1e-07, trace = isotrace))
-        if (trace) {
-            cat("Run", tries, "stress", stry$stress, "\n")
-        }
-        if ((s0$stress - stry$stress) > -EPS) {
-            pro <- procrustes(s0, stry, symmetric = TRUE)
-            if (plot && k > 1) 
-                plot(pro)
-            if (stry$stress < s0$stress) {
-                s0 <- stry
-                if (trace) 
-                    cat("... New best solution\n")
-            }
-            summ <- summary(pro)
-            if (trace) 
-                cat("... procrustes: rmse", summ$rmse, " max resid", 
-                    max(summ$resid), "\n")
-            if (summ$rmse < RMSELIM && max(summ$resid) < RESLIM) {
-                if (trace) 
-                    cat("*** Solution reached\n\n")
-                converged <- TRUE
-                break
-            }
-        }
-        flush.console()
+    ## Prepare for parallel processing
+    if (is.null(parallel))
+        parallel <- 1
+    hasClus <- inherits(parallel, "cluster")
+    isParal <- (hasClus || parallel > 1) && require(parallel)
+    isMulticore <- .Platform$OS.type == "unix" && !hasClus
+    if (isParal && !isMulticore && !hasClus) {
+        parallel <- makeCluster(parallel)
+        clusterEvalQ(parallel, library(vegan))
     }
+    ## get the number of clusters
+    if (inherits(parallel, "cluster"))
+        nclus <- length(parallel)
+    else
+        nclus <- parallel
+    ## proper iterations
+    while(tries < trymax && !converged) {
+        init <- replicate(nclus, initMDS(dist, k = k))
+        if (nclus > 1) isotrace <- FALSE
+        if (isParal) {
+            if (isMulticore) {
+                stry <-
+                    mclapply(1:nclus, function(i)
+                             switch(engine,
+                                    "monoMDS" = monoMDS(dist, init[,,i], k = k,
+                                    maxit = maxit, ...),
+                                    "isoMDS" = isoMDS(dist, init[,,i], k = k,
+                                    maxit = maxit, tol = 1e-07,
+                                    trace = isotrace)),
+                             mc.cores = parallel)
+            } else {
+                stry <-
+                    parLapply(parallel, 1:nclus, function(i)
+                              switch(engine,
+                                     "monoMDS" = monoMDS(dist, init[,,i], k = k,
+                                     maxit = maxit, ...),
+                                     "isoMDS" = isoMDS(dist, init[,,i], k = k,
+                                     maxit = maxit, tol = 1e-07, trace = isotrace)))
+            }
+        } else {
+            stry <- list(switch(engine,
+                                "monoMDS" = monoMDS(dist, init[,,1], k = k,
+                                maxit = maxit, ...),
+                                "isoMDS" = isoMDS(dist, init[,,1], k = k,
+                                maxit = maxit, tol = 1e-07, trace = isotrace)))
+        }
+        ## analyse results of 'nclus' tries
+        for (i in 1:nclus) {
+            tries <- tries + 1
+            if (trace)
+                cat("Run", tries, "stress", stry[[i]]$stress, "\n")
+            if (monotrace)
+                monostop(stry[[i]])
+            if ((s0$stress - stry[[i]]$stress) > -EPS) {
+                pro <- procrustes(s0, stry[[i]], symmetric = TRUE)
+                if (plot && k > 1) 
+                    plot(pro)
+                if (stry[[i]]$stress < s0$stress) {
+                    s0 <- stry[[i]]
+                    ## New best solution has not converged unless
+                    ## proved later
+                    converged <- FALSE
+                    if (trace) 
+                        cat("... New best solution\n")
+                }
+                summ <- summary(pro)
+                if (trace) 
+                    cat("... procrustes: rmse", summ$rmse, " max resid", 
+                        max(summ$resid), "\n")
+                if (summ$rmse < RMSELIM && max(summ$resid) < RESLIM) {
+                    if (trace) 
+                        cat("*** Solution reached\n")
+                    converged <- TRUE
+                }
+            }
+            flush.console()
+        }
+    }
+    ## stop socket cluster
+    if (isParal && !isMulticore && !hasClus)
+        stopCluster(parallel)
     if (!missing(previous.best) && inherits(previous.best, "metaMDS")) {
         tries <- tries + previous.best$tries
     }

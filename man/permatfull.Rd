@@ -21,9 +21,10 @@ Details section.}
 
 \usage{
 permatfull(m, fixedmar = "both", shuffle = "both", strata = NULL, 
-    mtype = "count", times = 99)
+    mtype = "count", times = 99, ...)
 permatswap(m, method = "quasiswap", fixedmar="both", shuffle = "both",
-    strata = NULL, mtype = "count", times = 99, burnin = 0, thin = 1)
+    strata = NULL, mtype = "count", times = 99, 
+    burnin = 0, thin = 1, ...)
 \method{print}{permat}(x, digits = 3, ...)
 \method{summary}{permat}(object, ...)
 \method{print}{summary.permat}(x, digits = 2, ...)
@@ -47,7 +48,7 @@ permatswap(m, method = "quasiswap", fixedmar="both", shuffle = "both",
   \item{method}{Character for method used for the swap algorithm
     (\code{"swap"}, \code{"tswap"}, \code{"quasiswap"},
     \code{"backtrack"}) as described for function
-    \code{\link{commsimulator}}. If \code{mtype="count"} the
+    \code{\link{make.commsim}}. If \code{mtype="count"} the
     \code{"quasiswap"}, \code{"swap"}, \code{"swsh"} and
     \code{"abuswap"} methods are available (see details).} 
   \item{shuffle}{Character, indicating whether individuals
@@ -67,7 +68,8 @@ permatswap(m, method = "quasiswap", fixedmar="both", shuffle = "both",
     method, whether a locally weighted regression curve should be drawn,
     the plot should be drawn, and statistic values should be printed on
     the plot.} 
-  \item{\dots}{Other arguments passed to methods.}
+  \item{\dots}{Other arguments passed to \code{\link{simulate.nullmodel}} 
+    or methods.}
 }
 
 \details{
@@ -80,8 +82,8 @@ permatswap(m, method = "quasiswap", fixedmar="both", shuffle = "both",
   \code{\link{r2dtable}} function is used that is based on Patefield's
   (1981) algorithm. For presence absence data, matrix fill should be
   necessarily fixed, and \code{permatfull} is a wrapper for the function
-  \code{\link{commsimulator}}. The \code{r00, r0, c0, quasiswap}
-  algorithms of \code{\link{commsimulator}} are used for \code{"none",
+  \code{\link{make.commsim}}. The \code{r00, r0, c0, quasiswap}
+  algorithms of \code{\link{make.commsim}} are used for \code{"none",
   "rows", "columns", "both"} values of the \code{fixedmar} argument,
   respectively
 
@@ -99,7 +101,7 @@ permatswap(m, method = "quasiswap", fixedmar="both", shuffle = "both",
   kept constant. \code{permatswap} uses different kinds of swap
   algorithms, and row and columns sums are fixed in all cases.  For
   presence-absence data, the \code{swap} and \code{tswap} methods of
-  \code{\link{commsimulator}} can be used.  For count data, a special
+  \code{\link{make.commsim}} can be used.  For count data, a special
   swap algorithm ('swapcount') is implemented that results in permuted
   matrices with fixed marginals and matrix fill at the same time.
 
@@ -140,13 +142,18 @@ permatswap(m, method = "quasiswap", fixedmar="both", shuffle = "both",
   column incidences constant, then non-zero values are modified
   according to the \code{shuffle} argument (only \code{"samp"} and
   \code{"both"} are available in this case, because it is applied only
-  on non-zero values).
+  on non-zero values). It also recognizes the \code{fixedmar}
+  argument which cannot be \code{"both"} (\pkg{vegan} versions <= 2.0
+  had this algorithm with \code{fixedmar = "none"}).
 
   The algorithm \code{"abuswap"} produces two kinds of null models
   (based on \code{fixedmar="columns"} or \code{fixedmar="rows"}) as
   described in Hardy (2008; randomization scheme 2x and 3x,
   respectively).  These preserve column and row occurrences, and column
-  or row sums at the same time.
+  or row sums at the same time. (Note that similar constraints
+  can be achieved by the non sequential \code{"swsh"} algorithm
+  with \code{fixedmar} argument set to \code{"columns"} or
+  \code{"rows"}, respectively.)
 
   Constraints on row/column sums, matrix fill, total sum and sums within
   strata can be checked by the \code{summary} method. \code{plot} method
@@ -177,7 +184,7 @@ permatswap(m, method = "quasiswap", fixedmar="both", shuffle = "both",
   is useful for accessing diagnostic tools available in the \pkg{coda}
   package.  }
 
-\value{ Functions \code{permatfull} and \code{permatswap} return an
+\value{Functions \code{permatfull} and \code{permatswap} return an
   object of class \code{"permat"} containing the the function call
   (\code{call}), the original data matrix used for permutations
   (\code{orig}) and a list of permuted matrices with length \code{times}
@@ -196,7 +203,7 @@ permatswap(m, method = "quasiswap", fixedmar="both", shuffle = "both",
 
 
 \references{ Original references for presence-absence algorithms are
-  given on help page of \code{\link{commsimulator}}.
+  given on help page of \code{\link{make.commsim}}.
 
   Hardy, O. J. (2008) Testing the spatial phylogenetic structure of
   local communities: statistical performances of different null models
@@ -212,7 +219,7 @@ permatswap(m, method = "quasiswap", fixedmar="both", shuffle = "both",
 \email{solymos@ualberta.ca} and Jari Oksanen}
 
 \seealso{ For other functions to permute matrices:
-\code{\link{commsimulator}}, \code{\link{r2dtable}},
+\code{\link{make.commsim}}, \code{\link{r2dtable}},
 \code{\link{sample}}, \code{\link[bipartite]{swap.web}}.
 
 For the use of these permutation algorithms: \code{\link{oecosimu}},
@@ -220,7 +227,10 @@ For the use of these permutation algorithms: \code{\link{oecosimu}},
 
 For time-series diagnostics: \code{\link{Box.test}},
 \code{\link{lag.plot}}, \code{\link{tsdiag}}, \code{\link{ar}},
-\code{\link{arima}} }
+\code{\link{arima}} 
+
+For underlying `low level' implementation:
+\code{\link{commsim}} and \code{\link{nullmodel}}.}
 
 \examples{
 ## A simple artificial community data matrix.
@@ -273,7 +283,7 @@ lag.plot(bc)
 mar <- arima(bc, c(1,0,0))
 mar
 ## Ljung-Box test of residuals
-Box.test(mar$residuals)
+Box.test(residuals(mar))
 ## Graphical diagnostics
 tsdiag(mar)
 }

@@ -9,6 +9,7 @@
 \alias{summary.ordihull}
 \alias{scores.ordihull}
 \alias{summary.ordiellipse}
+\alias{ordiareatest}
 
 \title{Display Groups or Factor Levels in Ordination Diagrams}
 
@@ -24,11 +25,14 @@ ordiellipse(ord, groups, display="sites", kind = c("sd","se"), conf,
          draw = c("lines","polygon", "none"), w = weights(ord, display),
          col = NULL, alpha = 127, show.groups, label = FALSE, ...)
 ordispider(ord, groups, display="sites", w = weights(ord, display),
-         show.groups, label = FALSE, ...)
+	 spiders = c("centroid", "median"),  show.groups, 
+         label = FALSE, ...)
 ordicluster(ord, cluster, prune = 0, display = "sites",
          w = weights(ord, display), ...)
 \method{summary}{ordihull}(object, ...)
 \method{summary}{ordiellipse}(object, ...)
+ordiareatest(ord, groups, area = c("hull", "ellipse"), permutations = 999,
+         parallel = getOption("mc.cores"), ...)
 }
 
 \arguments{
@@ -80,6 +84,9 @@ ordicluster(ord, cluster, prune = 0, display = "sites",
     corresponding value found from the Chi-squared distribution with
     2df. }
 
+  \item{spiders}{Are centres or spider bodies calculated either as
+    centroids (averages) or spatial medians.}
+
   \item{cluster}{Result of hierarchic cluster analysis, such as
     \code{\link{hclust}} or \code{\link[cluster]{agnes}}.}
 
@@ -91,6 +98,19 @@ ordicluster(ord, cluster, prune = 0, display = "sites",
     \code{ordiellipse}. The result is \code{\link{invisible}}, but it
     can be saved, and used for summaries (areas etc. of hulls and
     ellipses). }
+
+  \item{area}{Evaluate the area of convex hulls of \code{ordihull}, or of
+    ellipses of \code{ordiellipse}.}
+
+  \item{permutations}{a list of control values for the permutations
+    as returned by the function \code{\link[permute]{how}}, or the
+    number of permutations required, or a permutation matrix where each
+    row gives the permuted indices.}
+
+  \item{parallel}{Number of parallel processes or a predefined socket
+    cluster.  With \code{parallel = 1} uses ordinary, non-parallel
+    processing. The parallel processing is done with \pkg{parallel}
+    package.}
 
   \item{\dots}{Parameters passed to graphical functions or to
     \code{\link{scores}} to select axes and scaling etc. } 
@@ -109,6 +129,12 @@ ordicluster(ord, cluster, prune = 0, display = "sites",
   defines the direction of the principal axis of the ellipse. 
   An ellipsoid hull can be drawn with function
   \code{\link[cluster]{ellipsoidhull}} of package \pkg{cluster}.
+
+  Function \code{ordihull} and \code{ordiellipse} return invisibly an
+  object that has a \code{summary} method that returns the coordinates
+  of centroids and areas of the hulls or ellipses. Function
+  \code{ordiareatest} studies the one-sided hypothesis that these
+  areas are smaller than with randomized \code{groups}.
 
   Function \code{ordispider} draws a \sQuote{spider} diagram where
   each point is connected to the group centroid with
@@ -147,10 +173,7 @@ ordicluster(ord, cluster, prune = 0, display = "sites",
   Function \code{ordihull} returns a list of coordinates of the hulls
   (which can be extracted with \code{scores}), and \code{ordiellipse}
   returns a list of covariance matrices and scales used in drawing the
-  ellipses.  These result objects have a \code{summary} method that
-  returns the coordinates of the centres of the ellipses or hulls and
-  their surface areas in user units.  With \code{draw = "none"} only
-  the result object is returned and nothing is drawn.
+  ellipses.
 
 }
 

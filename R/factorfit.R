@@ -1,5 +1,5 @@
-"factorfit" <-
-    function (X, P, permutations = 0, strata, w,  ...) 
+`factorfit` <-
+    function (X, P, permutations = 0, strata = NULL, w,  ...) 
 {
     P <- as.data.frame(P)
     ## Check that all variables are factors, and coerce if necessary
@@ -18,16 +18,20 @@
         w <- rep(w, NR)
     r <- NULL
     pval <- NULL
-    totvar <- .C("goffactor", as.double(X), as.integer(rep(0, 
-                                                           NR)), as.double(w), as.integer(NR), as.integer(NC), as.integer(1), 
+    totvar <- .C("goffactor", as.double(X), as.integer(rep(0, NR)),
+                 as.double(w), as.integer(NR), as.integer(NC), as.integer(1), 
                  double(1), double(1), double(1), var = double(1), PACKAGE = "vegan")$var
     sol <- centroids.cca(X, P, w)
     var.id <- rep(names(P), sapply(P, nlevels))
+    ## make permutation matrix for all variables handled in the next loop
+    permat <- getPermuteMatrix(permutations, NR, strata = strata)
+    permutations <- nrow(permat)
+
     for (i in 1:length(P)) {
         A <- as.integer(P[[i]])
         NL <- nlevels(P[[i]])
-        invar <- .C("goffactor", as.double(X), as.integer(A - 
-                                                          1), as.double(w), as.integer(NR), as.integer(NC), 
+        invar <- .C("goffactor", as.double(X), as.integer(A - 1), as.double(w),
+                    as.integer(NR), as.integer(NC), 
                     as.integer(NL), double(NL), double(NL), double(NL), 
                     var = double(1), PACKAGE = "vegan")$var
         r.this <- 1 - invar/totvar
@@ -35,16 +39,17 @@
         if (permutations) {
             A <- as.integer(P[[i]])
             NL <- nlevels(P[[i]])
-            tmp <- rep(NA, permutations)
-            for (i in 1:permutations) {
-                indx <- permuted.index(length(A), strata)
+            ptest <- function(indx, ...) {
                 take <- A[indx]
-                invar <- .C("goffactor", as.double(X), as.integer(take - 
-                                                                  1), as.double(w), as.integer(NR), as.integer(NC), 
+                invar <- .C("goffactor", as.double(X),
+                            as.integer(take -  1), as.double(w),
+                            as.integer(NR), as.integer(NC), 
                             as.integer(NL), double(NL), double(NL), double(NL), 
                             var = double(1), PACKAGE = "vegan")$var
-                tmp[i] <- 1 - invar/totvar
+                1 - invar/totvar
             }
+            tmp <- sapply(1:permutations,
+                          function(indx,...) ptest(permat[indx,], ...))
             pval.this <- (sum(tmp >= r.this) + 1)/(permutations + 1)
             pval <- c(pval, pval.this)
         }
@@ -57,10 +62,7 @@
         names(pval) <- names(P)
     out <- list(centroids = sol, r = r, permutations = permutations, 
                 pvals = pval, var.id = var.id)
-    if (!missing(strata)) {
-        out$strata <- deparse(substitute(strata))
-        out$stratum.values <- strata
-    }
+    out$control <- attr(permat, "control")
     class(out) <- "factorfit"
     out
 }

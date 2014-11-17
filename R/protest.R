@@ -1,5 +1,6 @@
-"protest" <-
-    function (X, Y, scores = "sites", permutations = 999, strata, ...)
+`protest` <-
+    function (X, Y, scores = "sites", permutations = how(nperm = 999),
+              ...)
 {
     X <- scores(X, display = scores, ...)
     Y <- scores(Y, display = scores, ...)
@@ -16,28 +17,29 @@
     sol$symmetric <- TRUE
     sol$t0 <- sqrt(1 - sol$ss)
     N <- nrow(X)
-    perm <- rep(0, permutations)
-    for (i in 1:permutations) {
-        take <- permuted.index(N, strata)
-        ## avoid overhead of procrustes() and only evaluate the
-        ## statistic by svd (hand crafted from r2388 of the devel
-        ## branch).
-        perm[i] <- sum(svd(crossprod(X, Y[take,]), nv = 0, nu = 0)$d)
-    }
-    Pval <- (sum(perm >= sol$t0) + 1)/(permutations + 1)
-    if (!missing(strata)) {
-        strata <- deparse(substitute(strata))
-        s.val <- strata
-    }
-    else {
-        strata <- NULL
-        s.val <- NULL
-    }
+
+    ## Permutations: We only need the goodness of fit statistic from
+    ## Procrustes analysis, and therefore we only have the necessary
+    ## function here. This avoids a lot of overhead of calling
+    ## procrustes() for each permutation. The following gives the
+    ## Procrustes r directly.
+    procr <- function(X, Y) sum(svd(crossprod(X, Y), nv=0, nu=0)$d)
+
+    permutations <- getPermuteMatrix(permutations, N)
+    if (ncol(permutations) != N)
+        stop(gettextf("'permutations' have %d columns, but data have %d observations",
+                      ncol(permutations), N))
+    np <- nrow(permutations)
+
+    perm <- sapply(seq_len(np),
+                   function(i, ...) procr(X, Y[permutations[i,],]))
+
+    Pval <- (sum(perm >= sol$t0) + 1)/(np + 1)
+
     sol$t <- perm
     sol$signif <- Pval
-    sol$permutations <- permutations
-    sol$strata <- strata
-    sol$stratum.values <- s.val
+    sol$permutations <- np
+    sol$control <- attr(permutations, "control")
     sol$call <- match.call()
     class(sol) <- c("protest", "procrustes")
     sol

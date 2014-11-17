@@ -3,6 +3,8 @@
     function(object, ...)
 {
     x <- object
+    ## calculations are much faster if x$orig is matrix instead of data.frame
+    x$orig <- data.matrix(x$orig)
     n <- attr(x, "times")
     ss <- sum(x$orig)
     fi <- sum(x$orig > 0)
@@ -32,7 +34,9 @@
     attr(chisq, "chisq.orig") <- sum((x$orig - E)^2 / E)
 #    attr(chisq, "df") <- (nr - 1) * (nc - 1)
     ## ts if sequential
-    seqmethods <- c("swap", "tswap", "abuswap")
+    seqmethods <- sapply(make.commsim(), function(z) make.commsim(z)$isSeq)
+    seqmethods <- names(seqmethods)[seqmethods]
+#    seqmethods <- c("swap", "tswap", "abuswap")
     if (attr(x, "method") %in% seqmethods) {
         startval <- attr(x, "burnin") + 1 
         dtime <- max(1, attr(x, "thin"))

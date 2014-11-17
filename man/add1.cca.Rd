@@ -9,9 +9,9 @@ constrained ordination model.
 }
 \usage{
 \method{add1}{cca}(object, scope, test = c("none", "permutation"),
-    pstep = 100, perm.max = 200, ...)
+    permutations = how(nperm=199), ...)
 \method{drop1}{cca}(object, scope, test = c("none", "permutation"), 
-    pstep = 100, perm.max = 200, ...)
+    permutations = how(nperm=199), ...)
 }
 
 \arguments{
@@ -20,9 +20,12 @@ constrained ordination model.
   \item{scope}{ A formula giving the terms to be considered for adding
   or dropping; see \code{\link{add1}} for details.}
   \item{test}{ Should a permutation test be added using \code{\link{anova.cca}}. }
-  \item{pstep}{Number of permutations in one step, passed as argument
-  \code{step} to \code{\link{anova.cca}}.}
-  \item{perm.max}{ Maximum number of permutation in \code{\link{anova.cca}}. }
+ 
+  \item{permutations}{a list of control values for the permutations
+    as returned by the function \code{\link[permute]{how}}, or the
+    number of permutations required, or a permutation matrix where each
+    row gives the permuted indices.}
+
   \item{\dots}{Other arguments passed to \code{\link{add1.default}},
   \code{\link{drop1.default}}, and \code{\link{anova.cca}}.}
 }

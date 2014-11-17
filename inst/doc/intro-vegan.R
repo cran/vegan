@@ -92,7 +92,7 @@ points(ord, disp="sites", pch=21, col="red", bg="yellow", cex=1.3)
 ###################################################
 ### code chunk number 12: intro-vegan.Rnw:248-250
 ###################################################
-ord.fit <- envfit(ord ~ A1 + Management, data=dune.env, perm=1000)
+ord.fit <- envfit(ord ~ A1 + Management, data=dune.env, perm=999)
 ord.fit
 
 
@@ -151,44 +151,45 @@ anova(ord)
 
 
 ###################################################
-### code chunk number 21: intro-vegan.Rnw:340-341
+### code chunk number 21: intro-vegan.Rnw:334-335
 ###################################################
-anova(ord, by="term", permu=200)
+anova(ord, by="term", permutations=199)
 
 
 ###################################################
-### code chunk number 22: intro-vegan.Rnw:347-348
+### code chunk number 22: intro-vegan.Rnw:340-341
 ###################################################
-anova(ord, by="mar")
+anova(ord, by="mar", permutations=199)
 
 
 ###################################################
 ### code chunk number 23: a
 ###################################################
-anova(ord, by="axis", perm=500)
+anova(ord, by="axis", permutations=499)
 
 
 ###################################################
-### code chunk number 24: intro-vegan.Rnw:365-367
+### code chunk number 24: intro-vegan.Rnw:353-355
 ###################################################
 ord <- cca(dune ~ A1 + Management + Condition(Moisture), data=dune.env)
 ord
 
 
 ###################################################
-### code chunk number 25: intro-vegan.Rnw:372-373
+### code chunk number 25: intro-vegan.Rnw:360-361
 ###################################################
-anova(ord, by="term", perm=500)
+anova(ord, by="term", permutations=499)
 
 
 ###################################################
-### code chunk number 26: intro-vegan.Rnw:378-379
+### code chunk number 26: intro-vegan.Rnw:369-371
 ###################################################
-anova(ord, by="term", perm=500, strata=Moisture)
+how <- how(nperm=499, plots = Plots(strata=dune.env$Moisture))
+anova(ord, by="term", permutations = how)
 
 
 ###################################################
-### code chunk number 27: intro-vegan.Rnw:383-384
+### code chunk number 27: intro-vegan.Rnw:375-376
 ###################################################
 detach(dune.env)
 

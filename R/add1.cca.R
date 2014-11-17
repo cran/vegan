@@ -1,6 +1,6 @@
 `add1.cca`<-
     function(object, scope, test = c("none", "permutation"),
-             pstep = 100, perm.max = 200, ...)
+             permutations = how(nperm = 199), ...)
 {
     if (inherits(object, "prc"))
         stop("'step'/'add1' cannot be used for 'prc' objects")
@@ -15,7 +15,7 @@
         if (!is.character(scope)) 
             scope <- add.scope(object, update.formula(object, scope))
         ns <- length(scope)
-        adds <- matrix(0, ns+1, 3)
+        adds <- matrix(0, ns+1, 2)
         adds[1, ] <- NA
         for (i in 1:ns) {
             tt <- scope[i]
@@ -27,11 +27,16 @@
             else
                 nfit <- update(object,
                                as.formula(paste(". ~ . +", tt)))
-            tmp <- anova(nfit, step = pstep, perm.max = perm.max, ...)
-            adds[i+1,] <- unlist(tmp[1,3:5])
+            tmp <- anova(nfit,  permutations = permutations, ...)
+            adds[i+1,] <- unlist(tmp[1,3:4])
         }
-        colnames(adds) <- colnames(tmp)[3:5]
+        colnames(adds) <- colnames(tmp)[3:4]
         out <- cbind(out, adds)
+        ## check for redundant (0 Df) terms
+        if (any(nas <- out[,1] < 1, na.rm = TRUE)) {
+            out[[3]][nas] <- NA
+            out[[4]][nas] <- NA
+        }
         class(out) <- cl
     }
     out

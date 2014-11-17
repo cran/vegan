@@ -2,101 +2,142 @@
     function(comm, nestfun, method, nsimul=99,
              burnin=0, thin=1, statistic = "statistic",
              alternative = c("two.sided", "less", "greater"),
-             ...)
+             batchsize = NA,
+             parallel = getOption("mc.cores"), ...)
 {
     alternative <- match.arg(alternative)
     nestfun <- match.fun(nestfun)
-    if (!is.function(method)) {
-        method <- match.arg(method, c("r00", "r0", "r1", "r2", "c0",
-                                  "swap", "tswap", "backtrack", "quasiswap",
-                                  "r2dtable"))
-        if (method == "r2dtable") {
-            nr <- rowSums(comm)
-            nc <- colSums(comm)
-            permfun <- function(z) r2dtable(1, nr, nc)[[1]]
-        }
-    } else {
-        permfun <- match.fun(method)
-        method <- "custom"
+    if (length(statistic) > 1)
+        stop("only one 'statistic' is allowed")
+    if (!is.na(batchsize))
+        batchsize <- batchsize * 1024 * 1024
+    applynestfun <-
+        function(x, fun = nestfun, statistic = "statistic", ...) {
+            tmp <- fun(x, ...)
+            if (is.list(tmp))
+                tmp[[statistic]]
+            else
+                tmp
     }
-    quant <- method %in% c("r2dtable", "custom")
-    ## binarize data with binary null models before getting statistics
-    if (!quant)
-        comm <- ifelse(comm > 0, 1, 0)
-    ind <- nestfun(comm, ...)
-
-    if (is.list(ind))
-        indstat <- ind[[statistic]]
-    else
-        indstat <- ind
-    n <- length(indstat)
-    simind <- matrix(0, nrow=n, ncol=nsimul)
-
-    ## permutation for binary data
-    if (!quant) {
-        if (method %in% c("swap", "tswap")){
-            checkbrd <- 1
-            if (method == "tswap") {
-                checkbrd <- sum(designdist(comm, "(J-A)*(J-B)", "binary"))
-                M <- ncol(comm)
-                N <- nrow(comm)
-                checkbrd <- M*(M-1)*N*(N-1)/4/checkbrd
-                thin <- round(thin*checkbrd)
-            }
-            attr(simind, "thin") <- thin
-            attr(simind, "burnin") <- burnin
-            x <- comm
-            if (burnin > 0)
-                x <- commsimulator(x, method= method, thin = round(checkbrd) * burnin)
-            for(i in 1:nsimul) {
-                x <- commsimulator(x, method = method, thin = thin)
-                tmp <- nestfun(x, ...)
-                if (is.list(tmp))
-                    simind[,i] <- tmp[[statistic]]
-                else
-                    simind[,i] <- tmp
-            }
-        }
-        else {
-            for (i in 1:nsimul) {
-                x <- commsimulator(comm, method=method)
-                tmp <- nestfun(x,...)
-                if (is.list(tmp))
-                    simind[,i] <- tmp[[statistic]]
-                else
-                    simind[,i] <- tmp
-            }
-        }
-    ## permutation for count data
+    if (inherits(comm, "simmat")) {
+        x <- comm
+        method <- attr(x, "method")
+        nsimul <- dim(x)[3]
+        if (nsimul == 1)
+            stop("only one simulation in ", sQuote(deparse(substitute(comm))))
+        comm <- attr(comm, "data")
+        simmat_in <- TRUE
     } else {
-        if (!all(dim(comm) == dim(permfun(comm))))
-            stop("permutation function is not compatible with community matrix")
-        ## sequential algorithms
-        if (burnin > 0 || thin > 1) {
-            if (burnin > 0) {
-                m <- permfun(comm, burnin=burnin, thin=1)
-            }  else m <- comm
-            for (i in 1:nsimul) {
-                tmp <- nestfun(permfun(m, burnin=0, thin=thin), ...)
-                if (is.list(tmp))
-                    simind[, i] <- tmp[[statistic]]
-                else simind[, i] <- tmp
-            }
-            attr(simind, "thin") <- thin
-            attr(simind, "burnin") <- burnin
-        ## not sequential algorithms
+        simmat_in <- FALSE
+        if (inherits(comm, "nullmodel")) {
+            nm <- comm
+            comm <- comm$data
         } else {
-            for (i in 1:nsimul) {
-                tmp <- nestfun(permfun(comm), ...)
-                if (is.list(tmp)) {
-                    simind[, i] <- tmp[[statistic]]
-                } else simind[, i] <- tmp
+            nm <- nullmodel(comm, method)
+            if (nm$commsim$binary) {
+                ## sometimes people do not realize that null model
+                ## makes their data binary
+                if (max(abs(comm - nm$data)) > 0.1)
+                    warning("nullmodel transformed 'comm' to binary data")
+                comm <- nm$data
             }
-            attr(simind, "thin") <- NULL
-            attr(simind, "burnin") <- NULL
+        }
+        method <- nm$commsim$method
+    }
+    ## Check the number of batches needed to run the requested number
+    ## of simulations without exceeding arg 'batchsize', and find the
+    ## size of each batch.
+    if (!simmat_in && !is.na(batchsize)) {
+        commsize <- object.size(comm)
+        totsize <- commsize * nsimul
+        if (totsize > batchsize) { 
+            nbatch <- ceiling(unclass(totsize/batchsize))
+            batches <- diff(round(seq(0, nsimul, by = nsimul/nbatch)))
+        } else {
+            nbatch <- 1
+        }
+    } else {
+        nbatch <- 1
+    }
+    if (nbatch == 1)
+        batches <- nsimul
+    
+    ind <- nestfun(comm, ...)
+    indstat <-
+        if (is.list(ind))
+            ind[[statistic]]
+        else
+            ind
+    ## burnin of sequential models
+    if (!simmat_in && nm$commsim$isSeq) {
+        ## estimate thinning for "tswap" (trial swap)
+        if (nm$commsim$method == "tswap") {
+            checkbrd <-sum(designdist(comm, "(J-A)*(J-B)", 
+                                      "binary"))
+            M <- nm$ncol
+            N <- nm$nrow
+            checkbrd <- M * (M - 1) * N * (N - 1)/4/checkbrd
+            thin <- round(thin * checkbrd)
+            burnin <- round(burnin * checkbrd)
+        }
+        if (burnin > 0)
+            nm <- update(nm, burnin)
+    }
+    ## start with empty simind
+    simind <- NULL
+    ## Go to parallel processing if 'parallel > 1' or 'parallel' could
+    ## be a pre-defined socket cluster or 'parallel = NULL'.
+    if (is.null(parallel))
+        parallel <- 1
+    hasClus <- inherits(parallel, "cluster")
+    if ((hasClus || parallel > 1)  && require(parallel)) {
+        if(.Platform$OS.type == "unix" && !hasClus) {
+            for (i in seq_len(nbatch)) {
+                ## simulate if no simmat_in
+                if(!simmat_in)
+                    x <- simulate(nm, nsim = batches[i], thin = thin)
+                tmp <- mclapply(seq_len(batches[i]),
+                                function(j)
+                                applynestfun(x[,,j], fun=nestfun,
+                                             statistic = statistic, ...),
+                                mc.cores = parallel)
+                simind <- cbind(simind, do.call(cbind, tmp))
+            }
+        } else {
+            ## if hasClus, do not set up and stop a temporary cluster
+            if (!hasClus) {
+                parallel <- makeCluster(parallel)
+                ## make vegan functions available: others may be unavailable
+                clusterEvalQ(parallel, library(vegan))
+            }
+            for(i in seq_len(nbatch)) {
+                if (!simmat_in)
+                    x <- simulate(nm, nsim = batches[i], thin = thin)
+                simind <- cbind(simind,
+                                parApply(parallel, x, 3, function(z)
+                                         applynestfun(z, fun = nestfun,
+                                                      statistic = statistic, ...)))
+            }
+            if (!hasClus)
+                stopCluster(parallel)
+        }
+    } else {
+        for(i in seq_len(nbatch)) {
+            ## do not simulate if x was already a simulation
+            if(!simmat_in)
+                x <- simulate(nm, nsim = batches[i], thin = thin)
+            simind <- cbind(simind, apply(x, 3, applynestfun, fun = nestfun,
+                                          statistic = statistic, ...))
         }
     }
-    ## end of addition
+    
+    simind <- matrix(simind, ncol = nsimul)
+
+    if (attr(x, "isSeq")) {
+        attr(simind, "thin") <- attr(x, "thin")
+        attr(simind, "burnin") <- burnin
+    }
+    
     sd <- apply(simind, 1, sd, na.rm = TRUE)
     means <- rowMeans(simind, na.rm = TRUE)
     z <- (indstat - means)/sd
@@ -113,7 +154,7 @@
                 less = pless,
                 greater = pmore)
     p <- pmin(1, (p + 1)/(nsimul + 1))
-
+    
     ## ADDITION: if z is NA then it is not correct to calculate p values
     ## try e.g. oecosimu(dune, sum, "permat")
     if (any(is.na(z)))
@@ -121,19 +162,12 @@
 
     if (is.null(names(indstat)) && length(indstat) == 1)
         names(indstat) <- statistic
-    ## $oecosimu cannot be added to a data frame, but this gives
-    ## either an error or a mess
-    if (is.data.frame(ind))
-        ind <- as.list(ind)
-    if (!is.list(ind))
-        ind <- list(statistic = ind)
-    if (method == "custom")
-        attr(method, "permfun") <- permfun
-    ind$oecosimu <- list(z = z, means = means, pval = p, simulated=simind,
-                         method=method,
-                         statistic = indstat, alternative = alternative)
-    attr(ind, "call") <- match.call()
-    class(ind) <- c("oecosimu", class(ind))
-    ind
+    oecosimu <- list(z = z, means = means, pval = p, simulated=simind,
+                     method=method, statistic = indstat,
+                     alternative = alternative, isSeq = attr(x, "isSeq"))
+    out <- list(statistic = ind, oecosimu = oecosimu)
+    attr(out, "call") <- match.call()
+    class(out) <- "oecosimu"
+    out
 }
 

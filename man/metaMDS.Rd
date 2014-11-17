@@ -41,7 +41,8 @@ metaMDSdist(comm, distance = "bray", autotransform = TRUE,
     noshare = TRUE, trace = 1, commname, zerodist = "ignore", 
     distfun = vegdist, ...)
 metaMDSiter(dist, k = 2, trymax = 20, trace = 1, plot = FALSE, 
-    previous.best, engine = "monoMDS", maxit = 200, ...)   
+    previous.best, engine = "monoMDS", maxit = 200,
+    parallel = getOption("mc.cores"), ...)   
 initMDS(x, k=2)
 postMDS(X, dist, pc=TRUE, center=TRUE, halfchange, threshold=0.8,
     nthreshold=10, plot=FALSE, ...)
@@ -123,6 +124,14 @@ metaMDSredist(object, ...)
  \item{maxit}{Maximum number of iterations in the single NMDS run;
    passed to the \code{engine} function \code{\link{monoMDS}} or
    \code{\link[MASS]{isoMDS}}.}
+
+ \item{parallel}{Number of parallel processes or a predefined socket
+   cluster.  If you use pre-defined socket clusters (say,
+   \code{clus}), you must issue \code{clusterEvalQ(clus,
+   library(vegan))} to make available internal \pkg{vegan}
+   functions. With \code{parallel = 1} uses ordinary, non-parallel
+   processing. The parallel processing is done with \pkg{parallel}
+   package.}
 
  \item{dist}{Dissimilarity matrix used in multidimensional scaling. }
   \item{pc}{Rotate to principal components. }

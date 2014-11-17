@@ -111,7 +111,7 @@ betadisper(d, group, type = c("median","centroid"), bias.adjust = FALSE)
   parts respectively. This is equation (3) in Anderson (2006). If the
   imaginary part is greater in magnitude than the real part, then we
   would be taking the square root of a negative value, resulting in
-  NaN. From \pkg{vegan} 1.12-12 \code{betadisper} takes the absolute
+  NaN.  Function takes the absolute
   value of the real distance minus the imaginary distance, before
   computing the square root. This is in line with the behaviour of Marti
   Anderson's PERMDISP2 programme. 
@@ -140,7 +140,7 @@ betadisper(d, group, type = c("median","centroid"), bias.adjust = FALSE)
   (Anderson \emph{et al} 2006). Function \code{\link{betadiver}}
   provides some popular dissimilarity measures for this purpose.
 
-  As noted in passing by Anderson (2001) and in a related
+  As noted in passing by Anderson (2006) and in a related
   context by O'Neill (2000), estimates of dispersion around a
   central location (median or centroid) that is calculated from the same data
   will be biased downward. This bias matters most when comparing diversity
@@ -200,9 +200,6 @@ betadisper(d, group, type = c("median","centroid"), bias.adjust = FALSE)
   analysis gives the correct error rates.
 }
 \references{
-  Anderson, M. J. (2001) A new method for non-parametric multivariate 
-  analysis of variance. \emph{Austral Ecology} \strong{26}, 32--46.
-
   Anderson, M.J. (2006) Distance-based tests for homogeneity of
   multivariate dispersions. \emph{Biometrics} \strong{62}, 245--253.
 
@@ -240,7 +237,7 @@ mod
 anova(mod)
 
 ## Permutation test for F
-permutest(mod, pairwise = TRUE)
+permutest(mod, pairwise = TRUE, permutations = 99)
 
 ## Tukey's Honest Significant Differences
 (mod.HSD <- TukeyHSD(mod))
@@ -279,7 +276,7 @@ groups[c(2,20)] <- NA
 dis[c(2, 20)] <- NA
 mod2 <- betadisper(dis, groups) ## warnings
 mod2
-permutest(mod2, control = how(nperm = 100))
+permutest(mod2, permutations = 99)
 anova(mod2)
 plot(mod2)
 boxplot(mod2)
@@ -288,7 +285,7 @@ plot(TukeyHSD(mod2))
 ## Using group centroids
 mod3 <- betadisper(dis, groups, type = "centroid")
 mod3
-permutest(mod3, control = how(nperm = 100))
+permutest(mod3, permutations = 99)
 anova(mod3)
 plot(mod3)
 boxplot(mod3)

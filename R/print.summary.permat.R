@@ -6,12 +6,12 @@ function(x, digits=2, ...)
     cat("Summary of object of class 'permat'\n\nCall: ")
     print(x$x$call)
     cat("\nMatrix type:", attr(x$x, "mtype"), "\nPermutation type:", attr(x$x, "ptype"))
+    cat("\nMethod: ", attr(x$x, "method"), sep = "")
     if (attr(x$x, "ptype") == "swap") {
-        cat("\nMethod: ", attr(x$x, "method"), sep = "")
-        if (attr(x$x, "method") != "quasiswap") {
+        if (!is.na(attr(x$x, "burnin")))
             cat(", burnin: ", attr(x$x, "burnin"), sep = "")
+        if (!is.na(attr(x$x, "thin")))
             cat(", thin: ", attr(x$x, "thin"), sep = "")
-        }
     }
     cat("\nRestricted:", attr(x$x, "is.strat"), "\nFixed margins:", attr(x$x, "fixedmar"))
     if (!is.na(attr(x$x, "shuffle"))) {
@@ -34,7 +34,7 @@ function(x, digits=2, ...)
         cat("\nSums within strata retained:", round(100 * sum(x$strsum) / n, digits), "%")
     cat("\n\nBray-Curtis dissimilarities among original and permuted matrices:\n")
     print(summary(x$bray))
-    cat("\nChi-squared for original matrix: ", round(attr(x$chisq, "chisq.orig"), digits), ")\n", sep = "")
+    cat("\nChi-squared for original matrix: ", round(attr(x$chisq, "chisq.orig"), digits), "\n", sep = "")
     cat("Chi-squared values among expected and permuted matrices:\n")
     print(summary(x$chisq))
 invisible(x)

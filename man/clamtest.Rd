@@ -28,8 +28,9 @@ two unique values or levels. Habitat IDs in the grouping vector
 must match corresponding rows in the community matrix \code{comm}.
 }
   \item{coverage.limit}{
-Integer, below this limit the sample coverage based correction
-is applied to rare species. Sample coverage is calculated separately 
+Integer, the sample coverage based correction 
+is applied to rare species with counts below this limit. 
+Sample coverage is calculated separately 
 for the two habitats. Sample relative abundances are used for species 
 with higher than or equal to \code{coverage.limit} total counts per habitat.
 }
@@ -142,7 +143,7 @@ The original method (Chazdon et al. 2011) has two major problems:
 \examples{
 data(mite)
 data(mite.env)
-sol <- clamtest(mite, mite.env$Shrub=="None", alpha=0.005)
+sol <- with(mite.env, clamtest(mite, Shrub=="None", alpha=0.005))
 summary(sol)
 head(sol)
 plot(sol)

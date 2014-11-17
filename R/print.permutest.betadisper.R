@@ -5,7 +5,7 @@
     cat("\n")
     writeLines(strwrap("Permutation test for homogeneity of multivariate dispersions\n"))
     ##cat("\n")
-    print(x$control)
+    cat(howHead(x$control))
     nc <- dim(x$tab)[2]
     cn <- colnames(x$tab)
     has.P <- substr(cn[nc], 1, 3) == "Pr("
@@ -21,7 +21,7 @@
         zap.i <- zap.i[!(zap.i %in% i)]
     if (length(i <- grep("N.Perm$", cn)))
         zap.i <- zap.i[!(zap.i %in% i)]
-    cat("Response: Distances", sep = "\n")
+    cat("\nResponse: Distances", sep = "\n")
     printCoefmat(x$tab, digits = digits,
                  signif.stars = getOption("show.signif.stars"),
                  has.Pvalue = has.P, P.values = has.P, cs.ind = NULL,

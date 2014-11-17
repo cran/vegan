@@ -75,10 +75,16 @@
 `stressplot.default` <-
     function(object, dis, pch, p.col = "blue", l.col = "red", lwd = 2, ...)
 {
-    require(MASS) || stop("Needs MASS package")
+    ## the default function only works with metaMDS or MASS::isoMDS results
+    if (!(inherits(object, "metaMDS") ||
+        all(c("points", "stress") %in% names(object))))
+        stop("can be used only with objects that are compatible with MASS::isoMDS results")
     if (missing(dis))
-        dis <- metaMDSredist(object)
-    if (attr(dis, "Size") != nrow(object$points))
+        if (inherits(object, "metaMDS"))
+            dis <- metaMDSredist(object)
+        else
+            stop("needs dissimilarities 'dis'")
+     if (attr(dis, "Size") != nrow(object$points))
         stop("Dimensions do not match in ordination and dissimilarities")
     shep <- Shepard(dis, object$points)
     stress <- sum((shep$y - shep$yf)^2)/sum(shep$y^2)

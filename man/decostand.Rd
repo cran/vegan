@@ -10,7 +10,6 @@ methods for community ecologists.
 }
 \usage{
 decostand(x, method, MARGIN, range.global, logbase = 2, na.rm=FALSE, ...)
-
 wisconsin(x)
 }
 
@@ -87,7 +86,7 @@ wisconsin(x)
   \code{"decostand"} giving the name of applied standardization
   \code{"method"}.
 }
-\author{Jari Oksanen and Etienne \enc{Laliberté}{Laliberte}
+\author{Jari Oksanen, Etienne \enc{Laliberté}{Laliberte}
   (\code{method = "log"}).}
 \note{Common transformations can be made with standard \R functions.}
 
@@ -117,5 +116,5 @@ sptrans <- wisconsin(varespec)
 sptrans <- decostand(varespec, "chi.square")
 plot(procrustes(rda(sptrans), cca(varespec)))
 }
-\keyword{ multivariate}%-- one or more ...
+\keyword{ multivariate}
 \keyword{ manip }

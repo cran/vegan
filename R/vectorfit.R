@@ -1,5 +1,5 @@
 "vectorfit" <-
-    function (X, P, permutations = 0, strata, w, ...) 
+    function (X, P, permutations = 0, strata = NULL, w, ...) 
 {
     if (missing(w) || is.null(w)) 
         w <- 1
@@ -24,29 +24,37 @@
     if (is.null(colnames(X))) 
         colnames(heads) <- paste("Dim", 1:nc, sep = "")
     else colnames(heads) <- colnames(X)
+    ## make permutation matrix for all variables handled in the next loop
+    nr <- nrow(X)
+    permat <- getPermuteMatrix(permutations, nr, strata = strata)
+    if (ncol(permat) != nr)
+        stop(gettextf("'permutations' have %d columns, but data have %d rows",
+                          ncol(permat), nr))
+    permutations <- nrow(permat)
+
     if (permutations) {
-        nr <- nrow(X)
-        permstore <- matrix(nrow = permutations, ncol = ncol(P))
-        for (i in 1:permutations) {
-            indx <- permuted.index(nrow(P), strata)
+        ptest <- function(indx, ...) {
             take <- P[indx, , drop = FALSE]
             take <- .C("wcentre", x = as.double(take), as.double(w),
                        as.integer(nrow(take)), as.integer(ncol(take)),
                        PACKAGE = "vegan")$x
             dim(take) <- dim(P)
             Hperm <- qr.fitted(Q, take)
-            permstore[i, ] <- diag(cor(Hperm, take))^2
+            diag(cor(Hperm, take))^2
         }
-        permstore <- sweep(permstore, 2, r, ">=")
-        pvals <- (apply(permstore, 2, sum) + 1)/(permutations + 1)
+        permstore <- sapply(1:permutations, function(indx, ...) ptest(permat[indx,], ...))
+        ## Single variable is dropped to a vector, and otherwise
+        ## permutations are the matrix columns and variables are rows
+        if (!is.matrix(permstore))
+            permstore <- matrix(permstore, ncol=permutations)
+        permstore <- sweep(permstore, 1, r, ">=")
+        validn <- rowSums(is.finite(permstore))
+        pvals <- (rowSums(permstore, na.rm = TRUE) + 1)/(validn + 1)
     }
     else pvals <- NULL
     sol <- list(arrows = heads, r = r, permutations = permutations, 
                 pvals = pvals)
-    if (!missing(strata)) {
-        sol$strata <- deparse(substitute(strata))
-        sol$stratum.values <- strata
-    }
+    sol$control <- attr(permat, "control")
     class(sol) <- "vectorfit"
     sol
 }

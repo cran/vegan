@@ -16,10 +16,10 @@
 }
 \usage{
 ordistep(object, scope, direction = c("both", "backward", "forward"),
-   Pin = 0.05, Pout = 0.1, pstep = 100, perm.max = 1000, steps = 50,
+   Pin = 0.05, Pout = 0.1, permutations = how(nperm = 199), steps = 50,
    trace = TRUE, ...)
 ordiR2step(object, scope, direction = c("both", "forward"),
-   Pin = 0.05, R2scope = TRUE, pstep = 100, perm.max = 1000,
+   Pin = 0.05, R2scope = TRUE, permutations = how(nperm = 499),
    trace = TRUE, ...)
 }
 %- maybe also 'usage' for other objects documented here.
@@ -51,12 +51,12 @@ ordiR2step(object, scope, direction = c("both", "forward"),
   lower adjusted \eqn{R^2}{R2} than scope are accepted.
   }
 
-  \item{pstep}{
-  Number of permutations in one step. See \code{\link{add1.cca}}.
-}
-  \item{perm.max}{
-  Maximum number of permutation in \code{\link{anova.cca}}.
-}
+  \item{permutations}{a list of control values for the permutations as
+    returned by the function \code{\link[permute]{how}}, or the number
+    of permutations required, or a permutation matrix where each row
+    gives the permuted indices. This is passed to
+    \code{\link{anova.cca}}: see there for details.  }
+
   \item{steps}{
   Maximum number of iteration steps of dropping and adding terms.
 }

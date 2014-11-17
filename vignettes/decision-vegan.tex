@@ -7,10 +7,10 @@
 \author{Jari Oksanen}
 \title{Design decisions and implementation details in vegan}
 
-\date{\footnotesize{$ $Id: decision-vegan.Rnw 2616 2013-09-11 08:34:17Z jarioksa $ $
+\date{\footnotesize{
   processed with vegan
-2.0-10
-in R Under development (unstable) (2013-12-11 r64449) on \today}}
+2.2-0
+in R Under development (unstable) (2014-11-16 r66991) on \today}}
 
 %% need no \usepackage{Sweave}
 \begin{document}
@@ -28,6 +28,201 @@ another document.
 
 \tableofcontents
 
+\section{Parallel processing}
+
+Several \pkg{vegan} functions can perform parallel processing using
+the standard \R{} package \pkg{parallel}. 
+The \pkg{parallel} package in \R{} implements
+the functionality of earlier contributed packages \pkg{multicore} and
+\pkg{snow}.  The \pkg{multicore} functionality forks the analysis to
+multiple cores, and \pkg{snow} functionality sets up a socket cluster
+of workers.  The \pkg{multicore} functionality only works in unix-like
+systems (such as MacOS and Linux), but \pkg{snow} functionality works
+in all operating systems.  \pkg{Vegan} can use either method, but
+defaults to \pkg{multicore} functionality when this is available,
+because its forked clusters are usually faster.  This chapter
+describes both the user interface and internal implementation for the
+developers.
+
+\subsection{User interface}
+\label{sec:parallel:ui}
+
+The functions that are capable of parallel processing have argument
+\code{parallel}.  The normal default is \code{parallel = 1} which
+means that no parallel processing is performed.  It is possible to set
+parallel processing as the default in \pkg{vegan} (see
+\S\,\ref{sec:parallel:default}). 
+
+For parallel processing, the \code{parallel} argument can be either
+
+\begin{enumerate}
+\item An integer in which case the given number of parallel processes
+  will be launched (value $1$ launches non-parallel processing). In
+  unix-like systems (\emph{e.g.}, MacOS, Linux) these will be forked
+  \code{multicore} processes. In Windows socket clusters will be set up,
+  initialized and closed.
+\item A previously created socket cluster. This saves time as the
+  cluster is not set up and closed in the function.  If the argument is a
+  socket cluster, it will also be used in unix-like systems. Setting
+  up a socket cluster is discussed in \S\,\ref{sec:parallel:socket}.
+\end{enumerate}
+
+\subsubsection{Using parallel processing as default}
+\label{sec:parallel:default}
+
+If the user sets option \code{mc.cores}, its value will be used as the
+default value of the \code{parallel} argument in \pkg{vegan}
+functions.  The following command will set up parallel processing to
+all subsequent \pkg{vegan} commands:
+\begin{Schunk}
+\begin{Sinput}
+> options(mc.cores = 2)
+\end{Sinput}
+\end{Schunk}
+
+The \code{mc.cores} option is defined in the \pkg{parallel} package,
+but it is usually unset in which case \pkg{vegan} will default to
+non-parallel computation.  The \code{mc.cores} option can be set by
+the environmental variable \code{MC_CORES} when the \pkg{parallel}
+package is loaded.
+
+\R{} allows\footnote{Since \R{} version 2.15.0.}
+setting up a default socket cluster (\code{setDefaultCluster}), but
+this will not be used in \pkg{vegan}. 
+
+\subsubsection{Setting up socket clusters}
+\label{sec:parallel:socket}
+
+If socket clusters are used (and they are the only alternative in
+Windows), it is often wise to set up a cluster before calling
+parallelized code and give the pre-defined cluster as the value of
+the \code{parallel} argument in \pkg{vegan}.  If you want to use
+socket clusters in unix-like systems (MacOS, Linux), this can be only
+done with pre-defined clusters.
+
+If socket cluster is not set up in Windows, \pkg{vegan} will create and
+close the cluster within the function body. This involves following commands:
+\begin{Schunk}
+\begin{Soutput}
+clus <- makeCluster(4)
+## perform parallel processing
+stopCluster(clus)
+\end{Soutput}
+\end{Schunk}
+The first command sets up the cluster, in this case with four
+cores, and the second command stops the cluster.
+
+Most parallelized \pkg{vegan} functions work similarly in socket and
+fork clusters, but in \code{oecosimu} the parallel processing is used
+to evaluate user-defined functions, and their arguments and data must
+be made known to the socket cluster.  For example, if you want to run
+in parallel the \code{meandist} function of the \code{oecosimu}
+example with a pre-defined socket cluster, you must use:
+\begin{Schunk}
+\begin{Sinput}
+> ## start up and define meandist()
+> library(vegan)
+> data(sipoo)
+> meandist <- 
+      function(x) mean(vegdist(x, "bray"))
+> library(parallel)
+> clus <- makeCluster(4)
+> clusterEvalQ(clus, library(vegan))
+> mbc1 <- oecosimu(dune, meandist, "r2dtable", 
+                   parallel = clus)
+> stopCluster(clus)
+\end{Sinput}
+\end{Schunk}
+Socket clusters are used for parallel processing in Windows, but you
+do not need to pre-define the socket cluster in \code{oecosimu} if you
+only need \pkg{vegan} commands.  However, if you need some other
+contributed packages, you must pre-define the socket cluster also in
+Windows with appropriate \code{clusterEvalQ} calls.
+
+If you pre-set the cluster, you can also use \pkg{snow} style socket
+clusters in unix-like systems.
+
+\subsubsection{Random number generation}
+
+\pkg{Vegan} does not use parallel processing in random number
+generation, and you can set the seed for the standard random number
+generator. Setting the seed for the parallelized generator (L'Ecuyer)
+has no effect in \pkg{vegan}.
+
+\subsubsection{Does it pay off?}
+
+Parallelized processing has a considerable overhead, and the analysis
+is faster only if the non-parallel code is really slow (takes several
+seconds in wall clock time). The overhead is particularly large in
+socket clusters (in Windows). Creating a socket cluster and evaluating
+\code{library(vegan)} with \code{clusterEvalQ} can take two seconds or
+longer, and only pays off if the non-parallel analysis takes ten
+seconds or longer. Using pre-defined clusters will reduce the
+overhead. Fork clusters (in unix-likes operating systems) have a
+smaller overhead and can be faster, but they also have an overhead.
+
+Each parallel process needs memory, and for a large number of
+processes you need much memory.  If the memory is exhausted, the
+parallel processes can stall and  take much longer than
+non-parallel processes (minutes instead of seconds).
+
+If the analysis is fast, and function runs in, say, less than five
+seconds, parallel processing is rarely useful.  Parallel processing is
+useful only in slow analyses: large number of replications or
+simulations, slow evaluation of each simulation. The danger of memory
+exhaustion must always be remembered.
+
+The benefits and potential problems of parallel processing depend on
+your particular system: it is best to rely on your own experience. 
+
+\subsection{Internals for developers}
+
+The implementation of the parallel processing should accord with the
+description of the user interface above (\S\,\ref{sec:parallel:ui}).
+Function \code{oecosimu} can be used as a reference implementation,
+and similar interpretation and order of interpretation of arguments
+should be followed.  All future implementations should be consistent
+and all must be changed if the call heuristic changes.
+
+The value of the \code{parallel} argument can be \code{NULL}, a
+positive integer or a socket cluster.  Integer $1$ means that no
+parallel processing is performed.  The ``normal'' default is
+\code{NULL} which in  the ``normal'' case is interpreted as $1$.  Here
+``normal'' means that \R{} is run with default settings without
+setting \code{mc.cores} or environmental variable \code{MC_CORES}.  
+
+Function \code{oecosimu} interprets the \code{parallel} arguments in
+the following way:
+\begin{enumerate} 
+\item \code{NULL}: The function is called with argument \code{parallel
+    = getOption("mc.cores")}. The option \code{mc.cores} is normally
+  unset and then the default is \code{parallel = NULL}.  
+\item Integer: An integer value is taken as the number of created
+  parallel processes.  In unix-like systems this is the number of
+  forked multicore processes, and in Windows this is the number of
+  workers in socket clusters.  In Windows, the socket cluster is
+  created, and if needed \code{library(vegan)} is evaluated in the
+  cluster (this is not necessary if the function only uses internal
+  functions), and the cluster is stopped after parallel processing.
+\item Socket cluster: If a socket cluster is given, it will be used in
+  all operating systems, and  the cluster is not stopped
+  within the function.
+\end{enumerate}
+
+This gives the following precedence order for parallel processing
+(highest to lowest):
+\begin{enumerate}
+  \item Explicitly given argument value of \code{parallel} will always
+    be used.
+  \item If \code{mc.cores} is set, it will be used. In Windows this
+    means creating and stopping socket clusters. Please note
+    that the \code{mc.cores} is only set from the environmental
+    variable \code{MC_CORES} when you load the \pkg{parallel} package,
+    and it is always unset before first
+    \code{require(parallel)}.
+ \item The fall back behaviour is no parallel processing. 
+\end{enumerate}
+
 \section{Nestedness and Null models}
 
 Some published indices of nestedness and null models of communities
@@ -40,7 +235,7 @@ The matrix temperature is intuitively simple
 (Fig. \ref{fig:nestedtemp}), but the the exact calculations were not
 explained in the original publication \cite{AtmarPat93}.
 \begin{figure}
-\includegraphics{decision-vegan-002}
+\includegraphics{decision-vegan-004}
 \label{fig:nestedtemp}
 \caption{Matrix temperature for \emph{Falco subbuteo} on Sibbo
   Svartholmen (dot). The curve is the fill line, and in a cold
@@ -218,8 +413,8 @@ weighted averaging scores have somewhat wider dispersion.
     in the functions \code{prcomp} and \code{princomp}, and the
     one used in the \pkg{vegan} function \code{rda} 
     and the proprietary software \proglang{Canoco}
-    scores in terms of orthonormal species ($u_{ik}$) and site scores
-    ($v_{jk}$), eigenvalues ($\lambda_k$), number of sites  ($n$) and
+    scores in terms of orthonormal species ($v_{ik}$) and site scores
+    ($u_{jk}$), eigenvalues ($\lambda_k$), number of sites  ($n$) and
     species standard deviations ($s_j$). In \code{rda},
     $\mathrm{const} = \sqrt[4]{(n-1) \sum \lambda_k}$.  Corresponding
     negative scaling in \pkg{vegan}
@@ -413,7 +608,7 @@ default. So we must specifically ask for LC scores
 \end{Sinput}
 \end{Schunk}
 \begin{figure}
-\includegraphics{decision-vegan-005}
+\includegraphics{decision-vegan-007}
 \caption{LC scores in CCA of the original data.}
 \label{fig:ccalc}
 \end{figure}
@@ -428,7 +623,7 @@ shuffles the indices.
 \end{Sinput}
 \end{Schunk}
 \begin{figure}
-\includegraphics{decision-vegan-007}
+\includegraphics{decision-vegan-009}
 \caption{LC scores of shuffled species data.}
 \label{fig:ccashuff}
 \end{figure}
@@ -442,7 +637,7 @@ similar the site scores indeed are (Fig. \ref{fig:ccaproc}).
 \end{Sinput}
 \end{Schunk}
 \begin{figure}
-\includegraphics{decision-vegan-009}
+\includegraphics{decision-vegan-011}
 \caption{Procrustes rotation of LC scores from CCA of original and shuffled data.}
 \label{fig:ccaproc}
 \end{figure}
@@ -457,7 +652,7 @@ Redundancy Analysis (RDA) instead of CCA
 \end{Sinput}
 \end{Schunk}
 \begin{figure}
-\includegraphics{decision-vegan-011}
+\includegraphics{decision-vegan-013}
 \caption{Procrustes rotation of LC scores in RDA of the original and shuffled data.}
 \label{fig:rdaproc}
 \end{figure}
@@ -492,10 +687,10 @@ Eigenvalues for constrained axes:
 0.3608 0.1152 
 
 Eigenvalues for unconstrained axes:
-    CA1     CA2     CA3     CA4     CA5     CA6 
-0.37476 0.24036 0.19696 0.17818 0.15209 0.11840 
-    CA7     CA8 
-0.08364 0.07567 
+   CA1    CA2    CA3    CA4    CA5    CA6    CA7 
+0.3748 0.2404 0.1970 0.1782 0.1521 0.1184 0.0836 
+   CA8 
+0.0757 
 (Showed only 8 of all 21 unconstrained eigenvalues)
 \end{Soutput}
 \begin{Sinput}
@@ -507,26 +702,26 @@ Call: cca(formula = varespec[i, ] ~ Al + K, data
 
               Inertia Proportion Rank
 Total          2.0832     1.0000     
-Constrained    0.1932     0.0927    2
-Unconstrained  1.8900     0.9073   21
+Constrained    0.2023     0.0971    2
+Unconstrained  1.8809     0.9029   21
 Inertia is mean squared contingency coefficient 
 
 Eigenvalues for constrained axes:
-  CCA1   CCA2 
-0.1298 0.0634 
+   CCA1    CCA2 
+0.17450 0.02779 
 
 Eigenvalues for unconstrained axes:
-    CA1     CA2     CA3     CA4     CA5     CA6 
-0.52408 0.31643 0.21958 0.17766 0.17696 0.11951 
-    CA7     CA8 
-0.08447 0.07063 
+   CA1    CA2    CA3    CA4    CA5    CA6    CA7 
+0.5192 0.3131 0.1957 0.1802 0.1562 0.1203 0.0894 
+   CA8 
+0.0799 
 (Showed only 8 of all 21 unconstrained eigenvalues)
 \end{Soutput}
 \end{Schunk}
 Similarly their WA scores will be (probably) very different
 (Fig. \ref{fig:ccawa}).
 \begin{figure}
-\includegraphics{decision-vegan-013}
+\includegraphics{decision-vegan-015}
 \caption{Procrustes rotation of WA scores of CCA with the original and
   shuffled data.}
 \label{fig:ccawa}
@@ -547,11 +742,11 @@ remain within numerical accuracy:
 > max(residuals(proc))
 \end{Sinput}
 \begin{Soutput}
-[1] 2.67932e-14
+[1] 2.948264e-14
 \end{Soutput}
 \end{Schunk}
 In \code{cca} the difference would be somewhat larger than now
-observed 2.6793e-14 because site
+observed 2.9483e-14 because site
 weights used for environmental variables are shuffled with the species
 data.
 
@@ -570,7 +765,7 @@ following example uses the classical dune meadow data \cite{Jongman87}:
 When the results are plotted using LC scores, sample plots fall only
 in four alternative positions (Fig. \ref{fig:factorlc}).
 \begin{figure}
-\includegraphics{decision-vegan-016}
+\includegraphics{decision-vegan-018}
 \caption{LC scores of the dune meadow data using only one factor as a
   constraint.}
 \label{fig:factorlc}
@@ -595,7 +790,7 @@ score with the corresponding LC (Fig.  \ref{fig:walcspider}).
 \end{Sinput}
 \end{Schunk}
 \begin{figure}
-\includegraphics{decision-vegan-018}
+\includegraphics{decision-vegan-020}
 \caption{A ``spider plot'' connecting WA scores to corresponding LC
   scores. The shorter the web segments, the better the ordination.}
 \label{fig:walcspider}

@@ -10,20 +10,33 @@
 }
 
 \usage{
-simper(comm, group,  ...)
-\method{summary}{simper}(object, ordered = TRUE, 
-     digits = max(3, getOption("digits") - 3), ...)
+simper(comm, group, permutations = 0, trace = FALSE, 
+    parallel = getOption("mc.cores"), ...)
+\method{summary}{simper}(object, ordered = TRUE,
+    digits = max(3,getOption("digits") - 3), ...)
 }
 
 \arguments{
   \item{comm}{Community data matrix.}
   \item{group}{Factor describing the group structure. Must have at
     least 2 levels.}
+  \item{permutations}{a list of control values for the permutations
+    as returned by the function \code{\link[permute]{how}}, or the
+    number of permutations required, or a permutation matrix where each
+    row gives the permuted indices.}
+  \item{trace}{Trace permutations.}
   \item{object}{an object returned by \code{simper}.}
   \item{ordered}{Logical; Should the species be ordered by their
     average contribution?}
   \item{digits}{Number of digits in output.}
-  \item{...}{Parameters passed to other functions.}
+  \item{parallel}{Number of parallel processes or a predefined socket
+    cluster.  With \code{parallel = 1} uses ordinary, non-parallel
+    processing. The parallel processing is done with \pkg{parallel}
+    package. See \code{\link{vegandocs}} \code{decision-vegan} for
+    details.}
+  \item{...}{Parameters passed to other functions. In \code{simper} the
+    extra parameters are passed to \code{\link[permute]{shuffleSet}} if
+    permutations are used.}
 }
 
 \details{ Similarity percentage, \code{simper} (Clarke 1993) is based
@@ -74,6 +87,9 @@ simper(comm, group,  ...)
   \item{ord}{An index vector to order vectors by their contribution or
     order \code{cusum} back to the original data order.}
   \item{cusum}{Ordered cumulative contribution.}
+  \item{p}{Permutation \eqn{p}-value. Probability of getting a larger
+    or equal average contribution in random permutation of the group
+    factor.}
 }
 
 \examples{

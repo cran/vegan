@@ -28,7 +28,7 @@
     \code{"euclidean"}, \code{"canberra"}, \code{"bray"}, \code{"kulczynski"},
      \code{"jaccard"}, \code{"gower"}, \code{"altGower"}, \code{"morisita"}, 
      \code{"horn"}, \code{"mountford"}, \code{"raup"} , \code{"binomial"}, 
-     \code{"chao"} or \code{"cao"}.}
+     \code{"chao"}, \code{"cao"} or \code{"mahalanobis"}.}
   \item{binary}{Perform presence/absence standardization before analysis
     using \code{\link{decostand}}.}
   \item{diag}{Compute diagonals. }
@@ -187,7 +187,10 @@
   and Crick originally suggested that sampling probabilities should be
   proportional to species frequencies (Chase et al. 2011). A simulation
   approach with unequal species sampling probabilities is implemented in
-  \code{\link{raupcrick}} function following Chase et al. (2011).
+  \code{\link{raupcrick}} function following Chase et al. (2011).  The
+  index can be also used for transposed data to give a probabilistic
+  dissimilarity index of species co-occurrence (identical to Veech
+  2013).
   
   Chao index tries to take into account the number of unseen species
   pairs, similarly as in \code{method = "chao"} in
@@ -208,6 +211,13 @@
 
   Morisita index can be used with genuine count data (integers) only. Its
   Horn--Morisita variant is able to handle any abundance data.
+
+  Mahalanobis distances are Euclidean distances of a matrix where
+  columns are centred, have unit variance, and are uncorrelated.  The
+  index is not commonly used for community data, but it is sometimes
+  used for environmental variables. The calculation is based on
+  transforming data matrix and then using Euclidean distances
+  following Mardia et al. (1979).
 
   Euclidean and Manhattan dissimilarities are not good in gradient
   separation without proper standardization but are still included for
@@ -272,9 +282,15 @@
 
   Krebs, C. J. (1999). \emph{Ecological Methodology.} Addison Wesley Longman.
 
+  Mardia, K.V., Kent, J.T. and Bibby, J.M. (1979). \emph{Multivariate analysis}.
+  Academic Press.
+
   Mountford, M. D. (1962). An index of similarity and its application to
   classification problems. In: P.W.Murphy (ed.),
   \emph{Progress in Soil Zoology}, 43--50. Butterworths.
+
+  Veech, J. A. (2013). A probabilistic model for analysing species
+  co-occurrence. \emph{Global Ecology and Biogeography} 22, 252--260. 
 
   Wolda, H. (1981). Similarity indices, sample size and
   diversity. \emph{Oecologia} 50, 296--302.

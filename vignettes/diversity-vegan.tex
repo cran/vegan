@@ -9,9 +9,9 @@
 
 \title{Vegan: ecological diversity} \author{Jari Oksanen} 
 
-\date{\footnotesize{$ $Id: diversity-vegan.Rnw 2807 2013-12-05 11:50:52Z jarioksa $ $
-  processed with vegan 2.0-10
-  in R Under development (unstable) (2013-12-11 r64449) on \today}}
+\date{\footnotesize{
+  processed with vegan 2.2-0
+  in R Under development (unstable) (2014-11-16 r66991) on \today}}
 
 %% need no \usepackage{Sweave}
 \begin{document}
@@ -344,14 +344,14 @@ log-series for a randomly selected plot is (Fig. \ref{fig:fisher}):
 \end{Sinput}
 \begin{Soutput}
 Fisher log series model
-No. of species: 92 
-Fisher alpha:   35.12348 
+No. of species: 86 
+Fisher alpha:   33.31374 
 \end{Soutput}
 \end{Schunk}
 \begin{figure}
 \includegraphics{diversity-vegan-017}
 \caption{Fisher's log-series fitted to one randomly selected site
-  (34).}
+  (43).}
 \label{fig:fisher}
 \end{figure}
 We already saw $\alpha$ as a diversity index.
@@ -375,7 +375,7 @@ octave, and the same for all species at the octave limits occurring 2,
 the lower octave.  Function \code{prestondistr} directly maximizes
 truncated log-normal likelihood without binning data, and it is the
 recommended alternative.  Log-normal models usually fit poorly to the
-BCI data, but here our random plot (number 34):
+BCI data, but here our random plot (number 43):
 \begin{Schunk}
 \begin{Sinput}
 > prestondistr(BCI[k,])
@@ -383,18 +383,18 @@ BCI data, but here our random plot (number 34):
 \begin{Soutput}
 Preston lognormal model
 Method: maximized likelihood to log2 abundances 
-No. of species: 92 
+No. of species: 86 
 
-      mode      width         S0 
- 0.9808822  1.7328484 24.2476646 
+     mode     width        S0 
+ 0.722374  1.867705 22.353328 
 
 Frequencies by Octave
-                0        1        2        3        4
-Observed 17.00000 24.50000 22.50000 16.00000 6.500000
-Fitted   20.65821 24.24619 20.39683 12.29845 5.315036
+                0        1       2        3        4
+Observed 17.50000 27.00000 16.5000 11.50000 9.000000
+Fitted   20.74239 22.10773 17.6901 10.62715 4.792958
                 5         6
-Observed 3.500000 2.0000000
-Fitted   1.646382 0.3655304
+Observed 2.500000 2.0000000
+Fitted   1.622897 0.4125523
 \end{Soutput}
 \end{Schunk}
 
@@ -433,26 +433,26 @@ set gives (Fig. \ref{fig:rad}):
 \end{Sinput}
 \begin{Soutput}
 RAD models, family poisson 
-No. of species 92, total abundance 447
+No. of species 86, total abundance 407
 
-           par1      par2     par3    Deviance AIC    
-Null                                   96.957  363.040
-Preemption  0.049501                   94.601  362.684
-Lognormal   0.87031   1.2147           23.247  293.330
-Zipf        0.15445  -0.88735          20.796  290.879
-Mandelbrot  0.52179  -1.2176   2.4672   6.227  278.310
-           BIC    
-Null       363.040
-Preemption 365.205
-Lognormal  298.373
-Zipf       295.922
-Mandelbrot 285.875
+           par1      par2     par3    Deviance
+Null                                   92.4312
+Preemption  0.054324                   82.4328
+Lognormal   0.82087   1.2361           20.2361
+Zipf        0.1632   -0.90476          20.0974
+Mandelbrot  0.57359  -1.2499   2.4591   9.5133
+           AIC      BIC     
+Null       336.9752 336.9752
+Preemption 328.9768 331.4312
+Lognormal  268.7801 273.6888
+Zipf       268.6414 273.5501
+Mandelbrot 260.0574 267.4204
 \end{Soutput}
 \end{Schunk}
 \begin{figure}
 \includegraphics{diversity-vegan-020}
 \caption{Ranked abundance distribution models for a random plot
-  (no. 34).  The best model has the lowest \textsc{aic}.}
+  (no. 43).  The best model has the lowest \textsc{aic}.}
 \label{fig:rad}
 \end{figure}
 
@@ -701,9 +701,12 @@ species is related to the number of rare species, or species seen only
 once or twice.
 
 Function \code{specpool} implements the following models to estimate
-the pool size $S_p$ \citep{SmithVanBelle84, Chao87}:
+the pool size $S_p$ \citep{SmithVanBelle84, Chao87, ChiuEtal14}:
 \begin{align}
-S_p &= S_o + \frac{f_1^2}{2 f_2} & \text{Chao}\\
+\label{eq:chao-basic}
+S_p &= S_o + \frac{f_1^2}{2 f_2} \frac{N-1}{N} & \text{Chao}\\
+\label{eq:chao-bc}
+S_p &= S_o + \frac{f_1 (f_1 -1)}{2 (f_2+1)}  \frac{N-1}{N} & \text{Chao bias-corrected}\\
 S_p &= S_o + f_1 \frac{N-1}{N}  & \text{1st order Jackknife}\\
 S_p & = S_o + f_1 \frac{2N-3}{N} \nonumber \\ & + f_2 \frac{(N-2)^2}{N(N-1)}
 & \text{2nd order Jackknife}\\
@@ -715,12 +718,36 @@ and $p_i$ are proportions of species.  The idea in jackknife seems to
 be that we missed about as many species as we saw only once, and the
 idea in bootstrap that if we repeat sampling (with replacement) from
 the same data, we miss as many species as we missed originally.
+\citet{ChiuEtal14} introduced the small-sample correction term
+$\frac{N}{N-1}$, but it was not originally used \citep{Chao87}.
 
-The variance the estimator of \citet{Chao87} is:
-\begin{equation}
-s^2 = f_2 \left(\frac{G^4}{4} + G^3 + \frac{G^2}{2} \right), \,
-\text{where}\quad G = \frac{f_1}{f_2}
-\end{equation}
+The variance the estimator of the basic Chao estimate is \citep{ChiuEtal14}:
+\begin{multline}
+\label{eq:var-chao-basic}
+s^2 = f_2 \left(A^2 \frac{G^4}{4} + A^2 G^3 + A \frac{G^2}{2} \right),\\
+\text{where}\; A = \frac{N-1}{N}\;\text{and}\; G = \frac{f_1}{f_2} 
+\end{multline}
+The variance of bias-corrected Chao estimate can be approximated by
+replacing the terms of eq.~\ref{eq:var-chao-basic} with the
+corresponding terms in eq.~\ref{eq:chao-bc}:
+\begin{multline}
+\label{eq:var-chao-bc}
+s^2 = A \frac{f_1(f_1-1)}{2(f_2+1)} + A^2 \frac{f_1(2 f_1+1)^2}{(f_2+1)^2}\\
+ + A^2 \frac{f_1^2 f_2 (f_1 -1)^2}{4 (f_2 + 1)^4}
+\end{multline}
+If we apply the bias-correction in the special case where there are no
+doubletons ($f_2 = 0$), the he variance is 
+\citep[who omit small-sample correction in some terms]{ChiuEtal14}:
+\begin{multline}
+\label{eq:var-chao-bc0}
+s^2 = \frac{1}{4} A^2 f_1 (2f_1 -1)^2 + \frac{1}{2} A f_1 (f_1-1) - \frac{1}{4}A^2 \frac{f_1^4}{S_p}
+\end{multline}
+Function \code{specpool} uses eq.~\ref{eq:chao-basic} and estimates
+its variance with eq.~\ref{eq:var-chao-basic} when $f_2 > 0$. When
+$f_2 = 0$, \code{specpool} applies eq.~\ref{eq:chao-bc} which reduces
+to $\frac{N-1}{N} \frac{1}{2} f_1 (f_1 - 1)$, and its variance
+estimator eq.~\ref{eq:var-chao-bc0}.
+
 The variance of the first-order jackknife is based on the number of
 ``singletons'' $r$ (species occurring only once in the data) in sample
 plots \citep{SmithVanBelle84}:
@@ -732,8 +759,9 @@ Variance of the second-order jackknife is not evaluated in
 For the variance of bootstrap estimator, it is practical to define a
 new variable $q_i = (1-p_i)^N$ for each species \citep{SmithVanBelle84}:
 \begin{multline}
-s^2 = \sum_{i=1}^{S_o} q_i (1-q_i) + 2 \sum \sum Z_p ,\\ \text{where}\; Z_p = \dots
+s^2 = \sum_{i=1}^{S_o} q_i (1-q_i)  \\ +2 \sum_{i \neq j}^{S_o} \left[(Z_{ij}/N)^N - q_i q_j \right]
 \end{multline}
+where $Z_{ij}$ is the number of sites where both species are absent.
 
 The extrapolated richness values for the whole BCI data are:
 \begin{Schunk}
@@ -741,8 +769,8 @@ The extrapolated richness values for the whole BCI data are:
 > specpool(BCI)
 \end{Sinput}
 \begin{Soutput}
-    Species     chao  chao.se  jack1 jack1.se    jack2
-All     225 236.6053 6.659395 245.58 5.650522 247.8722
+    Species     chao chao.se  jack1 jack1.se    jack2
+All     225 236.3732 6.54361 245.58 5.650522 247.8722
         boot  boot.se  n
 All 235.6862 3.468888 50
 \end{Soutput}
@@ -756,10 +784,10 @@ the plots (but this is rarely true):
 > specpool(BCI[s,])
 \end{Sinput}
 \begin{Soutput}
-    Species     chao  chao.se jack1 jack1.se    jack2
-All     207 229.3214 11.73157   231 6.499231 241.6567
+    Species     chao  chao.se  jack1 jack1.se    jack2
+All     206 229.1771 12.00792 230.96 7.394701 242.5367
         boot  boot.se  n
-All 218.3863 3.760674 25
+All 217.8287 4.374874 25
 \end{Soutput}
 \end{Schunk}
 
@@ -776,16 +804,19 @@ two of these methods:
 > estimateR(BCI[k,])
 \end{Sinput}
 \begin{Soutput}
-                 34
-S.obs     92.000000
-S.chao1  127.062500
-se.chao1  17.669342
-S.ACE    124.460040
-se.ACE     5.531529
+                 43
+S.obs     86.000000
+S.chao1  115.750000
+se.chao1  13.264138
+S.ACE    132.940236
+se.ACE     6.432043
 \end{Soutput}
 \end{Schunk}
-Chao's method is similar as above, but uses another, ``unbiased''
-equation. \textsc{ace} is based on rare species also:
+Chao's method is similar as the bias-corrected model
+eq.~\ref{eq:chao-bc} with its variance estimator
+eq.~\ref{eq:var-chao-bc}, but it uses counts of individuals instead of
+incidences, and does not use small sample correction.  \textsc{ace} is
+based on rare species also:
 \begin{equation}
 \begin{split}
 S_p &= S_\mathrm{abund} + \frac{S_\mathrm{rare}}{C_\mathrm{ACE}} +
@@ -824,14 +855,14 @@ can try:
 \end{Sinput}
 \begin{Soutput}
 Extrapolated     Observed       Veiled 
-   105.32232     92.00000     13.32232 
+    104.6503      86.0000      18.6503 
 \end{Soutput}
 \begin{Sinput}
 > veiledspec(BCI[k,])
 \end{Sinput}
 \begin{Soutput}
 Extrapolated     Observed       Veiled 
-   111.38235     92.00000     19.38235 
+   118.52239     86.00000     32.52239 
 \end{Soutput}
 \end{Schunk}
 

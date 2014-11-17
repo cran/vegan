@@ -17,12 +17,14 @@
         } else {
             ## input vector: either vectors or factors must be NULL,
             ## and the existing set of labels is replaced
-            if (!is.null(labs$v) && !is.null(labs$f))
+            if (!is.null(x$vectors) && !is.null(x$factors))
                 stop("needs a list with both 'vectors' and 'factors' labels")
-            if (!is.null(labs$v))
-                labs$v <- labels
-            else
+            ## need to handle the case where both sets of labels are NULL
+            ## such as when used with the default interface and single x
+            if (!is.null(x$factors))
                 labs$f <- labels
+            else
+                labs$v <- labels
         }
     }
     vect <- NULL
@@ -102,7 +104,7 @@
         xlim <- range(xstack[,1] + sw, xstack[,2] - sw)
         ylim <- range(xstack[,2] + sh, xstack[,2] - sh)
         plot.window(xlim = xlim, ylim = ylim, asp = 1, ...)
-        ## Re-evaluate arrow.mul, set its text and re-evaluate limits again 
+        ## Re-evaluate arrow.mul, set its text and re-evaluate limits again
         if (!is.null(vect)) {
             arrow.mul <- ordiArrowMul(vect, at = at, fill = 1)
             vect <- arrow.mul * vect
@@ -119,7 +121,7 @@
         alabs <- colnames(vect)
         title(..., ylab = alabs[2], xlab = alabs[1])
     }
-    
+
     if (!is.null(vect)) {
         arrows(at[1], at[2], vect[, 1], vect[, 2], len = 0.05,
                col = col)

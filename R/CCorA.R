@@ -1,5 +1,5 @@
 `CCorA` <-
-    function(Y, X, stand.Y = FALSE, stand.X = FALSE, nperm = 0, ...)
+    function(Y, X, stand.Y = FALSE, stand.X = FALSE, permutations = 0, ...)
 {
     epsilon <- sqrt(.Machine$double.eps)
     ##
@@ -40,20 +40,15 @@
         }
         invisible(0)
     }
-    probPillai <- function(Y, X, n, S11.inv, S22.inv, s, df1, df2, epsilon,
-                           Fref, nperm, ...) {
+    probPillai <- function(Y.per, X, n, S11.inv, S22.inv, s, df1, df2, epsilon,
+                           Fref, permat, ...) {
         ## Permutation test for Pillai's trace in CCorA.
         ## Reference: Brian McArdle's unpublished graduate course notes.
-        nGE <- 1
-        for(i in 1:nperm) {
-            Y.per <- Y[permuted.index(n, ...),, drop=FALSE]
-            S12.per <- cov(Y.per,X)
-            gross.mat <- S12.per %*% S22.inv %*% t(S12.per) %*% S11.inv
-            Pillai.per <- sum(diag(gross.mat))
-            Fper  <- (Pillai.per*df2)/((s-Pillai.per)*df1)
-            if(Fper >= (Fref-epsilon)) nGE <- nGE+1
-        }
-        P <- nGE/(nperm+1)
+        S12.per <- cov(Y.per,X)
+        gross.mat <- S12.per %*% S22.inv %*% t(S12.per) %*% S11.inv
+        Pillai.per <- sum(diag(gross.mat))
+        Fper  <- (Pillai.per*df2)/((s-Pillai.per)*df1)
+        Fper >= (Fref-epsilon)
     }
     ## END: internal functions
     ##
@@ -161,21 +156,29 @@
     df2 <- (n - max(pp,qq) - 1)
     Fval  <- (PillaiTrace*df2)/((s-PillaiTrace)*df1)
     p.Pillai <- pf(Fval, s*df1, s*df2, lower.tail=FALSE)
+    permat <- getPermuteMatrix(permutations, n, ...)
+    nperm <- nrow(permat)
+    if (ncol(permat) != n)
+        stop(gettextf("'permutations' have %d columns, but data have %d rows",
+                      ncol(permat), n))
 
-    if(nperm > 0) {
-        p.perm <- probPillai(Y, X, n, S11.inv, S22.inv, s, df1, df2,
-                             epsilon, Fval, nperm, ...)
+    if (nperm > 0) {
+        p.perm <- sapply(1:nperm, function(indx, ...) 
+                         probPillai(Y[permat[indx,],] , X, n, S11.inv, S22.inv, s,
+                                    df1, df2, epsilon, Fval, nperm, ...))
+        p.perm <- (sum(p.perm) +1)/(nperm + 1)
     } else {
         p.perm <- NA
     }
-
+    
     out <- list(Pillai=PillaiTrace, Eigenvalues=Eigenvalues, CanCorr=K.svd$d,
                 Mat.ranks=c(RsquareX.Y$m, RsquareY.X$m), 
                 RDA.Rsquares=c(RsquareY.X$Rsquare, RsquareX.Y$Rsquare),
                 RDA.adj.Rsq=c(Rsquare.adj.Y.X, Rsquare.adj.X.Y),
                 nperm=nperm, p.Pillai=p.Pillai, p.perm=p.perm, Cy=Cy, Cx=Cx, 
                 corr.Y.Cy=corr.Y.Cy, corr.X.Cx=corr.X.Cx, corr.Y.Cx=corr.Y.Cx, 
-                corr.X.Cy=corr.X.Cy, call = match.call())
+                corr.X.Cy=corr.X.Cy, control = attr(permat, "control"),
+                call = match.call())
     class(out) <- "CCorA"
     out
 }

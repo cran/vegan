@@ -1,12 +1,343 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html><head><title>R: vegan News</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link rel="stylesheet" type="text/css" href="R.css">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: vegan News</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
-<table width="100%" summary="page for NEWS"><tr><td>NEWS</td><td align="right">R Documentation</td></tr></table>
+<table width="100%" summary="page for NEWS"><tr><td>NEWS</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>vegan News</h2>
+
+<h3>Changes in version 2.2-0</h3>
+
+
+
+<h4>GENERAL</h4>
+
+
+<ul>
+<li><p> Several <span class="pkg">vegan</span> functions can now use parallel
+processing for slow and repeating calculations. All these
+functions have argument <code>parallel</code>. The argument can be an
+integer giving the number of parallel processes. In unix-alikes
+(Mac OS, Linux) this will launch <code>"multicore"</code> processing
+and in Windows it will set up <code>"snow"</code> clusters as desribed
+in the documentation of the <span class="pkg">parallel</span> package. If <code>option</code>
+<code>"mc.cores"</code> is set to an integer &gt; 1, this will be used to
+automatically start parallel processing. Finally, the argument
+can also be a previously set up <code>"snow"</code> cluster which will
+be used both in Windows and in unix-alikes. <span class="pkg">Vegan</span> vignette
+on Design decision explains the implementation (use
+<code>vegandocs("decission")</code>, and <span class="pkg">parallel</span> package has more
+extensive documentation on parallel processing in <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span>.
+</p>
+<p>The following function use parallel processing in analysing
+permutation statistics: <code>adonis</code>, <code>anosim</code>,
+<code>anova.cca</code> (and <code>permutest.cca</code>), <code>mantel</code> (and
+<code>mantel.partial</code>), <code>mrpp</code>, <code>ordiareatest</code>,
+<code>permutest.betadisper</code> and <code>simper</code>. In addition,
+<code>bioenv</code> can compare several candidate sets of models in
+paralle, <code>metaMDS</code> can launch several random starts in
+parallel, and <code>oecosimu</code> can evaluate test statistics for
+several null models in parallel.
+</p>
+</li>
+<li><p> All permutation tests are based on the <span class="pkg">permute</span> package
+which offers strong tools for restricted permutation. All these
+functions have argument <code>permutations</code>. The default usage of
+simple non-restricted permutations is achieved by giving a single
+integer number. Restricted permutations can be defined using the
+<code>how</code> function of the <span class="pkg">permute</span> package. Finally, the
+argument can be a permutation matrix where rows define
+permutations. It is possible to use external or user constructed
+permutations.
+</p>
+<p>See <code>help(permutations)</code> for a brief introduction on
+permutations in <span class="pkg">vegan</span>, and <span class="pkg">permute</span> package for the
+full documention. The vignette of the <span class="pkg">permute</span> package can
+be read from <span class="pkg">vegan</span> with command
+<code>vegandocs("permutations")</code>.
+</p>
+<p>The following functions use the <span class="pkg">permute</span> package:
+<code>CCorA</code>, <code>adonis</code>, <code>anosim</code>, <code>anova.cca</code> (plus
+associated <code>permutest.cca</code>, <code>add1.cca</code>,
+<code>drop1.cca</code>, <code>ordistep</code>, <code>ordiR2step</code>),
+<code>envfit</code> (plus associated <code>factorfit</code> and
+<code>vectorfit</code>), <code>mantel</code> (and <code>mantel.partial</code>),
+<code>mrpp</code>, <code>mso</code>, <code>ordiareatest</code>,
+<code>permutest.betadisper</code>, <code>protest</code> and <code>simper</code>.
+</p>
+</li>
+<li><p> Community null model generation has been completely
+redesigned and rewritten. The communities are constructed with
+new <code>nullmodel</code> function and defined in a low level
+<code>commsim</code> function. The actual null models are generated
+with a <code>simulate</code> function that builds an array of null
+models. The new null models include a wide array of quantitative
+models in addition to the old binary models, and users can plug
+in their own generating functions. The basic tool invoking and
+analysing null models is <code>oecosimu</code>. The null models are
+often used only for the analysis of nestedness, but the
+implementation in <code>oecosimu</code> allows analysing any
+statistic, and null models are better seen as an alternative to
+permutation tests.
+</p>
+</li></ul>
+ 
+ 
+
+
+<h4>INSTALLATION</h4>
+
+
+<ul>
+<li> <p><span class="pkg">vegan</span> package dependencies and namespace imports
+were adapted to changes in <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span>, and no more trigger warnings and
+notes in package tests.
+</p>
+</li>
+<li><p> Three-dimensional ordination graphics using
+<span class="pkg">scatterplot3d</span> for static plots and <span class="pkg">rgl</span> for dynamic
+plots were removed from <span class="pkg">vegan</span> and moved to a companion
+package <span class="pkg">vegan3d</span>. The package is available in CRAN.
+</p>
+</li></ul>
+ 
+ 
+
+
+<h4>NEW FUNCTIONS</h4>
+
+
+<ul>
+<li><p> Function <code>dispweight</code> implements dispersion weighting
+of Clarke et al. (<em>Marine Ecology Progress Series</em>, 320,
+11&ndash;27).  In addition, we implemented a new method for
+generalized dispersion weighting <code>gdispweight</code>. Both
+methods downweight species that are significantly
+over-dispersed.
+</p>
+</li>
+<li><p> New <code>hclust</code> support functions <code>reorder</code>,
+<code>rev</code> and <code>scores</code>. Functions <code>reorder</code> and
+<code>rev</code> are similar as these functions for <code>dendrogram</code>
+objects in base <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span>. However, <code>reorder</code> can use (and defaults
+to) weighted mean. In weighted mean the node average is always the
+mean of member leaves, whereas the <code>dendrogram</code> uses always
+unweighted means of joined branches.
+</p>
+</li>
+<li><p> Function <code>ordiareatest</code> supplements <code>ordihull</code> and
+<code>ordiellipse</code> and provides a randomization test for the
+one-sided alternative hypothesis that convex hulls or ellipses in
+two-dimensional ordination space have smaller areas than with
+randomized groups.
+</p>
+</li>
+<li><p> Function <code>permustats</code> extracts and inspects permutation
+results with support functions <code>summary</code>, <code>density</code>,
+<code>densityplot</code>, <code>qqnorm</code> and <code>qqmath</code>. The
+<code>density</code> and <code>qqnorm</code> are standard <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> tools that only
+work with one statistic, and <code>densityplot</code> and <code>qqmath</code>
+are <span class="pkg">lattice</span> graphics that work with univariate and
+multivariate statistics. The results of following functions can be
+extracted: <code>anosim</code>, <code>adonis</code>, <code>mantel</code> (and
+<code>mantel.partial</code>), <code>mrpp</code>, <code>oecosimu</code>,
+<code>permustest.cca</code> (but not the corresponding <code>anova</code>
+methods), <code>permutest.betadisper</code>, and <code>protest</code>.
+</p>
+</li>
+<li> <p><code>stressplot</code> functions display the ordination distances
+at given number of dimensions against original distances.  The
+method functins are similar to <code>stressplot</code> for
+<code>metaMDS</code>, and always use the inherent distances of each
+ordination method. The functions are available for the results
+<code>capscale</code>, <code>cca</code>, <code>princomp</code>, <code>prcomp</code>,
+<code>rda</code>, and <code>wcmdscale</code>.
+</p>
+</li></ul>
+ 
+ 
+
+
+<h4>BUG FIXES</h4>
+
+
+<ul>
+<li> <p><code>cascadeKM</code> of only one group will be <code>NA</code> instead
+of a random value. 
+</p>
+</li>
+<li> <p><code>ordiellipse</code> can handle points exactly on a line,
+including only two points (with a warning).
+</p>
+</li>
+<li><p> plotting <code>radfit</code> results for several species failed if
+any of the communities had no species or had only one species.
+</p>
+</li>
+<li> <p><code>RsquareAdj</code> for <code>capscale</code> with negative
+eigenvalues will now report <code>NA</code> instead of using biased
+method of <code>rda</code> results.
+</p>
+</li>
+<li> <p><code>simper</code> failed when a group had only a single member.
+</p>
+</li></ul>
+
+ 
+
+
+<h4>NEW FEATURES</h4>
+
+
+<ul>
+<li> <p><code>anova.cca</code> functions were re-written to use the
+<span class="pkg">permute</span> package. Old results may not be exactly
+reproduced, and models with missing data may fail in several
+cases. There is a new option of analysing a sequence of models
+against each other.
+</p>
+</li>
+<li> <p><code>simulate</code> functions for <code>cca</code> and <code>rda</code>
+can return several simulations in a <code>nullmodel</code> compatible
+object. The functions can produce simulations with correlated
+errors (also for <code>capscale</code>) in parametric simulation with
+Gaussian error.
+</p>
+</li>
+<li> <p><code>bioenv</code> can use Manhattan, Gower and Mahalanobis
+distances in addition to the default Euclidean. New helper
+function <code>bioenvdist</code> can extract the dissimilarities
+applied in best model or any other model.
+</p>
+</li>
+<li> <p><code>metaMDS(..., trace = 2)</code> will show convergence
+information with the default <code>monoMDS</code> engine.
+</p>
+</li>
+<li><p> Function <code>MDSrotate</code> can rotate a <i>k</i>-dimensional
+ordination to <i>k-1</i> variables. When these variables are
+correlated (like usually is the case), the vectors can also be
+correlated to previously rotated dimensions, but will be
+uncorrelated to all later ones.
+</p>
+</li>
+<li> <p><span class="pkg">vegan</span> 2.0-10 changed the weighted <code>nestednodf</code>
+so that weighted analysis of binary data was equivalent to
+binary analysis. However, this broke the equivalence to the
+original method. Now the function has an argument <code>wbinary</code>
+to select the method of analysis. The problem was reported and a
+fix submitted by Vanderlei Debastiani (Universidade Federal do
+Rio Grande do Sul, Brasil).
+</p>
+</li>
+<li> <p><code>ordiellipse</code>, <code>ordihull</code> and <code>ordiellipse</code>
+can handle missing values in <code>groups</code>.
+</p>
+</li>
+<li> <p><code>ordispider</code> can now use spatial medians instead of
+means. 
+</p>
+</li>
+<li> <p><code>rankindex</code> can use Manhattan, Gower and Mahalanobis
+distance in addition to the default Euclidean.
+</p>
+</li>
+<li><p> User can set colours and line types in function
+<code>rarecurve</code> for plotting rarefaction curves.
+</p>
+</li>
+<li> <p><code>spantree</code> gained a support function <code>as.hclust</code>
+to change the minimum spanning tree into an <code>hclust</code> tree.
+</p>
+</li>
+<li> <p><code>fitspecaccum</code> can do weighted analysis. Gained
+<code>lines</code> method.
+</p>
+</li>
+<li><p> Functions for extrapolated number of species or for the size
+of species pool using Chao method were modified following Chiu et
+al., <em>Biometrics</em> 70, 671&ndash;682 (2014).
+</p>
+<p>Incidence based <code>specpool</code> can now use (and defaults to)
+small sample correction with number of sites as the sample
+size. Function uses basic Chao extrapolation based on the ratio of
+singletons and doubletons, but switches now to bias corrected Chao
+extrapolation if there are no doubletons (species found
+twice). The variance formula for bias corrected Chao was derived
+following the supporting
+<a href="http://onlinelibrary.wiley.com/doi/10.1111/biom.12200/suppinfo">online material</a>
+and differs slightly from Chiu et al. (2014).
+</p>
+<p>The <code>poolaccum</code> function was changed similarly, but the small
+sample correction is used always.
+</p>
+<p>The abundance based <code>estimateR</code> uses bias corrected Chao
+extrapolation, but earlier it estimated its variance with classic
+Chao model. Now we use the widespread
+<a href="http://viceroy.eeb.uconn.edu/EstimateS/EstimateSPages/EstSUsersGuide/EstimateSUsersGuide.htm#AppendixB">approximate
+equation</a> for variance.
+</p>
+<p>With these changes these functions are more similar to
+<a href="http://viceroy.eeb.uconn.edu/EstimateS/EstimateSPages/EstSUsersGuide/EstimateSUsersGuide.htm#AppendixB">EstimateS</a>.
+</p>
+</li>
+<li> <p><code>tabasco</code> uses now <code>reorder.hclust</code> for
+<code>hclust</code> object for better ordering than previously when it
+cast trees to <code>dendrogram</code> objects.
+</p>
+</li>
+<li> <p><code>treedive</code> and <code>treedist</code> default now to
+<code>match.force = TRUE</code> and can be silenced with
+<code>verbose = FALSE</code>.
+</p>
+</li>
+<li> <p><code>vegdist</code> gained Mahalanobis distance.
+</p>
+</li>
+<li><p> Nomenclature updated in plant community data with the help
+of <span class="pkg">Taxonstand</span> and <span class="pkg">taxize</span> packages. The taxonomy of
+the <code>dune</code> data was adapted to the same sources and APG
+III.  <code>varespec</code> and <code>dune</code> use 8-character names (4
+from genus + 4 from species epithet). New data set on
+phylogenetic distances for <code>dune</code> was extracted from Zanne
+et al. (<em>Nature</em> 506, 89&ndash;92; 2014).
+</p>
+</li>
+<li><p> User configurable plots for <code>rarecurve</code>.
+</p>
+</li></ul>
+ 
+ 
+
+
+<h4>DEPRECATED AND DEFUNCT</h4>
+
+
+<ul>
+<li> <p><code>strata</code> are deprecated in permutations. It is still
+accepted but will be phased out in next releases. Use <code>how</code>
+of <span class="pkg">permute</span> package.
+</p>
+</li>
+<li> <p><code>cca</code>, <code>rda</code> and <code>capscale</code> do not return
+scores scaled by eigenvalues: use <code>scores</code> function to
+extract scaled results.
+</p>
+</li>
+<li> <p><code>commsimulator</code> is deprecated. Replace
+<code>commsimulator(x, method)</code> with
+<code>simulate(nullmodel(x, method))</code>.
+</p>
+</li>
+<li> <p><code>density</code> and <code>densityplot</code> for permutation
+results are deprecated: use <code>permustats</code> with its
+<code>density</code> and <code>densityplot</code> method.
+</p>
+</li></ul>
+ 
+ 
+
 
 <h3>Changes in version 2.0-10</h3>
 
@@ -102,11 +433,11 @@ using the sampling effort as weights.
 
 <ul>
 <li><p> This version is released due to changes in programming
-interface and testing procedures in <font face="Courier New,Courier" color="#666666"><b>R</b></font> 3.0.2. If you are using an
-older version of <font face="Courier New,Courier" color="#666666"><b>R</b></font>, there is no need to upgrade <span class="pkg">vegan</span>. There
+interface and testing procedures in <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> 3.0.2. If you are using an
+older version of <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span>, there is no need to upgrade <span class="pkg">vegan</span>. There
 are no new features nor bug fixes. The only user-visible changes
 are in documentation and in output messages and formatting. Because
-of <font face="Courier New,Courier" color="#666666"><b>R</b></font> changes, this version is dependent on <font face="Courier New,Courier" color="#666666"><b>R</b></font> version 2.14.0
+of <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> changes, this version is dependent on <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> version 2.14.0
 or newer and on <span class="pkg">lattice</span> package.
 </p>
 </li></ul>
@@ -122,7 +453,7 @@ or newer and on <span class="pkg">lattice</span> package.
 
 <ul>
 <li><p> This is a maintenance release that fixes some issues
-raised by changed in <font face="Courier New,Courier" color="#666666"><b>R</b></font> toolset for processing vignettes.  In
+raised by changed in <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> toolset for processing vignettes.  In
 the same we also fix some typographic issues in the vignettes.
 </p>
 </li></ul>
@@ -168,7 +499,7 @@ be used to replot the saved result.
 
 <ul>
 <li> <p><code>tabasco()</code> is a new function for graphical display
-of community data matrix.  Technically it is an interface to <font face="Courier New,Courier" color="#666666"><b>R</b></font>
+of community data matrix.  Technically it is an interface to <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span>
 <code>heatmap</code>, but its use is closer to <span class="pkg">vegan</span> function
 <code>vegemite</code>. The function can reorder the community data
 matrix similarly as <code>vegemite</code>, for instance, by ordination
@@ -357,7 +688,7 @@ statistic is evaluated within the function.
 <code>plot</code> etc. of the results. These methods are only used if
 the full <code>wcmdscale</code> result is returned with, e.g., argument
 <code>eig = TRUE</code>. The default is still to return only a matrix of
-scores similarly as the standard <font face="Courier New,Courier" color="#666666"><b>R</b></font> function <code>cmdscale()</code>,
+scores similarly as the standard <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> function <code>cmdscale()</code>,
 and in that case the new methods are not used.
 </p>
 </li></ul>
@@ -456,13 +787,13 @@ in the data.  All functions now have methods <code>AIC</code>,
 version of LaTeX (TeXLive 2012).
 </p>
 </li>
-<li> <p><font face="Courier New,Courier" color="#666666"><b>R</b></font> versions later than 2.15-1 (including development
+<li> <p><span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> versions later than 2.15-1 (including development
 version) report warnings and errors when installing and checking
 <span class="pkg">vegan</span>, and you must upgrade <span class="pkg">vegan</span> to this version.
 The warnings concern functions <code>cIndexKM</code> and
 <code>betadisper</code>, and the error occurs in <code>betadisper</code>.
 These errors and warnings were triggered by internal changes in
-<font face="Courier New,Courier" color="#666666"><b>R</b></font>.
+<span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span>.
 </p>
 </li></ul>
 
@@ -593,8 +924,8 @@ argument can be used only with one set of points.
 <li><p> Added new nestedness functions <code>nestedbetasor</code> and
 <code>nestedbetajac</code> that implement multiple-site dissimilarity
 indices and their decomposition into turnover and nestedness
-components following Baselga (<EM>Global Ecology and
-Biogeography</EM> 19, 134&ndash;143; 2010).
+components following Baselga (<em>Global Ecology and
+Biogeography</em> 19, 134&ndash;143; 2010).
 </p>
 </li>
 <li><p> Added function <code>rarecurve</code> to draw rarefaction curves
@@ -604,8 +935,8 @@ for each curve.
 </p>
 </li>
 <li><p> Added function <code>simper</code> that implements
-&ldquo;similarity percentages&rdquo; of Clarke (<EM>Australian
-Journal of Ecology</EM> 18, 117&ndash;143; 1993).  The method compares
+&ldquo;similarity percentages&rdquo; of Clarke (<em>Australian
+Journal of Ecology</em> 18, 117&ndash;143; 1993).  The method compares
 two or more groups and decomposes the average between-group
 Bray-Curtis dissimilarity index to contributions by individual
 species.  The code was developed in 
@@ -677,8 +1008,8 @@ effect of constraining term to adjusted <i>R-squared</i>.
 </p>
 </li>
 <li><p> Added Cao dissimilarity (CYd) as a new dissimilarity
-method in <code>vegdist</code> following Cao et al., <EM>Water
-Envir Res</EM> 69, 95&ndash;106 (1997). The index should be good for
+method in <code>vegdist</code> following Cao et al., <em>Water
+Envir Res</em> 69, 95&ndash;106 (1997). The index should be good for
 data with high beta diversity and variable sampling
 intensity. Thanks to consultation to Yong Cao (Univ Illinois,
 USA).
@@ -757,7 +1088,7 @@ with no <code>groups</code> they are the LC scores.
 <ul>
 <li> <p><code>clamtest</code>: new function to classify species as
 generalists and specialists in two distinct habitats (CLAM test of
-Chazdon et al., <EM>Ecology</EM> 92, 1332&ndash;1343; 2011).  The test is
+Chazdon et al., <em>Ecology</em> 92, 1332&ndash;1343; 2011).  The test is
 based on multinomial distribution of individuals in two habitat
 types or sampling units, and it is applicable only to count data
 with no over-dispersion.
@@ -777,7 +1108,7 @@ frequencies.  <span class="pkg">Vegan</span> has Raup-Crick index as a choice in
 <code>vegdist</code>, but that uses equal sampling probabilities for
 species and analytic equations. The new <code>raupcrick</code>
 function uses simulation with <code>oecosimu</code>. The function
-follows Chase et al. (2011) <EM>Ecosphere</EM> 2:art24
+follows Chase et al. (2011) <em>Ecosphere</em> 2:art24
 [<a href="http://www.esajournals.org/doi/abs/10.1890/ES10-00117.1">doi:10.1890/ES10-00117.1</a>],
 and was developed with the consultation of Brian Inouye.
 </p>
@@ -810,12 +1141,12 @@ submatrix if all cells were filled.
 <code>update</code>d because of a &lsquo;<span class="file">NAMESPACE</span>&rsquo; issue.
 </p>
 </li>
-<li> <p><font face="Courier New,Courier" color="#666666"><b>R</b></font> 2.14.0 changed so that it does not accept using
+<li> <p><span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> 2.14.0 changed so that it does not accept using
 <code>sd()</code> function for matrices (which was the behaviour at
-least since <font face="Courier New,Courier" color="#666666"><b>R</b></font> 1.0-0), and several <span class="pkg">vegan</span> functions were
+least since <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> 1.0-0), and several <span class="pkg">vegan</span> functions were
 changed to adapt to this change (<code>rda</code>, <code>capscale</code>,
 <code>simulate</code> methods for <code>rda</code>, <code>cca</code> and
-<code>capscale</code>). The change in <font face="Courier New,Courier" color="#666666"><b>R</b></font> 2.14.0 does not influence the
+<code>capscale</code>). The change in <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> 2.14.0 does not influence the
 results but you probably wish to upgrade <span class="pkg">vegan</span> to avoid
 annoying warnings.
 </p>
@@ -849,11 +1180,11 @@ early in tries, and the results are equally good in most cases.
 <li><p> Peter Minchin joins the <span class="pkg">vegan</span> team.
 </p>
 </li>
-<li> <p><span class="pkg">vegan</span> implements standard <font face="Courier New,Courier" color="#666666"><b>R</b></font> &lsquo;<span class="file">NAMESPACE</span>&rsquo;. In
+<li> <p><span class="pkg">vegan</span> implements standard <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> &lsquo;<span class="file">NAMESPACE</span>&rsquo;. In
 general, <code>S3</code> methods are not exported which means that you
 cannot directly use or see contents of functions like
 <code>cca.default</code>, <code>plot.cca</code> or <code>anova.ccabyterm</code>. To
-use these functions you should rely on <font face="Courier New,Courier" color="#666666"><b>R</b></font> delegation and simply
+use these functions you should rely on <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> delegation and simply
 use <code>cca</code> and for its result objects use <code>plot</code> and
 <code>anova</code> without suffix <code>.cca</code>. To see the contents of
 the function you can use <code>:::</code>, such as
@@ -900,7 +1231,7 @@ an environmental vector.
 <li> <p><code>eventstar</code> finds the minimum of the evenness profile
 on the Tsallis entropy, and uses this to find the corresponding
 values of diversity, evenness and numbers equivalent following
-Mendes et al. (<EM>Ecography</EM> 31, 450-456; 2008). The code was
+Mendes et al. (<em>Ecography</em> 31, 450-456; 2008). The code was
 contributed by Eduardo Ribeira Cunha and Heloisa Beatriz Antoniazi
 Evangelista and adapted to <span class="pkg">vegan</span> by Peter Solymos.
 </p>
@@ -909,9 +1240,9 @@ Evangelista and adapted to <span class="pkg">vegan</span> by Peter Solymos.
 the species accumulation results from <code>specaccum</code>. The
 function can use new self-starting species accumulation models
 in <span class="pkg">vegan</span> or other self-starting non-linear regression
-models in <font face="Courier New,Courier" color="#666666"><b>R</b></font>. The function can fit Arrhenius, Gleason, Gitay,
+models in <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span>. The function can fit Arrhenius, Gleason, Gitay,
 Lomolino (in <span class="pkg">vegan</span>), asymptotic, Gompertz,
-Michaelis-Menten, logistic and Weibull (in base <font face="Courier New,Courier" color="#666666"><b>R</b></font>) models. The
+Michaelis-Menten, logistic and Weibull (in base <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span>) models. The
 function has <code>plot</code> and <code>predict</code> methods.
 </p>
 </li>
@@ -920,7 +1251,7 @@ function has <code>plot</code> and <code>predict</code> methods.
 <code>SSlomolino</code>. These can be used with <code>fitspecaccum</code> or
 directly in non-linear regression with <code>nls</code>. These functions
 were implemented because they were found good for species-area
-models by Dengler (<EM>J. Biogeogr.</EM> 36, 728-744; 2009).
+models by Dengler (<em>J. Biogeogr.</em> 36, 728-744; 2009).
 </p>
 </li></ul>
 
