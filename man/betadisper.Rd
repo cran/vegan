@@ -47,11 +47,11 @@ betadisper(d, group, type = c("median","centroid"), bias.adjust = FALSE)
 
 \arguments{
   \item{d}{a distance structure such as that returned by 
-    \code{\link[stats]{dist}}, \code{\link{betadiver}} or 
+    \code{\link[stats]{dist}}, \code{\link{betadiver}} or
     \code{\link{vegdist}}.}
   \item{group}{vector describing the group structure, usually a factor
     or an object that can be coerced to a factor using
-    \code{\link[base]{as.factor}}. Can consist of a factor with a single
+    \code{\link{as.factor}}. Can consist of a factor with a single
     level (i.e., one group).}
   \item{type}{the type of analysis to perform. Use the spatial median or
     the group centroid? The spatial median is now the default.}
@@ -161,7 +161,7 @@ betadisper(d, group, type = c("median","centroid"), bias.adjust = FALSE)
   functions in the \code{\link{ordiplot}} family. 
 
   The \code{boxplot} function invisibly returns a list whose components
-  are documented in \code{\link[graphics]{boxplot}}.
+  are documented in \code{\link{boxplot}}.
 
   \code{eigenvals.betadisper} returns a named vector of eigenvalues.
 
@@ -217,7 +217,7 @@ betadisper(d, group, type = c("median","centroid"), bias.adjust = FALSE)
 }
 \author{Gavin L. Simpson; bias correction by Adrian Stier and Ben Bolker.}
 \seealso{\code{\link{permutest.betadisper}}, \code{\link[stats]{anova.lm}},
-  \code{\link{scores}}, \code{\link[graphics]{boxplot}},
+  \code{\link{scores}}, \code{\link{boxplot}},
   \code{\link{TukeyHSD}}. Further measure of beta diversity
   can be found in \code{\link{betadiver}}.}
 \examples{

@@ -2,6 +2,72 @@
 \title{vegan News}
 \encoding{UTF-8}
 
+\section{Changes in version 2.2-1}{
+
+  \subsection{GENERAL}{
+    \itemize{
+
+      \item This is a maintenance release to avoid warning messages
+      caused by changes in CRAN repository. The namespace usage is also
+      more stringent to avoid warnings and notes in development versions
+      of \R.
+
+    }
+  }% end general
+
+  \subsection{INSTALLATION}{
+    \itemize{
+
+      \item \pkg{vegan} can be installed and loaded without \pkg{tcltk}
+      package. The \pkg{tcltk} package is needed in \code{orditkplot}
+      function for interactive editing of ordination graphics.
+
+    }
+  } % installation
+
+  \subsection{BUG FIXES}{
+    \itemize{
+
+      \item \code{ordisurf} failed if \pkg{gam} package was loaded due
+      to namespace issues: some support functions of \pkg{gam} were used
+      instead of \pkg{mgcv} functions.
+
+      \item \code{tolerance} function failed for unconstrained
+      correspondence analysis.
+
+    }
+  } % bug fixes
+
+  \subsection{NEW FEATURES}{
+    \itemize{
+
+      \item \code{estimateR} uses a more exact variance formula for
+      bias-corrected Chao estimate of extrapolated number of
+      species. The new formula may be unpublished, but it was derived
+      following the guidelines of Chiu, Wang, Walther & Chao,
+      \emph{Biometrics} 70, 671--682 (2014),
+      \href{http://onlinelibrary.wiley.com/doi/10.1111/biom.12200/suppinfo}{online
+      supplementary material}.
+
+      \item Diversity accumulation functions \code{specaccum},
+      \code{renyiaccum}, \code{tsallisaccum}, \code{poolaccum} and
+      \code{estaccumR} use now \pkg{permute} package for permutations
+      of the order of sampling sites. Normally these functions only
+      need simple random permutation of sites, but restricted
+      permutation of the \pkg{permute} package and user-supplied
+      permutation matrices can be used.
+
+      \item \code{estaccumR} function can use parallel processing.
+
+      \item \code{linestack} accepts now expressions as labels. This
+      allows using mathematical symbols and formula given as
+      mathematical expressions.
+
+    }
+  } % new features
+
+} % v2.2-1
+
 \section{Changes in version 2.2-0}{
 
   \subsection{GENERAL}{

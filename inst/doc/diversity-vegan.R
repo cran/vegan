@@ -80,7 +80,7 @@ range(diversity(BCI, "simp") - (S2 -1))
 
 
 ###################################################
-### code chunk number 13: diversity-vegan.Rnw:258-262
+### code chunk number 13: diversity-vegan.Rnw:260-264
 ###################################################
 data(dune)
 data(dune.taxon)
@@ -89,21 +89,21 @@ mod <- taxondive(dune, taxdis)
 
 
 ###################################################
-### code chunk number 14: diversity-vegan.Rnw:265-266
+### code chunk number 14: diversity-vegan.Rnw:267-268
 ###################################################
 getOption("SweaveHooks")[["fig"]]()
 plot(mod)
 
 
 ###################################################
-### code chunk number 15: diversity-vegan.Rnw:292-294
+### code chunk number 15: diversity-vegan.Rnw:294-296
 ###################################################
 tr <- hclust(taxdis, "aver")
 mod <- treedive(dune, tr)
 
 
 ###################################################
-### code chunk number 16: diversity-vegan.Rnw:316-319
+### code chunk number 16: diversity-vegan.Rnw:318-321
 ###################################################
 k <- sample(nrow(BCI), 1)
 fish <- fisherfit(BCI[k,])
@@ -111,27 +111,27 @@ fish
 
 
 ###################################################
-### code chunk number 17: diversity-vegan.Rnw:322-323
+### code chunk number 17: diversity-vegan.Rnw:324-325
 ###################################################
 getOption("SweaveHooks")[["fig"]]()
 plot(fish)
 
 
 ###################################################
-### code chunk number 18: diversity-vegan.Rnw:351-352
+### code chunk number 18: diversity-vegan.Rnw:353-354
 ###################################################
 prestondistr(BCI[k,])
 
 
 ###################################################
-### code chunk number 19: diversity-vegan.Rnw:383-385
+### code chunk number 19: diversity-vegan.Rnw:385-387
 ###################################################
 rad <- radfit(BCI[k,])
 rad
 
 
 ###################################################
-### code chunk number 20: diversity-vegan.Rnw:388-389
+### code chunk number 20: diversity-vegan.Rnw:390-391
 ###################################################
 getOption("SweaveHooks")[["fig"]]()
 print(radlattice(rad))
@@ -145,7 +145,7 @@ plot(sac, ci.type="polygon", ci.col="yellow")
 
 
 ###################################################
-### code chunk number 22: diversity-vegan.Rnw:458-459
+### code chunk number 22: diversity-vegan.Rnw:461-462
 ###################################################
 getOption("SweaveHooks")[["fig"]]()
 sac <- specaccum(BCI)
@@ -153,33 +153,33 @@ plot(sac, ci.type="polygon", ci.col="yellow")
 
 
 ###################################################
-### code chunk number 23: diversity-vegan.Rnw:487-488
+### code chunk number 23: diversity-vegan.Rnw:490-491
 ###################################################
 ncol(BCI)/mean(specnumber(BCI)) - 1
 
 
 ###################################################
-### code chunk number 24: diversity-vegan.Rnw:505-507
+### code chunk number 24: diversity-vegan.Rnw:508-510
 ###################################################
 beta <- vegdist(BCI, binary=TRUE)
 mean(beta)
 
 
 ###################################################
-### code chunk number 25: diversity-vegan.Rnw:514-515
+### code chunk number 25: diversity-vegan.Rnw:517-518
 ###################################################
 betadiver(help=TRUE)
 
 
 ###################################################
-### code chunk number 26: diversity-vegan.Rnw:533-535
+### code chunk number 26: diversity-vegan.Rnw:536-538
 ###################################################
 z <- betadiver(BCI, "z")
 quantile(z)
 
 
 ###################################################
-### code chunk number 27: diversity-vegan.Rnw:545-550
+### code chunk number 27: diversity-vegan.Rnw:548-553
 ###################################################
 data(dune)
 data(dune.env)
@@ -189,40 +189,40 @@ mod
 
 
 ###################################################
-### code chunk number 28: diversity-vegan.Rnw:553-554
+### code chunk number 28: diversity-vegan.Rnw:556-557
 ###################################################
 getOption("SweaveHooks")[["fig"]]()
 boxplot(mod)
 
 
 ###################################################
-### code chunk number 29: diversity-vegan.Rnw:639-640
+### code chunk number 29: diversity-vegan.Rnw:668-669
 ###################################################
 specpool(BCI)
 
 
 ###################################################
-### code chunk number 30: diversity-vegan.Rnw:645-647
+### code chunk number 30: diversity-vegan.Rnw:674-676
 ###################################################
 s <- sample(nrow(BCI), 25)
 specpool(BCI[s,])
 
 
 ###################################################
-### code chunk number 31: diversity-vegan.Rnw:658-659
+### code chunk number 31: diversity-vegan.Rnw:687-688
 ###################################################
 estimateR(BCI[k,])
 
 
 ###################################################
-### code chunk number 32: diversity-vegan.Rnw:698-700
+### code chunk number 32: diversity-vegan.Rnw:757-759
 ###################################################
 veiledspec(prestondistr(BCI[k,]))
 veiledspec(BCI[k,])
 
 
 ###################################################
-### code chunk number 33: diversity-vegan.Rnw:714-715
+### code chunk number 33: diversity-vegan.Rnw:773-774
 ###################################################
 smo <- beals(BCI)
 
@@ -232,17 +232,17 @@ smo <- beals(BCI)
 ###################################################
 j <- which(colnames(BCI) == "Ceiba.pentandra")
 plot(beals(BCI, species=j, include=FALSE), BCI[,j], 
-     main="Ceiba pentandra", xlab="Probability of occurrence",
-     ylab="Occurrence")
+     ylab="Occurrence", main="Ceiba pentandra", 
+     xlab="Probability of occurrence")
 
 
 ###################################################
-### code chunk number 35: diversity-vegan.Rnw:728-729
+### code chunk number 35: diversity-vegan.Rnw:787-788
 ###################################################
 getOption("SweaveHooks")[["fig"]]()
 j <- which(colnames(BCI) == "Ceiba.pentandra")
 plot(beals(BCI, species=j, include=FALSE), BCI[,j], 
-     main="Ceiba pentandra", xlab="Probability of occurrence",
-     ylab="Occurrence")
+     ylab="Occurrence", main="Ceiba pentandra", 
+     xlab="Probability of occurrence")
 
 

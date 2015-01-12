@@ -37,7 +37,7 @@
         if (is.null(parallel))
             parallel <- 1
         hasClus <- inherits(parallel, "cluster")
-        if ((hasClus || parallel > 1)  && require(parallel)) {
+        if (hasClus || parallel > 1)  {
             if(.Platform$OS.type == "unix" && !hasClus) {
                 perm <- do.call(rbind,
                                mclapply(1:permutations,

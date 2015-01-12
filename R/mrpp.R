@@ -52,7 +52,7 @@
         if (is.null(parallel))
             parallel <- 1
         hasClus <- inherits(parallel, "cluster")
-        if ((hasClus || parallel > 1)  && require(parallel)) {
+        if (hasClus || parallel > 1) {
             if(.Platform$OS.type == "unix" && !hasClus) {
                 m.ds <- unlist(mclapply(1:permutations, function(i, ...)
                                         mrpp.perms(perms[,i], dmat, indls, w),

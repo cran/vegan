@@ -7,6 +7,88 @@
 
 <h2>vegan News</h2>
 
+<h3>Changes in version 2.2-1</h3>
+
+
+
+<h4>GENERAL</h4>
+
+
+<ul>
+<li><p> This is a maintenance release to avoid warning messages
+caused by changes in CRAN repository. The namespace usage is also
+more stringent to avoid warnings and notes in development versions
+of <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span>.
+</p>
+</li></ul>
+
+
+
+
+<h4>INSTALLATION</h4>
+
+
+<ul>
+<li> <p><span class="pkg">vegan</span> can be installed and loaded without <span class="pkg">tcltk</span>
+package. The <span class="pkg">tcltk</span> package is needed in <code>orditkplot</code>
+function for interactive editing of ordination graphics.
+</p>
+</li></ul>
+
+ 
+
+
+<h4>BUG FIXES</h4>
+
+
+<ul>
+<li> <p><code>ordisurf</code> failed if <span class="pkg">gam</span> package was loaded due
+to namespace issues: some support functions of <span class="pkg">gam</span> were used
+instead of <span class="pkg">mgcv</span> functions.
+</p>
+</li>
+<li> <p><code>tolerance</code> function failed for unconstrained
+correspondence analysis.
+</p>
+</li></ul>
+
+ 
+
+
+<h4>NEW FEATURES</h4>
+
+
+<ul>
+<li> <p><code>estimateR</code> uses a more exact variance formula for
+bias-corrected Chao estimate of extrapolated number of
+species. The new formula may be unpublished, but it was derived
+following the guidelines of Chiu, Wang, Walther &amp; Chao,
+<em>Biometrics</em> 70, 671&ndash;682 (2014),
+<a href="http://onlinelibrary.wiley.com/doi/10.1111/biom.12200/suppinfo">online
+supplementary material</a>.
+</p>
+</li>
+<li><p> Diversity accumulation functions <code>specaccum</code>,
+<code>renyiaccum</code>, <code>tsallisaccum</code>, <code>poolaccum</code> and
+<code>estaccumR</code> use now <span class="pkg">permute</span> package for permutations
+of the order of sampling sites. Normally these functions only
+need simple random permutation of sites, but restricted
+permutation of the <span class="pkg">permute</span> package and user-supplied
+permutation matrices can be used.
+</p>
+</li>
+<li> <p><code>estaccumR</code> function can use parallel processing.
+</p>
+</li>
+<li> <p><code>linestack</code> accepts now expressions as labels. This
+allows using mathematical symbols and formula given as
+mathematical expressions.
+</p>
+</li></ul>
+
+ 
+
+
 <h3>Changes in version 2.2-0</h3>
 
 

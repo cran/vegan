@@ -81,7 +81,7 @@
         parallel <- 1
     }
     hasClus <- inherits(parallel, "cluster")
-    if ((hasClus || parallel > 1L) && requireNamespace("parallel")) {
+    if (hasClus || parallel > 1L) {
         if (.Platform$OS.type == "unix" && !hasClus) {
             Pstats <- do.call("rbind",
                            mclapply(seq_len(nperm),
@@ -92,7 +92,8 @@
             if (!hasClus) {
                 parallel <- makeCluster(parallel)
             }
-            Pstats <- parRapply(parallel, permutations, function(x) permFun(x))
+            Pstats <- parRapply(parallel, permutations,
+                                          function(x) permFun(x))
             if (!hasClus) {
                 stopCluster(parallel)
             }
