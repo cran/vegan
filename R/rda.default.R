@@ -5,6 +5,11 @@
     CCA <- NULL
     pCCA <- NULL
     CA <- NULL
+    ## Protect against grave misuse: some people have used
+    ## dissimilarities instead of data
+    if (inherits(X, "dist") || NCOL(X) == NROW(X) &&
+        isTRUE(all.equal(X, t(X))))
+        stop("function cannot be used with (dis)similarities")
     X <- as.matrix(X)
     NR <- nrow(X) - 1
     Xbar <- scale(X, center = TRUE, scale = scale)
@@ -41,7 +46,7 @@
         ## it can happen that rank < qrank
         rank <- min(rank, sum(sol$d > (sol$d[1L] * ZERO)))
         sol$d <- sol$d/sqrt(NR)
-        ax.names <- paste("RDA", 1:length(sol$d), sep = "")
+        ax.names <- paste("RDA", seq_along(sol$d), sep = "")
         colnames(sol$u) <- ax.names
         colnames(sol$v) <- ax.names
         names(sol$d) <- ax.names

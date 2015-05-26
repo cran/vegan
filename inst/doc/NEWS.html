@@ -7,6 +7,133 @@
 
 <h2>vegan News</h2>
 
+<h3>Changes in version 2.3-0</h3>
+
+
+
+<h4>BUG FIXES</h4>
+
+
+<ul>
+<li><p> Constrained ordination functions <code>cca</code>, <code>rda</code> and
+<code>capscale</code> are now more robust. Scoping of data set names and
+variable names is much improved. This should fix numerous
+long-standing problems, for instance those reported by Benedicte
+Bachelot (in email) and Richard Telford (in Twitter), as well as
+issues <a href="https://github.com/vegandevs/vegan/issues/16">#16</a>
+and <a href="https://github.com/vegandevs/vegan/issues/100">#100</a> in
+GitHub.
+</p>
+</li>
+<li><p> Ordination functions <code>cca</code> and <code>rda</code> silently
+accepted dissimilarities as input although their analysis makes
+no sense with these methods. Dissimilarities should be analysed
+with distance-based redundancy analysis (<code>capscale</code>).
+</p>
+</li>
+<li><p> The variance of the conditional component was over-estimated
+in <code>goodness</code> of <code>rda</code> results, and results were wrong
+for partial RDA. The problems were reported in an
+<a href="https://stat.ethz.ch/pipermail/r-sig-ecology/2015-March/004936.html">R-sig-ecology</a>
+message by Christoph von Redwitz.
+</p>
+</li></ul>
+
+ 
+
+
+<h4>WINDOWS</h4>
+
+
+<ul>
+<li> <p><code>orditkplot</code> did not add file type identifier to saved
+graphics in Windows although that is required. The problem only
+concerned Windows OS.
+</p>
+</li></ul>
+
+ 
+
+
+<h4>NEW FEATURES AND FUNCTIONS</h4>
+
+
+<ul>
+<li> <p><code>goodness</code> function for constrained ordination
+(<code>cca</code>, <code>rda</code>, <code>capscale</code>) was redesigned. Function
+gained argument <code>addprevious</code> to add the variation explained
+by previous ordination components to axes when <code>statistic =
+      "explained"</code>. With this option, <code>model = "CCA"</code> will include
+the variation explained by partialled-out conditions, and
+<code>model = "CA"</code> will include the accumulated variation
+explained by conditions and constraints. The former behaviour was
+<code>addprevious = TRUE</code> for <code>model = "CCA"</code>, and
+<code>addprevious = FALSE</code> for <code>model = "CA"</code>. The argument
+will have no effect when <code>statistic = "distance"</code>, but this
+will always show the residual distance after all previous
+components. Formerly it displayed the residual distance only for
+the currently analysed model.
+</p>
+</li>
+<li><p> Functions <code>ordiArrowMul</code> and <code>ordiArrowTextXY</code> are
+exported and can be used in normal interactive sessions. These
+functions are used to scale a bunch arrows to fit ordination
+graphics, and formerly they were internal functions used within
+other <span class="pkg">vegan</span> functions.
+</p>
+</li>
+<li> <p><code>orditkplot</code> can export graphics in SVG format. SVG is
+a vector graphics format which can be edited with several external
+programs, such as Illustrator and Inkscape.
+</p>
+</li>
+<li><p> Rarefaction curve (<code>rarecurve</code>) and species
+accumulation models (<code>specaccum</code>, <code>fitspecaccum</code>)
+gained new functions to estimate the slope of curve at given
+location. Originally this was based on a response to an
+<a href="https://stat.ethz.ch/pipermail/r-sig-ecology/2015-May/005038.html">R-SIG-ecology</a>
+query. For rarefaction curves, the function is <code>rareslope</code>,
+and for species accumulation models it is <code>specslope</code>.
+</p>
+<p>The functions are based on analytic equations, and can also be
+evaluated at interpolated non-integer values. In
+<code>specaccum</code> models the functions can be only evaluated for
+analytic models <code>"exact"</code>, <code>"rarefaction"</code> and
+<code>"coleman"</code>. With <code>"random"</code> and <code>"collector"</code>
+methods you can only use finite differences
+(<code>diff(fitted(&lt;result.object&gt;))</code>). Analytic functions for
+slope are used for all non-linear regression models known to
+<code>fitspecaccum</code>.
+</p>
+</li>
+<li><p> Species accumulation models (<code>specaccum</code>) and
+non-liner regression models for species accumulation
+(<code>fitspecaccum</code>) work more consistently with weights. In
+all cases, the models are defined using the number of sites as
+independent variable, which with weights means that observations
+can be non-integer numbers of virtual sites. The <code>predict</code>
+models also use the number of sites with <code>newdata</code>,
+and for analytic models they can estimate the expected values
+for non-integer number of sites, and for non-analytic randomized
+or collector models they can interpolate on non-integer values.
+</p>
+</li>
+<li> <p><code>fitspecaccum</code> gained support functions <code>AIC</code>
+and <code>deviance</code>.
+</p>
+</li>
+<li><p> The <code>varpart</code> plots of four-component models were
+redesigned following Legendre, Borcard &amp; Roberts <em>Ecology</em>
+93, 1234&ndash;1240 (2012), and they use now four ellipses instead of
+three circles and two rectangles. The components are now labelled
+in plots, and the circles and ellipses can be easily filled with
+transparent background colour.
+</p>
+</li></ul>
+
+ 
+
+
 <h3>Changes in version 2.2-1</h3>
 
 

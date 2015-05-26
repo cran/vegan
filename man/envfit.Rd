@@ -47,8 +47,15 @@ factorfit(X, P, permutations = 0, strata = NULL, w, ...)
     or environmental variables. The operation is casewise: the whole
     row of data is removed if there is a missing value and 
     \code{na.rm = TRUE}.}
-  \item{x}{A result object from \code{envfit}.}
+    
+  \item{x}{A result object from \code{envfit}. For \code{ordiArrowMul}
+    and \code{ordiArrowTextXY} this must be a two-column matrix (or
+    matrix-like object) containing the coordinates of arrow heads on
+    the two plot axes, and other methods extract such a structure from
+    the \code{envfit} results.}
+    
   \item{choices}{Axes to plotted.}
+    
   \item{labels}{Change plotting labels. The argument should be a list
     with elements \code{vectors} and \code{factors} which give the new
     plotting labels. If either of these elements is omitted, the
@@ -82,6 +89,7 @@ factorfit(X, P, permutations = 0, strata = NULL, w, ...)
     (with synonyms \code{"bp"} or \code{"cn"}, resp.).}
   \item{w}{Weights used in fitting (concerns mainly \code{\link{cca}}
     and \code{\link{decorana}} results which have nonconstant weights).}
+
   \item{...}{Parameters passed to \code{\link{scores}}.}
 }
 \details{
@@ -110,7 +118,7 @@ factorfit(X, P, permutations = 0, strata = NULL, w, ...)
   adjusted to the current graph using a constant multiplier: this will
   keep the relative \code{r2}-scaled lengths of the arrows but tries
   to fill the current plot.  You can see the multiplier using
-  \code{vegan:::ordiArrowMul(result_of_envfit)}, and set it with the
+  \code{ordiArrowMul(result_of_envfit)}, and set it with the
   argument \code{arrow.mul}.
   
   Functions \code{vectorfit} and \code{factorfit} can be called directly.
@@ -146,8 +154,9 @@ factorfit(X, P, permutations = 0, strata = NULL, w, ...)
   for the physical size of the plot, and the arrow lengths cannot be
   compared across plots. For similar scaling of arrows, you must
   explicitly set the \code{arrow.mul} argument in the \code{plot}
-  command.
-
+  command; see \code{\link{ordiArrowMul}} and
+  \code{\link{ordiArrowTextXY}}.
+  
   The results can be accessed with \code{scores.envfit} function which
   returns either the fitted vectors scaled by correlation coefficient or
   the centroids of the fitted environmental variables.
@@ -210,6 +219,7 @@ ord <- cca(varespec ~ Al + P + K, varechem)
 plot(ord, type="p")
 fit <- envfit(ord, varechem, perm = 999, display = "lc")
 plot(fit, p.max = 0.05, col = "red")
+
 ## Class variables, formula interface, and displaying the
 ## inter-class variability with `ordispider', and semitransparent
 ## white background for labels (semitransparent colours are not
@@ -228,6 +238,7 @@ labels(fit)
 plot(ord)
 plot(fit, labels=list(factors = paste("M", c(1,2,4,5), sep = "")),
    bg = rgb(1,1,0,0.5))
+detach(dune.env)
 }
 \keyword{multivariate }
 \keyword{aplot}

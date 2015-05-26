@@ -164,7 +164,8 @@
                        command=function() tcltk::tkpostscript(can, x=0, y=0,
                        height=height, width=width,
                        file=tcltk::tkgetSaveFile(
-                         filetypes="{{EPS file} {.eps}}")))
+                         filetypes="{{EPS file} {.eps}}",
+                         defaultextension=".eps")))
     dismiss <- tcltk::tkbutton(buts, text="Dismiss",
                                command=function() tcltk::tkdestroy(w))
     ## Dump current plot to an "orditkplot" object (internally)
@@ -229,6 +230,7 @@
         xy <- ordDump()
         ftypes <- c("eps" = "{EPS File} {.eps}",
                     "pdf" = "{PDF File} {.pdf}",
+                    "svg" = "{SVG File} {.svg}",
                     "png" = "{PNG File} {.png}",
                     "jpg" = "{JPEG File} {.jpg .jpeg}",
                     "bmp" = "{BMP File} {.bmp}",
@@ -240,11 +242,24 @@
             falt["png"] <- FALSE
         if (!capabilities("jpeg"))
             falt["jpg"] <- FALSE
+        if (!capabilities("cairo"))
+            falt["svg"] <- FALSE
         ## Should work also in R < 2.8.0 with no capabilities("tiff")
         if (!isTRUE(unname(capabilities("tiff"))))
             falt["tiff"] <- FALSE
         ftypes <- ftypes[falt]
-        fname <- tcltk::tkgetSaveFile(filetypes=ftypes)
+        ## External Tcl/Tk in Windows seems to buggy with type
+        ## extensions of the file name: the extension is not
+        ## automatically appended, but defaultextension is interpreted
+        ## wrongly so that its value is not used as extension but
+        ## correct appending is done if defaultextension has any
+        ## value. The following kluge is against Tcl/Tk documentation,
+        ## and should be corrected if Tcl/Tk is fixed.
+        if (.Platform$OS.type == "windows")
+            fname <- tcltk::tkgetSaveFile(filetypes=ftypes,
+                                          defaultextension = TRUE)
+        else
+            fname <- tcltk::tkgetSaveFile(filetypes=ftypes)
         if(tcltk::tclvalue(fname) == "")
             return(NULL)
         fname <- tcltk::tclvalue(fname)
@@ -265,6 +280,7 @@
                eps = postscript(file=fname, width=xy$dim[1], height=xy$dim[2],
                paper="special", horizontal = FALSE),
                pdf = pdf(file=fname, width=xy$dim[1], height=xy$dim[2]),
+               svg = svg(filename=fname, width=xy$dim[1], height=xy$dim[2]),
                png = png(filename=fname, width=pixdim[1], height=pixdim[2]),
                jpg = jpeg(filename=fname, width=pixdim[1], height=pixdim[2],
                quality = 100),

@@ -10,8 +10,8 @@
 \title{Vegan: ecological diversity} \author{Jari Oksanen} 
 
 \date{\footnotesize{
-  processed with vegan 2.2-1
-  in R Under development (unstable) (2015-01-12 r67426) on \today}}
+  processed with vegan 2.3-0
+  in R Under development (unstable) (2015-05-25 r68412) on \today}}
 
 %% need no \usepackage{Sweave}
 \begin{document}
@@ -346,14 +346,14 @@ log-series for a randomly selected plot is (Fig.~\ref{fig:fisher}):
 \end{Sinput}
 \begin{Soutput}
 Fisher log series model
-No. of species: 91 
-Fisher alpha:   35.84847 
+No. of species: 93 
+Fisher alpha:   39.21057 
 \end{Soutput}
 \end{Schunk}
 \begin{figure}
 \includegraphics{diversity-vegan-017}
 \caption{Fisher's log-series fitted to one randomly selected site
-  (22).}
+  (17).}
 \label{fig:fisher}
 \end{figure}
 We already saw $\alpha$ as a diversity index.
@@ -377,7 +377,7 @@ octave, and the same for all species at the octave limits occurring 2,
 the lower octave.  Function \code{prestondistr} directly maximizes
 truncated log-normal likelihood without binning data, and it is the
 recommended alternative.  Log-normal models usually fit poorly to the
-BCI data, but here our random plot (number 22):
+BCI data, but here our random plot (number 17):
 \begin{Schunk}
 \begin{Sinput}
 > prestondistr(BCI[k,])
@@ -385,18 +385,18 @@ BCI data, but here our random plot (number 22):
 \begin{Soutput}
 Preston lognormal model
 Method: maximized likelihood to log2 abundances 
-No. of species: 91 
+No. of species: 93 
 
       mode      width         S0 
- 0.6707546  1.8437957 24.0831256 
+ 0.5486774  1.7318443 26.3054207 
 
 Frequencies by Octave
-                0       1        2        3        4
-Observed 19.50000 28.5000 15.50000 14.50000 8.000000
-Fitted   22.54109 23.7022 18.57176 10.84347 4.717738
-                5         6
-Observed 3.000000 2.0000000
-Fitted   1.529503 0.3695023
+                0        1      2         3        4
+Observed 20.00000 31.00000 23.000 11.000000 3.000000
+Fitted   25.01783 25.42717 18.516  9.660439 3.611164
+                 5        6
+Observed 3.0000000 2.000000
+Fitted   0.9671599 0.185588
 \end{Soutput}
 \end{Schunk}
 
@@ -435,26 +435,26 @@ set gives (Fig.~\ref{fig:rad}):
 \end{Sinput}
 \begin{Soutput}
 RAD models, family poisson 
-No. of species 91, total abundance 418
+No. of species 93, total abundance 381
 
-           par1      par2     par3    Deviance
-Null                                  114.1747
-Preemption  0.051814                  110.5156
-Lognormal   0.75751   1.2637           26.2510
-Zipf        0.16662  -0.92076          15.5222
-Mandelbrot  0.34281  -1.1219   1.2679   9.6047
-           AIC      BIC     
-Null       370.1156 370.1156
-Preemption 368.4564 370.9673
-Lognormal  286.1919 291.2136
-Zipf       275.4630 280.4847
-Mandelbrot 271.5455 279.0781
+           par1      par2     par3    Deviance AIC    
+Null                                  138.506  390.830
+Preemption  0.050488                  134.435  388.759
+Lognormal   0.64126   1.2648           52.994  309.318
+Zipf        0.16818  -0.92746          30.855  287.179
+Mandelbrot  0.5011   -1.2287   2.0074  17.027  275.352
+           BIC    
+Null       390.830
+Preemption 391.292
+Lognormal  314.384
+Zipf       292.244
+Mandelbrot 282.949
 \end{Soutput}
 \end{Schunk}
 \begin{figure}
 \includegraphics{diversity-vegan-020}
 \caption{Ranked abundance distribution models for a random plot
-  (no. 22).  The best model has the lowest \textsc{aic}.}
+  (no. 17).  The best model has the lowest \textsc{aic}.}
 \label{fig:rad}
 \end{figure}
 
@@ -813,10 +813,10 @@ the plots (but this is rarely true):
 > specpool(BCI[s,])
 \end{Sinput}
 \begin{Soutput}
-    Species   chao  chao.se  jack1 jack1.se  jack2
-All     212 231.44 9.819491 237.92 8.309224 246.89
-        boot boot.se  n
-All 224.7046 4.71474 25
+    Species    chao  chao.se  jack1 jack1.se    jack2
+All     210 223.824 7.431665 233.04 5.963086 237.4867
+        boot  boot.se  n
+All 221.7912 4.001204 25
 \end{Soutput}
 \end{Schunk}
 
@@ -833,12 +833,12 @@ two of these methods:
 > estimateR(BCI[k,])
 \end{Sinput}
 \begin{Soutput}
-                 22
-S.obs     91.000000
-S.chao1  130.000000
-se.chao1  16.580069
-S.ACE    141.966707
-se.ACE     6.459391
+                 17
+S.obs     93.000000
+S.chao1  126.913043
+se.chao1  14.130714
+S.ACE    137.197249
+se.ACE     6.495766
 \end{Soutput}
 \end{Schunk}
 In abundance based models $a_i$ denotes the number of species with $i$
@@ -914,14 +914,14 @@ can try:
 \end{Sinput}
 \begin{Soutput}
 Extrapolated     Observed       Veiled 
-   111.30523     91.00000     20.30523 
+    114.1942      93.0000      21.1942 
 \end{Soutput}
 \begin{Sinput}
 > veiledspec(BCI[k,])
 \end{Sinput}
 \begin{Soutput}
 Extrapolated     Observed       Veiled 
-   129.14959     91.00000     38.14959 
+   126.01983     93.00000     33.01983 
 \end{Soutput}
 \end{Schunk}
 

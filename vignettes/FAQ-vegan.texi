@@ -8,7 +8,7 @@
 @setfilename FAQ-@pkg{vegan}.info
 @settitle @pkg{vegan} FAQ
 @setchapternewpage on
-@set FAQ_YEAR 2014
+@set FAQ_YEAR 2015
 @afourpaper
 @c %**end of header
 
@@ -25,7 +25,7 @@ License. To view a copy of this license, visit
 Creative Commons, 543 Howard Street, 5th Floor, San Francisco,
 California, 94105, USA.
 
-Copyright @copyright{} 2008-2013 Jari Oksanen
+Copyright @copyright{} 2008-2015 vegan development team
 @end quotation
 @end copying
 
@@ -638,14 +638,14 @@ ordination @code{plot} command, you can see the value of the currently
 used @code{arrow.mul} which is saved as an attribute of @code{biplot}
 scores.
 
-An unexported function @code{ordiArrowMul} is used to find the scaling
-for the current plot. You can use this function to see how arrows would
-be scaled:
+Function @code{ordiArrowMul} is used to find the scaling for the
+current plot. You can use this function to see how arrows would be
+scaled:
 @example
 sol <- cca(varespec)
 ef <- envfit(sol ~ ., varechem)
 plot(sol)
-vegan:::ordiArrowMul(scores(ef, display="vectors"))
+ordiArrowMul(scores(ef, display="vectors"))
 @end example
 
 @node I want to use Helmert or sum contrasts, What are aliased variables and how to see them?, How are environmental arrows scaled?, Ordination
@@ -704,8 +704,11 @@ and characters.
 
 If there is a really high number of species or sites, the graphs often
 are congested and many labels are overwritten. It may be impossible to
-have complete readable graphics with some data sets. However, here are
-some tricks you can use:
+have complete readable graphics with some data sets. Below we give a
+brief overview of tricks you can use. Gavin Simpson's blog
+@uref{http://www.fromthebottomoftheheap.net,, From the bottom of the
+heap} has a series of articles on ``decluttering ordination plots'' with
+more detailed discussion and examples.
 @itemize
 
 @item 
@@ -723,19 +726,25 @@ Use points and add labels to desired points using interactive
 Add labels using function @code{ordilabel} which uses non-transparent
 background to the text. The labels still shadow each other, but the
 uppermost labels are readable. Argument @code{priority} will help in
-displaying the most interesting labels.
+displaying the most interesting labels (see
+@uref{http://www.fromthebottomoftheheap.net/2013/01/12/decluttering-ordination-plots-in-vegan-part-1-ordilabel/,,Decluttering
+blog, part 1}).
 
 @item 
 Use @code{orditorp} function that uses labels only if these can be
 added to a graph without overwriting other labels, and points otherwise,
 if you do not need to see all labels. You must first create an empty
 plot using  @code{plot(..., type="n")}, and then add labels or points
-with @code{orditorp}.  
+with @code{orditorp} (see
+@uref{http://www.fromthebottomoftheheap.net/2013/01/13/decluttering-ordination-plots-in-vegan-part-2-orditorp/,,Decluttering
+blog}). 
 
 @item 
 Use @code{ordipointlabel} which uses points and text labels to the
 points, and tries to optimize the location of the text to minimize the
-overlap. 
+overlap (see
+@uref{http://www.fromthebottomoftheheap.net/2013/06/27/decluttering-ordination-plots-in-vegan-part-3-ordipointlabel/,,
+Decluttering blog}).
 
 @item
 Ordination @code{text} and @code{points} functions have argument
@@ -745,7 +754,9 @@ plotted as text or points.
 @item 
 Use interactive @code{orditkplot} function that lets you drag
 labels of points to better positions if you need to see all labels. Only
-one set of points can be used. 
+one set of points can be used (see
+@uref{http://www.fromthebottomoftheheap.net/2013/12/31/decluttering-ordination-in-vegan-part-4-orditkplot/,,Decluttering
+blog}).
 
 @item 
 Most @code{plot} functions allow you to zoom to a part of the
