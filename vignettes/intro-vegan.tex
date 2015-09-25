@@ -8,8 +8,8 @@
 
 \date{\footnotesize{
   processed with vegan
-2.3-0
-in R Under development (unstable) (2015-05-25 r68412) on \today}}
+2.3-1
+in R Under development (unstable) (2015-09-24 r69424) on \today}}
 
 %% need no \usepackage{Sweave}
 \begin{document}
@@ -113,11 +113,9 @@ species scores to the configuration as weighted averages (function
 \end{Sinput}
 \begin{Soutput}
 Run 0 stress 0.1192678 
-Run 1 stress 0.1183187 
+Run 1 stress 0.1192678 
 ... New best solution
-... procrustes: rmse 0.02026168  max resid 0.06491274 
-Run 2 stress 0.118319 
-... procrustes: rmse 0.0001018938  max resid 0.0002761111 
+... procrustes: rmse 4.211892e-05  max resid 0.0001225318 
 *** Solution reached
 \end{Soutput}
 \begin{Sinput}
@@ -133,9 +131,9 @@ Data:     dune
 Distance: bray 
 
 Dimensions: 2 
-Stress:     0.1183187 
+Stress:     0.1192678 
 Stress type 1, weak ties
-Two convergent solutions found after 2 tries
+Two convergent solutions found after 1 tries
 Scaling: centring, PC rotation, halfchange scaling 
 Species: expanded scores based on ‘dune’ 
 \end{Soutput}
@@ -294,7 +292,7 @@ variables using permutation tests:
 ***VECTORS
 
      NMDS1   NMDS2     r2 Pr(>r)  
-A1 0.96462 0.26365 0.3649  0.015 *
+A1 0.99003 0.14087 0.3797  0.015 *
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 Permutation: free
@@ -304,14 +302,14 @@ Number of permutations: 999
 
 Centroids:
                NMDS1   NMDS2
-ManagementBF -0.4533 -0.0104
-ManagementHF -0.2635 -0.1283
-ManagementNM  0.2954  0.5791
-ManagementSF  0.1508 -0.4670
+ManagementBF -0.4474 -0.0194
+ManagementHF -0.2688 -0.1256
+ManagementNM  0.2975  0.5798
+ManagementSF  0.1503 -0.4654
 
 Goodness of fit:
                r2 Pr(>r)   
-Management 0.4133  0.004 **
+Management 0.4134  0.007 **
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 Permutation: free
@@ -342,9 +340,9 @@ Formula:
 y ~ s(x1, x2, k = 10, bs = "tp", fx = FALSE)
 
 Estimated degrees of freedom:
-1.59  total = 2.59 
+1.62  total = 2.62 
 
-REML score: 41.58728     
+REML score: 41.42675     
 \end{Soutput}
 \end{Schunk}
 \begin{figure}
@@ -484,7 +482,7 @@ Number of permutations: 199
 Model: cca(formula = dune ~ A1 + Management, data = dune.env)
            Df ChiSquare      F Pr(>F)   
 A1          1   0.22476 2.5245  0.015 * 
-Management  3   0.55502 2.0780  0.005 **
+Management  3   0.55502 2.0780  0.010 **
 Residual   15   1.33549                 
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
@@ -505,7 +503,7 @@ Number of permutations: 199
 
 Model: cca(formula = dune ~ A1 + Management, data = dune.env)
            Df ChiSquare      F Pr(>F)   
-A1          1   0.17594 1.9761  0.025 * 
+A1          1   0.17594 1.9761  0.035 * 
 Management  3   0.55502 2.0780  0.005 **
 Residual   15   1.33549                 
 ---
@@ -528,8 +526,8 @@ Model: cca(formula = dune ~ A1 + Management, data = dune.env)
          Df ChiSquare      F Pr(>F)   
 CCA1      1   0.31875 3.5801  0.002 **
 CCA2      1   0.23718 2.6640  0.006 **
-CCA3      1   0.13217 1.4845  0.114   
-CCA4      1   0.09168 1.0297  0.380   
+CCA3      1   0.13217 1.4845  0.102   
+CCA4      1   0.09168 1.0297  0.374   
 Residual 15   1.33549                 
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
@@ -581,10 +579,10 @@ Permutation: free
 Number of permutations: 499
 
 Model: cca(formula = dune ~ A1 + Management + Condition(Moisture), data = dune.env)
-           Df ChiSquare      F Pr(>F)  
-A1          1   0.11543 1.4190  0.108  
-Management  3   0.39543 1.6205  0.012 *
-Residual   12   0.97610                
+           Df ChiSquare      F Pr(>F)   
+A1          1   0.11543 1.4190   0.13   
+Management  3   0.39543 1.6205   0.01 **
+Residual   12   0.97610                 
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 \end{Soutput}
@@ -609,8 +607,8 @@ Number of permutations: 499
 
 Model: cca(formula = dune ~ A1 + Management + Condition(Moisture), data = dune.env)
            Df ChiSquare      F Pr(>F)   
-A1          1   0.11543 1.4190  0.270   
-Management  3   0.39543 1.6205  0.002 **
+A1          1   0.11543 1.4190  0.262   
+Management  3   0.39543 1.6205  0.004 **
 Residual   12   0.97610                 
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1

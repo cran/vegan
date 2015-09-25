@@ -17,9 +17,9 @@
     trmlab <- trmlab[trmlab %in% attr(terms(object$terminfo),
                                       "term.labels")]
     ntrm <- length(trmlab)
-    m0 <- update(object, paste(".~.-", paste(trmlab, collapse="-")))
+    m0 <- update(object, paste(".~.-", paste(trmlab, collapse = "-")))
     mods <- list(m0)
-    for(i in seq_along(trmlab)) {
+    for (i in seq_along(trmlab)) {
         fla <- paste(". ~ . + ", trmlab[i])
         mods[[i+1]] <- update(mods[[i]], fla)
     }
@@ -27,13 +27,18 @@
     sol <- anova.ccalist(mods, permutations = permutations,
                          model = model, parallel = parallel)
     ## Reformat
-    out <- data.frame(c(sol[-1,3], sol[ntrm+1,1]),
-                      c(sol[-1,4], sol[ntrm+1,2]),
-                      c(sol[-1,5], NA),
-                      c(sol[-1,6], NA))
-    isRDA <- inherits(object, "rda")
-    colnames(out) <- c("Df", ifelse(isRDA, "Variance", "ChiSquare"),
-                       "F", "Pr(>F)")
+    out <- data.frame(c(sol[-1, 3], sol[ntrm+1, 1]),
+                      c(sol[-1, 4], sol[ntrm+1, 2]),
+                      c(sol[-1, 5], NA),
+                      c(sol[-1, 6], NA))
+    if (inherits(object, "capscale") &&
+        (object$adjust != 1 || is.null(object$adjust)))
+        varname <- "SumOfSqs"
+    else if (inherits(object, "rda"))
+        varname <- "Variance"
+    else
+        varname <- "ChiSquare"
+    colnames(out) <- c("Df", varname, "F", "Pr(>F)")
     rownames(out) <- c(trmlab, "Residual")
     head <- paste0("Permutation test for ", object$method, " under ",
                    model, " model\n",
@@ -41,7 +46,8 @@
                    howHead(attr(permutations, "control")))
     mod <- paste("Model:", c(object$call))
     attr(out, "heading") <- c(head, mod)
-    class(out) <- c("anova","data.frame")
+    attr(out, "F.perm") <- attr(sol, "F.perm")
+    class(out) <- c("anova.cca", "anova","data.frame")
     out
 }
 
@@ -51,6 +57,7 @@
 `anova.ccabymargin` <-
     function(object, permutations, scope, ...)
 {
+    EPS <- sqrt(.Machine$double.eps)
     nperm <- nrow(permutations)
     ## Refuse to handle models with missing data
     if (!is.null(object$na.action))
@@ -62,7 +69,7 @@
         trms <- drop.scope(object)
     trmlab <- trms[trms %in% attr(terms(object$terminfo),
                                       "term.labels")]
-    if(length(trmlab) == 0)
+    if (length(trmlab) == 0)
         stop("the scope was empty: no available marginal terms")
     ## baseline: all terms
     big <- permutest(object, permutations, ...)
@@ -85,18 +92,23 @@
     Fval <- sapply(mods, function(x) x$num)
     ## Had we an empty model we need to clone the denominator
     if (length(Fval) == 1)
-        Fval <- matrix(Fval, nrow=nperm)
+        Fval <- matrix(Fval, nrow = nperm)
     Fval <- sweep(-Fval, 1, big$num, "+")
     Fval <- sweep(Fval, 2, Df, "/")
     Fval <- sweep(Fval, 1, scale, "/")
     ## Simulated P-values
-    Pval <- (colSums(sweep(Fval, 2, Fstat, ">=")) + 1)/(nperm + 1)
+    Pval <- (colSums(sweep(Fval, 2, Fstat - EPS, ">=")) + 1)/(nperm + 1)
     ## Collect results to anova data.frame
     out <- data.frame(c(Df, dfbig), c(Chisq, chibig),
                       c(Fstat, NA), c(Pval, NA))
-    isRDA <- inherits(object, "rda")
-    colnames(out) <- c("Df", ifelse(isRDA, "Variance", "ChiSquare"),
-                       "F", "Pr(>F)")
+    if (inherits(object, "capscale") &&
+        (object$adjust != 1 || is.null(object$adjust)))
+        varname <- "SumOfSqs"
+    else if (inherits(object, "rda"))
+        varname <- "Variance"
+    else
+        varname <- "ChiSquare"
+    colnames(out) <- c("Df", varname, "F", "Pr(>F)")
     rownames(out) <- c(trmlab, "Residual")
     head <- paste0("Permutation test for ", object$method, " under ",
                    mods[[1]]$model, " model\n",
@@ -104,7 +116,8 @@
                    howHead(attr(permutations, "control")))
     mod <- paste("Model:", c(object$call))
     attr(out, "heading") <- c(head, mod)
-    class(out) <- c("anova", "data.frame")
+    attr(out, "F.perm") <- Fval
+    class(out) <- c("anova.cca", "anova", "data.frame")
     out
 }
 
@@ -113,6 +126,7 @@
 `anova.ccabyaxis` <-
     function(object, permutations, model, parallel, cutoff = 1)
 {
+    EPS <- sqrt(.Machine$double.eps)
     nperm <- nrow(permutations)
     ## Observed F-values and Df
     eig <- object$CCA$eig
@@ -124,10 +138,10 @@
     ## missing values?
     if (!is.null(object$na.action))
         LC <- napredict(structure(object$na.action,
-                                  class="exclude"), LC)
+                                  class = "exclude"), LC)
     ## subset?
     if (!is.null(object$subset)) {
-        tmp <- matrix(NA, nrow=length(object$subset),
+        tmp <- matrix(NA, nrow = length(object$subset),
                       ncol = ncol(LC))
         tmp[object$subset,] <- LC
         LC <- tmp
@@ -136,6 +150,7 @@
     LC <- as.data.frame(LC)
     fla <- reformulate(names(LC))
     Pvals <- rep(NA, length(eig))
+    F.perm <- matrix(ncol = length(eig), nrow = nperm)
     environment(object$terms) <- environment()
     for (i in seq_along(eig)) {
         part <- paste("~ . +Condition(",
@@ -150,22 +165,29 @@
                 permutest(update(object, upfla, data = LC),
                           permutations, model = model,
                           parallel = parallel)
-        Pvals[i] <- (sum(mod$F.perm >= mod$F.0) + 1)/(nperm+1)
+        Pvals[i] <- (sum(mod$F.perm >= mod$F.0) + 1) / (nperm + 1)
+        F.perm[ , i] <- mod$F.perm
         if (Pvals[i] > cutoff)
             break
     }
     out <- data.frame(c(Df, resdf), c(eig, object$CA$tot.chi),
                       c(Fstat, NA), c(Pvals,NA))
     rownames(out) <- c(names(eig), "Residual")
-    isRDA <- inherits(object, "rda")
-    colnames(out) <- c("Df", ifelse(isRDA, "Variance", "ChiSquare"),
-                       "F", "Pr(>F)")
+    if (inherits(object, "capscale") &&
+        (object$adjust != 1 || is.null(object$adjust)))
+        varname <- "SumOfSqs"
+    else if (inherits(object, "rda"))
+        varname <- "Variance"
+    else
+        varname <- "ChiSquare"
+    colnames(out) <- c("Df", varname, "F", "Pr(>F)")
     head <- paste0("Permutation test for ", object$method, " under ",
                    model, " model\n",
                    "Marginal tests for axes\n",
                    howHead(attr(permutations, "control")))
     mod <- paste("Model:", c(object$call))
     attr(out, "heading") <- c(head, mod)
-    class(out) <- c("anova", "data.frame")
+    attr(out, "F.perm") <- F.perm
+    class(out) <- c("anova.cca", "anova", "data.frame")
     out
 }

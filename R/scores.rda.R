@@ -1,6 +1,6 @@
 `scores.rda` <-
-    function (x, choices = c(1, 2), display = c("sp", "wa", "cn"), 
-              scaling = 2, const, ...) 
+    function (x, choices = c(1, 2), display = c("sp", "wa", "cn"),
+              scaling = "species", const, correlation = FALSE, ...)
 {
     ## Check the na.action, and pad the result with NA or WA if class
     ## "exclude"
@@ -39,6 +39,8 @@
     }
     rnk <- x$CCA$rank
     sol <- list()
+    ## process scaling; numeric scaling will just be returned as is
+    scaling <- scalingType(scaling = scaling, correlation = correlation)
     if ("species" %in% take) {
         v <- cbind(x$CCA$v, x$CA$v)[, choices, drop=FALSE]
         if (scaling) {

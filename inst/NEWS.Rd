@@ -2,6 +2,85 @@
 \title{vegan News}
 \encoding{UTF-8}
 
+\section{Changes in version 2.3-1}{
+
+  \subsection{BUG FIXES}{
+    \itemize{
+
+      \item Permutation tests did not always correctly recognize ties
+      with the observed statistic and this could result in too low
+      \eqn{P}-values. This would happen in particular when all predictor
+      variables were factors (classes). The changes concern functions
+      \code{adonis}, \code{anosim}, \code{anova} and \code{permutest}
+      functions for \code{cca}, \code{rda} and \code{capscale},
+      \code{permutest} for \code{betadisper}, \code{envfit},
+      \code{mantel} and \code{mantel.partial}, \code{mrpp}, \code{mso},
+      \code{oecosimu}, \code{ordiareatest}, \code{protest} and
+      \code{simper}. This also fixes issues
+      \href{https://github.com/vegandevs/vegan/issues/120}{#120} and
+      \href{https://github.com/vegandevs/vegan/issues/132}{#132} in
+      GitHub.
+
+      \item Automated model building in constrained ordination
+      (\code{cca}, \code{rda}, \code{capscale}) with \code{step},
+      \code{ordistep} and \code{ordiR2step} could fail if there were
+      aliased candidate variables, or constraints that were completely
+      explained by other variables already in the model. This was a
+      regression introduced in \pkg{vegan} 2.2-0.
+
+      \item Constrained ordination methods \code{cca}, \code{rda} and
+      \code{capscale} treat character variables as factors in analysis,
+      but did not return their centroids for plotting.
+
+      \item Recovery of original data in \code{metaMDS} when computing
+      WA scores for species would fail if the expression supplied to
+      argument \code{comm} was long & got deparsed to multiple
+      strings. \code{metaMDSdist} now returns the (possibly modified)
+      data frame of community data \code{comm} as attribute
+      \code{"comm"} of the returned \code{dist} object. \code{metaMDS}
+      now uses this to compute the WA species scores for the NMDS. In
+      addition, the deparsed expression for \code{comm} is now robust to
+      long expressions.  Reported by Richard Telford.
+
+      \item \code{metaMDS} and \code{monoMDS} rejected dissimilarities
+      with missing values.
+
+      \item Function \code{rarecurve} did not check its input and this
+      could cause confusing error messages. Now function checks that
+      input data are integers that can be interpreted as counts on
+      individuals and all sampling units have some species. Unchecked
+      bad inputs were the reason for problems reported in
+      \href{http://stackoverflow.com/questions/30856909/error-while-using-rarecurve-in-r}{Stackoverflow}.
+
+    }
+  } % bug fixes
+
+  \subsection{NEW FEATURES AND FUNCTIONS}{
+    \itemize{
+      
+     \item Scaling of ordination axes in \code{cca}, \code{rda} and
+     \code{capscale} can now be expressed with descriptive strings
+     \code{"none"}, \code{"sites"}, \code{"species"} or
+     \code{"symmetric"} to tell which kind of scores should be scaled by
+     eigenvalues. These can be further modified with arguments
+     \code{hill} in \code{cca} and \code{correlation} in \code{rda}. The
+     old numeric scaling can still be used.
+
+     \item The permutation data can be extracted from \code{anova}
+     results of constrained ordination (\code{cca}, \code{rda},
+     \code{capscale}) and further analysed with \code{permustats}
+     function.
+
+     \item New data set \code{BCI.env} of site information for the Barro
+     Colorado Island tree community data. Most useful variables are the
+     UTM coordinates of sample plots. Other variables are constant or
+     nearly constant and of little use in normal analysis.
+     
+   }
+  } % new features and functions
+
+}
+
 \section{Changes in version 2.3-0}{
 
   \subsection{BUG FIXES}{

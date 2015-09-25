@@ -9,8 +9,8 @@
 
 \date{\footnotesize{
   processed with vegan
-2.3-0
-in R Under development (unstable) (2015-05-25 r68412) on \today}}
+2.3-1
+in R Under development (unstable) (2015-09-24 r69424) on \today}}
 
 %% need no \usepackage{Sweave}
 \begin{document}
@@ -701,20 +701,20 @@ Call: cca(formula = varespec[i, ] ~ Al + K, data
 = varechem)
 
               Inertia Proportion Rank
-Total          2.0832     1.0000     
-Constrained    0.1200     0.0576    2
-Unconstrained  1.9632     0.9424   21
+Total         2.08320    1.00000     
+Constrained   0.15850    0.07608    2
+Unconstrained 1.92470    0.92392   21
 Inertia is mean squared contingency coefficient 
 
 Eigenvalues for constrained axes:
    CCA1    CCA2 
-0.08228 0.03767 
+0.12178 0.03672 
 
 Eigenvalues for unconstrained axes:
    CA1    CA2    CA3    CA4    CA5    CA6    CA7 
-0.5249 0.3452 0.2173 0.1801 0.1748 0.1155 0.0889 
+0.5038 0.3395 0.1960 0.1893 0.1573 0.1214 0.1069 
    CA8 
-0.0814 
+0.0792 
 (Showed only 8 of all 21 unconstrained eigenvalues)
 \end{Soutput}
 \end{Schunk}
@@ -742,11 +742,11 @@ remain within numerical accuracy:
 > max(residuals(proc))
 \end{Sinput}
 \begin{Soutput}
-[1] 3.149138e-14
+[1] 4.392963e-14
 \end{Soutput}
 \end{Schunk}
 In \code{cca} the difference would be somewhat larger than now
-observed 3.1491e-14 because site
+observed 4.393e-14 because site
 weights used for environmental variables are shuffled with the species
 data.
 
