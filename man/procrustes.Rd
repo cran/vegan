@@ -22,9 +22,12 @@ procrustes(X, Y, scale = TRUE, symmetric = FALSE, scores = "sites", ...)
 \method{plot}{procrustes}(x, kind=1, choices=c(1,2), to.target = TRUE, 
     type = "p", xlab, ylab, main, ar.col = "blue", len=0.05, 
     cex = 0.7, ...)
-\method{points}{procrustes}(x, display = c("target", "rotated"), ...)
-\method{text}{procrustes}(x, display = c("target", "rotated"), labels, ...)
-\method{lines}{procrustes}(x, type = c("segments", "arrows"), choices = c(1, 2), ...)  
+\method{points}{procrustes}(x, display = c("target", "rotated"),
+    choices = c(1,2), truemean = FALSE, ...)
+\method{text}{procrustes}(x, display = c("target", "rotated"),
+    choices = c(1,2), labels, truemean = FALSE, ...)
+\method{lines}{procrustes}(x, type = c("segments", "arrows"),
+    choices = c(1, 2), truemean = FALSE, ...)
 \method{residuals}{procrustes}(object, ...)
 \method{fitted}{procrustes}(object, truemean = TRUE, ...)
 \method{predict}{procrustes}(object, newdata, truemean = TRUE, ...)
@@ -61,7 +64,8 @@ protest(X, Y, scores = "sites", permutations = how(nperm = 999), ...)
     target and rotated configuration.}
   \item{truemean}{Use the original range of target matrix instead of
     centring the fitted values. Function \code{plot.procrustes} needs
-    \code{truemean = FALSE}.}
+    \code{truemean = FALSE}, and adding graphical items to the plots
+    from the original results may need \code{truemean = TRUE}.}
   \item{newdata}{Matrix of coordinates to be rotated and translated to
      the target.}
   \item{permutations}{a list of control values for the permutations
