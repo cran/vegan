@@ -8,8 +8,8 @@
 
 \date{\footnotesize{
   processed with vegan
-2.3-2
-in R Under development (unstable) (2015-11-18 r69655) on \today}}
+2.3-3
+in R Under development (unstable) (2016-01-12 r69919) on \today}}
 
 %% need no \usepackage{Sweave}
 \begin{document}
@@ -113,8 +113,16 @@ species scores to the configuration as weighted averages (function
 \end{Sinput}
 \begin{Soutput}
 Run 0 stress 0.1192678 
-Run 1 stress 0.1192679 
-... procrustes: rmse 9.501138e-05  max resid 0.0002893396 
+Run 1 stress 0.1812958 
+Run 2 stress 0.1183186 
+... New best solution
+... procrustes: rmse 0.02027023  max resid 0.06495566 
+Run 3 stress 0.1192679 
+Run 4 stress 0.180892 
+Run 5 stress 0.1192678 
+Run 6 stress 0.1192679 
+Run 7 stress 0.1183186 
+... procrustes: rmse 2.809601e-05  max resid 9.348212e-05 
 *** Solution reached
 \end{Soutput}
 \begin{Sinput}
@@ -130,9 +138,9 @@ Data:     dune
 Distance: bray 
 
 Dimensions: 2 
-Stress:     0.1192678 
+Stress:     0.1183186 
 Stress type 1, weak ties
-Two convergent solutions found after 1 tries
+Two convergent solutions found after 7 tries
 Scaling: centring, PC rotation, halfchange scaling 
 Species: expanded scores based on ‘dune’ 
 \end{Soutput}
@@ -291,7 +299,7 @@ variables using permutation tests:
 ***VECTORS
 
      NMDS1   NMDS2     r2 Pr(>r)  
-A1 0.99008 0.14052 0.3798  0.022 *
+A1 0.96474 0.26322 0.3649  0.019 *
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 Permutation: free
@@ -301,14 +309,14 @@ Number of permutations: 999
 
 Centroids:
                NMDS1   NMDS2
-ManagementBF -0.4474 -0.0193
-ManagementHF -0.2689 -0.1256
-ManagementNM  0.2976  0.5798
-ManagementSF  0.1502 -0.4654
+ManagementBF -0.4534 -0.0102
+ManagementHF -0.2636 -0.1282
+ManagementNM  0.2958  0.5790
+ManagementSF  0.1506 -0.4670
 
 Goodness of fit:
-               r2 Pr(>r)  
-Management 0.4134  0.011 *
+               r2 Pr(>r)   
+Management 0.4134  0.005 **
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 Permutation: free
@@ -339,9 +347,9 @@ Formula:
 y ~ s(x1, x2, k = 10, bs = "tp", fx = FALSE)
 
 Estimated degrees of freedom:
-1.62  total = 2.62 
+1.59  total = 2.59 
 
-REML score: 41.42642     
+REML score: 41.58728     
 \end{Soutput}
 \end{Schunk}
 \begin{figure}
@@ -455,9 +463,9 @@ Permutation: free
 Number of permutations: 999
 
 Model: cca(formula = dune ~ A1 + Management, data = dune.env)
-         Df ChiSquare      F Pr(>F)    
-Model     4   0.77978 2.1896  0.001 ***
-Residual 15   1.33549                  
+         Df ChiSquare      F Pr(>F)   
+Model     4   0.77978 2.1896  0.002 **
+Residual 15   1.33549                 
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 \end{Soutput}
@@ -480,7 +488,7 @@ Number of permutations: 199
 
 Model: cca(formula = dune ~ A1 + Management, data = dune.env)
            Df ChiSquare      F Pr(>F)   
-A1          1   0.22476 2.5245  0.025 * 
+A1          1   0.22476 2.5245  0.015 * 
 Management  3   0.55502 2.0780  0.005 **
 Residual   15   1.33549                 
 ---
@@ -502,8 +510,8 @@ Number of permutations: 199
 
 Model: cca(formula = dune ~ A1 + Management, data = dune.env)
            Df ChiSquare      F Pr(>F)   
-A1          1   0.17594 1.9761  0.025 * 
-Management  3   0.55502 2.0780  0.010 **
+A1          1   0.17594 1.9761  0.030 * 
+Management  3   0.55502 2.0780  0.005 **
 Residual   15   1.33549                 
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
@@ -523,10 +531,10 @@ Number of permutations: 499
 
 Model: cca(formula = dune ~ A1 + Management, data = dune.env)
          Df ChiSquare      F Pr(>F)   
-CCA1      1   0.31875 3.5801  0.002 **
-CCA2      1   0.23718 2.6640  0.006 **
-CCA3      1   0.13217 1.4845  0.096 . 
-CCA4      1   0.09168 1.0297  0.426   
+CCA1      1   0.31875 3.5801  0.004 **
+CCA2      1   0.23718 2.6640  0.008 **
+CCA3      1   0.13217 1.4845  0.116   
+CCA4      1   0.09168 1.0297  0.342   
 Residual 15   1.33549                 
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
@@ -579,8 +587,8 @@ Number of permutations: 499
 
 Model: cca(formula = dune ~ A1 + Management + Condition(Moisture), data = dune.env)
            Df ChiSquare      F Pr(>F)   
-A1          1   0.11543 1.4190  0.114   
-Management  3   0.39543 1.6205  0.008 **
+A1          1   0.11543 1.4190  0.144   
+Management  3   0.39543 1.6205  0.004 **
 Residual   12   0.97610                 
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
@@ -606,8 +614,8 @@ Number of permutations: 499
 
 Model: cca(formula = dune ~ A1 + Management + Condition(Moisture), data = dune.env)
            Df ChiSquare      F Pr(>F)   
-A1          1   0.11543 1.4190  0.252   
-Management  3   0.39543 1.6205  0.002 **
+A1          1   0.11543 1.4190  0.276   
+Management  3   0.39543 1.6205  0.004 **
 Residual   12   0.97610                 
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1

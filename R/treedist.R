@@ -1,6 +1,11 @@
 `treedist` <-
     function(x, tree, relative = TRUE,  match.force = TRUE, ...)
 {
+    ## we cannot reconstruct tree with reversals from cophenetic
+    tree <- as.hclust(tree)
+    if (any(diff(tree$height) < -sqrt(.Machine$double.eps)))
+        stop("tree with reversals cannot be handled")
+    x <- as.matrix(x)
     n <- nrow(x)
     ABJ <- matrix(0, n , n)
     dmat <- as.matrix(cophenetic(tree))

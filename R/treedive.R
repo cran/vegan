@@ -1,8 +1,12 @@
 `treedive` <-
     function(comm, tree, match.force = TRUE, verbose = TRUE)
 {
+    EPS <- sqrt(.Machine$double.eps)
+    comm <- as.matrix(comm)
     if (!inherits(tree, c("hclust", "spantree")))
-        stop("'clus' must be an 'hclust' or 'spantree' result object")
+        stop("'tree' must be an 'hclust' or 'spantree' result object")
+    if (inherits(tree, "hclust") && any(diff(tree$height) < -EPS))
+        stop("tree with reversals cannot be handled")
     m <- as.matrix(cophenetic(tree))
     ## Check tree/comm match by names
     if (match.force || ncol(comm) != ncol(m)) {

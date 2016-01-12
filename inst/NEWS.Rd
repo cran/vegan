@@ -2,6 +2,60 @@
 \title{vegan News}
 \encoding{UTF-8}
 
+\section{Changes in version 2.3-3}{
+  \subsection{BUG FIXES}{
+     \itemize{
+
+	\item \code{metaMDS} and \code{monoMDS} could fail if input
+	dissimilarities were huge: in the reported case they were of
+	magnitude 1E85. Fixes issue
+	\href{https://github.com/vegandevs/vegan/issues/152}{#152} in
+	Github.
+
+       \item Permutations failed if they were defined as \pkg{permute}
+       control structures in \code{estaccum}, \code{ordiareatest},
+       \code{renyiaccum} and \code{tsallisaccum}. Reported by Dan
+       Gafta (Cluj-Napoca) for \code{renyiaccum}.
+
+       \item \code{rarefy} gave false warnings if input was a vector
+       or a single sampling unit.
+
+       \item Some extrapolated richness indices in \code{specpool}
+       needed the number of doubletons (= number of species occurring
+       in two sampling units), and these failed when only one sampling
+       unit was supplied.  The extrapolated richness cannot be
+       estimated from a single sampling unit, but now such cases are
+       handled smoothly instead of failing: observed non-extrapolated
+       richness with zero standard error will be reported. The issue
+       was reported in
+       \href{http://stackoverflow.com/questions/34027496/error-message-when-using-specpool-in-vegan-package}{StackOverflow}.
+
+    } %itemize
+  } % bug fixes
+
+  \subsection{NEW FEATURES}{
+    \itemize{
+
+       \item \code{treedist} and \code{treedive} refuse to handle
+       trees with reversals, i.e, higher levels are more homogeneous
+       than lower levels. Function \code{treeheight} will estimate
+       their total height with absolute values of branch
+       lengths. Function \code{treedive} refuses to handle trees with
+       negative branch heights indicating negative
+       dissimilarities. Function \code{treedive} is faster.
+
+       \item \code{gdispweight} works when input data are in a matrix
+       instead of a data frame.
+
+       \item Input dissimilarities supplied in symmetric matrices or
+       data frames are more robustly recognized by \code{anosim},
+       \code{bioenv} and \code{mrpp}.
+
+    } %itemize
+  } %new features
+
+} %v2.3-3
+
 \section{Changes in version 2.3-2}{
 
   \subsection{BUG FIXES}{

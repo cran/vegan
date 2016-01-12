@@ -7,6 +7,72 @@
 
 <h2>vegan News</h2>
 
+<h3>Changes in version 2.3-3</h3>
+
+
+
+<h4>BUG FIXES</h4>
+
+
+<ul>
+<li> <p><code>metaMDS</code> and <code>monoMDS</code> could fail if input
+dissimilarities were huge: in the reported case they were of
+magnitude 1E85. Fixes issue
+<a href="https://github.com/vegandevs/vegan/issues/152">#152</a> in
+Github.
+</p>
+</li>
+<li><p> Permutations failed if they were defined as <span class="pkg">permute</span>
+control structures in <code>estaccum</code>, <code>ordiareatest</code>,
+<code>renyiaccum</code> and <code>tsallisaccum</code>. Reported by Dan
+Gafta (Cluj-Napoca) for <code>renyiaccum</code>.
+</p>
+</li>
+<li> <p><code>rarefy</code> gave false warnings if input was a vector
+or a single sampling unit.
+</p>
+</li>
+<li><p> Some extrapolated richness indices in <code>specpool</code>
+needed the number of doubletons (= number of species occurring
+in two sampling units), and these failed when only one sampling
+unit was supplied.  The extrapolated richness cannot be
+estimated from a single sampling unit, but now such cases are
+handled smoothly instead of failing: observed non-extrapolated
+richness with zero standard error will be reported. The issue
+was reported in
+<a href="http://stackoverflow.com/questions/34027496/error-message-when-using-specpool-in-vegan-package">StackOverflow</a>.
+</p>
+</li></ul>
+ 
+ 
+
+
+<h4>NEW FEATURES</h4>
+
+
+<ul>
+<li> <p><code>treedist</code> and <code>treedive</code> refuse to handle
+trees with reversals, i.e, higher levels are more homogeneous
+than lower levels. Function <code>treeheight</code> will estimate
+their total height with absolute values of branch
+lengths. Function <code>treedive</code> refuses to handle trees with
+negative branch heights indicating negative
+dissimilarities. Function <code>treedive</code> is faster.
+</p>
+</li>
+<li> <p><code>gdispweight</code> works when input data are in a matrix
+instead of a data frame.
+</p>
+</li>
+<li><p> Input dissimilarities supplied in symmetric matrices or
+data frames are more robustly recognized by <code>anosim</code>,
+<code>bioenv</code> and <code>mrpp</code>.
+</p>
+</li></ul>
+ 
+ 
+
+
 <h3>Changes in version 2.3-2</h3>
 
 
