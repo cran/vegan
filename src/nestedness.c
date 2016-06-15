@@ -1,5 +1,6 @@
 #include <R.h>
 #include <Rmath.h>
+#include <R_ext/Utils.h> /* check user interrupts */
 
 /* Utility functions */
 
@@ -11,6 +12,8 @@
 
 void i2rand(int *vec, int imax)
 {
+    if (imax < 1)
+	error("needs at least 2 items");
     vec[0] = IRAND(imax);
     do {
 	vec[1] = IRAND(imax);
@@ -35,9 +38,9 @@ void i2rand(int *vec, int imax)
 
 #define INDX(i, j, nr) (i) + (nr)*(j)
 
-void quasiswap(int *m, int *nr, int *nc)
+void quasiswap(int *m, int *nr, int *nc, int *thin)
 {
-    int i, n, mtot, ss, row[2], col[2], nr1, nc1, a, b, c, d;
+    int i, intcheck, n, mtot, ss, row[2], col[2], nr1, nc1, a, b, c, d;
 
     nr1 = (*nr) - 1;
     nc1 = (*nc) - 1;
@@ -55,28 +58,35 @@ void quasiswap(int *m, int *nr, int *nc)
 
     /* Quasiswap while there are entries > 1 */
 
+    intcheck  = 0; /* check interrupts */
     while (ss > mtot) {
-	i2rand(row, nr1);
-	i2rand(col, nc1);
-	/* a,b,c,d notation for a 2x2 table */
-	a = INDX(row[0], col[0], *nr);
-	b = INDX(row[0], col[1], *nr);
-	c = INDX(row[1], col[0], *nr);
-	d = INDX(row[1], col[1], *nr);
-	if (m[a] > 0 && m[d] > 0 && m[a] + m[d] - m[b] - m[c] >= 2) {
-	    ss -= 2 * (m[a] + m[d] - m[b] - m[c] - 2);
-	    m[a]--;
-	    m[d]--;
-	    m[b]++;
-	    m[c]++;
-	} else if (m[b] > 0 && m[c] > 0 &&
-		   m[b] + m[c] - m[a] - m[d] >= 2) {
-	    ss -= 2 * (m[b] + m[c] - m[a] - m[d] - 2);
-	    m[a]++;
-	    m[d]++;
-	    m[b]--;
-	    m[c]--;
+	for (i = 0; i < *thin; i++) {
+	    i2rand(row, nr1);
+	    i2rand(col, nc1);
+	    /* a,b,c,d notation for a 2x2 table */
+	    a = INDX(row[0], col[0], *nr);
+	    b = INDX(row[0], col[1], *nr);
+	    c = INDX(row[1], col[0], *nr);
+	    d = INDX(row[1], col[1], *nr);
+	    if (m[a] > 0 && m[d] > 0 && m[a] + m[d] - m[b] - m[c] >= 2) {
+		ss -= 2 * (m[a] + m[d] - m[b] - m[c] - 2);
+		m[a]--;
+		m[d]--;
+		m[b]++;
+		m[c]++;
+	    } else if (m[b] > 0 && m[c] > 0 &&
+		       m[b] + m[c] - m[a] - m[d] >= 2) {
+		ss -= 2 * (m[b] + m[c] - m[a] - m[d] - 2);
+		m[a]++;
+		m[d]++;
+		m[b]--;
+		m[c]--;
+	    }
 	}
+	/* interrupt? */
+	if (intcheck % 1000 == 999)
+	    R_CheckUserInterrupt();
+	intcheck++;
     }
 
     /* Set R RNG */
@@ -129,12 +139,15 @@ void trialswap(int *m, int *nr, int *nc, int *thin)
 void swap(int *m, int *nr, int *nc, int *thin)
 {
 
-    int i, a, b, c, d, row[2], col[2], sX;
+    int i, intcheck, a, b, c, d, row[2], col[2], sX;
 
     GetRNGstate();
 
-    for (i=0; i < *thin; i++) {
+    for (i=0, intcheck=0; i < *thin; i++) {
 	for(;;) {
+	    if (intcheck % 1000 == 999)
+		R_CheckUserInterrupt();
+	    intcheck++;
 	    i2rand(row, (*nr) - 1);
 	    i2rand(col, (*nc) - 1);
 	    a = INDX(row[0], col[0], *nr);
@@ -163,6 +176,65 @@ void swap(int *m, int *nr, int *nc, int *thin)
     PutRNGstate();
 }
 
+/* Strona et al. 2014 (NATURE COMMUNICATIONS | 5:4114 |
+ * DOI:10.1038/ncomms5114 | www.nature.com/naturecommunications)
+ * suggested a boosted sequential binary swap method. Instead of
+ * looking for random 2x2 submatrices, they look for 2 rows and
+ * collect a list of unique species that occur only in one row, and
+ * allocate these randomly to rows preserving counts.
+ */
+
+/* uniq is a work vector to hold indices of unique species (occurring
+ * only in one of two random rows). uniq must be allocated in the
+ * calling function, with safe size 2 * (max. number of species) or
+ * with belt and suspenders 2 * (*nc). */
+
+void curveball(int *m, int *nr, int *nc, int *thin, int *uniq)
+{
+    int row[2], i, j, jind, ind, nsp1, nsp2, itmp, tmp;
+
+    /* Set RNG */
+    GetRNGstate(); 
+
+    for (i = 0; i < *thin; i++) {
+	/* Random sites */
+	i2rand(row, (*nr)-1);
+	/* uniq is a vector of unique species for a random pair of
+	   rows, It need not be zeroed between thin loops because ind
+	   keeps track of used elements. */
+	for (j = 0, ind = -1, nsp1 = 0, nsp2 = 0; j < (*nc); j++) {
+	    jind = j * (*nr);
+	    if (m[row[0] + jind] > 0 && m[row[1] + jind] == 0) {
+		uniq[++ind] = j;
+		nsp1++;
+	    }
+	    if (m[row[1] + jind] > 0 && m[row[0] + jind] == 0) {
+		uniq[++ind] = j;
+		nsp2++;
+	    }
+	}
+	/* uniq contains indices of unique species: shuffle these and
+	 * allocate nsp1 first to row[0] and the rest to row[1] */
+	if (nsp1 > 0 && nsp2 > 0) { /* something to swap? */
+	    for (j = ind; j >= nsp1; j--) {
+		tmp = uniq[j];
+		itmp = IRAND(j);
+		uniq[j] = uniq[itmp];
+		uniq[itmp] = tmp;
+	    }
+	    for (j = 0; j < nsp1; j++) {
+		m[INDX(row[0], uniq[j], *nr)] = 1;
+		m[INDX(row[1], uniq[j], *nr)] = 0;
+	    }
+	    for (j = nsp1; j <= ind; j++) {
+		m[INDX(row[0], uniq[j], *nr)] = 0;
+		m[INDX(row[1], uniq[j], *nr)] = 1;
+	    }
+	}
+    }
+
+    PutRNGstate();
+}
 
 /* 'swapcount' is a C translation of Peter Solymos's R code. It is
  * similar to 'swap', but can swap > 1 values and so works for
@@ -281,13 +353,14 @@ int isDiagFill(int *sm)
 
 void swapcount(int *m, int *nr, int *nc, int *thin)
 {
-    int row[2], col[2], k, ij[4], changed, 
+    int row[2], col[2], k, ij[4], changed, intcheck,
 	pm[4] = {1, -1, -1, 1} ;
     int sm[4], ev;
 
     GetRNGstate();
 
     changed = 0;
+    intcheck = 0;
     while (changed < *thin) {
 	/* Select a random 2x2 matrix*/
 	i2rand(row, *nr - 1);
@@ -305,6 +378,9 @@ void swapcount(int *m, int *nr, int *nc, int *thin)
 			m[ij[k]] += pm[k]*ev;
 		changed++;
 	}
+	if (intcheck % 1000 == 999)
+	    R_CheckUserInterrupt();
+	intcheck++;
     }
 
     PutRNGstate();
@@ -319,7 +395,7 @@ void swapcount(int *m, int *nr, int *nc, int *thin)
 
 void rswapcount(int *m, int *nr, int *nc, int *mfill)
 {
-    int row[2], col[2], i, k, ij[4], n, change, cfill,
+    int row[2], col[2], i, intcheck, k, ij[4], n, change, cfill,
        pm[4] = {1, -1, -1, 1} ;
     int sm[4], ev;
 
@@ -333,6 +409,7 @@ void rswapcount(int *m, int *nr, int *nc, int *mfill)
     GetRNGstate();
 
     /* Loop while fills differ */
+    intcheck = 0;
     while (cfill != *mfill) {
 	/* Select a random 2x2 matrix*/
 	i2rand(row, *nr - 1);
@@ -359,6 +436,9 @@ void rswapcount(int *m, int *nr, int *nc, int *mfill)
 		cfill += change;
 	    } 
 	}
+	if (intcheck % 1000 == 999)
+	    R_CheckUserInterrupt();
+	intcheck++;
     }
     PutRNGstate();
 }
@@ -404,12 +484,13 @@ int isDiagSimple(double *sm)
 
 void abuswap(double *m, int *nr, int *nc, int *thin, int *direct)
 {
-    int row[2], col[2], k, ij[4], changed, ev;
+    int row[2], col[2], k, ij[4], intcheck, changed, ev;
     double sm[4];
 
     GetRNGstate();
 
     changed = 0;
+    intcheck = 0;
     while (changed < *thin) {
 	/* Select a random 2x2 matrix*/
 	 i2rand(row, *nr - 1);
@@ -439,6 +520,9 @@ void abuswap(double *m, int *nr, int *nc, int *thin, int *direct)
 	      }
 	      changed++;
 	 }
+	 if (intcheck % 1000 == 999)
+	     R_CheckUserInterrupt();
+	 intcheck++;
     }
     
     PutRNGstate();

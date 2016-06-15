@@ -12,6 +12,9 @@
 \alias{veganCovEllipse}
 \alias{hierParseFormula}
 \alias{veganMahatrans}
+\alias{GowerDblcen}
+\alias{addLingoes}
+\alias{addCailliez}
 
 \title{Internal vegan functions}
 
@@ -35,6 +38,9 @@ pasteCall(call, prefix = "Call:")
 veganCovEllipse(cov, center = c(0, 0), scale = 1, npoints = 100)
 veganMahatrans(x, s2, tol = 1e-8)
 hierParseFormula(formula, data)
+GowerDblcen(x, na.rm = TRUE)
+addLingoes(d)
+addCailliez(d)
 }
 
 \details{ The description here is only intended for \pkg{vegan}
@@ -97,6 +103,18 @@ hierParseFormula(formula, data)
   and a model frame with factors representing hierarchy levels 
   (right hand side) to be used in \code{\link{adipart}}, 
   \code{\link{multipart}} and \code{\link{hiersimu}}.
+
+  \code{GowerDblcen} performs the Gower double centring of a matrix of
+  dissimilarities. Similar function was earlier available as a compiled
+  code in \pkg{stats}, but it is not a part of official API, and
+  therefore we have this poorer replacement.
+
+  \code{addLingoes} and \code{addCailliez} find the constant added to
+  non-diagonal (squared) dissimilarities to make all eigenvalues
+  non-negative in Principal Co-ordinates Analysis
+  (\code{\link{wcmdscale}}, \code{\link{capscale}}). Function
+  \code{\link{cmdscale}} implements the Cailliez method. The argument
+  is a matrix of dissimilarities.
 }
 
 \keyword{internal }

@@ -1,5 +1,5 @@
-"spenvcor" <-
-function (object) 
+`spenvcor` <-
+    function (object) 
 {
     if (is.null(object$CCA))
         stop("Needs results from constrained ordination")

@@ -21,11 +21,8 @@ function(object, nsim=1, seed = NULL, burnin=0, thin=1, ...)
         x <- object$state
     } else {
         x <- m
-#        if (thin != 1)
-#            message("non-sequential model: 'thin' set to 1")
-        thin <- 1L
-#        if (burnin != 0)
-#            message("non-sequential model: 'burnin' set to 0")
+        ## non-sequential models have no burnin -- but they may have
+        ## thinning: set burnin=0, but leave thin like user set it.
         burnin <- 0L
     }
     perm <- object$commsim$fun(x=x,
@@ -40,12 +37,17 @@ function(object, nsim=1, seed = NULL, burnin=0, thin=1, ...)
         fill=object$fill,
         thin=as.integer(thin), ...)
     if (object$commsim$isSeq) {
-        Start <- as.integer(object$iter + 1L)
-        End <- as.integer(object$iter + nsim * thin)
+        Start <- object$iter + thin
+        End <- object$iter + nsim * thin
+        ## sequence can overflow integer
+        if (Start <= .Machine$integer.max)
+            Start <- as.integer(Start)
+        if (End <= .Machine$integer.max)
+            End <- as.integer(End)
         state <- perm[,,nsim]
         storage.mode(state) <- object$commsim$mode
         assign("state", state, envir=object)
-        assign("iter", as.integer(End), envir=object)
+        assign("iter", End, envir=object)
     } else {
         Start <- 1L
         End <- as.integer(nsim)

@@ -10,6 +10,7 @@
 
     ## starting values and CONSTANTS
     NALL <- 7
+    allperm <- factorial(NALL)
     ties <- FALSE
     trace <- FALSE
     ## Code
@@ -28,31 +29,22 @@
     ## Function to evaluate discrepancy
     FUN <- function(x) sum(comm[col(comm)[,x] <= rowSums(comm)] == 0)
     Ad <- FUN(x)
-    ## Go through all le-items and permute ties. Functions allPerms
-    ## and shuffleSet are in permute package.
+    ## Go through all le-items and permute ties. Function shuffleSet
+    ## is in permute package, and its minperm argument triggers
+    ## complete enumeration for no. of ties <= NALL!.
     for (i in seq_along(le)) {
         if (le[i] > 1) {
             take <- x
-            idx <- (1:le[i]) + cle[i]
+            idx <- seq_len(le[i]) + cle[i]
             ## Can swaps influence discrepancy?
             if (idx[1] > rs[2] || idx[le[i]] < rs[1])
                 next
-            ## Complete enumeration if no. of tied value <= NALL
-            if (le[i] <= NALL) {
-                perm <- matrix(allPerms(le[i]), ncol=le[i]) + cle[i]
-                ## Take at maximum NITER cases from complete enumeration
-                if (nrow(perm) > niter) {
-                    perm <- perm[sample.int(nrow(perm), niter),]
-                    ties <- TRUE
-                }
-            }
-            ## No complete enumeration, but a sample and potentially
-            ## duplicated orders
-            else {
+            perm <- shuffleSet(le[i], niter, control = how(minperm = allperm),
+                               quietly = TRUE)
+            ## maxperm is a double -- needs EPS -0.5
+            if ((attr(perm, "control")$maxperm - 0.5) > niter)
                 ties <- TRUE
-                perm <- shuffleSet(le[i], niter)
-                perm <- perm + cle[i]
-            }
+            perm <- matrix(perm, ncol = le[i]) + cle[i]
             vals <- sapply(1:nrow(perm), function(j) {
                 take[idx] <- perm[j,]
                 FUN(take)

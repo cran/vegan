@@ -1,5 +1,5 @@
 ### stressplot() methods for eigenvector ordinations wcmdscale, rda,
-### cca, capscale
+### cca, capscale, dbrda
 
 `stressplot.wcmdscale` <-
     function(object, k = 2, pch,  p.col = "blue", l.col = "red", lwd = 2, ...)
@@ -13,7 +13,8 @@
         stop("observed distances cannot be reconstructed: all axes were not calculated")
     ## Get the ordination distances in k dimensions
     if (k > NCOL(object$points))
-        stop("'k' cannot exceed the number of real dimensions")
+        warning(gettextf("max allowed rank is k = %d", NCOL(object$points)))
+    k <- min(NCOL(object$points), k)
     w <- sqrt(object$weights)
     u <- diag(w) %*% object$points
     odis <- dist(u[,1:k, drop = FALSE])
@@ -21,13 +22,15 @@
     dis <- dist(u)
     if (!is.null(object$negaxes))
         dis <- sqrt(dis^2 - dist(diag(w) %*% object$negaxes)^2)
-    ## additive constant is not implemented in wcmdscale (which
-    ## returns 'ac = NA'), but the next statement would take care of
-    ## that: we want to have the input distances as observed distances
-    ## so that we need to subtract 'ac' here, although ordination
-    ## distances 'odis' do not add up to 'dis' but to 'dis + ac'.
-    if (!is.na(object$ac))
-        dis <- dis - object$ac
+    ## Remove additive constant to get original dissimilarities
+    if (!is.na(object$ac)) {
+        if (object$add == "lingoes")
+            dis <- sqrt(dis^2 - 2 * object$ac)
+        else if (object$add == "cailliez")
+            dis <- dis - object$ac
+        else
+            stop("unknown Euclidifying adjustment: no idea what to do")
+    }
     ##Plot
     if (missing(pch))
         if (length(dis) > 5000)
@@ -109,6 +112,10 @@
 {
     ## Scores to reconstruct data
     u <- cbind(object$CCA$u, object$CA$u)
+    ## check rank
+    if (k > NCOL(u))
+        warning(gettextf("max allowed rank is k = %d", ncol(u)))
+    k <- min(k, ncol(u))
     ev <- c(object$CCA$eig, object$CA$eig)
     if (object$adjust == 1)
         const <- sqrt(NROW(u) - 1)
@@ -135,12 +142,92 @@
     ## Distances
     dis <- dist(Xbar)
     odis <- dist(Xbark)
-    if (!is.null(object$CA$imaginary.u.eig))
-        dis <- sqrt(dis^2 - dist(object$CA$imaginary.u.eig)^2)
-    if (!is.null(object$ac))
-        dis <- dis - object$ac
+    if (!is.null(object$CA$imaginary.u.eig)) {
+        dis <- dis^2 - dist(object$CA$imaginary.u.eig)^2
+        if (all(dis > -sqrt(.Machine$double.eps)))
+            dis <- sqrt(pmax(dis, 0))
+        else # neg dis will be NaN with a warning
+            dis <- sqrt(dis)
+    }
+    ## Remove additive constant to get original dissimilarities
+    if (!is.null(object$ac)) {
+        if (object$add == "lingoes")
+            dis <- sqrt(dis^2 - 2 * object$ac)
+        else if (object$add == "cailliez")
+            dis <- dis - object$ac
+        else
+            stop("unknown Euclidifying adjustment: no idea what to do")
+    }
+    ## undo internal sqrt.dist
+    if (object$sqrt.dist)
+        dis <- dis^2
     ## plot like above
         ## Plot
+    if (missing(pch))
+        if (length(dis) > 5000)
+            pch <- "."
+        else
+            pch <- 1
+    plot(dis, odis, pch = pch, col = p.col, xlab = "Observed Dissimilarity",
+         ylab = "Ordination Distance", ...)
+    abline(0, 1, col = l.col, lwd = lwd, ...)
+    invisible(odis)
+}
+
+### dbrda() returns only row scores 'u' (LC scores for constraints,
+### site scores for unconstrained part), and these can be used to
+### reconstitute dissimilarities only in unconstrained ordination or
+### for constrained component.
+
+`stressplot.dbrda` <-
+    function(object, k = 2, pch, p.col = "blue", l.col = "red", lwd = 2, ...)
+{
+    ## Does not work correctly for p-dbRDA
+    if (!is.null(object$pCCA))
+        stop("cannot be used with partial dbrda")
+    ## Reconstruct original distances from Gower 'G'
+    dis <- if (is.null(object$CCA))
+               object$CA$G
+           else
+               object$CCA$G
+    if (object$adjust == 1)
+        const <- nobs(object) - 1
+    else
+        const <- 1
+    dia <- diag(dis)
+    dis <- -2 * dis + outer(dia, dia, "+")
+    dis <- sqrt(as.dist(dis) * const)
+    ## Remove additive constant to get original dissimilarities
+    if (!is.null(object$ac)) {
+        if (object$add == "lingoes")
+            dis <- sqrt(dis^2 - 2 * object$ac)
+        else if (object$add == "cailliez")
+            dis <- dis - object$ac
+        else
+            stop("unknown Euclidifying adjustment: no idea what to do")
+    }
+    ## undo internal sqrt.dist
+    if (object$sqrt.dist)
+        dis <- dis^2
+    ## Approximate dissimilarities from real components. Can only be
+    ## used for one component.
+    if (is.null(object$CCA)) {
+        U <- object$CA$u
+        eig <- object$CA$eig
+    } else {
+        U <- object$CCA$u
+        eig <- object$CCA$eig
+    }
+    eig <- eig[eig > 0] 
+    ## check that 'k' does not exceed real rank
+    if (k > ncol(U))
+        warning(gettextf("max allowed rank is k = %d", ncol(U)))
+    k <- min(k, ncol(U))
+    Gk <- tcrossprod(sweep(U[, seq_len(k), drop=FALSE], 2,
+                  sqrt(eig[seq_len(k)]), "*"))
+    dia <- diag(Gk)
+    odis <- sqrt(as.dist(-2 * Gk + outer(dia, dia, "+")) * const)
+    ## Plot
     if (missing(pch))
         if (length(dis) > 5000)
             pch <- "."

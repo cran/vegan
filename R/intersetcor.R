@@ -1,4 +1,5 @@
-intersetcor <- function(object) 
+`intersetcor` <-
+    function(object) 
 {
     if (!inherits(object, "cca"))
         stop("can be used only with objects inheriting from 'cca'")

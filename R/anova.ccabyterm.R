@@ -23,6 +23,9 @@
         fla <- paste(". ~ . + ", trmlab[i])
         mods[[i+1]] <- update(mods[[i]], fla)
     }
+    ## for compatibility with the old capscale design we need the following
+    if (inherits(object, "oldcapscale")) # uh -- get rid of this later
+        mods <- suppressMessages(lapply(mods, oldCapscale))
     ## The result
     sol <- anova.ccalist(mods, permutations = permutations,
                          model = model, parallel = parallel)
@@ -31,7 +34,7 @@
                       c(sol[-1, 4], sol[ntrm+1, 2]),
                       c(sol[-1, 5], NA),
                       c(sol[-1, 6], NA))
-    if (inherits(object, "capscale") &&
+    if (inherits(object, c("capscale", "dbrda")) &&
         (object$adjust != 1 || is.null(object$adjust)))
         varname <- "SumOfSqs"
     else if (inherits(object, "rda"))
@@ -62,6 +65,9 @@
     ## Refuse to handle models with missing data
     if (!is.null(object$na.action))
         stop("by = 'margin' models cannot handle missing data")
+    ## Refuse to handle oldCapscale models
+    if (inherits(object, "oldcapscale"))
+        stop("by = 'margin' models cannot handle oldCapscale results")
     ## We need term labels but without Condition() terms
     if (!is.null(scope) && is.character(scope))
         trms <- scope
@@ -101,7 +107,7 @@
     ## Collect results to anova data.frame
     out <- data.frame(c(Df, dfbig), c(Chisq, chibig),
                       c(Fstat, NA), c(Pval, NA))
-    if (inherits(object, "capscale") &&
+    if (inherits(object, c("capscale", "dbrda")) &&
         (object$adjust != 1 || is.null(object$adjust)))
         varname <- "SumOfSqs"
     else if (inherits(object, "rda"))
@@ -127,6 +133,17 @@
     function(object, permutations, model, parallel, cutoff = 1)
 {
     EPS <- sqrt(.Machine$double.eps)
+    ## capscale axes are still based only on real components and we
+    ## need to cast to old format to get the correct residual
+    ## variation. This should give a message().
+    if (!is.null(object$CA$imaginary.chi))
+        object <- oldCapscale(object)
+    ## On 29/10/15 (983ba7726) we assumed that dbrda(d ~ dbrda(d ~
+    ## x)$CCA$u) is not equal to dbrda(d ~ x) when there are negative
+    ## eigenvalues, but it seems that it is OK if constrained
+    ## eigenvalues are non-negative
+    if (inherits(object, "dbrda") && any(object$CCA$eig < 0))
+        stop("by = 'axis' cannot be used when constraints have negative eigenvalues")
     nperm <- nrow(permutations)
     ## Observed F-values and Df
     eig <- object$CCA$eig
@@ -149,9 +166,16 @@
     }
     LC <- as.data.frame(LC)
     fla <- reformulate(names(LC))
-    Pvals <- rep(NA, length(eig))
-    F.perm <- matrix(ncol = length(eig), nrow = nperm)
+    Pvals <- rep(NA, ncol(LC))
+    F.perm <- matrix(ncol = ncol(LC), nrow = nperm)
     environment(object$terms) <- environment()
+    ## in dbrda, some axes can be imaginary, but we only want to have
+    ## an analysis of real-valued dimensions, and we must adjust data
+    if (ncol(LC) < length(eig)) {
+        eig <- eig[seq_len(ncol(LC))]
+        Df <- Df[seq_len(ncol(LC))]
+        Fstat <- Fstat[seq_len(ncol(LC))]
+    }
     for (i in seq_along(eig)) {
         part <- paste("~ . +Condition(",
                       paste(names(LC)[-i], collapse = "+"), ")")
@@ -165,7 +189,7 @@
                 permutest(update(object, upfla, data = LC),
                           permutations, model = model,
                           parallel = parallel)
-        Pvals[i] <- (sum(mod$F.perm >= mod$F.0) + 1) / (nperm + 1)
+        Pvals[i] <- (sum(mod$F.perm >= mod$F.0 - EPS) + 1) / (nperm + 1)
         F.perm[ , i] <- mod$F.perm
         if (Pvals[i] > cutoff)
             break
@@ -173,7 +197,7 @@
     out <- data.frame(c(Df, resdf), c(eig, object$CA$tot.chi),
                       c(Fstat, NA), c(Pvals,NA))
     rownames(out) <- c(names(eig), "Residual")
-    if (inherits(object, "capscale") &&
+    if (inherits(object, c("capscale", "dbrda")) &&
         (object$adjust != 1 || is.null(object$adjust)))
         varname <- "SumOfSqs"
     else if (inherits(object, "rda"))

@@ -7,29 +7,37 @@
 \alias{plot.varpart}
 \alias{plot.varpart234}
 \alias{simpleRDA2}
+\alias{simpleDBRDA}
 
 \title{Partition the Variation of Community Matrix by 2, 3, or 4 Explanatory Matrices }
 
 \description{ 
-  The function partitions the variation of response table Y with
-  respect to two, three, or four explanatory tables, using adjusted
-  \eqn{R^2}{R-squared} in redundancy analysis ordination (RDA). If Y
-  contains a single vector, partitioning is by partial regression.
-  Collinear variables in the explanatory tables do NOT have to be
-  removed prior to partitioning.  
+
+  The function partitions the variation in community data or community
+  dissimilarities with respect to two, three, or four explanatory
+  tables, using adjusted \eqn{R^2}{R-squared} in redundancy analysis
+  ordination (RDA) or distance-based redundancy analysis. If response
+  is a single vector, partitioning is by partial regression. Collinear
+  variables in the explanatory tables do NOT have to be removed prior
+  to partitioning.
+
 }
 
 \usage{
-varpart(Y, X, ..., data, transfo, scale = FALSE)
+varpart(Y, X, ..., data, transfo, scale = FALSE, add = FALSE,
+    sqrt.dist = FALSE)
 showvarparts(parts, labels, bg = NULL, alpha = 63, Xnames,
     id.size = 1.2,  ...)
 \method{plot}{varpart234}(x, cutoff = 0, digits = 1, ...)
 }
 
 \arguments{
-\item{Y}{ Data frame or matrix containing the response data
-table. In community ecology, that table is often a site-by-species
-table. }
+
+\item{Y}{ Data frame or matrix containing the response data table or
+  dissimilarity structure inheriting from \code{\link{dist}}. In
+  community ecology, that table is often a site-by-species table or a
+  dissimilarity object. }
+
 \item{X}{Two to four explanatory models, variables or tables.  These can
   be defined in three alternative ways: (1) one-sided model formulae
   beginning with \code{~} and then defining the model, (2) name of a
@@ -46,11 +54,28 @@ table. }
   }
 \item{data}{The data frame with the variables used in the formulae in
   \code{X}.} 
+
 \item{transfo}{ Transformation for \code{Y} (community data) using
-  \code{\link{decostand}}.  All alternatives in \code{decostand} can be
-    used, and those preserving Euclidean metric include
-    \code{"hellinger"}, \code{"chi.square"}, \code{"total"}, \code{"norm"}.}
-\item{scale}{Should the columns of \code{Y} be standardized to unit variance}
+  \code{\link{decostand}}.  All alternatives in \code{decostand} can
+  be used, and those preserving Euclidean metric include
+  \code{"hellinger"}, \code{"chi.square"}, \code{"total"},
+  \code{"norm"}. Ignored if \code{Y} are dissimilarities.}
+
+\item{scale}{Should the columns of \code{Y} be standardized to unit
+  variance. Ignored if \code{Y} are dissimilarities.}
+
+\item{add}{Add a constant to the non-diagonal values to euclidify
+  dissimilarities (see \code{\link{wcmdscale}} for details). Choice
+  \code{"lingoes"} (or \code{TRUE}) use the recommended method of
+  Legendre & Anderson (1999: \dQuote{method 1}) and \code{"cailliez"}
+  uses their \dQuote{method 2}. The argument has an effect only when
+  \code{Y} are dissimilarities.}
+
+\item{sqrt.dist}{Take square root of dissimilarities. This often
+  euclidifies dissimilarities. NB., the argument name cannot be
+  abbreviated. The argument has an effect only when \code{Y} are
+  dissimilarities.}
+
 \item{parts}{Number of explanatory tables (circles) displayed.}
 \item{labels}{Labels used for displayed fractions. Default is to use
   the same letters as in the printed output.}
@@ -73,16 +98,30 @@ table. }
 \item{cutoff}{The values below \code{cutoff} will not be displayed.}
 \item{digits}{The number of significant digits; the number of decimal
   places is at least one higher.}
-\item{...}{Other parameters passed to functions.}
+\item{...}{Other parameters passed to functions. NB, arguments after
+  dots cannot be abbreviated but they must be spelt out completely.}
 }
 
 \details{
+
   The functions partition the variation in \code{Y} into components
   accounted for by two to four explanatory tables and their combined
-  effects. If \code{Y} is a multicolumn data frame or
-  matrix, the partitioning is based on redundancy analysis (RDA, see
+  effects. If \code{Y} is a multicolumn data frame or matrix, the
+  partitioning is based on redundancy analysis (RDA, see
   \code{\link{rda}}), and if \code{Y} is a single variable, the
-  partitioning is based on linear regression.  
+  partitioning is based on linear regression.  If \code{Y} are
+  dissimilarities, the decomposition is based on distance-based
+  redundancy analysis (db-RDA, see \code{\link{capscale}}) following
+  McArdle & Anderson (2001). The input dissimilarities must be
+  compatible to the results of \code{\link{dist}}. \pkg{Vegan} functions
+  \code{\link{vegdist}}, \code{\link{designdist}},
+  \code{\link{raupcrick}} and \code{\link{betadiver}} produce such
+  objects, as do many other dissimilarity functions in \R
+  packages. However, symmetric square matrices are not recognized as
+  dissimilarities but must be transformed with \code{\link{as.dist}}.
+  Partitioning will be made to squared dissimilarities analogously to
+  using variance with rectangular data -- unless \code{sqrt.dist = TRUE}
+  was specified.
 
   The function primarily uses adjusted \eqn{R^2}{R-squared} to assess
   the partitions explained by the explanatory tables and their
@@ -96,14 +135,13 @@ table. }
   \code{browseVignettes("vegan")}), or can be displayed graphically
   using function \code{showvarparts}.
 
-  A fraction is testable if it can be directly
-  expressed as an RDA model.  In these cases the printed output also
-  displays the corresponding RDA model using notation where explanatory
-  tables after \code{|} are conditions (partialled out; see
-  \code{\link{rda}} for details). Although single fractions can be
-  testable, this does not mean that all fractions simultaneously can be
-  tested, since there number of  testable fractions  is higher than
-  the number of estimated models.
+  A fraction is testable if it can be directly expressed as an RDA or
+  db-RDA model.  In these cases the printed output also displays the
+  corresponding RDA model using notation where explanatory tables after
+  \code{|} are conditions (partialled out; see \code{\link{rda}} for
+  details). Although single fractions can be testable, this does not
+  mean that all fractions simultaneously can be tested, since the number
+  of testable fractions is higher than the number of estimated models.
 
   An abridged explanation of the alphabetic symbols for the individual
   fractions follows, but computational details should be checked in the
@@ -169,12 +207,12 @@ table. }
   \code{indfract}, \code{contr1} and \code{contr2} are all data frames with
   items:
   \itemize{
-  \item{Df}{Degrees of freedom of numerator of the \eqn{F}-statistic
+  \item{\code{Df}: }{Degrees of freedom of numerator of the \eqn{F}-statistic
     for the fraction.}
-  \item{R.square}{Raw \eqn{R^2}{R-squared}. This is calculated only for
+  \item{\code{R.square}: }{Raw \eqn{R^2}{R-squared}. This is calculated only for
     \code{fract} and this is \code{NA} in other items.}
-  \item{Adj.R.square}{Adjusted \eqn{R^2}{R-squared}.}
-  \item{Testable}{If the fraction can be expressed as a (partial) RDA
+  \item{\code{Adj.R.square}: }{Adjusted \eqn{R^2}{R-squared}.}
+  \item{\code{Testable}: }{If the fraction can be expressed as a (partial) RDA
     model, it is directly \code{Testable}, and this field is
     \code{TRUE}.  In that case the fraction label also gives the
     specification of the testable RDA model.}
@@ -201,10 +239,21 @@ transformations for ordination of species data. Oecologia 129: 271--280.
 Peres-Neto, P., P. Legendre, S. Dray and D. Borcard. 2006. Variation partitioning
 of species data matrices: estimation and comparison of fractions.
 Ecology 87: 2614--2625.
- }
+
+(d) References on partitioning of dissimilarities
+
+Legendre, P. & Anderson, M. J. (1999). Distance-based redundancy
+analysis: testing multispecies responses in multifactorial ecological
+experiments. \emph{Ecological Monographs} 69, 1--24.
+
+McArdle, B.H. & Anderson, M.J. (2001). Fitting multivariate models
+to community data: a comment on distance-based redundancy
+analysis. Ecology 82, 290-297.
+
+}
 
 \author{ Pierre Legendre, Departement de Sciences Biologiques, Universite de
-Montreal, Canada.  Adapted to \pkg{vegan} by Jari Oksanen. }
+Montreal, Canada.  Further developed by Jari Oksanen. }
 
 \note{
 
@@ -216,22 +265,31 @@ Montreal, Canada.  Adapted to \pkg{vegan} by Jari Oksanen. }
 
   The functions frequently give negative estimates of variation.
   Adjusted \eqn{R^2}{R-squared} can be negative for any fraction;
-  unadjusted \eqn{R^2}{R-squared} of testable fractions always will be
-  non-negative.  Non-testable fractions cannot be found directly, but
-  by subtracting different models, and these subtraction results can
-  be negative.  The fractions are orthogonal, or linearly independent,
-  but more complicated or nonlinear dependencies can cause negative
-  non-testable fractions.
+  unadjusted \eqn{R^2}{R-squared} of testable fractions of variances
+  will be non-negative.  Non-testable fractions cannot be found
+  directly, but by subtracting different models, and these subtraction
+  results can be negative.  The fractions are orthogonal, or linearly
+  independent, but more complicated or nonlinear dependencies can
+  cause negative non-testable fractions. Any fraction can be negative
+  for non-Euclidean dissimilarities because the underlying db-RDA model
+  can yield negative eigenvalues (see \code{\link{capscale}},
+  \code{\link{dbrda}}). These negative eigenvalues in the underlying
+  analysis can be avoided with arguments \code{sqrt.dist} and \code{add}
+  which have a similar effect as in \code{\link{capscale}}: the square
+  roots of several dissimilarities do not have negative eigenvalues, and
+  no negative eigenvalues are produced after Lingoes or Cailliez
+  adjustment, which in effect add random variation to the
+  dissimilarities.
 
   The current function will only use RDA in multivariate
   partitioning. It is much more complicated to estimate the adjusted
   R-squares for CCA, and unbiased analysis of CCA is not currently
   implemented.
 
-  A simplified, fast version of RDA is used (function
-  \code{simpleRDA2}).  The actual calculations are done in functions
-  \code{varpart2} to \code{varpart4}, but these are not intended to be
-  called directly by the user.
+  A simplified, fast version of RDA or dbRDA are used (functions
+  \code{simpleRDA2} and \code{simpleDBRDA}).  The actual calculations
+  are done in functions \code{varpart2} to \code{varpart4}, but these
+  are not intended to be called directly by the user.
 
 }
 
@@ -269,6 +327,8 @@ anova(aFrac, step=200, perm.max=200)
 # RsquareAdj gives the same result as component [a] of varpart
 RsquareAdj(aFrac)
 
+# Partition Bray-Curtis dissimilarities
+varpart(vegdist(mite), ~ ., mite.pcnm, data = mite.env)
 # Three explanatory matrices 
 mod <- varpart(mite, ~ SubsDens + WatrCont, ~ Substrate + Shrub + Topo,
    mite.pcnm, data=mite.env, transfo="hel")

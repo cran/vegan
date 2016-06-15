@@ -17,7 +17,7 @@ require(vegan)
 
 
 ###################################################
-### code chunk number 3: decision-vegan.Rnw:126-137 (eval = FALSE)
+### code chunk number 3: decision-vegan.Rnw:125-136 (eval = FALSE)
 ###################################################
 ## ## start up and define meandist()
 ## library(vegan)
@@ -33,7 +33,7 @@ require(vegan)
 
 
 ###################################################
-### code chunk number 4: decision-vegan.Rnw:241-252
+### code chunk number 4: decision-vegan.Rnw:240-251
 ###################################################
 getOption("SweaveHooks")[["fig"]]()
 data(sipoo)
@@ -50,7 +50,7 @@ arrows(x,y, r, f(r, mod$p), lwd=4)
 
 
 ###################################################
-### code chunk number 5: decision-vegan.Rnw:609-613
+### code chunk number 5: decision-vegan.Rnw:592-596
 ###################################################
 library(vegan)
 data(varespec)
@@ -65,21 +65,21 @@ plot(orig, dis=c("lc","bp"))
 
 
 ###################################################
-### code chunk number 7: decision-vegan.Rnw:622-623
+### code chunk number 7: decision-vegan.Rnw:605-606
 ###################################################
 getOption("SweaveHooks")[["fig"]]()
 plot(orig, dis=c("lc","bp"))
 
 
 ###################################################
-### code chunk number 8: decision-vegan.Rnw:632-634
+### code chunk number 8: decision-vegan.Rnw:615-617
 ###################################################
 i <- sample(nrow(varespec))
 shuff <- cca(varespec[i,] ~ Al + K, varechem)
 
 
 ###################################################
-### code chunk number 9: decision-vegan.Rnw:637-638
+### code chunk number 9: decision-vegan.Rnw:620-621
 ###################################################
 getOption("SweaveHooks")[["fig"]]()
 plot(shuff, dis=c("lc","bp"))
@@ -93,7 +93,7 @@ plot(procrustes(scores(orig, dis="lc"),
 
 
 ###################################################
-### code chunk number 11: decision-vegan.Rnw:651-652
+### code chunk number 11: decision-vegan.Rnw:634-635
 ###################################################
 getOption("SweaveHooks")[["fig"]]()
 plot(procrustes(scores(orig, dis="lc"), 
@@ -101,7 +101,7 @@ plot(procrustes(scores(orig, dis="lc"),
 
 
 ###################################################
-### code chunk number 12: decision-vegan.Rnw:660-663
+### code chunk number 12: decision-vegan.Rnw:643-646
 ###################################################
 tmp1 <- rda(varespec ~ Al + K, varechem)
 i <- sample(nrow(varespec)) # Different shuffling
@@ -109,7 +109,7 @@ tmp2 <- rda(varespec[i,] ~ Al + K, varechem)
 
 
 ###################################################
-### code chunk number 13: decision-vegan.Rnw:666-668
+### code chunk number 13: decision-vegan.Rnw:649-651
 ###################################################
 getOption("SweaveHooks")[["fig"]]()
 plot(procrustes(scores(tmp1, dis="lc"), 
@@ -117,21 +117,21 @@ plot(procrustes(scores(tmp1, dis="lc"),
 
 
 ###################################################
-### code chunk number 14: decision-vegan.Rnw:685-687
+### code chunk number 14: decision-vegan.Rnw:668-670
 ###################################################
 orig
 shuff
 
 
 ###################################################
-### code chunk number 15: decision-vegan.Rnw:692-693
+### code chunk number 15: decision-vegan.Rnw:675-676
 ###################################################
 getOption("SweaveHooks")[["fig"]]()
 plot(procrustes(orig, shuff))
 
 
 ###################################################
-### code chunk number 16: decision-vegan.Rnw:706-711
+### code chunk number 16: decision-vegan.Rnw:689-694
 ###################################################
 tmp1 <- rda(varespec ~ ., varechem)
 tmp2 <- rda(varespec[i,] ~ ., varechem)
@@ -141,7 +141,7 @@ max(residuals(proc))
 
 
 ###################################################
-### code chunk number 17: decision-vegan.Rnw:723-726
+### code chunk number 17: decision-vegan.Rnw:706-709
 ###################################################
 data(dune)
 data(dune.env)
@@ -149,7 +149,7 @@ orig <- cca(dune ~ Moisture, dune.env)
 
 
 ###################################################
-### code chunk number 18: decision-vegan.Rnw:731-732
+### code chunk number 18: decision-vegan.Rnw:714-715
 ###################################################
 getOption("SweaveHooks")[["fig"]]()
 plot(orig, dis="lc")
@@ -164,7 +164,7 @@ text(orig, dis="cn", col="blue")
 
 
 ###################################################
-### code chunk number 20: decision-vegan.Rnw:756-757
+### code chunk number 20: decision-vegan.Rnw:739-740
 ###################################################
 getOption("SweaveHooks")[["fig"]]()
 plot(orig, display="wa", type="points")

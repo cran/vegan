@@ -27,7 +27,8 @@
   Tukey's 'Honest Significant Difference' method.
 }
 \usage{
-betadisper(d, group, type = c("median","centroid"), bias.adjust = FALSE)
+betadisper(d, group, type = c("median","centroid"), bias.adjust = FALSE,
+       sqrt.dist = FALSE, add = FALSE)
 
 \method{anova}{betadisper}(object, \dots)
 
@@ -36,7 +37,11 @@ betadisper(d, group, type = c("median","centroid"), bias.adjust = FALSE)
 
 \method{eigenvals}{betadisper}(x, \dots)
 
-\method{plot}{betadisper}(x, axes = c(1,2), cex = 0.7, hull = TRUE,
+\method{plot}{betadisper}(x, axes = c(1,2), cex = 0.7,
+     pch = seq_len(ng), col = NULL, lty = "solid", lwd = 1, hull = TRUE,
+     ellipse = FALSE, conf,
+     segments = TRUE, seg.col = "grey", seg.lty = lty, seg.lwd = lwd,
+     label = TRUE, label.cex = 1,
      ylab, xlab, main, sub, \dots)
 
 \method{boxplot}{betadisper}(x, ylab = "Distance to centroid", ...)
@@ -55,19 +60,49 @@ betadisper(d, group, type = c("median","centroid"), bias.adjust = FALSE)
     level (i.e., one group).}
   \item{type}{the type of analysis to perform. Use the spatial median or
     the group centroid? The spatial median is now the default.}
-  \item{bias.adjust}{logical: adjust for small sample bias in beta diversity estimates?}
+  \item{bias.adjust}{logical: adjust for small sample bias in beta
+    diversity estimates?}
+  \item{sqrt.dist}{Take square root of dissimilarities. This often
+    euclidifies dissimilarities.}
+  \item{add}{Add a constant to the non-diagonal dissimilarities such
+    that all eigenvalues are non-negative in the underlying Principal
+    Co-ordinates Analysis (see \code{\link{wcmdscale}} for
+    details). Choice \code{"lingoes"} (or \code{TRUE}) use the
+    recommended method of Legendre & Anderson (1999: \dQuote{method
+    1}) and \code{"cailliez"} uses their \dQuote{method 2}.}
   \item{display}{character; partial match to access scores for
     \code{"sites"} or \code{"species"}.}
   \item{object, x}{an object of class \code{"betadisper"}, the result of a
     call to \code{betadisper}.}
   \item{choices, axes}{the principal coordinate axes wanted.}
   \item{hull}{logical; should the convex hull for each group be plotted?}
+  \item{ellipse}{logical; should the standard deviation data ellipse for
+    each group be plotted?}
+  \item{conf}{Expected fractions of data coverage for data ellipses,
+    e.g. 0.95. The default is to draw a 1 standard deviation data
+    ellipse, but if supplied, \code{conf} is multiplied with the
+    corresponding value found from the Chi-squared distribution with 2df
+    to provide the requested coverage (probability contour).}
+  \item{pch}{plot symbols for the groups, a vector of length equal to
+    the number of groups.}
+  \item{col}{colors for the plot symbols for the groups, a vector of
+    length equal to the number of groups.}
+  \item{lty, lwd}{linetype, linewidth for convex hulls and confidence
+    ellipses.}
+  \item{segments}{logical; should segments joining points to their
+    centroid be drawn?}
+  \item{seg.col}{colour to draw segments between points and their
+    centroid. Can be a vector, in which case one colour per group.}
+  \item{seg.lty, seg.lwd}{linetype and line width for segments.}
+  \item{label}{logical; should the centroids by labelled with their
+    respective factor label?}
+  \item{label.cex}{numeric; character expansion for centroid labels.}
   \item{cex, ylab, xlab, main, sub}{graphical parameters. For details,
     see \code{\link{plot.default}}.}
   \item{which}{A character vector listing terms in the fitted model for
     which the intervals should be calculated. Defaults to the grouping
     factor.}
-  \item{ordered}{Logical; see \code{\link{TukeyHSD}}.}
+  \item{ordered}{logical; see \code{\link{TukeyHSD}}.}
   \item{conf.level}{A numeric value between zero and one giving the
     family-wise confidence level to use.}
   \item{\dots}{arguments, including graphical parameters (for
@@ -247,8 +282,12 @@ plot(mod.HSD)
 ## first two PCoA axes
 plot(mod)
 
+## with data ellipses instead of hulls
+plot(mod, ellipse = TRUE, hull = FALSE) # 1 sd data ellipse
+plot(mod, ellipse = TRUE, hull = FALSE, conf = 0.90) # 90% data ellipse
+
 ## can also specify which axes to plot, ordering respected
-plot(mod, axes = c(3,1))
+plot(mod, axes = c(3,1), seg.col = "forestgreen", seg.lty = "dashed")
 
 ## Draw a boxplot of the distances to centroid for each group
 boxplot(mod)

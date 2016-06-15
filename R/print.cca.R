@@ -7,27 +7,40 @@
     }
     writeLines(strwrap(pasteCall(x$call)))
     cat("\n")
-    chi <- c(x$tot.chi, if (!is.null(x$CA$imaginary.chi)) x$tot.chi - x$CA$imaginary.chi,
-                            x$pCCA$tot.chi, x$CCA$tot.chi, x$CA$tot.chi,
-             x$CA$imaginary.chi)
-    ## Proportions of inertia only for Real dimensions in capscale
-    if (is.null(x$CA$imaginary.chi))
-        props <- chi/chi[1]
+    chi <- c(x$tot.chi, x$pCCA$tot.chi, x$CCA$tot.chi, x$CA$tot.chi)
+    props <- chi/chi[1]
+    rnk <- c(NA, x$pCCA$rank, x$CCA$rank, x$CA$rank)
+    ## handle negative eigenvalues of capscale
+    if (!is.null(x$CA$imaginary.chi)) 
+        rchi <- c(x$real.tot.chi, x$pCCA$real.tot.chi,
+                  x$CCA$real.tot.chi, x$CA$real.tot.chi)
     else
-        props <- c(NA, chi[-c(1, length(chi))]/chi[2], NA)
-    rnk <- c(NA, if (!is.null(x$CA$imaginary.rank)) NA, x$pCCA$rank, x$CCA$rank, x$CA$rank,
-             x$CA$imaginary.rank)
-    tbl <- cbind(chi, props, rnk)
-    colnames(tbl) <- c("Inertia", "Proportion", "Rank")
-    rn <- c("Total", "Real Total",  "Conditional", "Constrained", "Unconstrained",
+        rchi <- NULL
+    ## report no. of real axes in dbrda if any negative eigenvalues
+    if (inherits(x, "dbrda") &&
+        (!is.null(x$CCA) && x$CCA$poseig < x$CCA$qrank ||
+             !is.null(x$CA) && x$CA$poseig < x$CA$rank))
+        poseig <- c(NA, if (!is.null(x$pCCA)) NA, x$CCA$poseig, x$CA$poseig)
+    else
+        poseig <- NULL
+    tbl <- cbind(chi, props, rchi, rnk, poseig)
+    if (!is.null(rchi))
+        tbl <- rbind(tbl, c(NA, NA, x$CA$imaginary.chi,
+                            x$CA$imaginary.rank))
+    colnames(tbl) <- c("Inertia", "Proportion",
+                       if(!is.null(rchi)) "Eigenvals", "Rank",
+                       if (!is.null(poseig)) "RealDims")
+    rn <- c("Total", "Conditional", "Constrained", "Unconstrained",
             "Imaginary")
-    rownames(tbl) <- rn[c(TRUE, !is.null(x$CA$imaginary.chi), !is.null(x$pCCA),
+    rownames(tbl) <- rn[c(TRUE,!is.null(x$pCCA),
                           !is.null(x$CCA),  !is.null(x$CA),
                           !is.null(x$CA$imaginary.chi))]
     ## Remove "Proportion" if only one component
     if (is.null(x$CCA) && is.null(x$pCCA))
         tbl <- tbl[,-2]
-    printCoefmat(tbl, digits = digits, na.print = "")
+    ## 'cs' columns before "Rank" are non-integer
+    cs <- which(colnames(tbl) == "Rank") - 1
+    printCoefmat(tbl, digits = digits, na.print = "", cs.ind = seq_len(cs))
     cat("Inertia is", x$inertia, "\n")
     if (!is.null(x$CCA$alias))
         cat("Some constraints were aliased because they were collinear (redundant)\n")
@@ -56,5 +69,11 @@
         else print(zapsmall(x$CA$eig, digits = digits), ...)
     }
     cat("\n")
+    if (inherits(x, c("capscale", "dbrda"))) {
+        if (!is.null(x$metaMDSdist))
+            cat("metaMDSdist transformed data:", x$metaMDSdist, "\n\n")
+        if (!is.null(x$ac))
+            cat("Constant added to distances:", x$ac, "\n\n")
+    }
     invisible(x)
 }
