@@ -15,11 +15,20 @@
     w <- weights(object, display = display)
     pCCA <- object$pCCA$Fit
     CA <- object[[model]][[what]]
+    if (is.null(CA))
+        stop(gettextf("model = '%s' does not exist", model))
     eig <- object[[model]]$eig
-    eig <- eig[eig > 0]
+    if (!inherits(object, "dbrda"))
+        eig <- eig[eig > 0]
     ## imaginary dimensions for dbrda
     if (inherits(object, "dbrda"))
         CA <- cbind(CA, object[[model]][["imaginary.u"]])
+    ## take only chosen axes within the component
+    if (!missing(choices)) {
+        choices <- choices[choices <= ncol(CA)]
+        CA <- CA[, choices, drop = FALSE]
+        eig <- eig[choices]
+    }
     att <- attributes(CA)
     if (inherits(object, "rda"))
         nr <- nobs(object) - 1
@@ -33,8 +42,12 @@
         else
             pCCA <- diag(crossprod(pCCA))/nr
     }
-    CA <- t(apply(diag(w) %*% CA^2 %*% diag(eig), 1,
-                  cumsum))
+    CA <- t(apply(
+        diag(w, length(w)) %*% CA^2 %*% diag(eig, length(eig)),
+        1, cumsum))
+    ## rank=1 solutions comes out transposed: back transpose
+    if (length(eig) == 1)
+        CA <- t(CA)
     totals <- inertcomp(object, display = display)
     comps <- colnames(totals)
     if (statistic == "explained") {

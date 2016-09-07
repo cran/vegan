@@ -2,6 +2,82 @@
 \title{vegan News}
 \encoding{UTF-8}
 
+\section{Changes in version 2.4-1}{
+  \subsection{INSTALLATION}{
+    \itemize{
+
+      \item Fortran code was modernized to avoid warnings in latest
+      \R. The modernization should have no visible effect in
+      functions. Please report all suspect cases as
+      \href{https://github.com/vegandevs/vegan/issues/}{vegan issues}.
+
+    } %itemize
+  } % installation
+
+  
+  \subsection{BUG FIXES}{
+    \itemize{
+
+      \item Several support functions for ordination methods failed if
+      the solution had only one ordination axis, for instance, if
+      there was only one constraining variable in CCA, RDA and
+      friends. This concerned \code{goodness} for constrained
+      ordination, \code{inertcomp}, \code{fitted} for
+      \code{capscale}, \code{stressplot} for RDA, CCA (GitHub issue
+      \href{https://github.com/vegandevs/vegan/issues/189}{#189}).
+
+      \item \code{goodness} for CCA & friends ignored \code{choices}
+      argument (GitHub issue
+      \href{https://github.com/vegandevs/vegan/issues/190}{#190}).
+
+      \item \code{goodness} function did not consider negative
+      eigenvalues of db-RDA (function \code{dbrda}).
+
+      \item Function \code{meandist} failed in some cases when one of
+      the groups had only one observation.
+
+      \item \code{linestack} could not handle expressions in
+      \code{labels}. This regression is discussed in GitHub issue
+      \href{https://github.com/vegandevs/vegan/issues/195}{#195}.
+
+      \item Nestedness measures \code{nestedbetajac} and
+      \code{nestedbetasor} expecting binary data did not cope with
+      quantitative input in evaluating Baselga's matrix-wide Jaccard
+      or Sørensen dissimilarity indices.
+
+      \item Function \code{as.mcmc} to cast \code{oecosimu} result to an
+      MCMC object (\pkg{coda} package) failed if there was only one
+      chain.
+
+    } % itemize
+  } % bug fixes
+
+  \subsection{NEW FEATURES}{
+    \itemize{
+
+      \item \code{diversity} function returns now \code{NA} if the
+      observation had \code{NA} values instead of returning
+      \code{0}. The function also checks the input and refuses to
+      handle data with negative values.  GitHub issue
+      \href{https://github.com/vegandevs/vegan/issues/187}{#187}.
+
+      \item \code{rarefy} function will work more robustly in marginal
+      case when the user asks for only one individual which can only
+      be one species with zero variance.
+
+      \item Several functions are more robust if their factor arguments
+      contain missing values (\code{NA}): \code{betadisper},
+      \code{adipart}, \code{multipart}, \code{hiersimu}, \code{envfit}
+      and constrained ordination methods \code{cca}, \code{rda},
+      \code{capscale} and \code{dbrda}. GitHub issues
+      \href{https://github.com/vegandevs/vegan/issues/192}{#192} and
+      \href{https://github.com/vegandevs/vegan/issues/193}{#193}.
+
+    } % itemize
+  } % new features
+
+} % 2.4-1
+
 \section{Changes in version 2.4-0}{
   \subsection{DISTANCE-BASED ANALYSIS}{
      \itemize{

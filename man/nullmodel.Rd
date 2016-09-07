@@ -21,10 +21,9 @@ object without sampling (effective for sequential algorithms).
 \usage{
 nullmodel(x, method)
 \method{print}{nullmodel}(x, ...)
-\method{simulate}{nullmodel}(object, nsim = 1,
-seed = NULL, burnin = 0, thin = 1, ...)
-\method{update}{nullmodel}(object, nsim = 1,
-seed = NULL, ...)
+\method{simulate}{nullmodel}(object, nsim = 1, seed = NULL,
+    burnin = 0, thin = 1, ...)
+\method{update}{nullmodel}(object, nsim = 1, seed = NULL, ...)
 \method{print}{simmat}(x, ...)
 smbind(object, ..., MARGIN, strict = TRUE)
 }
@@ -76,8 +75,8 @@ Active only for sequential null model algorithms.
 Ignored for non-sequential null model algorithms.
 }
   \item{MARGIN}{
-Integer, indicating the dimansion over which multiple
-\code{simmat} objects are to be boud together by \code{smbind}.
+Integer, indicating the dimension over which multiple
+\code{simmat} objects are to be bound together by \code{smbind}.
 1: matrices are stacked (row bound), 2: matrices are column bound,
 3: iterations are combined. Needs to be of length 1.
 The other dimensions are expected to match across the objects.
