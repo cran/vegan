@@ -7,7 +7,7 @@
 tolerance(x, \dots)
 
 \method{tolerance}{cca}(x, choices = 1:2, which = c("species","sites"),
-          scaling = "species", useN2 = FALSE, hill = FALSE, \dots)
+          scaling = "species", useN2 = TRUE, hill = FALSE, \dots)
 }
 \description{
   Species tolerances and sample heterogeneities.
@@ -15,11 +15,12 @@ tolerance(x, \dots)
 \details{
   Function to compute species tolerances and site heterogeneity measures
   from unimodal ordinations (CCA & CA). Implements Eq 6.47 and 6.48 from
-  the Canoco 4.5 Reference Manual (pages 178-179).
+  the Canoco 4.5 Reference Manual (pages 178--179).
 }
 \value{
   Matrix of tolerances/heterogeneities with some additional
-  attributes.
+  attributes: \code{which}, \code{scaling}, and \code{N2}, the latter of
+  which will be \code{NA} if \code{useN2 = FALSE}.
 }
 \author{Gavin L. Simpson}
 \arguments{

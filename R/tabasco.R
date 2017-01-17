@@ -5,17 +5,20 @@
 ### but only uses these for sites, and only if given as 'use'.
 
 `tabasco` <-
-    function (x, use, sp.ind = NULL, site.ind = NULL,  
-              select, Rowv = TRUE, Colv = TRUE, ...) 
+    function (x, use, sp.ind = NULL, site.ind = NULL,
+              select, Rowv = TRUE, Colv = TRUE, labRow = NULL,
+              labCol = NULL, scale = c("none", "column", "row"),
+              col = heat.colors(12), ...)
 {
     if (any(x < 0))
         stop("function cannot be used with negative data values")
     pltree <- sptree <- NA
+    scale <- match.arg(scale)
     if (!missing(use)) {
         if (!is.list(use) && is.vector(use)) {
-            if (is.null(site.ind)) 
+            if (is.null(site.ind))
                 site.ind <- order(use)
-            if (is.null(sp.ind)) 
+            if (is.null(sp.ind))
                 sp.ind <- order(wascores(use, x))
         }
         else if (inherits(use, c("dendrogram", "hclust", "twins"))) {
@@ -52,14 +55,14 @@
                                   length(Rowv), nrow(x)))
                 use <- reorder(use, Rowv, agglo.FUN = "mean")
             }
-            if (inherits(use, "dendrogram")) { 
+            if (inherits(use, "dendrogram")) {
                 site.ind <- seq_len(nrow(x))
                 names(site.ind) <- rownames(x)
                 site.ind <- site.ind[labels(use)]
             } else {
                 site.ind <- use$order
             }
-            if (is.null(sp.ind)) 
+            if (is.null(sp.ind))
                 sp.ind <- order(wascores(order(site.ind), x))
             pltree <- use
             ## heatmap needs a "dendrogram"
@@ -68,19 +71,19 @@
         }
         else if (is.list(use)) {
             tmp <- scores(use, choices = 1, display = "sites")
-            if (is.null(site.ind)) 
+            if (is.null(site.ind))
                 site.ind <- order(tmp)
-            if (is.null(sp.ind)) 
-                sp.ind <- try(order(scores(use, choices = 1, 
+            if (is.null(sp.ind))
+                sp.ind <- try(order(scores(use, choices = 1,
                                            display = "species")))
-            if (inherits(sp.ind, "try-error")) 
+            if (inherits(sp.ind, "try-error"))
                 sp.ind <- order(wascores(tmp, x))
         }
         else if (is.matrix(use)) {
             tmp <- scores(use, choices = 1, display = "sites")
-            if (is.null(site.ind)) 
+            if (is.null(site.ind))
                 site.ind <- order(tmp)
-            if (is.null(sp.ind)) 
+            if (is.null(sp.ind))
                 sp.ind <- order(wascores(tmp, x))
         }
     }
@@ -121,9 +124,9 @@
         sp.ind <- (1:ncol(x))[sp.ind]
     if (!is.null(site.ind) && is.logical(site.ind))
         site.ind <- (1:nrow(x))[site.ind]
-    if (is.null(sp.ind)) 
+    if (is.null(sp.ind))
         sp.ind <- 1:ncol(x)
-    if (is.null(site.ind)) 
+    if (is.null(site.ind))
         site.ind <- 1:nrow(x)
     if (!missing(select)) {
         if (!is.na(pltree))
@@ -152,10 +155,22 @@
         cind <- sort(sp.ind)
     ## we assume t() changes data.frame to a matrix
     x <- t(x[rind, cind])
-    sp.nam <- rownames(x)
-    sp.len <- max(nchar(sp.nam))
+    ## labels must be ordered if there is no dendrogram
+    if (!is.null(labRow))
+        labRow <- labRow[cind]
+    if (!is.null(labCol))
+        labCol <- labCol[rind]
+    x <- switch(scale,
+                "none" = x,
+                "column" = decostand(x, "max", 2),
+                "row" = decostand(x, "max", 1))
+    ## explicit scaling so that zeros and small abundances get
+    ## different colours
+    brk <- (max(x) - min(x[x>0])/2)/length(col)
+    brk <- 0:length(col) * brk
     heatmap((max(x) - x), Rowv = sptree, Colv = pltree,
-             scale = "none", ...)
+            scale = "none", labRow = labRow, labCol = labCol,
+            col = col, breaks = brk, ...)
     out <- list(sites = site.ind, species = sp.ind)
     invisible(out)
 }
