@@ -1,6 +1,73 @@
- \name{NEWS}
+\name{NEWS}
 \title{vegan News}
 \encoding{UTF-8}
+
+\section{Changes in version 2.4-3}{
+
+  \subsection{INSTALLATION AND BUILDING}{
+    \itemize{
+
+      \item \pkg{vegan} registers native \bold{C} and \bold{Fortran}
+      routines. This avoids warnings in model checking, and may also
+      give a small gain in speed.
+
+      \item Future versions of \pkg{vegan} will deprecate and remove
+      elements \code{pCCA$Fit}, \code{CCA$Xbar}, and \code{CA$Xbar}
+      from \code{cca} result objects. This release provides a new
+      function \code{ordiYbar} which is able to construct these
+      elements both from the current and future releases. Scripts and
+      functions directly accessing these elements should switch to
+      \code{ordiYbar} for smooth transition.
+
+    } % itemize
+  } % installation
+
+  \subsection{BUG FIXES}{
+    \itemize{
+
+      \item \code{as.mlm} methods for constrained ordination include
+      zero intercept to give the correct residual degrees of freedom for
+      derived statistics.
+
+      \item \code{biplot} method for \code{rda} passes
+      \code{correlation} argument to the scaling algorithm.
+
+      \item Biplot scores were wrongly centred in \code{cca} which
+      caused a small error in their values.
+
+      \item Weighting and centring were corrected in \code{intersetcor}
+      and \code{spenvcor}. The fix can make a small difference when
+      analysing \code{cca} results.
+
+      Partial models were not correctly handled in \code{intersetcor}.
+
+      \item \code{envfit} and \code{ordisurf} functions failed when
+      applied to species scores.
+
+      \item Non-standard variable names can be used within
+      \code{Condition()} in partial ordination.  Partial models are used
+      internally within several functions, and a problem was reported by
+      Albin Meyer (Univ Lorraine, Metz, France) in \code{ordiR2step}
+      when using a variable name that contained a hyphen (which was
+      wrongly interpreted as a minus sign in partial ordination).
+
+      \item \code{ordispider} did not pass graphical arguments when
+      used to show the difference of LC and WA scores in constrained
+      ordination.
+
+      \item \code{ordiR2step} uses only \code{forward} selection to
+      avoid several problems in model evaluation.
+
+      \item \code{tolerance} function could return \code{NaN} in some
+      cases when it should have returned \eqn{0}. Partial models were
+      not correctly analysed. Misleading (non-zero) tolerances were
+      sometimes given for species that occurred only once or sampling
+      units that had only one species.
+
+    } %itemize
+  } % bug fixes
+
+} % 2.4-3
 
 \section{Changes in version 2.4-2}{
   \subsection{BUG FIXES}{
