@@ -165,7 +165,7 @@
         object <- update(object, subset = object$subset)
     }
     LC <- as.data.frame(LC)
-    fla <- reformulate(names(LC))
+    fla <- formula(object)
     Pvals <- rep(NA, ncol(LC))
     F.perm <- matrix(ncol = ncol(LC), nrow = nperm)
     environment(object$terms) <- environment()
@@ -176,10 +176,17 @@
         Df <- Df[seq_len(ncol(LC))]
         Fstat <- Fstat[seq_len(ncol(LC))]
     }
+    axnams <- colnames(LC)
+    mf <- model.frame(object)
+    LC <- cbind(mf, LC)
     for (i in seq_along(eig)) {
-        part <- paste("~ . +Condition(",
-                      paste(names(LC)[-i], collapse = "+"), ")")
-        upfla <- update(fla, part)
+        if (i > 1) {
+            part <- paste("~ . +Condition(",
+                          paste(axnams[seq_len(i-1)], collapse = "+"), ")")
+            upfla <- update(fla, part)
+        } else {
+            upfla <- fla
+        }
         ## only one axis, and cannot partial out?
         if (length(eig) == 1)
             mod <- permutest(object, permutations, model = model,
@@ -188,7 +195,7 @@
             mod <-
                 permutest(update(object, upfla, data = LC),
                           permutations, model = model,
-                          parallel = parallel)
+                          parallel = parallel, first = TRUE)
         Pvals[i] <- (sum(mod$F.perm >= mod$F.0 - EPS) + 1) / (nperm + 1)
         F.perm[ , i] <- mod$F.perm
         if (Pvals[i] > cutoff)
@@ -207,7 +214,7 @@
     colnames(out) <- c("Df", varname, "F", "Pr(>F)")
     head <- paste0("Permutation test for ", object$method, " under ",
                    model, " model\n",
-                   "Marginal tests for axes\n",
+                   "Forward tests for axes\n",
                    howHead(attr(permutations, "control")))
     mod <- paste("Model:", c(object$call))
     attr(out, "heading") <- c(head, mod)

@@ -78,7 +78,7 @@
     \cr
     \code{canberra}
     \tab \eqn{d_{jk}=\frac{1}{NZ} \sum_i
-      \frac{|x_{ij}-x_{ik}|}{x_{ij}+x_{ik}}}{d[jk] = (1/NZ) sum ((x[ij]-x[ik])/(x[ij]+x[ik]))}
+      \frac{|x_{ij}-x_{ik}|}{|x_{ij}|+|x_{ik}|}}{d[jk] = (1/NZ) sum (abs(x[ij]-x[ik])/(abs(x[ij])+abs(x[ik])))}
     \cr
     \tab where \eqn{NZ} is the number of non-zero entries.
     \cr \tab binary: \eqn{\frac{A+B-2J}{A+B-J}}{(A+B-2*J)/(A+B-J)}
@@ -217,7 +217,11 @@
   index is not commonly used for community data, but it is sometimes
   used for environmental variables. The calculation is based on
   transforming data matrix and then using Euclidean distances
-  following Mardia et al. (1979).
+  following Mardia et al. (1979). The Mahalanobis transformation
+  usually fails when the number of columns is larger than the number
+  of rows (sampling units). When the transformation fails, the
+  distances are nearly constant except for small numeric noise. Users
+  must check that the returned Mahalanobis distances are meaningful.
 
   Euclidean and Manhattan dissimilarities are not good in gradient
   separation without proper standardization but are still included for

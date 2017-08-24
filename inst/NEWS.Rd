@@ -2,6 +2,53 @@
 \title{vegan News}
 \encoding{UTF-8}
 
+\section{Changes in version 2.4-4}{
+
+  \subsection{INSTALLATION AND BUILDING}{
+    \itemize{
+
+      \item \code{orditkplot} should no longer give warnings in CRAN
+      tests.
+
+    } %itemize
+  } % installatin and building
+  
+  \subsection{BUG FIXES}{
+    \itemize{
+
+      \item \code{anova(..., by = "axis")} for constrained ordination
+      (\code{cca}, \code{rda}, \code{dbrda}) ignored partial terms in
+      \code{Condition()}.
+      
+      \item \code{inertcomp} and \code{summary.cca} failed if the
+      constrained component was defined, but explained nothing and had
+      zero rank. See StackOverflow:
+      \href{https://stackoverflow.com/questions/43683699/}{R - Error
+      message in doing RDA analysis - vegan package}.
+
+      \item Labels are no longer cropped in the \code{meandist} plots.
+
+
+    } % itemize
+  } % bug fixes
+  
+  \subsection{NEW FEATURES}{
+    \itemize{
+
+      \item The significance tests for the axes of constrained
+      ordination use now forward testing strategy. More extensive
+      analysis indicated that the previous marginal tests were biased.
+      This is in conflict with Legendre, Oksanen & ter Braak,
+      \emph{Methods Ecol Evol} \strong{2,} 269--277 (2011) who regarded
+      marginal tests as unbiased.
+
+      \item Canberra distance in \code{vegdist} can now handle negative
+      input entries similarly as latest versions of \R.
+
+    } %itemize
+  } % new features
+} % v2.4-4
+
 \section{Changes in version 2.4-3}{
 
   \subsection{INSTALLATION AND BUILDING}{
