@@ -121,15 +121,14 @@ function(method)
             if (nr < 2L || nc < 2)
                 stop("needs at least 2 items")
             btrfun <- function() {
-                all <- matrix(as.integer(1:(nr * nc)), nrow = nr, ncol = nc)
                 out <- matrix(0L, nrow = nr, ncol = nc)
                 free <- matrix(as.integer(1:(nr * nc)), nrow = nr)
                 icount <- integer(length(rs))
                 jcount <- integer(length(cs))
-                prob <- outer(rs, cs, "*")
+                prob <- outer(rs, cs)
                 ij <- sample(free, prob = prob)
-                i <- (ij - 1)%%nr + 1
-                j <- (ij - 1)%/%nr + 1
+                i <- (ij - 1) %% nr + 1L
+                j <- (ij - 1) %/% nr + 1L
                 for (k in seq_along(ij)) {
                     if (icount[i[k]] < rs[i[k]] && jcount[j[k]] < cs[j[k]]) {
                         out[ij[k]] <- 1L
@@ -140,24 +139,41 @@ function(method)
                 ndrop <- 1
                 for (i in seq_len(10000)) {
                     oldout <- out
+                    oldicount <- icount
+                    oldjcount <- jcount
                     oldn <- sum(out)
-                    drop <- sample(all[as.logical(out)], ndrop)
+                    drop <- sample(which(as.logical(out)), ndrop)
                     out[drop] <- 0L
-                    candi <- outer(rowSums(out) < rs, colSums(out) < cs) * !out
-                    while (sum(candi) > 0) {
-                        if (sum(candi) > 1)
-                          ij <- sample(all[as.logical(candi)], 1)
-                        else ij <- all[as.logical(candi)]
+                    ic <- (drop - 1L) %% nr + 1L
+                    jc <- (drop - 1L) %/% nr + 1L
+                    for (idrop in seq_len(ndrop)) {
+                        icount[ic[idrop]] <- icount[ic[idrop]] - 1L
+                        jcount[jc[idrop]] <- jcount[jc[idrop]] - 1L
+                    }
+                    candi <- outer(icount < rs, jcount < cs) * !out
+                    candi <- which(as.logical(candi))
+                    while (length(candi) > 0) {
+                        if (length(candi) > 1)
+                          ij <- sample(candi, 1)
+                        else ij <- candi
                         out[ij] <- 1L
-                        candi <- outer(rowSums(out) < rs, colSums(out) < cs) * !out
+                        ic <- (ij - 1L) %% nr + 1L
+                        jc <- (ij - 1L)  %/% nr + 1L
+                        icount[ic] <- icount[ic] + 1L
+                        jcount[jc] <- jcount[jc] + 1L
+                        candi <- outer(icount < rs, jcount < cs) * !out
+                        candi <- which(as.logical(candi))
                     }
                     if (sum(out) >= fill)
                         break
                     if (oldn >= sum(out))
                         ndrop <- min(ndrop + 1, 4)
                     else ndrop <- 1
-                    if (oldn > sum(out))
+                    if (oldn > sum(out)) {
                         out <- oldout
+                        icount <- oldicount
+                        jcount <- oldjcount
+                    }
                 }
                 out
             }
@@ -205,7 +221,7 @@ function(method)
             if (nr < 2L || nc < 2)
                 stop("needs at least 2 items")
             nz <- x[x > 0]
-            out <- array(unlist(r2dtable(fill, rf, cf)), c(nr, nc, n))
+            out <- array(unlist(r2dtable(n, rf, cf)), c(nr, nc, n))
             storage.mode(out) <- "double"
             for (k in seq_len(n)) {
                 out[,,k] <- .C("quasiswap",
@@ -224,7 +240,7 @@ function(method)
                 drop(rmultinom(1, sum(x), rep(1, length(x))))
             }
             nz <- as.integer(x[x > 0])
-            out <- array(unlist(r2dtable(fill, rf, cf)), c(nr, nc, n))
+            out <- array(unlist(r2dtable(n, rf, cf)), c(nr, nc, n))
             storage.mode(out) <- "integer"
             for (k in seq_len(n)) {
                 out[,,k] <- .C("quasiswap",
@@ -239,7 +255,7 @@ function(method)
         fun=function(x, n, nr, nc, cs, rs, rf, cf, s, fill, thin) {
             if (nr < 2L || nc < 2)
                 stop("needs at least 2 items")
-            out <- array(unlist(r2dtable(fill, rf, cf)), c(nr, nc, n))
+            out <- array(unlist(r2dtable(n, rf, cf)), c(nr, nc, n))
             storage.mode(out) <- "double"
             I <- seq_len(nr)
             for (k in seq_len(n)) {
@@ -261,7 +277,7 @@ function(method)
         fun=function(x, n, nr, nc, cs, rs, rf, cf, s, fill, thin) {
             if (nr < 2L || nc < 2)
                 stop("needs at least 2 items")
-            out <- array(unlist(r2dtable(fill, rf, cf)), c(nr, nc, n))
+            out <- array(unlist(r2dtable(n, rf, cf)), c(nr, nc, n))
             storage.mode(out) <- "double"
             J <- seq_len(nc)
             for (k in seq_len(n)) {
@@ -287,7 +303,7 @@ function(method)
                 drop(rmultinom(1, sum(x), rep(1, length(x))))
             }
             I <- seq_len(nr)
-            out <- array(unlist(r2dtable(fill, rf, cf)), c(nr, nc, n))
+            out <- array(unlist(r2dtable(n, rf, cf)), c(nr, nc, n))
             storage.mode(out) <- "integer"
             for (k in seq_len(n)) {
                 out[,,k] <- .C("quasiswap",
@@ -312,7 +328,7 @@ function(method)
                 drop(rmultinom(1, sum(x), rep(1, length(x))))
             }
             J <- seq_len(nc)
-            out <- array(unlist(r2dtable(fill, rf, cf)), c(nr, nc, n))
+            out <- array(unlist(r2dtable(n, rf, cf)), c(nr, nc, n))
             storage.mode(out) <- "integer"
             for (k in seq_len(n)) {
                 out[,,k] <- .C("quasiswap",
