@@ -3,9 +3,12 @@
 `rrarefy` <-
     function(x, sample)
 {
-    if (!identical(all.equal(x, round(x)), TRUE)) 
-        stop("function is meaningful only for integers (counts)")
     x <- as.matrix(x)
+    if (!identical(all.equal(x, round(x)), TRUE))
+        stop("function is meaningful only for integers (counts)")
+    ## x may not be exactly integer, since, e.g., sqrt(2)^2 != 2
+    if (!is.integer(x))
+        x <- round(x)
     if (ncol(x) == 1)
         x <- t(x)
     if (length(sample) > 1 && length(sample) != nrow(x))
@@ -14,6 +17,8 @@
     sample <- rep(sample, length=nrow(x))
     colnames(x) <- colnames(x, do.NULL = FALSE)
     nm <- colnames(x)
+    if (any(duplicated(nm)))
+        nm <- make.names(nm, unique = TRUE)
     ## warn if something cannot be rarefied
     if (any(rowSums(x) < sample))
         warning("Some row sums < 'sample' and are not rarefied")
@@ -34,7 +39,7 @@
 `drarefy` <-
     function(x, sample)
 {
-    if (!identical(all.equal(x, round(x)), TRUE)) 
+    if (!identical(all.equal(x, round(x)), TRUE))
         stop("function accepts only integers (counts)")
     if (length(sample) > 1 &&  length(sample) != nrow(x))
         stop(gettextf(
@@ -45,7 +50,7 @@
         rs <- rowSums(x)
     else
         rs <- sum(x)
-    if (any(rs) < sample)
+    if (any(rs < sample))
         warning("Some row sums < 'sample' and probabilities either 0 or 1")
     ## dfun is kluge: first item of  vector x must be the sample size,
     ## and the rest  is the community data. This  seemed an easy trick
