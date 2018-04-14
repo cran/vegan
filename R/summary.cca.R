@@ -1,12 +1,8 @@
 `summary.cca` <- function (object, scaling = "species", axes = 6,
                            display=c("sp","wa","lc","bp","cn"),
                            digits = max(3, getOption("digits") - 3),
-                           correlation = FALSE, hill = FALSE, ...) {
-    if (inherits(object, "pcaiv")) {
-        warning("this is an ade4 object which vegan cannot handle")
-        axes <- min(axes, object$nf)
-        object <- ade2vegancca(object)
-    }
+                           correlation = FALSE, hill = FALSE, ...)
+{
     axes <- min(axes, sum(object$CCA$rank, object$CA$rank))
     summ <- list()
     ## scaling is stored in return object so must be in numeric format
@@ -38,9 +34,10 @@
     summ$partial.chi <- object$pCCA$tot.chi
     summ$constr.chi <- object$CCA$tot.chi
     summ$unconst.chi <- object$CA$tot.chi
-    summ$cont <- summary(eigenvals(object))
+    ## nested list cont$importance needed to keep vegan pre-2.5-0 compatibility
+    summ$cont$importance <- summary(eigenvals(object))
     if (!is.null(object$CCA) && object$CCA$rank > 0)
-        summ$concont <- summary(eigenvals(object, constrained = TRUE))
+        summ$concont$importance <- summary(eigenvals(object, model = "constrained"))
     summ$ev.head <- c(summ$ev.con, summ$ev.uncon)[seq_len(axes)]
     summ$scaling <- scaling
     summ$digits <- digits

@@ -5,7 +5,7 @@
 {
     EPS <- sqrt(.Machine$double.eps)
     if (!inherits(formula, "formula"))
-        stop("Needs a model formula")
+        stop("needs a model formula")
     if (missing(data)) {
         data <- parent.frame()
     }
@@ -25,6 +25,7 @@
         X <- as.dist(X)
     if (!inherits(X, "dist")) {
         comm <- X
+        vdata <- as.character(formula[[2]])
         dfun <- match.fun(dfun)
         if (metaMDSdist) {
             commname <- as.character(formula[[2]])
@@ -35,6 +36,11 @@
         } else {
             X <- dfun(X, distance)
         }
+    } else { # vdata name
+        if (missing(comm))
+            vdata <- NULL
+        else
+            vdata <- deparse(substitute(comm))
     }
     inertia <- attr(X, "method")
     if (is.null(inertia))
@@ -52,7 +58,8 @@
     d <- ordiParseFormula(formula,
                           data,
                           na.action = na.action,
-                          subset = substitute(subset))
+                          subset = substitute(subset),
+                          X = X)
     ## ordiParseFormula subsets rows of dissimilarities: do the same
     ## for columns ('comm' is handled later). ordiParseFormula
     ## returned the original data, but we use instead the potentially
@@ -70,10 +77,11 @@
         X <- sqrt(X)
     if (max(X) >= 4 + .Machine$double.eps) {
         inertia <- paste("mean", inertia)
-        adjust <- 1
+        adjust <- sqrt(k)
+        X <- X/adjust
     }
     else {
-        adjust <- sqrt(k)
+        adjust <- 1
     }
     nm <- attr(X, "Labels")
     ## wcmdscale, optionally with additive adjustment
@@ -85,66 +93,20 @@
                          "adjusted", inertia)
     if (is.null(rownames(X$points)))
         rownames(X$points) <- nm
-    X$points <- adjust * X$points
-    ## We adjust eigenvalues to variances, and simultaneously the
-    ## possible negative axes must be adjusted similarly
-    if (adjust == 1) {
-        X$eig <- X$eig/k
-        if (!is.null(X$negaxes))
-            X$negaxes <- X$negaxes/sqrt(k)
-    }
-    sol <- rda.default(X$points, d$Y, d$Z, ...)
-    ## Get components of inertia with negative eigenvalues following
-    ## McArdle & Anderson (2001), section "Theory". G is their
-    ## double-centred Gower matrix, but instead of hat matrix, we use
-    ## use QR decomposition to get the components of inertia.
-    hasNegEig <- any(X$eig < 0)
-    G <- -X$x/2
-    if (adjust == 1)
-        G <- G/k
-    if (hasNegEig)
-        sol$real.tot.chi <- sol$tot.chi
-    sol$tot.chi <- sum(diag(G))
-    if (!is.null(sol$pCCA)) {
-        sol$pCCA$G <- G
-        if (hasNegEig) {
-            sol$pCCA$real.tot.chi <- sol$pCCA$tot.chi
-            sol$pCCA$tot.chi <- sum(diag(qr.fitted(sol$pCCA$QR, G)))
-        }
-        G <- qr.resid(sol$pCCA$QR, t(qr.resid(sol$pCCA$QR, G)))
-    }
-    if (!is.null(sol$CCA) && sol$CCA$rank > 0) {
-        sol$CCA$G <- G
-        if (hasNegEig) {
-            sol$CCA$real.tot.chi <- sol$CCA$tot.chi
-            sol$CCA$tot.chi <- sum(diag(qr.fitted(sol$CCA$QR, G)))
-        }
-    }
-    if (hasNegEig) {
-        sol$CA$real.tot.chi <- sol$CA$tot.chi
-        if (!is.null(sol$CA) && !is.null(sol$CCA$QR))
-            sol$CA$tot.chi <- sum(diag(qr.resid(sol$CCA$QR, G)))
-        else
-            sol$CA$tot.chi <- sum(diag(G))
-    }
-    if (!is.null(sol$CCA) && sol$CCA$rank > 0) {
-        colnames(sol$CCA$u) <- colnames(sol$CCA$biplot) <- names(sol$CCA$eig) <-
-            colnames(sol$CCA$wa) <- colnames(sol$CCA$v) <-
-                paste("CAP", 1:ncol(sol$CCA$u), sep = "")
-    }
-    if (!is.null(sol$CA) && sol$CA$rank > 0) {
-        colnames(sol$CA$u) <- names(sol$CA$eig) <- colnames(sol$CA$v) <-
-            paste("MDS", 1:ncol(sol$CA$u), sep = "")
-    }
+
+    sol <- ordConstrained(X$points, d$Y, d$Z, method = "capscale")
+
     ## update for negative eigenvalues
     poseig <- length(sol$CA$eig)
     if (any(X$eig < 0)) {
         negax <- X$eig[X$eig < 0]
         sol$CA$imaginary.chi <- sum(negax)
+        sol$tot.chi <- sol$tot.chi + sol$CA$imaginary.chi
         sol$CA$imaginary.rank <- length(negax)
         sol$CA$imaginary.u.eig <- X$negaxes
     }
     if (!is.null(comm)) {
+        sol$vdata <- vdata
         comm <- scale(comm, center = TRUE, scale = FALSE)
         sol$colsum <- apply(comm, 2, sd)
         ## take a 'subset' of the community after scale()
@@ -188,7 +150,6 @@
     sol$terminfo <- ordiTerminfo(d, data)
     sol$call$formula <- formula(d$terms, width.cutoff = 500)
     sol$call$formula[[2]] <- formula[[2]]
-    sol$method <- "capscale"
     sol$sqrt.dist <- sqrt.dist
     if (!is.na(X$ac) && X$ac > 0) {
         sol$ac <- X$ac
@@ -200,7 +161,7 @@
         sol$metaMDSdist <- commname
     sol$subset <- d$subset
     sol$na.action <- d$na.action
-    class(sol) <- c("capscale", class(sol))
+    class(sol) <- c("capscale", "rda", "cca")
     if (!is.null(sol$na.action))
         sol <- ordiNAexclude(sol, d$excluded)
     sol

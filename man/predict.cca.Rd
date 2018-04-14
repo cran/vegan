@@ -32,21 +32,25 @@
         hill = FALSE, ...)
 \method{predict}{rda}(object, newdata, type = c("response", "wa", "sp", "lc", "working"),
         rank = "full", model = c("CCA", "CA"), scaling = "none",
-        correlation = FALSE, ...)
+        correlation = FALSE, const, ...)
 \method{calibrate}{cca}(object, newdata, rank = "full", ...)
-\method{coef}{cca}(object, ...)
+\method{coef}{cca}(object, norm = FALSE, ...)
 \method{predict}{decorana}(object, newdata, type = c("response", "sites", "species"),
     rank = 4, ...)
 }
 
 \arguments{
+
   \item{object}{A result object from \code{\link{cca}},
-    \code{\link{rda}}, \code{\link{capscale}} or \code{\link{decorana}}. }
+    \code{\link{rda}}, \code{\link{dbrda}}, \code{\link{capscale}} or
+    \code{\link{decorana}}. }
+  
   \item{model}{Show constrained (\code{"CCA"}), unconstrained
     (\code{"CA"}) or conditioned \dQuote{partial} (\code{"pCCA"})
-    results. For \code{fitted} method of \code{\link{capscale}} this
-    can also be \code{"Imaginary"} for imaginary components with
-    negative eigenvalues. }
+    results. For \code{fitted} method of \code{\link{capscale}} this can
+    also be \code{"Imaginary"} for imaginary components with negative
+    eigenvalues }
+
   \item{newdata}{New data frame to be used in prediction or in
     calibration.  Usually this a new community data frame, but with
     \code{type = "lc"} and for constrained component with \code{type =
@@ -64,12 +68,12 @@
     the same results, and \code{"working"} gives the values used
     internally, that is after Chi-square standardization in
     \code{\link{cca}} and scaling and centring in
-    \code{\link{rda}}. In \code{\link{capscale}} the \code{"response"}
-    gives the dissimilarities, and \code{"working"} the scaled scores
-    that produce the dissimilarities as Euclidean
-    distances. Alternative \code{"wa"} gives the site scores as
-    weighted averages of the community data, \code{"lc"} the site
-    scores as linear combinations of environmental data, and
+    \code{\link{rda}}. In \code{\link{capscale}} and
+    \code{\link{dbrda}} the \code{"response"} gives the
+    dissimilarities, and \code{"working"} the internal data structure
+    analysed in the ordination. Alternative \code{"wa"} gives the site
+    scores as weighted averages of the community data, \code{"lc"} the
+    site scores as linear combinations of environmental data, and
     \code{"sp"} the species scores. In \code{predict.decorana} the
     alternatives are scores for \code{"sites"} or \code{"species"}.}
   \item{rank}{The rank or the number of axes used in the approximation.
@@ -77,11 +81,18 @@
     all available four axes in \code{predict.decorana}.}
   \item{scaling}{logical, character, or numeric; Scaling or predicted
     scores with the same meaning as in \code{\link{cca}},
-    \code{\link{rda}} and \code{\link{capscale}}. See \code{scores.cca}
-    for further details on acceptable values.}
+    \code{\link{rda}}, \code{\link{dbrda}}, and
+    \code{\link{capscale}}. See \code{scores.cca} for further details
+    on acceptable values.}
   \item{correlation, hill}{logical; correlation-like scores or Hill's
-    scaling as appropriate for RDA/\code{\link{capscale}} and CCA
-    respectively. See \code{\link{scores.cca}} for additional details.}
+    scaling as appropriate for RDA and CCA respectively. See
+    \code{\link{scores.cca}} for additional details.}
+  \item{const}{Constant multiplier for  RDA scores. This will be used
+    only when \code{scaling} is not \code{FALSE}, and the default value
+    will give similar scaling as in \code{\link{scores.rda}}.}
+  \item{norm}{Coefficients for variables that are centred and scaled
+    to unit norm.}
+
   \item{\dots}{Other parameters to the functions.}
 }
 \details{
@@ -89,18 +100,22 @@
   Function \code{fitted} gives the approximation of the original data
   matrix or dissimilarities from the ordination result either in the
   scale of the response or as scaled internally by the function.
-  Function \code{residuals} gives the approximation of the original
-  data from the unconstrained ordination.  With argument \code{type =
+  Function \code{residuals} gives the approximation of the original data
+  from the unconstrained ordination.  With argument \code{type =
   "response"} the \code{fitted.cca} and \code{residuals.cca} function
   both give the same marginal totals as the original data matrix, and
   fitted and residuals do not add up to the original data.  Functions
-  \code{fitted.capscale} and \code{residuals.capscale} give the
-  dissimilarities with \code{type = "response"}, but these are not
-  additive, but the \code{"working"} scores are additive.  All
-  variants of \code{fitted} and \code{residuals} are defined so that
-  for model \code{mod <- cca(y ~ x)}, \code{cca(fitted(mod))} is equal
-  to constrained ordination, and \code{cca(residuals(mod))} is equal
-  to unconstrained part of the ordination.  
+  \code{fitted} and \code{residuals} for \code{\link{dbrda}} and
+  \code{\link{capscale}} give the dissimilarities with \code{type =
+  "response"}, but these are not additive.  However, the
+  \code{"working"} scores are additive for \code{\link{capscale}} (but
+  not for \code{\link{dbrda}}). The \code{fitted} and \code{residuals}
+  for \code{\link{capscale}} and \code{\link{dbrda}} will include the
+  additive constant if that was requested in the function call.  All
+  variants of \code{fitted} and \code{residuals} are defined so that for
+  model \code{mod <- cca(y ~ x)}, \code{cca(fitted(mod))} is equal to
+  constrained ordination, and \code{cca(residuals(mod))} is equal to
+  unconstrained part of the ordination.
 
   Function \code{predict} can find the estimate of the original data
   matrix or dissimilarities (\code{type = "response"}) with any rank.
@@ -143,14 +158,15 @@
   community ordination or \code{"wa"} scores from \code{\link{cca}},
   \code{\link{rda}} and \code{\link{capscale}}. This is often known as
   calibration, bioindication or environmental reconstruction.
-  Basically, the method is similar to projecting site scores onto biplot
-  arrows, but it uses regression coefficients.  The function can be called
-  with \code{newdata} so that cross-validation is possible.  The
-  \code{newdata} may contain new sites, but species must match in the
-  original and new data.  The function
-  does not work with \sQuote{partial} models with \code{Condition} term,
-  and it cannot be used with \code{newdata} for \code{\link{capscale}}
-  results.  The results may only be interpretable for continuous variables.
+  Basically, the method is similar to projecting site scores onto
+  biplot arrows, but it uses regression coefficients.  The function
+  can be called with \code{newdata} so that cross-validation is
+  possible.  The \code{newdata} may contain new sites, but species
+  must match in the original and new data.  The function does not work
+  with \sQuote{partial} models with \code{Condition} term, and it
+  cannot be used with \code{newdata} for \code{\link{capscale}} or
+  \code{\link{dbrda}} results.  The results may only be interpretable
+  for continuous variables.
   
   Function \code{coef} will give the regression coefficients from centred
   environmental variables (constraints and conditions) to linear
@@ -169,15 +185,19 @@
 \value{
   The functions return matrices, vectors or dissimilarities as is appropriate.
 }
+
 \references{
   Greenacre, M. J. (1984). Theory and applications of correspondence
   analysis. Academic Press, London.
 }
+
 \author{Jari Oksanen.}
 
 
-\seealso{\code{\link{cca}}, \code{\link{rda}}, \code{\link{capscale}},
-  \code{\link{decorana}}, \code{\link[car]{vif}}, \code{\link{goodness.cca}}. }
+\seealso{\code{\link{cca}}, \code{\link{rda}}, \code{\link{dbrda}},
+  \code{\link{capscale}}, \code{\link{decorana}},
+  \code{\link[car]{vif}}, \code{\link{goodness.cca}}. }
+
 \examples{
 data(dune)
 data(dune.env)

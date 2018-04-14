@@ -9,7 +9,7 @@
                         if (is.factor(x)) x else factor(x)))
     P <- droplevels(P, exclude = NA) ## make sure only the used levels are present
     if (any(!sapply(P, is.factor)))
-        stop("All non-numeric variables must be factors")
+        stop("all non-numeric variables must be factors")
     NR <- nrow(X)
     NC <- ncol(X)
     NF <- ncol(P)
@@ -19,9 +19,7 @@
         w <- rep(w, NR)
     r <- NULL
     pval <- NULL
-    totvar <- .C("goffactor", as.double(X), as.integer(rep(0, NR)),
-                 as.double(w), as.integer(NR), as.integer(NC), as.integer(1),
-                 double(1), double(1), double(1), var = double(1), PACKAGE = "vegan")$var
+    totvar <- .Call(do_goffactor, X, rep(1L, NR), 1L, w)
     sol <- centroids.cca(X, P, w)
     var.id <- rep(names(P), sapply(P, nlevels))
     ## make permutation matrix for all variables handled in the next loop
@@ -31,10 +29,7 @@
     for (i in seq_along(P)) {
         A <- as.integer(P[[i]])
         NL <- nlevels(P[[i]])
-        invar <- .C("goffactor", as.double(X), as.integer(A - 1), as.double(w),
-                    as.integer(NR), as.integer(NC),
-                    as.integer(NL), double(NL), double(NL), double(NL),
-                    var = double(1), PACKAGE = "vegan")$var
+        invar <- .Call(do_goffactor, X, A, NL, w)
         r.this <- 1 - invar/totvar
         r <- c(r, r.this)
         if (permutations) {
@@ -42,11 +37,7 @@
             NL <- nlevels(P[[i]])
             ptest <- function(indx, ...) {
                 take <- A[indx]
-                invar <- .C("goffactor", as.double(X),
-                            as.integer(take -  1), as.double(w),
-                            as.integer(NR), as.integer(NC),
-                            as.integer(NL), double(NL), double(NL), double(NL),
-                            var = double(1), PACKAGE = "vegan")$var
+                invar <- .Call(do_goffactor, X, take, NL, w)
                 1 - invar/totvar
             }
             tmp <- sapply(seq_len(permutations),

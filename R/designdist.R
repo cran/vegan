@@ -1,23 +1,22 @@
+## evaluate user-defined dissimilarity function.
+
 `designdist` <-
     function (x, method = "(A+B-2*J)/(A+B)",
               terms = c("binary", "quadratic", "minimum"),
-              abcd = FALSE, alphagamma = FALSE, name) 
+              abcd = FALSE, alphagamma = FALSE, name)
 {
     terms <- match.arg(terms)
     if ((abcd || alphagamma) && terms != "binary")
-        warning("Perhaps terms should be 'binary' with 'abcd' or 'alphagamma'?")
+        warning("perhaps terms should be 'binary' with 'abcd' or 'alphagamma'?")
     x <- as.matrix(x)
     N <- nrow(x)
     P <- ncol(x)
-    if (terms == "binary") 
+    if (terms == "binary")
         x <- ifelse(x > 0, 1, 0)
-    if (terms == "binary" || terms == "quadratic") 
+    if (terms == "binary" || terms == "quadratic")
         x <- tcrossprod(x)
-    if (terms == "minimum") {
-        r <- rowSums(x)
-        x <- dist(x, "manhattan")
-        x <- (outer(r, r, "+") - as.matrix(x))/2
-    }
+    if (terms == "minimum")
+        x <- .Call(do_minterms, as.matrix(x))
     d <- diag(x)
     A <- as.dist(outer(rep(1, N), d))
     B <- as.dist(outer(d, rep(1, N)))
@@ -38,8 +37,37 @@
     dis <- eval(parse(text = method))
     attributes(dis) <- attributes(J)
     attr(dis, "call") <- match.call()
-    if (missing(name)) 
+    if (missing(name))
         attr(dis, "method") <- paste(terms, method)
     else attr(dis, "method") <- name
+    dis
+}
+
+## similar to designdist, but uses Chao's terms U & V instead of J, A,
+## B (or their derived terms) in designdist. I considered having this
+## as an option 'terms = "chao"' in designdist, but there really is so
+## little in common and too many if's needed.
+
+`chaodist` <-
+    function(x, method = "1 - 2*U*V/(U+V)", name)
+{
+    x <- as.matrix(x)
+    ## need integer data
+    if (!identical(all.equal(x, round(x)), TRUE))
+        stop("function accepts only integers (counts)")
+    N <- nrow(x)
+    ## do_chaoterms returns a list with U, V which are non-classed
+    ## vectors where the order of terms matches 'dist' objects
+    vu <- .Call(do_chaoterms, x)
+    U <- vu$U
+    V <- vu$V
+    ## dissimilarities
+    dis <- eval(parse(text = method))
+    dis <- structure(dis, Size = N, Labels = rownames(x), Diag = FALSE,
+                     Upper = FALSE, call = match.call(), class = "dist")
+    if (missing(name))
+        attr(dis, "method") <- paste("chao", method)
+    else
+        attr(dis, "method") <- name
     dis
 }

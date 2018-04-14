@@ -18,7 +18,7 @@
     if (ncol(pts) > 2)
         pts <- pts[ , 1:2, drop = FALSE]
     if (ncol(pts) < 2)
-        stop("ordibar needs two dimensions")
+        stop("needs two dimensions")
     w <- eval(w)
     if (length(w) == 1)
         w <- rep(1, nrow(pts))
@@ -55,7 +55,7 @@
                 t <- 1
             else t <- sqrt(qchisq(conf, 2))
             if (mat$n.obs > 1) {
-                eig <- eigen(mat$cov)
+                eig <- eigen(mat$cov, symmetric = TRUE)
                 v <- sweep(eig$vectors, 2, sqrt(eig$values), "*") * t
                 cnt <- mat$center
                 ordiArgAbsorber(v[1,] + cnt[1], v[2,] + cnt[2],
@@ -72,7 +72,7 @@
         }
     }
     if (label) {
-        ordiArgAbsorber(cntrs, col = par("fg"), border = col, 
+        ordiArgAbsorber(cntrs, col = par("fg"), border = col,
                         FUN = ordilabel, ...)
     }
     class(res) <- "ordibar"

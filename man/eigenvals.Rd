@@ -21,23 +21,29 @@
 }
 \usage{
 eigenvals(x, ...)
-\method{eigenvals}{cca}(x, constrained = FALSE, ...)
+\method{eigenvals}{cca}(x, model = c("all", "unconstrained", "constrained"),
+          constrained = NULL, ...)
 \method{summary}{eigenvals}(object, ...)
 }
 
 \arguments{
   \item{x}{
     An object from which to extract eigenvalues.
-}
+  }
   \item{object}{
     An \code{eigenvals} result object.
-}
-   \item{constrained}{
-    Return only constrained eigenvalues.
-}
-   \item{\dots}{
+  }
+  \item{model}{
+    Which eigenvalues to return for objects that inherit from class
+    \code{"cca"} only.
+  }
+  \item{constrained}{
+    Return only constrained eigenvalues. Deprecated as of vegan
+    2.5-0. Use \code{model} instead.
+  }
+  \item{\dots}{
     Other arguments to the functions (usually ignored)
-}
+  }
 }
 
 \details{
@@ -71,7 +77,11 @@ eigenvals(x, ...)
 }
 
 \value{
-  An object of class \code{"eigenvals"} which is a vector of eigenvalues.
+  An object of class \code{"eigenvals"}, which is a vector of
+  eigenvalues.
+
+  The \code{summary} method returns an object of class
+  \code{"summary.eigenvals"}, which is a matrix.
 }
 
 \author{
@@ -99,6 +109,9 @@ mod <- cca(varespec ~ Al + P + K, varechem)
 ev <- eigenvals(mod)
 ev
 summary(ev)
+
+## choose which eignevalues to return
+eigenvals(mod, model = "unconstrained")
 }
 \keyword{ multivariate }
 

@@ -4,7 +4,7 @@
 ### code chunk number 1: diversity-vegan.Rnw:21-26
 ###################################################
 par(mfrow=c(1,1))
-options(width=55) 
+options(width=55)
 figset <- function() par(mar=c(4,4,1,1)+.1)
 options(SweaveHooks = list(fig = figset))
 options("prompt" = "> ", "continue" = "  ")
@@ -231,8 +231,8 @@ smo <- beals(BCI)
 ### code chunk number 34: a
 ###################################################
 j <- which(colnames(BCI) == "Ceiba.pentandra")
-plot(beals(BCI, species=j, include=FALSE), BCI[,j], 
-     ylab="Occurrence", main="Ceiba pentandra", 
+plot(beals(BCI, species=j, include=FALSE), BCI[,j],
+     ylab="Occurrence", main="Ceiba pentandra",
      xlab="Probability of occurrence")
 
 
@@ -241,8 +241,8 @@ plot(beals(BCI, species=j, include=FALSE), BCI[,j],
 ###################################################
 getOption("SweaveHooks")[["fig"]]()
 j <- which(colnames(BCI) == "Ceiba.pentandra")
-plot(beals(BCI, species=j, include=FALSE), BCI[,j], 
-     ylab="Occurrence", main="Ceiba pentandra", 
+plot(beals(BCI, species=j, include=FALSE), BCI[,j],
+     ylab="Occurrence", main="Ceiba pentandra",
      xlab="Probability of occurrence")
 
 

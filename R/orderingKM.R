@@ -17,24 +17,20 @@
 
     ##Check up
 
-    if(!is.matrix(mat)) stop("'mat' must be a matrix!")
-    if(!is.numeric(mat)) stop("'mat' must be numeric!")
-    if(any(is.na(mat))) stop("'NA' value was found in the matrix!")
-    if(any(is.infinite(mat))) stop("'Inf' value was found in the matrix!")
+    if(!is.matrix(mat)) stop("'mat' must be a matrix")
+    if(!is.numeric(mat)) stop("'mat' must be numeric")
+    if(any(is.na(mat))) stop("'NA' value was found in the matrix")
+    if(any(is.infinite(mat))) stop("'Inf' value was found in the matrix")
     nb.desc=ncol(mat)
     nb.obj=nrow(mat)
 
     scores<-rep(0.0,nb.obj)
     if (USEPOWERALGORITHM) {
-	scores<-as.vector(.Fortran("orderdata",as.integer(mat),
+	scores <- as.vector(.Fortran(orderdata, as.integer(mat),
                                    as.integer(nb.obj), as.integer(nb.desc),
-                                   sc=as.double(scores),
-                                   PACKAGE="vegan")$sc)
+                                   sc=as.double(scores))$sc)
     } else {
-        d <- .C("veg_distance", x = as.double(mat), nr = nb.obj,
-                nc = nb.desc, d = double(nb.obj * (nb.obj - 1)/2),
-                diag = as.integer(FALSE), method = as.integer(50),
-                PACKAGE = "vegan")$d
+        d <- .Call(do_vegdist, as.matrix(mat), as.integer(50))
         attr(d, "Size") <- nb.obj
         attr(d, "Labels") <- dimnames(mat)[[1]]
         attr(d, "Diag") <- FALSE
@@ -42,7 +38,6 @@
         attr(d, "method") <- "matching"
         class(d) <- "dist"
         scores <- cmdscale(d, k = 1)[,1]
-
     }
     scores <- order(scores)
     mat[scores,]

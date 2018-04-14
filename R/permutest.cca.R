@@ -2,95 +2,66 @@ permutest <- function(x, ...)
     UseMethod("permutest")
 
 permutest.default <- function(x, ...)
-    stop("No default permutation test defined")
+    stop("no default permutation test defined")
 
 `permutest.cca` <-
     function (x, permutations = how(nperm=99),
-              model = c("reduced", "direct"), first = FALSE,
-              strata = NULL, parallel = getOption("mc.cores") , ...)
+              model = c("reduced", "direct", "full"), by = NULL, first = FALSE,
+              strata = NULL, parallel = getOption("mc.cores") ,  ...)
 {
     ## do something sensible with insensible input (no constraints)
     if (is.null(x$CCA)) {
         sol <- list(call = match.call(), testcall = x$call, model = NA,
                     F.0 = NA, F.perm = NA, chi = c(0, x$CA$tot.chi),
                     num = 0, den = x$CA$tot.chi,
-                    df = c(0, nrow(x$CA$u) - max(x$pCCA$rank,0) - 1),
+                    df = c(0, nrow(x$CA$u) - max(x$pCCA$QR$rank,0) - 1),
                     nperm = 0, method = x$method, first = FALSE,
                     Random.seed = NA)
         class(sol) <- "permutest.cca"
         return(sol)
     }
+    ## compatible arguments?
+    if (!is.null(by)) {
+        if (first)
+            stop("'by' cannot be used with option 'first=TRUE'")
+        by <- match.arg(by, c("onedf", "terms"))
+        if (by == "terms" && is.null(x$terminfo))
+            stop("by='terms' needs a model fitted with a formula")
+    }
     model <- match.arg(model)
     ## special cases
     isCCA <- !inherits(x, "rda")    # weighting
     isPartial <- !is.null(x$pCCA)   # handle conditions
-    ## first eigenvalue cannot be analysed with capscale which had
-    ## discarded imaginary values: cast to old before evaluating isDB
-    if (first && inherits(x, "capscale"))
-        x <- oldCapscale(x)
-    isDB <- inherits(x, c("capscale", "dbrda")) &&
-        !inherits(x, "oldcapscale")  # distance-based & new design
-    ## Function to get the F statistics in one loop
-    getF <- function (indx, ...)
+    isDB <- inherits(x, c("dbrda")) # only dbrda is distance-based
+    ## C function to get the statististics in one loop
+    getF <- function(indx, ...)
     {
-        getEV <- function(x, isDB=FALSE)
-        {
-            if (isDB)
-                sum(diag(x))
-            else
-                sum(x*x)
-        }
         if (!is.matrix(indx))
-            dim(indx) <- c(1, length(indx))
-        R <- nrow(indx)
-        mat <- matrix(0, nrow = R, ncol = 3)
-        for (i in seq_len(R)) {
-            take <- indx[i,]
-            if (isDB)
-                Y <- E[take, take]
-            else
-                Y <- E[take, ]
-            if (isCCA)
-                wtake <- w[take]
-            if (isPartial) {
-                if (isCCA) {
-                    XZ <- .C("wcentre", x = as.double(Z), as.double(wtake),
-                             as.integer(N), as.integer(Zcol),
-                             PACKAGE = "vegan")$x
-                    dim(XZ) <- c(N, Zcol)
-                    QZ <- qr(XZ)
-                }
-                Y <- qr.resid(QZ, Y)
-                if (isDB)
-                    Y <- qr.resid(QZ, t(Y))
-            }
-            if (isCCA) {
-                XY <- .C("wcentre", x = as.double(X), as.double(wtake),
-                         as.integer(N), as.integer(Xcol),
-                         PACKAGE = "vegan")$x
-                dim(XY) <- c(N, Xcol)
-                Q <- qr(XY)
-            }
-            tmp <- qr.fitted(Q, Y)
-            if (first) {
-                if (isDB) {
-                    tmp <- qr.fitted(Q, t(tmp)) # eigen needs symmetric tmp
-                    cca.ev <- eigen(tmp, symmetric = TRUE)$values[1]
-                } else
-                    cca.ev <- La.svd(tmp, nv = 0, nu = 0)$d[1]^2
-            } else
-                cca.ev <- getEV(tmp, isDB)
-            if (isPartial || first) {
-                tmp <- qr.resid(Q, Y)
-                ca.ev <- getEV(tmp, isDB)
-            }
-            else ca.ev <- Chi.tot - cca.ev
-            mat[i,] <- cbind(cca.ev, ca.ev, (cca.ev/q)/(ca.ev/r))
+            indx <- matrix(indx, nrow=1)
+        out <- .Call(do_getF, indx, E, Q, QZ, effects, first, isPartial, isDB)
+        p <- length(effects)
+        if (!isPartial && !first)
+            out[,p+1] <- Chi.tot - rowSums(out[,seq_len(p), drop=FALSE])
+        if (p > 1) {
+            if (by == "terms")
+                out[, seq_len(p)] <- sweep(out[, seq_len(p), drop = FALSE],
+                                               2, q, "/")
+            out <- cbind(out, sweep(out[,seq_len(p), drop=FALSE], 1,
+                                    out[,p+1]/r, "/"))
         }
-        mat
+        else
+            out <- cbind(out, (out[,1]/q)/(out[,2]/r))
+        out
     }
-    ## end getF()
-
+    ## end getF
+    ## QR decomposition
+        Q <- x$CCA$QR
+    if (isPartial) {
+        QZ <- x$pCCA$QR
+    } else {
+        QZ <- NULL
+    }
+    ## statistics: overall tests
     if (first) {
         Chi.z <- x$CCA$eig[1]
         q <- 1
@@ -100,44 +71,74 @@ permutest.default <- function(x, ...)
         names(Chi.z) <- "Model"
         q <- x$CCA$qrank
     }
+    ## effects
+    if (!is.null(by)) {
+        partXbar <- ordiYbar(x, "partial")
+        if (by == "onedf") {
+            effects <- seq_len(q)
+            termlabs <-
+                if (isPartial)
+                    colnames(Q$qr)[effects + x$pCCA$QR$rank]
+                else
+                    colnames(Q$qr)[effects]
+        } else {                   # by = "terms"
+            ass <- x$terminfo$assign
+            ## ass was introduced in vegan_2.5-0
+            if (is.null(ass))
+                stop("update() old ordination result object")
+            pivot <- Q$pivot
+            if (isPartial)
+                pivot <- pivot[pivot > x$pCCA$QR$rank] - x$pCCA$QR$rank
+            ass <- ass[pivot[seq_len(x$CCA$qrank)]]
+            effects <- cumsum(rle(ass)$length)
+            termlabs <- labels(terms(x$terminfo))
+            if (isPartial)
+                termlabs <- termlabs[termlabs %in% labels(terms(x))]
+            termlabs <-termlabs[unique(ass)]
+        }
+        q <- diff(c(0, effects)) # d.o.f.
+        if (isPartial)
+            effects <- effects + x$pCCA$QR$rank
+        F.0 <- numeric(length(effects))
+        for (k in seq_along(effects)) {
+            fv <- qr.fitted(Q, partXbar, k = effects[k])
+            F.0[k] <- if (isDB) sum(diag(fv)) else sum(fv^2)
+        }
+    }
+    else {
+        effects <- 0
+        termlabs <- "Model"
+    }
     ## Set up
     Chi.xz <- x$CA$tot.chi
     names(Chi.xz) <- "Residual"
-    r <- nobs(x) - x$CCA$QR$rank - 1
+    r <- nobs(x) - Q$rank - 1
     if (model == "full")
         Chi.tot <- Chi.xz
     else Chi.tot <- Chi.z + Chi.xz
-    if (!isCCA && !isDB)
-        Chi.tot <- Chi.tot * (nrow(x$CCA$Xbar) - 1)
-    F.0 <- (Chi.z/q)/(Chi.xz/r)
-    Q <- x$CCA$QR
-    if (isCCA) {
-        w <- x$rowsum # works with any na.action, weights(x) won't
-        X <- qr.X(Q, ncol=length(Q$pivot))
-        X <- sweep(X, 1, sqrt(w), "/")
-    }
-    if (isPartial) {
-        Y.Z <- if (isDB) x$pCCA$G else x$pCCA$Fit
-        QZ <- x$pCCA$QR
-        if (isCCA) {
-            Z <- qr.X(QZ)
-            Z <- sweep(Z, 1, sqrt(w), "/")
+    if (is.null(by))
+        F.0 <- (Chi.z/q)/(Chi.xz/r)
+    else {
+        Chi.z <- numeric(length(effects))
+        for (k in seq_along(effects)) {
+            fv <- qr.fitted(Q, partXbar, k = effects[k])
+            Chi.z[k] <- if (isDB) sum(diag(fv)) else sum(fv^2)
         }
+        Chi.z <- diff(c(0, F.0))
+        F.0 <- Chi.z/q * r/Chi.xz
     }
-    if (model == "reduced" || model == "direct")
-        E <- if (isDB) x$CCA$G else x$CCA$Xbar
-    else E <-
-        if (isDB) stop(gettextf("%s cannot be used with 'full' model"), x$method)
-        else x$CA$Xbar
-    if (isPartial && model == "direct")
-        E <- if (isDB) x$pCCA$G else E + Y.Z
+
+    ## permutation data
+    E <- switch(model,
+                "direct" = ordiYbar(x, "initial"),
+                "reduced" = ordiYbar(x, "partial"),
+                "full" = ordiYbar(x, "CA"))
+    ## vegan < 2.5-0 cannot use direct model in partial dbRDA
+    if (is.null(E) && isDB && isPartial)
+        stop("'direct' model cannot be used in old partial-dbrda: update() result")
+
     ## Save dimensions
     N <- nrow(E)
-    if (isCCA) {
-        Xcol <- ncol(X)
-        if (isPartial)
-            Zcol <- ncol(Z)
-    }
     permutations <- getPermuteMatrix(permutations, N, strata = strata)
     nperm <- nrow(permutations)
     ## Parallel processing (similar as in oecosimu)
@@ -163,15 +164,21 @@ permutest.default <- function(x, ...)
     } else {
         tmp <- getF(permutations)
     }
-    num <- tmp[,1]
-    den <- tmp[,2]
-    F.perm <- tmp[,3]
+    if ((p <- length(effects)) > 1) {
+        num <- tmp[,seq_len(p)]
+        den <- tmp[,p+1]
+        F.perm <- tmp[, seq_len(p) + p + 1]
+    } else {
+        num <- tmp[,1]
+        den <- tmp[,2]
+        F.perm <- tmp[,3, drop=FALSE]
+    }
     Call <- match.call()
     Call[[1]] <- as.name("permutest")
     sol <- list(call = Call, testcall = x$call, model = model,
                 F.0 = F.0, F.perm = F.perm,  chi = c(Chi.z, Chi.xz),
                 num = num, den = den, df = c(q, r), nperm = nperm,
-                method = x$method, first = first)
+                method = x$method, first = first, termlabels = termlabs)
     sol$Random.seed <- attr(permutations, "seed")
     sol$control <- attr(permutations, "control")
     if (!missing(strata)) {

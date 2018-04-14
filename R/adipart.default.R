@@ -1,7 +1,7 @@
-adipart.default <-
-function(y, x, index=c("richness", "shannon", "simpson"),
-    weights=c("unif", "prop"), relative = FALSE, nsimul=99,
-    method = "r2dtable", ...)
+`adipart.default` <-
+    function(y, x, index=c("richness", "shannon", "simpson"),
+             weights=c("unif", "prop"), relative = FALSE, nsimul=99,
+             method = "r2dtable", ...)
 {
     ## evaluate formula
     lhs <- as.matrix(y)
@@ -13,7 +13,7 @@ function(y, x, index=c("richness", "shannon", "simpson"),
     rhs[] <- lapply(rhs, droplevels, exclude = NA)
     nlevs <- ncol(rhs)
     if (nlevs < 2)
-        stop("provide at least two level hierarchy")
+        stop("provide at least two-level hierarchy")
     if (any(rowSums(lhs) == 0))
         stop("data matrix contains empty rows")
     if (any(lhs < 0))
@@ -59,7 +59,7 @@ function(y, x, index=c("richness", "shannon", "simpson"),
     weights <- match.arg(weights)
     switch(index,
            "richness" = {
-               divfun <- function(x) apply(x > 0, 1, sum)},
+               divfun <- function(x) rowSums(x > 0)},
            "shannon" = {
                divfun <- function(x) diversity(x, index = "shannon", MARGIN = 1, base=base)},
            "simpson" = {

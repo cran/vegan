@@ -12,7 +12,7 @@
 \title{Permutation Test for Constrained Correspondence Analysis,
   Redundancy Analysis and Constrained Analysis of Principal Coordinates }
 
-\description{ 
+\description{
   The function performs an ANOVA like permutation test for Constrained
   Correspondence Analysis (\code{\link{cca}}), Redundancy Analysis
   (\code{\link{rda}}) or distance-based Redundancy Analysis (dbRDA,
@@ -21,24 +21,24 @@
 
 \usage{
 \method{anova}{cca}(object, ..., permutations = how(nperm=999),
-     by = NULL, model = c("reduced", "direct", "full"), 
+     by = NULL, model = c("reduced", "direct", "full"),
      parallel = getOption("mc.cores"), strata = NULL,
      cutoff = 1, scope = NULL)
-\method{permutest}{cca}(x, permutations = how(nperm = 99), 
-     model = c("reduced", "direct"), first = FALSE, strata = NULL, 
-     parallel = getOption("mc.cores"),  ...) 
+\method{permutest}{cca}(x, permutations = how(nperm = 99),
+     model = c("reduced", "direct", "full"), by = NULL, first = FALSE,
+     strata = NULL, parallel = getOption("mc.cores"), ...)
 }
 
 \arguments{
 
   \item{object}{One or several result objects from \code{\link{cca}},
-    \code{\link{rda}} or \code{\link{capscale}}. If there are several
-    result objects, they are compared against each other in the order
-    they were supplied. For a single object, a test specified in
-    \code{by} or an overall test is given.}
+    \code{\link{rda}}, \code{\link{dbrda}} or \code{\link{capscale}}. If
+    there are several result objects, they are compared against each
+    other in the order they were supplied. For a single object, a test
+    specified in \code{by} or an overall test is given.}
 
   \item{x}{A single ordination result object.}
- 
+
   \item{permutations}{a list of control values for the permutations
     as returned by the function \code{\link[permute]{how}}, or the
     number of permutations required, or a permutation matrix where each
@@ -49,11 +49,15 @@
     significance for each term (sequentially from first to last), and
     setting \code{by = "margin"} will assess the marginal effects of
     the terms (each marginal term analysed in a model with all other
-    variables)}
+    variables). Function \code{permutest} accepts choices
+    \code{"terms"} for sequential test of terms, and \code{"onedf"}
+    for sequential test of one-degree-of-freedom contrasts.}
 
-  \item{model}{Permutation model: \code{model="direct"} permutes 
-    community data, and \code{model="reduced"} permutes residuals
-    of the community data after Conditions (partial model).}
+  \item{model}{Permutation model: \code{model="direct"} permutes
+    community data, \code{model="reduced"} permutes residuals
+    of the community data after Conditions (partial model),
+    \code{model = "full"} permutes residuals after Conditions and
+    Constraints.}
 
   \item{parallel}{Use parallel processing with the given number of
     cores.}
@@ -63,11 +67,11 @@
     the specified strata. It is an error to use this when
     \code{permutations} is a matrix, or a \code{\link[permute]{how}}
     defines \code{blocks}. This is a legacy argument that will be
-    deprecated in the future: use 
+    deprecated in the future: use
     \code{permutations = how(\dots, blocks)} instead. }
 
   \item{cutoff}{Only effective with \code{by="axis"} where stops
-    permutations after an axis exceeds the \code{cutoff}.}
+    permutations after an axis exceeds the \code{cutoff} \eqn{p}-value.}
 
   \item{scope}{Only effective with \code{by="margin"} where it can be
     used to select the marginal terms for testing. The default is to
@@ -84,13 +88,12 @@
 
 \details{
 
-  Functions \code{anova.cca} and \code{permutest.cca} implement 
-  ANOVA like permutation tests for the joint effect of constraints in
-  \code{\link{cca}}, \code{\link{rda}} or \code{\link{capscale}}.
-  Functions \code{anova.cca} and \code{permutest.cca} differ in
-  printout style and in interface.  Function \code{permutest.cca} is
-  the proper workhorse, but \code{anova.cca} passes all parameters to
-  \code{permutest.cca}.
+  Functions \code{anova.cca} and \code{permutest.cca} implement ANOVA
+  like permutation tests for the joint effect of constraints in
+  \code{\link{cca}}, \code{\link{rda}}, \code{\link{dbrda}} or
+  \code{\link{capscale}}. Function \code{anova} is intended as a more
+  user-friendly alternative to \code{permutest} (that is the real
+  workhorse).
 
   Function \code{anova} can analyse a sequence of constrained
   ordination models. The analysis is based on the differences in
@@ -106,14 +109,14 @@
   significance tests for each constrained axis.  All previous
   constrained axes will be used as conditions (\dQuote{partialled
   out}) and a test for the first constrained eigenvalues is
-  performed (Legendre et al. 2011). 
+  performed (Legendre et al. 2011).
   You can stop permutation tests after exceeding a given
-   significance level with argument \code{cutoff} to speed up
+  significance level with argument \code{cutoff} to speed up
   calculations in large models. Setting \code{by = "terms"} will
   perform separate significance test for each term (constraining
   variable). The terms are assessed sequentially from first to last,
   and the order of the terms will influence their
-  significance. Setting \code{by = "margin"} will perform separate
+  significances. Setting \code{by = "margin"} will perform separate
   significance test for each marginal term in a model with all other
   terms. The marginal test also accepts a \code{scope} argument for
   the \code{\link{drop.scope}} which can be a character vector of term
@@ -122,46 +125,40 @@
   the current function only evaluates marginal terms. It will, for
   instance, ignore main effects that are included in interaction
   terms. In calculating pseudo-\eqn{F}, all terms are compared to the
-  same residual of the full model. 
-  
-  Community data are permuted with choice \code{model="direct"},
-  and residuals after partial CCA/ RDA/ dbRDA with choice
-  \code{model="reduced"} (default).   If there is no partial CCA/
-  RDA/ dbRDA stage, \code{model="reduced"} simply permutes the data
-  and is equivalent to \code{model="direct"}.  The test statistic is
+  same residual of the full model.
+
+  Community data are permuted with choice \code{model="direct"}, and
+  residuals after partial CCA/ RDA/ dbRDA with choice
+  \code{model="reduced"} (default).  If there is no partial CCA/ RDA/
+  dbRDA stage, \code{model="reduced"} simply permutes the data and is
+  equivalent to \code{model="direct"}.  The test statistic is
   \dQuote{pseudo-\eqn{F}}, which is the ratio of constrained and
   unconstrained total Inertia (Chi-squares, variances or something
-  similar), each divided by their respective ranks.  If there are no
-  conditions (\dQuote{partial} terms), the sum of all eigenvalues
-  remains constant, so that pseudo-\eqn{F} and eigenvalues would give
-  equal results.  In partial CCA/ RDA/ dbRDA, the effect of
+  similar), each divided by their respective degrees of freedom.  If
+  there are no conditions (\dQuote{partial} terms), the sum of all
+  eigenvalues remains constant, so that pseudo-\eqn{F} and eigenvalues
+  would give equal results.  In partial CCA/ RDA/ dbRDA, the effect of
   conditioning variables (\dQuote{covariables}) is removed before
-  permutation, and these residuals are added to the non-permuted
-  fitted values of partial CCA (fitted values of \code{X ~ Z}).
-  Consequently, the total Chi-square is not fixed, and test based on
+  permutation, and the total Chi-square is not fixed, and test based on
   pseudo-\eqn{F} would differ from the test based on plain
-  eigenvalues. CCA is a weighted method, and environmental data are
-  re-weighted at each permutation step using permuted weights.  }
+  eigenvalues.
 
-\value{ 
+}
+
+\value{
   The function \code{anova.cca} calls \code{permutest.cca} and fills an
-  \code{\link{anova}} table. Additional attributes are 
-  \code{Random.seed} (the random seeds used), 
-  \code{control} (the permutation design, see \link[permute]{how}) and 
+  \code{\link{anova}} table. Additional attributes are
+  \code{Random.seed} (the random seeds used),
+  \code{control} (the permutation design, see \link[permute]{how}) and
   \code{F.perm} (the permuted test statistics).
 }
 
-\note{
-  Some cases of \code{anova} need access to the original data on
-  constraints (at least \code{by = "term"} and \code{by = "margin"}),
-  and they may fail if data are unavailable.
-}
 \references{
   Legendre, P. and Legendre, L. (2012). \emph{Numerical Ecology}. 3rd
   English ed. Elsevier.
 
   Legendre, P., Oksanen, J. and ter Braak, C.J.F. (2011). Testing the
-  significance of canonical axes in redundancy analysis. 
+  significance of canonical axes in redundancy analysis.
   \emph{Methods in Ecology and Evolution} 2, 269--277.
 }
 \author{Jari Oksanen}
@@ -174,11 +171,15 @@
   semiautomatic model building (see \code{\link{deviance.cca}}). }
 
 \examples{
-data(varespec)
-data(varechem)
-vare.cca <- cca(varespec ~ Al + P + K, varechem)
+data(varespec, varechem)
+mod <- cca(varespec ~ Al + P + K, varechem)
 ## overall test
-anova(vare.cca)
+anova(mod)
+## tests for individual terms
+anova(mod, by="term")
+anova(mod, by="margin")
+## test for adding all environmental variables
+anova(mod, cca(varespec ~ ., varechem))
 }
 \keyword{ multivariate }
 \keyword{ htest }

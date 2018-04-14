@@ -75,158 +75,75 @@ function(method)
         "quasiswap" = commsim(method="quasiswap", binary=TRUE, isSeq=FALSE,
         mode="integer",
         fun=function(x, n, nr, nc, rs, cs, rf, cf, s, fill, thin) {
-            if (nr < 2L || nc < 2)
-                stop("needs at least 2 items")
+            if (nr < 2L || nc < 2L)
+                stop("needs at least two items")
             out <- array(unlist(r2dtable(n, rs, cs)), c(nr, nc, n))
             storage.mode(out) <- "integer"
-            for (k in seq_len(n))
-                out[,,k] <- .C("quasiswap",
-                    m = out[,,k], nr, nc, thin, PACKAGE = "vegan")$m
-            out
+            .Call(do_qswap, out, n, thin, "quasiswap")
         }),
-        "swap" = commsim(method="swap", binary=TRUE, isSeq=TRUE,
-        mode="integer",
+        "greedyqswap" = commsim(method="greedyqswap", binary=TRUE,
+        isSeq=FALSE, mode="integer",
         fun=function(x, n, nr, nc, rs, cs, rf, cf, s, fill, thin) {
-            out <- array(0L, c(nr, nc, n))
-            for (k in seq_len(n)) {
-                x <- .C("swap", m = x, nr, nc, thin, PACKAGE = "vegan")$m
-                out[,,k] <- x
-            }
-            out
+            if (nr < 2L || nc < 2L)
+                stop("needs at least two items")
+            out <- array(unlist(r2dtable(n, rs, cs)), c(nr, nc, n))
+            storage.mode(out) <- "integer"
+            .Call(do_greedyqswap, out, n, thin, fill)
         }),
-        "tswap" = commsim(method="tswap", binary=TRUE, isSeq=TRUE,
-        mode="integer",
-        fun=function(x, n, nr, nc, rs, cs, rf, cf, s, fill, thin) {
-            out <- array(0L, c(nr, nc, n))
-            for (k in seq_len(n)) {
-                x <- .C("trialswap", m = x, nr, nc, thin, PACKAGE = "vegan")$m
-                out[,,k] <- x
-            }
-            out
+        "swap" = commsim(method="swap", binary = TRUE, isSeq=TRUE,
+        mode = "integer",
+        fun = function(x, n, nr, nc, rs, cs, rf, cf, s, fill, thin) {
+            .Call(do_swap, as.matrix(x), n, thin, "swap")
         }),
-        "curveball" = commsim(method="curveball", binary=TRUE, isSeq=TRUE,
-        mode="integer",
-        fun=function(x, n, nr, nc, rs, cs, rf, cf, s, fill, thin) {
-            out <- array(0L, c(nr, nc, n))
-            for (k in seq_len(n)) {
-                x <- .C("curveball", m = x, nr, nc, thin,
-                        integer(2L*nc), PACKAGE = "vegan")$m
-                out[,,k] <- x
-            }
-            out
+        "tswap" = commsim(method="tswap", binary = TRUE, isSeq=TRUE,
+        mode = "integer",
+        fun = function(x, n, nr, nc, rs, cs, rf, cf, s, fill, thin) {
+            .Call(do_swap, as.matrix(x), n, thin, "trialswap")
         }),
-        "backtrack" = commsim(method="backtrack", binary=TRUE, isSeq=FALSE,
-        mode="integer",
-        fun=function(x, n, nr, nc, rs, cs, rf, cf, s, fill, thin) {
-            if (nr < 2L || nc < 2)
-                stop("needs at least 2 items")
-            btrfun <- function() {
-                out <- matrix(0L, nrow = nr, ncol = nc)
-                free <- matrix(as.integer(1:(nr * nc)), nrow = nr)
-                icount <- integer(length(rs))
-                jcount <- integer(length(cs))
-                prob <- outer(rs, cs)
-                ij <- sample(free, prob = prob)
-                i <- (ij - 1) %% nr + 1L
-                j <- (ij - 1) %/% nr + 1L
-                for (k in seq_along(ij)) {
-                    if (icount[i[k]] < rs[i[k]] && jcount[j[k]] < cs[j[k]]) {
-                        out[ij[k]] <- 1L
-                        icount[i[k]] <- icount[i[k]] + 1L
-                        jcount[j[k]] <- jcount[j[k]] + 1L
-                    }
-                }
-                ndrop <- 1
-                for (i in seq_len(10000)) {
-                    oldout <- out
-                    oldicount <- icount
-                    oldjcount <- jcount
-                    oldn <- sum(out)
-                    drop <- sample(which(as.logical(out)), ndrop)
-                    out[drop] <- 0L
-                    ic <- (drop - 1L) %% nr + 1L
-                    jc <- (drop - 1L) %/% nr + 1L
-                    for (idrop in seq_len(ndrop)) {
-                        icount[ic[idrop]] <- icount[ic[idrop]] - 1L
-                        jcount[jc[idrop]] <- jcount[jc[idrop]] - 1L
-                    }
-                    candi <- outer(icount < rs, jcount < cs) * !out
-                    candi <- which(as.logical(candi))
-                    while (length(candi) > 0) {
-                        if (length(candi) > 1)
-                          ij <- sample(candi, 1)
-                        else ij <- candi
-                        out[ij] <- 1L
-                        ic <- (ij - 1L) %% nr + 1L
-                        jc <- (ij - 1L)  %/% nr + 1L
-                        icount[ic] <- icount[ic] + 1L
-                        jcount[jc] <- jcount[jc] + 1L
-                        candi <- outer(icount < rs, jcount < cs) * !out
-                        candi <- which(as.logical(candi))
-                    }
-                    if (sum(out) >= fill)
-                        break
-                    if (oldn >= sum(out))
-                        ndrop <- min(ndrop + 1, 4)
-                    else ndrop <- 1
-                    if (oldn > sum(out)) {
-                        out <- oldout
-                        icount <- oldicount
-                        jcount <- oldjcount
-                    }
-                }
-                out
-            }
-            out <- array(0L, c(nr, nc, n))
-            for (k in seq_len(n))
-                out[, , k] <- btrfun()
-            out
+        "curveball" = commsim(method="curveball", binary = TRUE, isSeq=TRUE,
+        mode = "integer",
+        fun = function(x, n, nr, nc, rs, cs, rf, cf, s, fill, thin) {
+            .Call(do_curveball, as.matrix(x), n, thin)
+        }),
+        "backtrack" = commsim(method="backtrack", binary = TRUE,
+                               isSeq = FALSE, mode = "integer",
+        fun = function(x, n, nr, nc, rs, cs, rf, cf, s, fill, thin) {
+            .Call(do_backtrack, n, rs, cs)
         }),
         "r2dtable" = commsim(method="r2dtable", binary=FALSE, isSeq=FALSE,
         mode="integer",
         fun=function(x, n, nr, nc, cs, rs, rf, cf, s, fill, thin) {
-            if (nr < 2L || nc < 2)
-                stop("needs at least 2 items")
+            if (nr < 2L || nc < 2L)
+                stop("needs at least two items")
             out <- array(unlist(r2dtable(n, rs, cs)), c(nr, nc, n))
             storage.mode(out) <- "integer"
             out
         }),
-        "swap_count" = commsim(method="swap_count", binary=FALSE, isSeq=TRUE,
-        mode="integer",
-        fun=function(x, n, nr, nc, cs, rs, rf, cf, s, fill, thin) {
-            if (nr < 2L || nc < 2)
-                stop("needs at least 2 items")
-            out <- array(0L, c(nr, nc, n))
-            for (k in seq_len(n)) {
-                x <- .C("swapcount", m = x, nr, nc, thin, PACKAGE = "vegan")$m
-                out[,,k] <- x
-            }
-            out
+        "swap_count" = commsim(method="swap_count", binary = FALSE,
+        isSeq=TRUE, mode = "integer",
+        fun = function(x, n, nr, nc, rs, cs, rf, cf, s, fill, thin) {
+            .Call(do_swap, as.matrix(x), n, thin, "swapcount")
         }),
-        "quasiswap_count" = commsim(method="quasiswap_count", binary=FALSE, isSeq=FALSE,
-        mode="integer",
-        fun=function(x, n, nr, nc, cs, rs, rf, cf, s, fill, thin) {
-            if (nr < 2L || nc < 2)
-                stop("needs at least 2 items")
+        "quasiswap_count" = commsim(method="quasiswap_count", binary=FALSE,
+        isSeq=FALSE, mode="integer",
+        fun=function(x, n, nr, nc, rs, cs, rf, cf, s, fill, thin) {
+            if (nr < 2L || nc < 2L)
+                stop("needs at least two items")
             out <- array(unlist(r2dtable(n, rs, cs)), c(nr, nc, n))
             storage.mode(out) <- "integer"
-            for (k in seq_len(n))
-                out[,,k] <- .C("rswapcount",
-                    m = out[,,k], nr, nc, fill, PACKAGE = "vegan")$m
-            out
+            .Call(do_qswap, out, n, fill, "rswapcount")
         }),
         "swsh_samp" = commsim(method="swsh_samp", binary=FALSE, isSeq=FALSE,
         mode="double",
         fun=function(x, n, nr, nc, cs, rs, rf, cf, s, fill, thin) {
-            if (nr < 2L || nc < 2)
-                stop("needs at least 2 items")
+            if (nr < 2L || nc < 2L)
+                stop("needs at least two items")
             nz <- x[x > 0]
             out <- array(unlist(r2dtable(n, rf, cf)), c(nr, nc, n))
+            ## do_qswap changes 'out' within the function
+            .Call(do_qswap, out, n, thin, "quasiswap")
             storage.mode(out) <- "double"
             for (k in seq_len(n)) {
-                out[,,k] <- .C("quasiswap",
-                               m = as.integer(out[,,k]), nr, nc, thin,
-                               PACKAGE = "vegan")$m
                 out[,,k][out[,,k] > 0] <- sample(nz) # we assume that length(nz)>1
             }
             out
@@ -234,18 +151,16 @@ function(method)
         "swsh_both" = commsim(method="swsh_both", binary=FALSE, isSeq=FALSE,
         mode="integer",
         fun=function(x, n, nr, nc, cs, rs, rf, cf, s, fill, thin) {
-            if (nr < 2L || nc < 2)
-                stop("needs at least 2 items")
+            if (nr < 2L || nc < 2L)
+                stop("needs at least two items")
             indshuffle <- function(x) {
                 drop(rmultinom(1, sum(x), rep(1, length(x))))
             }
             nz <- as.integer(x[x > 0])
             out <- array(unlist(r2dtable(n, rf, cf)), c(nr, nc, n))
+            .Call(do_qswap, out, n, thin, "quasiswap")
             storage.mode(out) <- "integer"
             for (k in seq_len(n)) {
-                out[,,k] <- .C("quasiswap",
-                               m = out[,,k], nr, nc, thin,
-                               PACKAGE = "vegan")$m
                 out[,,k][out[,,k] > 0] <- indshuffle(nz - 1L) + 1L  # we assume that length(nz)>1
             }
             out
@@ -253,15 +168,13 @@ function(method)
         "swsh_samp_r" = commsim(method="swsh_samp_r", binary=FALSE, isSeq=FALSE,
         mode="double",
         fun=function(x, n, nr, nc, cs, rs, rf, cf, s, fill, thin) {
-            if (nr < 2L || nc < 2)
-                stop("needs at least 2 items")
+            if (nr < 2L || nc < 2L)
+                stop("needs at least two items")
             out <- array(unlist(r2dtable(n, rf, cf)), c(nr, nc, n))
+            .Call(do_qswap, out, n, thin, "quasiswap")
             storage.mode(out) <- "double"
             I <- seq_len(nr)
             for (k in seq_len(n)) {
-                out[,,k] <- .C("quasiswap",
-                               m = as.integer(out[,,k]), nr, nc, thin,
-                               PACKAGE = "vegan")$m
                 for (i in I) {
                     nz <- x[i,][x[i,] > 0]
                     if (length(nz) == 1)
@@ -275,15 +188,13 @@ function(method)
         "swsh_samp_c" = commsim(method="swsh_samp_c", binary=FALSE, isSeq=FALSE,
         mode="double",
         fun=function(x, n, nr, nc, cs, rs, rf, cf, s, fill, thin) {
-            if (nr < 2L || nc < 2)
-                stop("needs at least 2 items")
+            if (nr < 2L || nc < 2L)
+                stop("needs at least two items")
             out <- array(unlist(r2dtable(n, rf, cf)), c(nr, nc, n))
+            .Call(do_qswap, out, n, thin, "quasiswap")
             storage.mode(out) <- "double"
             J <- seq_len(nc)
             for (k in seq_len(n)) {
-                out[,,k] <- .C("quasiswap",
-                               m = as.integer(out[,,k]), nr, nc, thin,
-                               PACKAGE = "vegan")$m
                 for (j in J) {
                     nz <- x[,j][x[,j] > 0]
                     if (length(nz) == 1)
@@ -297,18 +208,16 @@ function(method)
         "swsh_both_r" = commsim(method="swsh_both_r", binary=FALSE, isSeq=FALSE,
         mode="integer",
         fun=function(x, n, nr, nc, cs, rs, rf, cf, s, fill, thin) {
-            if (nr < 2L || nc < 2)
-                stop("needs at least 2 items")
+            if (nr < 2L || nc < 2L)
+                stop("needs at least two items")
             indshuffle <- function(x) {
                 drop(rmultinom(1, sum(x), rep(1, length(x))))
             }
             I <- seq_len(nr)
             out <- array(unlist(r2dtable(n, rf, cf)), c(nr, nc, n))
+            .Call(do_qswap, out, n, thin, "quasiswap")
             storage.mode(out) <- "integer"
             for (k in seq_len(n)) {
-                out[,,k] <- .C("quasiswap",
-                               m = out[,,k], nr, nc, thin,
-                               PACKAGE = "vegan")$m
                 for (i in I) {
                     nz <- as.integer(x[i,][x[i,] > 0])
                     if (length(nz) == 1)
@@ -322,18 +231,16 @@ function(method)
         "swsh_both_c" = commsim(method="swsh_both_c", binary=FALSE, isSeq=FALSE,
         mode="integer",
         fun=function(x, n, nr, nc, cs, rs, rf, cf, s, fill, thin) {
-            if (nr < 2L || nc < 2)
-                stop("needs at least 2 items")
+            if (nr < 2L || nc < 2L)
+                stop("needs at least two items")
             indshuffle <- function(x) {
                 drop(rmultinom(1, sum(x), rep(1, length(x))))
             }
             J <- seq_len(nc)
             out <- array(unlist(r2dtable(n, rf, cf)), c(nr, nc, n))
+            .Call(do_qswap, out, n, thin, "quasiswap")
             storage.mode(out) <- "integer"
             for (k in seq_len(n)) {
-                out[,,k] <- .C("quasiswap",
-                               m = out[,,k], nr, nc, thin,
-                               PACKAGE = "vegan")$m
                 for (j in J) {
                     nz <- as.integer(x[,j][x[,j] > 0])
                     if (length(nz) == 1)
@@ -347,22 +254,12 @@ function(method)
         "abuswap_r" = commsim(method="abuswap_r", binary=FALSE, isSeq=TRUE,
         mode="double",
         fun=function(x, n, nr, nc, cs, rs, rf, cf, s, fill, thin) {
-            out <- array(0, c(nr, nc, n))
-            for (k in seq_len(n)) {
-                x <- .C("abuswap", m = x, nr, nc, thin, 1L, PACKAGE = "vegan")$m
-                out[,,k] <- x
-            }
-            out
+            .Call(do_abuswap, as.matrix(x), n, thin, 1L)
         }),
         "abuswap_c" = commsim(method="abuswap_c", binary=FALSE, isSeq=TRUE,
         mode="double",
         fun=function(x, n, nr, nc, cs, rs, rf, cf, s, fill, thin) {
-            out <- array(0, c(nr, nc, n))
-            for (k in seq_len(n)) {
-                x <- .C("abuswap", m = x, nr, nc, thin, 0L, PACKAGE = "vegan")$m
-                out[,,k] <- x
-            }
-            out
+            .Call(do_abuswap, as.matrix(x), n, thin, 0L)
         }),
         "r00_samp" = commsim(method="r00_samp", binary=FALSE, isSeq=FALSE,
         mode="double",

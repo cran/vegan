@@ -1,6 +1,5 @@
 \name{capscale}
 \alias{capscale}
-\alias{oldCapscale}
 \alias{dbrda}
 
 \title{[Partial] Distance-based Redundancy Analysis }
@@ -41,8 +40,8 @@ dbrda(formula, data, distance = "euclidean", sqrt.dist = FALSE,
     they can be transformed within the formula, and they can have
     interactions as in a typical \code{\link{formula}}. The RHS can have a
     special term \code{Condition} that defines variables to be
-    ``partialled out'' before constraints, just like in \code{\link{rda}}
-    or \code{\link{cca}}. This allows the use of partial CAP.}
+    \dQuote{partialled out} before constraints, just like in \code{\link{rda}}
+    or \code{\link{cca}}. This allows the use of partial dbRDA.}
   \item{data}{ Data frame containing the variables on the right hand side of
     the model formula. }
   \item{distance}{The name of the dissimilarity (or distance) index if
@@ -50,14 +49,20 @@ dbrda(formula, data, distance = "euclidean", sqrt.dist = FALSE,
     dissimilarity matrix.}
   \item{sqrt.dist}{Take square roots of dissimilarities. See section
     \code{Details} below.}
+
   \item{comm}{ Community data frame which will be used for finding
     species scores when the LHS of the \code{formula} was a
     dissimilarity matrix. This is not used if the LHS is a data
-    frame. If this is not supplied, the ``species scores'' unavailable.}
+    frame. If this is not supplied, the \dQuote{species scores} are
+    unavailable when dissimilarities were supplied. N.B., this is
+    only available in \code{capscale}: \code{dbrda} does not return
+    species scores. Function \code{\link{sppscores}} can be used to add
+    species scores if they are missing.}
+
   \item{add}{Add a constant to the non-diagonal dissimilarities such
      that all eigenvalues are non-negative in the underlying Principal
      Co-ordinates Analysis (see \code{\link{wcmdscale}} for
-     details). Choice \code{"lingoes"} (or \code{TRUE}) use the
+     details). \code{"lingoes"} (or \code{TRUE}) uses the
      recommended method of Legendre & Anderson (1999: \dQuote{method
      1}) and \code{"cailliez"} uses their \dQuote{method 2}. The
      latter is the only one in \code{\link{cmdscale}}.}
@@ -83,8 +88,8 @@ dbrda(formula, data, distance = "euclidean", sqrt.dist = FALSE,
      expression which can contain variables in the working
      environment, \code{data} or species names of the community data
      (if given in the formula or as \code{comm} argument).}
-   \item{\dots}{Other parameters passed to \code{\link{rda}} or to
-     \code{\link{metaMDSdist}}.  }
+   \item{\dots}{Other parameters passed to underlying functions (e.g.,
+     \code{\link{metaMDSdist}}).  }
 }
 \details{
 
@@ -92,46 +97,45 @@ dbrda(formula, data, distance = "euclidean", sqrt.dist = FALSE,
   implementations of dbRDA. Function \code{capscale} is based on
   Legendre & Anderson (1999): the dissimilarity data are first
   ordinated using metric scaling, and the ordination results are
-  analysed with \code{\link{rda}}. Function \code{dbrda} is based on
+  analysed as \code{\link{rda}}. Function \code{dbrda} is based on
   McArdle & Anderson (2001) and directly decomposes
   dissimilarities. It does not use \code{\link{rda}} but a parallel
   implementation adapted for analysing dissimilarities and returns a
   subset of \code{\link{rda}} items. With Euclidean distances both
-  results are identical to \code{\link{rda}}.  Other dissimmilarities
+  results are identical to \code{\link{rda}}.  Other dissimilarities
   may give negative eigenvalues associated with imaginary
   axes. Negative eigenvalues are handled differently: \code{capscale}
   ignores imaginary axes and analyses only real axes with positive
   eigenvalues, and \code{dbrda} directly analyses dissimilarities and
-  can give negative eigenvalues in any component. Both methods define
-  total inertia of conditions, constraints and residuals identically.
-  
+  can give negative eigenvalues in any component.
+
   If the user supplied a community data frame instead of
   dissimilarities, the functions will find dissimilarities using
   \code{\link{vegdist}} or distance function given in \code{dfun} with
   specified \code{distance}. The functions will accept distance
   objects from \code{\link{vegdist}}, \code{\link{dist}}, or any other
-  method producing similar objects. The constraining variables can be
+  method producing compatible objects. The constraining variables can be
   continuous or factors or both, they can have interaction terms, or
   they can be transformed in the call. Moreover, there can be a
   special term \code{Condition} just like in \code{\link{rda}} and
-  \code{\link{cca}} so that ``partial'' analysis can be performed.
+  \code{\link{cca}} so that \dQuote{partial} analysis can be performed.
+
+  Function \code{dbrda} does not return species scores, and they can
+  also be missing in \code{capscale}, but they can be added after the
+  analysis using function \code{\link{sppscores}}.
 
   Non-Euclidean dissimilarities can produce negative eigenvalues
-  (Legendre & Anderson 1999, McArdle & Anderson 2001). The total
-  inertia and \code{\link{anova.cca}} tests for constraints will also
-  include the effects of imaginary axes with negative eigenvalues
-  following McArdle & Anderson (2001). If there are negative
-  eigenvalues, the printed output of \code{capscale} will add a column
-  with sums of positive eigenvalues and an item of sum of negative
-  eigenvalues, and \code{dbrda} will add a column giving the number of
-  real dimensions with postive eigenvalues.  If negative eigenvalues
-  are disturbing, \code{capscale} lets you to distort the
+  (Legendre & Anderson 1999, McArdle & Anderson 2001).  If there are
+  negative eigenvalues, the printed output of \code{capscale} will add
+  a column with sums of positive eigenvalues and an item of sum of
+  negative eigenvalues, and \code{dbrda} will add a column giving the
+  number of real dimensions with positive eigenvalues.  If negative
+  eigenvalues are disturbing, functions let you to distort the
   dissimilarities so that only non-negative eigenvalues will be
-  produced using argument \code{add = TRUE} (this argument is passed
-  to \code{\link{cmdscale}}). Alternatively, with
-  \code{sqrt.dist = TRUE}, square roots of dissimilarities will be used
-  which may help in avoiding negative eigenvalues (Legendre & Anderson
-  1999).
+  produced with argument \code{add = TRUE}. Alternatively, with
+  \code{sqrt.dist = TRUE}, square roots of dissimilarities will be
+  used which may help in avoiding negative eigenvalues (Legendre &
+  Anderson 1999).
 
   The functions can be also used to perform ordinary metric scaling
   a.k.a. principal coordinates analysis by using a formula with only a
@@ -139,8 +143,8 @@ dbrda(formula, data, distance = "euclidean", sqrt.dist = FALSE,
   \code{metaMDSdist = TRUE}, the function can do automatic data
   standardization and use extended dissimilarities using function
   \code{\link{stepacross}} similarly as in non-metric multidimensional
-  scaling with \code{\link{metaMDS}}. 
-  
+  scaling with \code{\link{metaMDS}}.
+
 }
 \value{
 
@@ -173,36 +177,31 @@ dbrda(formula, data, distance = "euclidean", sqrt.dist = FALSE,
 
 \note{ The function \code{capscale} was originally developed as a
   variant of constrained analysis of proximities (Anderson & Willis
-  2003), but these developments made it became identical to dbRDA.  In
-  older version of \pkg{vegan} the total inertia and permutation tests
-  were based only on real axes, but in \pkg{vegan} 2.4-0 they also
-  include the imaginary components following McArdle & Anderson
-  (2001). For compatibility with the old versions of \pkg{vegan}, you
-  can use function \code{oldCapscale} to discard the effects of
-  imaginary dimensions (negative eigenvalues).
+  2003), but these developments made it similar to dbRDA. However, it
+  discards the imaginary dimensions with negative eigenvalues and
+  ordination and significance tests area only based on real dimensions
+  and positive eigenvalues.
 
   The inertia is named after the dissimilarity index as defined in the
-  dissimilarity data, or as \code{unknown distance} if such an
-  information is missing.  Function \code{\link{rda}} usually divides
-  the ordination scores by number of sites minus one. In this way, the
-  inertia is variance instead of sum of squares, and the eigenvalues sum
-  up to variance. Many dissimilarity measures are in the range 0 to 1,
-  so they have already made a similar division. If the largest original
-  dissimilarity is less than or equal to 4 (allowing for
-  \code{\link{stepacross}}), this division is undone in \code{capscale}
-  and original dissimilarities are used. Keyword \code{mean} is added to
-  the inertia in cases where division was made, e.g. in Euclidean and
-  Manhattan distances.  Inertia is based on squared index, and keyword
-  \code{squared} is added to the name of distance, unless data were
-  square root transformed (argument \code{sqrt.dist = TRUE}). If an
-  additive constant was used with argument \code{add},
-  \code{Lingoes adjusted} or \code{Cailliez adjusted} is added to the
-  the name of inertia, and the value of the constant is printed.  }
+  dissimilarity data, or as \code{unknown distance} if such
+  information is missing. If the largest original dissimilarity was
+  larger than 4, \code{capscale} handles input similarly as \code{rda}
+  and bases its analysis on variance instead of sum of
+  squares. Keyword \code{mean} is added to the inertia in these cases,
+  e.g. with Euclidean and Manhattan distances.  Inertia is based on
+  squared index, and keyword \code{squared} is added to the name of
+  distance, unless data were square root transformed (argument
+  \code{sqrt.dist=TRUE}). If an additive constant was used with
+  argument \code{add}, \code{Lingoes} or \code{Cailliez adjusted} is
+  added to the the name of inertia, and the value of the constant is
+  printed.}
 
 
 \seealso{\code{\link{rda}}, \code{\link{cca}}, \code{\link{plot.cca}},
   \code{\link{anova.cca}}, \code{\link{vegdist}},
-  \code{\link{dist}}, \code{\link{cmdscale}}, \code{\link{wcmdscale}}.
+  \code{\link{dist}}, \code{\link{cmdscale}}, \code{\link{wcmdscale}}
+  for underlying and related functions. Function \code{\link{sppscores}}
+  can add species scores or replace existing species scores.
 
   The function returns similar result object as \code{\link{rda}} (see
   \code{\link{cca.object}}). This section for \code{\link{rda}} gives a

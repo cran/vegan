@@ -10,7 +10,7 @@
 \usage{
 wascores(x, w, expand=FALSE)
 eigengrad(x, w)
-} 
+}
 
 \arguments{
   \item{x}{Environmental variables or ordination scores.}
@@ -20,16 +20,16 @@ eigengrad(x, w)
 }
 \details{
   Function \code{wascores} computes weighted averages. Weighted averages
-  `shrink': they cannot be more extreme than values used for calculating
-  the averages. With \code{expand = TRUE}, the function `dehsrinks' the
-  weighted averages by making their biased weighted variance equal to
-  the biased weighted variance of the corresponding environmental
-  variable.  Function \code{eigengrad} returns the inverses of squared
-  expansion factors or the attribute \code{shrinkage} of the
-  \code{wascores} result for each environmental gradient.  This is equal
-  to the constrained eigenvalue of \code{\link{cca}} when only this one
-  gradient was used as a constraint, and describes the strength of the
-  gradient. 
+  \dQuote{shrink}: they cannot be more extreme than values used for
+  calculating the averages. With \code{expand = TRUE}, the function
+  \dQuote{deshrinks} the weighted averages by making their biased
+  weighted variance equal to the biased weighted variance of the
+  corresponding environmental variable.  Function \code{eigengrad}
+  returns the inverses of squared expansion factors or the attribute
+  \code{shrinkage} of the \code{wascores} result for each environmental
+  gradient.  This is equal to the constrained eigenvalue of
+  \code{\link{cca}} when only this one gradient was used as a
+  constraint, and describes the strength of the gradient.
 }
 \value{
   Function \code{wascores} returns a matrix where species define rows
@@ -37,7 +37,7 @@ eigengrad(x, w)
   \code{expand = TRUE}, attribute \code{shrinkage} has the inverses of
   squared expansion factors or \code{\link{cca}} eigenvalues for the
   variable.  Function \code{eigengrad} returns only the \code{shrinkage}
-  attribute. 
+  attribute.
 }
 
 \author{ Jari Oksanen }

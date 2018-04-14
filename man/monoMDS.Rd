@@ -2,6 +2,8 @@
 \alias{monoMDS}
 \alias{scores.monoMDS}
 \alias{plot.monoMDS}
+\alias{points.monoMDS}
+\alias{text.monoMDS}
 
 \title{ Global and Local Non-metric Multidimensional Scaling and
   Linear and Hybrid Scaling }
@@ -10,23 +12,25 @@
   multidimensional scaling (NMDS) using monotone regression and
   primary (\dQuote{weak}) treatment of ties. In addition to
   traditional global NMDS, the function implements local NMDS, linear
-  and hybrid multidimensional scaling.  
+  and hybrid multidimensional scaling.
 }
 
 \usage{
-monoMDS(dist, y, k = 2, model = c("global", "local", "linear", "hybrid"), 
+monoMDS(dist, y, k = 2, model = c("global", "local", "linear", "hybrid"),
     threshold = 0.8, maxit = 200, weakties = TRUE, stress = 1,
-    scaling = TRUE, pc = TRUE, smin = 1e-4, sfgrmin = 1e-7, 
-    sratmax=0.99999, ...) 
+    scaling = TRUE, pc = TRUE, smin = 1e-4, sfgrmin = 1e-7,
+    sratmax=0.99999, ...)
 \method{scores}{monoMDS}(x, choices = NA, ...)
 \method{plot}{monoMDS}(x, choices = c(1,2), type = "t", ...)
+\method{points}{monoMDS}(x, choices = c(1,2), select, ...)
+\method{text}{monoMDS}(x, labels, choices = c(1,2), select, ...)
 }
 
 \arguments{
   \item{dist}{Input dissimilarities.}
   \item{y}{Starting configuration. A random configuration will be
     generated if this is missing.}
-  
+
   \item{k}{Number of dimensions. NB., the number of points \eqn{n}
     should be \eqn{n > 2k + 1}{n > 2*k + 1}, and preferably higher in
     non-metric MDS.}
@@ -42,12 +46,12 @@ monoMDS(dist, y, k = 2, model = c("global", "local", "linear", "hybrid"),
     used alternately with monotone regression. }
 
   \item{maxit}{Maximum number of iterations.}
-  
+
   \item{weakties}{Use primary or weak tie treatment, where equal
     observed dissimilarities are allowed to have different fitted
     values. if \code{FALSE}, then secondary (strong) tie treatment is
     used, and tied values are not broken.}
-  
+
   \item{stress}{Use stress type 1 or 2 (see Details).}
 
   \item{scaling}{Scale final scores to unit root mean squares.}
@@ -67,6 +71,12 @@ monoMDS(dist, y, k = 2, model = c("global", "local", "linear", "hybrid"),
   \item{type}{The type of the plot: \code{"t"} for text, \code{"p"}
     for points, and \code{"n"} for none.}
 
+  \item{select}{Items to be displayed.  This can either be a logical
+          vector which is \code{TRUE} for displayed items or a vector of
+          indices of displayed items.}
+
+  \item{labels}{Labels to be use used instead of row names.}
+
   \item{\dots}{Other parameters to the functions (ignored in
     \code{monoMDS}, passed to graphical functions in \code{plot}.).}
 }
@@ -75,7 +85,7 @@ monoMDS(dist, y, k = 2, model = c("global", "local", "linear", "hybrid"),
   scaling in \R, but \code{monoMDS} offers the following unique
   combination of features:
   \itemize{
-    
+
     \item \dQuote{Weak} treatment of ties (Kruskal 1964a,b), where
     tied dissimilarities can be broken in monotone regression. This is
     especially important for cases where compared sites share no
@@ -86,7 +96,7 @@ monoMDS(dist, y, k = 2, model = c("global", "local", "linear", "hybrid"),
     (\pkg{smacof} package) also has adequate tie treatment.
 
     \item Handles missing values in a meaningful way.
-  
+
     \item Offers \dQuote{local} and \dQuote{hybrid} scaling in
     addition to usual \dQuote{global} NMDS (see below).
 
@@ -133,7 +143,7 @@ monoMDS(dist, y, k = 2, model = c("global", "local", "linear", "hybrid"),
 
   Scaling, orientation and direction of the axes is arbitrary.
   However, the function always centres the axes, and the default
-  \code{scaling} is to scale the configuration ot unit root mean
+  \code{scaling} is to scale the configuration of unit root mean
   square and to rotate the axes (argument \code{pc}) to principal
   components so that the first dimension shows the major variation.
   It is possible to rotate the solution so that the first axis is
@@ -190,7 +200,7 @@ monoMDS(dist, y, k = 2, model = c("global", "local", "linear", "hybrid"),
   Faith, D.P., Minchin, P.R and Belbin, L. 1987. Compositional
       dissimilarity as a robust measure of ecological
       distance. \emph{Vegetatio} 69, 57--68.
-  
+
   Gower, J.C. (1966). Some distance properties of latent root and
       vector methods used in multivariate analysis. \emph{Biometrika}
       53, 325--328.
@@ -219,7 +229,7 @@ Peter R. Michin (Fortran core) and Jari Oksanen (R interface).
 \note{ This is the default NMDS function used in
    \code{\link{metaMDS}}. Function \code{\link{metaMDS}} adds support
    functions so that NMDS can be run like recommended by Minchin
-   (1987).  
+   (1987).
 }
 
 \seealso{ \code{\link{metaMDS}} for the \pkg{vegan} way of

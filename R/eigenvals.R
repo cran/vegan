@@ -54,15 +54,32 @@
 
 ## concatenate constrained and unconstrained eigenvalues in cca, rda
 ## and capscale (vegan) -- ignore pCCA component
-`eigenvals.cca` <- function(x, constrained = FALSE, ...)
+`eigenvals.cca` <- function(x, model = c("all", "unconstrained", "constrained"),
+                            constrained = NULL, ...)
 {
-   if (constrained)
-       out <- x$CCA$eig
-   else
-       out <- c(x$CCA$eig, x$CA$eig)
-   if (!is.null(out))
-       class(out) <- "eigenvals"
-   out
+    out <- if (!is.null(constrained)) {
+        ## old behaviour
+        message("Argument `constrained` is deprecated; use `model` instead.")
+        if (constrained) {
+            x$CCA$eig
+        } else {
+            c(x$CCA$eig, x$CA$eig)
+        }
+    } else {
+        ## new behaviour
+        model <- match.arg(model)
+        if (identical(model, "all")) {
+            c(x$CCA$eig, x$CA$eig)
+        } else if (identical(model, "unconstrained")) {
+            x$CA$eig
+        } else {
+            x$CCA$eig
+        }
+    }
+    if (!is.null(out)) {
+        class(out) <- "eigenvals"
+    }
+    out
 }
 
 ## wcmdscale (in vegan)
@@ -133,25 +150,24 @@
     invisible(x)
 }
 
-`summary.eigenvals` <-
-    function(object, ...)
-{
+`summary.eigenvals` <- function(object, ...) {
     ## dbRDA can have negative eigenvalues: do not give cumulative
     ## proportions
-    if(!is.null(attr(object, "sumev")))
+    if (!is.null(attr(object, "sumev"))) {
         sumev <- attr(object, "sumev")
-    else
+    } else {
         sumev <- sum(object)
+    }
     vars <- object/sumev
-    cumvars <- if (all(vars >= 0))
-                   cumsum(vars)
-               else
-                   NA
-    importance <- rbind(`Eigenvalue` = object,
-                        `Proportion Explained` = round(abs(vars), 5),
-                        `Cumulative Proportion` = round(cumvars, 5))
-    out <- list(importance = importance)
-    class(out) <- c("summary.eigenvals")
+    cumvars <- if (all(vars >= 0)) {
+        cumsum(vars)
+    } else {
+        NA
+    }
+    out <- rbind(`Eigenvalue` = object,
+                 `Proportion Explained` = abs(vars),
+                 `Cumulative Proportion` = cumvars)
+    class(out) <- c("summary.eigenvals", "matrix")
     out
 }
 
@@ -162,6 +178,7 @@
     function(x, digits = max(3L, getOption("digits") - 3L), ...)
 {
     cat("Importance of components:\n")
-    print(x$importance, digits = digits, ...)
+    class(x) <- "matrix"
+    print(x, digits = digits, ...)
     invisible(x)
 }

@@ -4,9 +4,6 @@
 \alias{ordiellipse}
 \alias{ordibar}
 \alias{ordicluster}
-\alias{weights.cca}
-\alias{weights.rda}
-\alias{weights.decorana}
 \alias{summary.ordihull}
 \alias{scores.ordihull}
 \alias{summary.ordiellipse}
@@ -14,7 +11,7 @@
 
 \title{Display Groups or Factor Levels in Ordination Diagrams}
 
-\description{ Functions to add convex hulls, `spider' graphs, ellipses
+\description{ Functions to add convex hulls, \dQuote{spider} graphs, ellipses
   or cluster dendrogram to ordination diagrams. The ordination
   diagrams can be produced by \code{vegan} \code{\link{plot.cca}},
   \code{\link{plot.decorana}} or \code{\link{ordiplot}}.  }
@@ -31,10 +28,11 @@ ordibar(ord, groups, display = "sites", kind = c("sd", "se"), conf,
          w = weights(ord, display), col = 1, show.groups, label = FALSE,
 	 lwd = NULL, length = 0,  ...)
 ordispider(ord, groups, display="sites", w = weights(ord, display),
-	 spiders = c("centroid", "median"),  show.groups, 
+	 spiders = c("centroid", "median"),  show.groups,
          label = FALSE, col = NULL, lty = NULL, lwd = NULL, ...)
 ordicluster(ord, cluster, prune = 0, display = "sites",
-         w = weights(ord, display), col = 1, ...)
+            w = weights(ord, display), col = 1, draw = c("segments", "none"),
+            ...)
 \method{summary}{ordihull}(object, ...)
 \method{summary}{ordiellipse}(object, ...)
 ordiareatest(ord, groups, area = c("hull", "ellipse"), kind = "sd",
@@ -47,11 +45,15 @@ ordiareatest(ord, groups, area = c("hull", "ellipse"), kind = "sd",
     drawn. }
   \item{display}{Item to displayed. }
 
-  \item{draw}{Use either \code{\link{lines}} or \code{\link{polygon}}
-    to draw the lines. Graphical parameters are passed to both. The
-    main difference is that \code{polygon}s may be filled and
-    non-transparent. With \code{none} nothing is drawn, but the
-    function returns the \code{\link{invisible}} plotting data.}
+  \item{draw}{character; how should objects be represented on the plot?
+    For \code{ordihull} and \code{ordiellipse} use either
+    \code{\link{lines}} or \code{\link{polygon}} to draw the
+    lines. For \code{ordicluster}, line segments are drawn using
+    \code{\link{segments}}. To suppress plotting, use
+    \code{"none"}. Graphical parameters are passed to both. The main
+    difference is that \code{polygon}s may be filled and
+    non-transparent. With \code{none} nothing is drawn, but the function
+    returns the \code{\link{invisible}} plotting.}
 
   \item{col}{Colour of hull or ellipse lines (if \code{draw = "lines"})
     or their fills (if \code{draw = "polygon"}) in \code{ordihull} and
@@ -123,7 +125,7 @@ ordiareatest(ord, groups, area = c("hull", "ellipse"), kind = "sd",
     cluster.  With \code{parallel = 1} uses ordinary, non-parallel
     processing. The parallel processing is done with \pkg{parallel}
     package.}
-    
+
   \item{lty, lwd, border}{Vectors of these parameters can be supplied
     and will be applied (if appropriate) for each element of
     \code{names(table(groups))} (in that order). Shorter vectors will be
@@ -133,7 +135,7 @@ ordiareatest(ord, groups, area = c("hull", "ellipse"), kind = "sd",
     ends of the bar segment (passed to \code{\link{arrows}}).}
 
   \item{\dots}{Parameters passed to graphical functions or to
-    \code{\link{scores}} to select axes and scaling etc. } 
+    \code{\link{scores}} to select axes and scaling etc. }
 }
 
 \details{
@@ -141,7 +143,7 @@ ordiareatest(ord, groups, area = c("hull", "ellipse"), kind = "sd",
   Function \code{ordihull} draws \code{\link{lines}} or
   \code{\link{polygon}}s for the convex
   hulls found by function \code{\link{chull}} encircling
-  the items in the groups. 
+  the items in the groups.
 
   Function \code{ordiellipse} draws \code{\link{lines}} or
   \code{\link{polygon}}s for ellipses by \code{groups}. The function
@@ -156,7 +158,7 @@ ordiareatest(ord, groups, area = c("hull", "ellipse"), kind = "sd",
   Function \code{ordibar} draws crossed \dQuote{error bars} using
   either either standard deviation of point scores or standard error
   of the (weighted) average of scores. These are the principal axes of
-  the correspoding \code{ordiellipse}, and are found by principal
+  the corresponding \code{ordiellipse}, and are found by principal
   component analysis of the (weighted) covariance matrix.
 
   Functions \code{ordihull} and \code{ordiellipse} return invisibly an
@@ -185,7 +187,7 @@ ordiareatest(ord, groups, area = c("hull", "ellipse"), kind = "sd",
   a similar structure. Function \code{ordicluster} connects cluster
   centroids to each other with line \code{\link{segments}}. Function
   uses centroids of all points in the clusters, and is therefore
-  similar to average linkage methods.  
+  similar to average linkage methods.
 }
 
 \note{These functions add graphical items to ordination graph: You

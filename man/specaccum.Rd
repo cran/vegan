@@ -27,7 +27,7 @@ specaccum(comm, method = "exact", permutations = 100,
           conditioned =TRUE, gamma = "jack1",  w = NULL, subset, ...)
 \method{plot}{specaccum}(x, add = FALSE, random = FALSE, ci = 2, 
     ci.type = c("bar", "line", "polygon"), col = par("fg"), lty = 1,
-    ci.col = col, ci.lty = 1, xlab, ylab = x$method, ylim,
+    ci.col = col, ci.lty = 1, ci.length = 0, xlab, ylab = x$method, ylim,
     xvar = c("sites", "individuals", "effort"), ...)
 \method{boxplot}{specaccum}(x, add = FALSE, ...)
 fitspecaccum(object, model, method = "random", ...)
@@ -77,6 +77,8 @@ specslope(object, at)
     \code{"polygon"}.}
   \item{ci.lty}{Line type for confidence intervals or border of the
     \code{"polygon"}.}
+  \item{ci.length}{Length of horizontal bars (in inches) at the end of
+    vertical bars with \code{ci.type = "bar"}.}
   \item{xlab,ylab}{Labels for \code{x} (defaults \code{xvar}) and
     \code{y} axis.}
   \item{ylim}{the y limits of the plot.}
@@ -170,7 +172,7 @@ specslope(object, at)
   \code{"lomolino"} (\code{\link{SSlomolino}}) of \pkg{vegan}
   package. In addition the following standard \R models are available:
   \code{"asymp"} (\code{\link{SSasymp}}), \code{"gompertz"}
-  (\code{\link{SSgompertz}}), \code{"michaelis-menten"})
+  (\code{\link{SSgompertz}}), \code{"michaelis-menten"}
   (\code{\link{SSmicmen}}), \code{"logis"} (\code{\link{SSlogis}}),
   \code{"weibull"} (\code{\link{SSweibull}}). See these functions for
   model specification and details. 

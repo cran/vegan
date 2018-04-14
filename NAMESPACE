@@ -1,13 +1,14 @@
 ## compiled code
-useDynLib(vegan)
+useDynLib(vegan, .registration = TRUE)
 
 ## Export regular function names (no dots)
 
 export(CCorA, MOStest, RsquareAdj, SSarrhenius, SSgitay, SSgleason,
 SSlomolino, adipart, adonis, anosim, beals, betadisper, betadiver,
 bgdispersal, bioenv, bioenvdist, bstick, cIndexKM, calibrate, capscale,
-cascadeKM, cca, contribdiv, clamtest, commsim, dbrda, decorana,
-decostand, designdist, coverscale, dispweight, dispindmorisita, distconnected,
+cascadeKM, cca, chaodist, contribdiv, clamtest, commsim, cutreeord,
+dbrda, decorana, decostand, designdist,
+coverscale, dispweight, dispindmorisita, distconnected,
 diversity, downweight, drarefy, eigengrad, eigenvals, envfit,
 estaccumR, estimateR, eventstar, factorfit, fisherfit, fitspecaccum,
 gdispweight,goodness, hiersimu, humpfit, indpower, inertcomp, initMDS,
@@ -26,24 +27,22 @@ poolaccum, postMDS, prc, prestondistr, prestonfit, procrustes,
 protest, radfit, radlattice, rankindex, rarefy, rarecurve, rareslope,
 raupcrick, rda, renyiaccum, renyi, rrarefy, scores,
 showvarparts, simper, spandepth, spantree, specaccum, specslope,
-specnumber, specpool2vect, specpool, spenvcor,
+specnumber, specpool2vect, specpool, spenvcor, "sppscores<-", sppscores,
 stepacross, stressplot, swan, tabasco, taxa2dist, taxondive, tolerance,
 treedist, treedive, treeheight, tsallisaccum, tsallis, varpart,
-vectorfit, vegandocs, vegdist, vegemite, veiledspec, wascores,
+vectorfit, vegandocs, vegdist, avgdist, vegemite, veiledspec, wascores,
 wcmdscale, wisconsin)
 ## export pasteCall for 'permute'
 export(pasteCall)
 ## export anova.cca for 'BiodiversityR': this should be fixed there
 export(anova.cca)
 export(as.mcmc.oecosimu, as.mcmc.permat)
-## export oldCapscale for compatibility after new capscale design
-export(oldCapscale)
 ## alternative implementation of adonis: may be eliminated later
 export(adonis2)
 
 ## export regular functions with dot names
 
-export(as.fisher, as.mlm, as.preston, as.rad, fieller.MOStest,
+export(as.fisher, as.preston, as.rad, fieller.MOStest,
 fisher.alpha, kendall.global, kendall.post, make.cepnames,
 mantel.correlog, mantel.partial, no.shared, rad.lognormal, rad.null,
 rad.preempt, rad.zipf, rad.zipfbrot, read.cep,
@@ -52,22 +51,17 @@ vif.cca)
 ## Export panel functions
 export(panel.ordi, panel.ordiarrows, panel.ordi3d, prepanel.ordi3d)
 
-## Export .Depracated functions (to be removed later)
+## Export .Defunct functions (to be removed later)
 export(commsimulator)
-## Export .Defunct function names (on their way out)
-S3method(density, adonis)
-S3method(density, anosim)
-S3method(density, mantel)
-S3method(density, mrpp)
-S3method(density, oecosimu)
-S3method(density, permutest.cca)
-S3method(density, protest)
-S3method(densityplot, adonis)
-S3method(densityplot, oecosimu)
+
+## Deprecated functions & methods
+export(as.mlm)
+S3method(as.mlm, cca)
+S3method(as.mlm, rda)
 
 ## do NOT export the following internal functions
 
-## export(ade2vegancca, orderingKM, ordiArgAbsorber, ordiArrowMul,
+## export(orderingKM, ordiArgAbsorber, ordiArrowMul,
 ## ordiGetData, ordimedian, ordiNAexclude, ordiNApredict,
 ## ordiParseFormula, ordiTerminfo, pregraphKM, simpleRDA2, varpart2,
 ## varpart3, varpart4, veganCovEllipse, veganMahatrans)
@@ -87,6 +81,7 @@ importFrom(MASS, isoMDS, sammon, Shepard, mvrnorm, lda)
 importFrom(cluster, daisy, ellipsoidhull)
 ## 's' must be imported in mgcv < 1.8-0 (not needed later)
 importFrom(mgcv, gam, s, te, predict.gam, summary.gam)
+
 ## Registration of S3 methods defined in vegan
 # adipart: vegan
 S3method(adipart, default)
@@ -117,9 +112,7 @@ S3method(as.hclust, spantree)
 # as.mcmc: coda <======= rare
 #S3method(as.mcmc, oecosimu)
 #S3method(as.mcmc, permat)
-# as.mlm: vegan
-S3method(as.mlm, cca)
-S3method(as.mlm, rda)
+
 # as.ts: stats
 S3method(as.ts, oecosimu)
 S3method(as.ts, permat)
@@ -132,6 +125,7 @@ S3method(biplot, cca)
 S3method(biplot, rda)
 # boxplot: graphics
 S3method(boxplot, betadisper)
+S3method(boxplot, permustats)
 S3method(boxplot, specaccum)
 # bstick: vegan
 S3method(bstick, cca)
@@ -155,6 +149,8 @@ S3method(coef, rda)
 # confint: stats -- also uses MASS:::confint.glm & MASS:::profile.glm
 # does this work with namespaces??
 S3method(confint, MOStest)
+# cooks.distance: stats
+S3method(cooks.distance, cca)
 # cophenetic: stats
 S3method(cophenetic, spantree)
 # density: stats
@@ -167,6 +163,8 @@ S3method(deviance, rda)
 S3method(deviance, radfit)
 S3method(deviance, radfit.frame)
 S3method(deviance, fitspecaccum)
+# df.residual: stats
+S3method(df.residual, cca)
 # drop1: stats
 S3method(drop1, cca)
 # eigenvals: vegan
@@ -201,6 +199,9 @@ S3method(fitted, rda)
 S3method(goodness, cca)
 S3method(goodness, metaMDS)
 S3method(goodness, monoMDS)
+# hatvalues: stats
+S3method(hatvalues, cca)
+S3method(hatvalues, rda)
 # head: utils
 S3method(head, summary.cca)
 # hiersimu: vegan
@@ -231,6 +232,7 @@ S3method(logLik, radfit.frame)
 # model.frame, model.matrix: stats
 S3method(model.frame, cca)
 S3method(model.matrix, cca)
+S3method(model.matrix, rda)
 # multipart: vegan
 S3method(multipart, default)
 S3method(multipart, formula)
@@ -324,13 +326,13 @@ S3method(plot, specaccum)
 S3method(plot, taxondive)
 S3method(plot, varpart)
 S3method(plot, varpart234)
-S3method(plot, vegandensity) # <- .defunct in 2.4-0
 S3method(plot, wcmdscale)
 # points: graphics
 S3method(points, cca)
 S3method(points, decorana)
 S3method(points, humpfit)
 S3method(points, metaMDS)
+S3method(points, monoMDS)
 S3method(points, ordiplot)
 S3method(points, orditkplot)
 S3method(points, procrustes)
@@ -418,6 +420,8 @@ S3method(profile, humpfit)
 S3method(qqmath, permustats)
 ## qqnorm: stats
 S3method(qqnorm, permustats)
+## qr: base
+S3method(qr, cca)
 # radfit: vegan
 S3method(radfit, data.frame)
 S3method(radfit, default)
@@ -428,6 +432,9 @@ S3method(rda, formula)
 # residuals: stats
 S3method(residuals, cca)
 S3method(residuals, procrustes)
+# rstandard, rstudent: stats
+S3method(rstandard, cca)
+S3method(rstudent, cca)
 # scores: vegan
 S3method(scores, betadisper)
 S3method(scores, betadiver)
@@ -450,6 +457,8 @@ S3method(screeplot, cca)
 S3method(screeplot, decorana)
 S3method(screeplot, prcomp)
 S3method(screeplot, princomp)
+# sigma: stats
+S3method(sigma, cca)
 # simulate: stats
 S3method(simulate, capscale)
 S3method(simulate, cca)
@@ -459,6 +468,12 @@ S3method(simulate, nullmodel)
 # specslope: vegan
 S3method(specslope, specaccum)
 S3method(specslope, fitspecaccum)
+## sppscores<-: vegan
+S3method("sppscores<-", capscale)
+S3method("sppscores<-", dbrda)
+S3method("sppscores<-", metaMDS)
+# SSD: stats
+S3method(SSD, cca)
 # str: utils
 S3method(str, nullmodel)
 # stressplot: vegan
@@ -498,6 +513,7 @@ S3method(tail, summary.cca)
 S3method(text, cca)
 S3method(text, decorana)
 S3method(text, metaMDS)
+S3method(text, monoMDS)
 S3method(text, ordiplot)
 S3method(text, orditkplot)
 S3method(text, procrustes)
@@ -509,6 +525,8 @@ S3method(update, nullmodel)
 # because of car definition: could be defined as exported 'vif' generic
 # in vegan with namespace
 #S3method(vif, cca)
+# vcov: stats
+S3method(vcov, cca)
 # weights: stats
 S3method(weights, cca)
 S3method(weights, decorana)

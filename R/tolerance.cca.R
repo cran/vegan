@@ -36,13 +36,7 @@ tolerance.cca <- function(x, choices = 1:2,
     ## zapping epsilon to make approximate 1's into 1's
     ZAP <- sqrt(.Machine$double.eps)
     ## reconstruct species/response matrix Y - up to machine precision!
-    partialFit <- if(is.null(x$pCCA$Fit)) 0 else x$pCCA$Fit
-    if (is.null(x$CCA)) {
-        Xbar <- x$CA$Xbar
-    } else {
-        Xbar <- x$CCA$Xbar
-    }
-    Y <- ((partialFit + Xbar) * sqrt(x$rowsum %o% x$colsum) +
+    Y <- (ordiYbar(x, "initial") * sqrt(x$rowsum %o% x$colsum) +
           x$rowsum %o% x$colsum) * x$grand.total
     which <- match.arg(which)
     siteScrTypes <- if (is.null(x$CCA)) {

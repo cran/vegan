@@ -1,3 +1,4 @@
+\encoding{UTF-8}
 \name{goodness.cca}
 \alias{goodness}
 \alias{goodness.cca}
@@ -15,14 +16,13 @@
   species. Function \code{vif.cca} and \code{alias.cca} can be used to
   analyse linear dependencies among constraints and conditions. In
   addition, there are some other diagnostic tools (see 'Details').
-  
+
 }
 \usage{
-\method{goodness}{cca}(object, display = c("species", "sites"), choices,
-    model = c("CCA", "CA"), statistic = c("explained", "distance"),
-    summarize = FALSE, addprevious = FALSE, ...)
+\method{goodness}{cca}(object, choices, display = c("species", "sites"),
+    model = c("CCA", "CA"), summarize = FALSE, addprevious = FALSE, ...)
 inertcomp(object, display = c("species", "sites"),
-    statistic = c("explained", "distance"), proportional = FALSE)
+    unity = FALSE, proportional = FALSE)
 spenvcor(object)
 intersetcor(object)
 vif.cca(object)
@@ -34,7 +34,7 @@ vif.cca(object)
     \code{\link{rda}} or \code{\link{capscale}}. }
 
   \item{display}{Display \code{"species"} or \code{"sites"}. Species
-    are not available in \code{\link{capscale}}. }
+    are not available in \code{\link{dbrda}} and \code{\link{capscale}}. }
 
   \item{choices}{Axes shown. Default is to show all axes of the
     \code{"model"}. }
@@ -42,40 +42,43 @@ vif.cca(object)
   \item{model}{Show constrained (\code{"CCA"}) or unconstrained
     (\code{"CA"}) results. }
 
-  \item{statistic}{Statistic used: \code{"explained"} gives the cumulative
-    percentage accounted for, \code{"distance"} shows the residual
-    distances. }
-
   \item{summarize}{Show only the accumulated total.}
 
   \item{addprevious}{Add the variation explained by previous components
-     when \code{statistic="explained"}. For \code{model="CCA"} add
-     conditionened (partialled out) variation, and for \code{model="CA"}
+     when \code{statistic="explained"}. For \code{model = "CCA"} add
+     conditioned (partialled out) variation, and for \code{model = "CA"}
      add both conditioned and constrained variation. This will give
      cumulative explanation. The argument has no effect when
      \code{statistic="distance"}, but this will always show the residual
      distance after current axis and all previous components.
    }
 
+  \item{unity}{Scale inertia components to unit sum (sum of all items is
+    1).}
   \item{proportional}{Give the inertia components as proportional for
-    the corresponding total.}
+    the corresponding total of the item (sum of each row is 1). This
+    option takes precedence over \code{unity}.}
   \item{names.only}{Return only names of aliased variable(s) instead of
     defining equations.}
   \item{\dots}{Other parameters to the functions.}
 }
 \details{
-  Function \code{goodness} gives the diagnostic statistics for species
-  or sites. The alternative statistics are the cumulative proportion of
-  inertia accounted for up to the axes, and the residual distance left
-  unaccounted for.
+  Function \code{goodness} gives cumulative proportion of inertia
+  accounted by species up to chosen axes.
 
   Function \code{inertcomp} decomposes the inertia into partial,
-  constrained and unconstrained components for each site or
-  species. Instead of inertia, the function can give the total
-  dispersion or distances from the centroid for each component.
+  constrained and unconstrained components for each site or species.
+  Legendre & De \enc{Cáceres}{Caceres} (2012) called these inertia
+  components as local contributions to beta-diversity (LCBD) and
+  species contributions to beta-diversity (SCBD), and they give these
+  as relative contributions summing up to unity (argument
+  \code{unity = TRUE}). For this interpretation, appropriate dissimilarity
+  measures should be used in \code{\link{dbrda}} or appropriate
+  standardization in \code{\link{rda}} (Legendre & De
+  \enc{Cáceres}{Caceres} 2012).
 
   Function \code{spenvcor} finds the so-called \dQuote{species --
-    environment correlation} or (weighted) correlation of 
+    environment correlation} or (weighted) correlation of
   weighted average scores and linear combination scores.  This is a bad
   measure of goodness of ordination, because it is sensitive to extreme
   scores (like correlations are), and very sensitive to overfitting or
@@ -92,8 +95,8 @@ vif.cca(object)
   (\code{\link{envfit}}) provide a better alternative.  Biplot scores
   (see \code{\link{scores.cca}}) are a multivariate alternative for
   (weighted) correlation between linear combination scores and
-  constraints. 
-  
+  constraints.
+
   Function \code{vif.cca} gives the variance inflation factors for each
   constraint or contrast in factor constraints. In partial ordination,
   conditioning variables are analysed together with constraints. Variance
@@ -104,7 +107,7 @@ vif.cca(object)
   from the estimation, and no biplot scores or centroids are calculated
   for these aliased constraints. A note will be printed with default
   output if there are aliased constraints. Function \code{alias} will
-  give the linear coefficients defining the aliased constraints, or 
+  give the linear coefficients defining the aliased constraints, or
   only their names with argument \code{names.only = TRUE}.
 }
 
@@ -116,7 +119,12 @@ vif.cca(object)
   analysis. Academic Press, London.
 
   Gross, J. (2003). Variance inflation factors. \emph{R News} 3(1),
-  13--15. 
+  13--15.
+
+  Legendre, P. & De \enc{Cáceres}{Caceres}, M. (2012). Beta diversity as
+  the variance of community data: dissimilarity coefficients and
+  partitioning. \emph{Ecology Letters} 16, 951--963.
+  \doi{10.1111/ele.12141}
 }
 \author{Jari Oksanen. The \code{vif.cca} relies heavily on the code by
   W. N. Venables. \code{alias.cca} is a simplified version of
@@ -141,8 +149,8 @@ goodness(mod, addprevious = TRUE)
 goodness(mod, addprevious = TRUE, summ = TRUE)
 # Inertia components
 inertcomp(mod, prop = TRUE)
-inertcomp(mod, stat="d")
-# vif.cca 
+inertcomp(mod)
+# vif.cca
 vif.cca(mod)
 # Aliased constraints
 mod <- cca(dune ~ ., dune.env)

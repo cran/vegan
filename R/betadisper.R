@@ -40,7 +40,7 @@
         rowSums(d^2)
     }
     ## Tolerance for zero Eigenvalues
-    TOL <- 1e-7
+    TOL <- sqrt(.Machine$double.eps)
     ## uses code from stats:::cmdscale by R Core Development Team
     if(!inherits(d, "dist"))
         stop("distances 'd' must be a 'dist' object")
@@ -85,7 +85,7 @@
         n <- n - sum(gr.na)
         ## update labels
         labs <- labs[!gr.na]
-        message("Missing observations due to 'group' removed")
+        message("missing observations due to 'group' removed")
     }
     ## remove NA's in d
     if(any(x.na <- apply(x, 1, function(x) any(is.na(x))))) {
@@ -95,7 +95,7 @@
         n <- n - sum(x.na)
         ## update labels
         labs <- labs[!x.na]
-        message("Missing observations due to 'd' removed")
+        message("missing observations due to 'd' removed")
     }
     x <- x + t(x)
     x <- dblcen(x)
@@ -103,7 +103,7 @@
     vectors <- e$vectors
     eig <- e$values
     ## Remove zero eigenvalues
-    eig <- eig[(want <- abs(eig/eig[1]) > TOL)]
+    eig <- eig[(want <- abs(eig) > max(TOL, TOL * eig[1L]))]
     ## scale Eigenvectors
     vectors <- vectors[, want, drop = FALSE] %*% diag(sqrt(abs(eig)),
                                nrow = length(eig))

@@ -9,28 +9,36 @@
 ### - only type = "lc" can be used with newdata with dbrda
 
 `predict.rda` <-
-    function (object, newdata, type = c("response", "wa", "sp", "lc", "working"), 
+    function (object, newdata, type = c("response", "wa", "sp", "lc", "working"),
               rank = "full", model = c("CCA", "CA"), scaling = "none",
-              correlation = FALSE, ...) 
+              correlation = FALSE, const, ...)
 {
     type <- match.arg(type)
     model <- match.arg(model)
-    if (model == "CCA" && is.null(object$CCA)) 
+    if (model == "CCA" && is.null(object$CCA))
         model <- "CA"
     if (inherits(object, "dbrda"))
         take <- object[[model]]$poseig
     else
         take <- object[[model]]$rank
     if (take == 0)
-        stop("model ", dQuote(model), " has rank 0")
-    if (rank != "full") 
+        stop(gettextf("model '%s' has rank 0", model))
+    if (rank != "full")
         take <- min(take, rank)
     if (!inherits(object, "dbrda")) {
-        if (is.null(object$CCA))
-            tmp <- object$CA$Xbar
-        else tmp <- object$CCA$Xbar
-        cent <- attr(tmp, "scaled:center")
-        scal <- attr(tmp, "scaled:scale")
+        ## the ifs are only needed to cope with pre-2.5-0 vegan: now
+        ## we always have Ybar, but earlier we needed to check whether
+        ## we had CA or CCA Xbar
+        if (!is.null(object$Ybar)) {
+            cent <- attr(object$Ybar, "scaled:center")
+            scal <- attr(object$Ybar, "scaled:scale")
+        } else { # needed for vegan-2.4 compatibility
+            if (is.null(object$CCA))
+                tmp <- object$CA$Xbar
+            else tmp <- object$CCA$Xbar
+            cent <- attr(tmp, "scaled:center")
+            scal <- attr(tmp, "scaled:scale")
+        }
         scaled.PCA <- !is.null(scal)
     }
     nr <- nobs(object) - 1
@@ -41,9 +49,16 @@
     if (!inherits(object, "dbrda")) {
         v <- object[[model]]$v[, 1:take, drop = FALSE]
     }
-    slam <- diag(sqrt(object[[model]]$eig[1:take] * nr), nrow = take)
     ## process scaling arg, scaling used later so needs to be a numeric
     scaling <- scalingType(scaling = scaling, correlation = correlation)
+    if (type %in% c("wa","sp","lc")) {
+        slam <- sqrt(object[[model]]$eig[1:take]/object$tot.chi)
+        if (scaling && missing(const))
+            const <- sqrt(sqrt((nobs(object)-1) * object$tot.chi))
+    } else {
+        slam <- diag(sqrt(object[[model]]$eig[1:take]), nrow = take)
+    }
+
     if (type %in% c("response", "working")) {
         if (!missing(newdata)) {
             u <- predict(object, type = if(model == "CCA") "lc" else "wa",
@@ -67,7 +82,7 @@
                 }
             }
         } else {
-            if (take > 0) 
+            if (take > 0)
                 out <- u %*% slam %*% t(v)
             else {
                 out <- matrix(0, nrow = nrow(u), ncol = nrow(v))
@@ -75,38 +90,36 @@
                 colnames(out) <- rownames(v)
             }
             if (type == "response") {
-                if (!is.null(scal)) 
+                if (!is.null(scal))
                     out <- sweep(out, 2, scal, "*")
+                out <- out * sqrt(nr)
                 out <- sweep(out, 2, cent, "+")
-            } else {
-                out <- out/sqrt(nrow(out) - 1)
             }
         }
     }
     else if (type == "lc") {
-        if (model == "CA") 
+        if (model == "CA")
             stop("'lc' scores not available for unconstrained ordination")
         if (!missing(newdata)) {
-            if (is.null(object$terminfo)) 
+            if (is.null(object$terminfo))
                 E <- as.matrix(newdata)
             else {
-                d <- ordiParseFormula(formula(object), newdata, 
+                d <- ordiParseFormula(formula(object), newdata,
                                       object$terminfo$xlev)
                 E <- cbind(d$Z, d$Y)
             }
             Q <- object[[model]]$QR
             p1 <- Q$pivot[1:Q$rank]
-            E <- sweep(E, 2, c(object$pCCA$envcentre, object$CCA$envcentre), 
+            E <- sweep(E, 2, c(object$pCCA$envcentre, object$CCA$envcentre),
                        "-")
-            u <- E[, p1, drop = FALSE] %*% coef(object)[p1, , 
+            u <- E[, p1, drop = FALSE] %*% coef(object)[p1, ,
                          drop = FALSE]
             u <- u[, 1:take, drop = FALSE]
         }
         out <- u
         if (scaling) {   # implicit coercion 0 == FALSE, other == TRUE
-            tot <- sqrt(object$tot.chi * nr)
-            lam <- list(diag(slam)/tot, 1, sqrt(diag(slam)/tot))[[abs(scaling)]]
-            out <- sqrt(tot) * sweep(out, 2, lam, "*")
+            lam <- list(slam, 1, sqrt(slam))[[abs(scaling)]]
+            out <- const * sweep(out, 2, lam, "*")
         }
     }
     else if (type == "wa") {
@@ -114,8 +127,8 @@
             if (inherits(object, c("capscale", "dbrda")))
                 stop(gettextf("'wa' scores not available in %s with 'newdata'",
                      object$method))
-            if (!is.null(object$pCCA)) 
-                stop("No 'wa' scores available (yet) in partial RDA")
+            if (!is.null(object$pCCA))
+                stop("no 'wa' scores available (yet) in partial RDA")
             nm <- rownames(v)
             if (!is.null(nm)) {
                 if (!all(nm %in% colnames(newdata)))
@@ -124,22 +137,22 @@
             }
             Xbar <- as.matrix(newdata)
             Xbar <- sweep(Xbar, 2, cent, "-")
+            Xbar <- Xbar / sqrt(nr)
             if (!is.null(scal)) {
                 nz <- scal > 0
                 Xbar[,nz] <- sweep(Xbar[,nz], 2, scal[nz], "/")
             }
             w <- Xbar %*% v
-            w <- sweep(w, 2, diag(slam), "/")
+            w <- sweep(w, 2, slam, "/") / sqrt(object$tot.chi)
         }
         out <- w
         if (scaling) {   # implicit coercion 0 == FALSE, other == TRUE
-            tot <- sqrt(object$tot.chi * nr)
-            lam <- list(diag(slam)/tot, 1, sqrt(diag(slam)/tot))[[abs(scaling)]]
-            out <- sqrt(tot) * sweep(out, 2, lam, "*")
+            lam <- list(slam, 1, sqrt(slam))[[abs(scaling)]]
+            out <- const * sweep(out, 2, lam, "*")
         }
     }
     else if (type == "sp") {
-        if (inherits(object, "capscale")) 
+        if (inherits(object, "capscale"))
             warning("'sp' scores may be meaningless in 'capscale'")
         if (inherits(object, "dbrda"))
             stop("'sp' scores are not available in 'dbrda'")
@@ -152,16 +165,20 @@
             }
             Xbar <- as.matrix(newdata)
             Xbar <- scale(Xbar, center = TRUE, scale = scaled.PCA)
-            if (!is.null(object$pCCA)) 
+            Xbar <- Xbar/sqrt(nr)
+            if (!is.null(object$pCCA))
                 Xbar <- qr.resid(object$pCCA$QR, Xbar)
             v <- t(Xbar) %*% u
-            v <- sweep(v, 2, diag(slam), "/")
+            v <- sweep(v, 2, slam, "/") / sqrt(object$tot.chi)
         }
         out <- v
         if (scaling) {   # implicit coercion 0 == FALSE, other == TRUE
-            tot <- sqrt(object$tot.chi * nr)
-            scal <- list(1, diag(slam)/tot, sqrt(diag(slam)/tot))[[abs(scaling)]]
-            out <- sqrt(tot) * sweep(out, 2, scal, "*")
+            lam <- list(1, slam, sqrt(slam))[[abs(scaling)]]
+            out <- const * sweep(out, 2, lam, "*")
+            if (scaling < 0) { # correlation=TRUE
+                out <- out / object$colsum
+                out <- out * sqrt(object$tot.chi / (nobs(object)-1))
+            }
         }
     }
     out

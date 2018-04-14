@@ -42,10 +42,16 @@
     sol <- adonis0(formula, data = data, method = method)
     out <- anova(sol, permutations = permutations, by = by,
                  parallel = parallel)
+    ## attributes will be lost when adding a new column
+    att <- attributes(out)
+    ## add traditional adonis output on R2
+    out <- rbind(out, "Total" = c(nobs(sol)-1, sol$tot.chi, NA, NA))
+    out <- cbind(out[,1:2], "R2" = out[,2]/sol$tot.chi, out[,3:4])
     ## Fix output header to show the adonis2() call instead of adonis0()
-    head <- attr(out, "heading")
-    head[2] <- deparse(match.call(), width.cutoff = 500L)
-    attr(out, "heading") <- head
+    att$heading[2] <- deparse(match.call(), width.cutoff = 500L)
+    att$names <- names(out)
+    att$row.names <- rownames(out)
+    attributes(out) <- att
     out
 }
 `adonis0` <-
@@ -72,6 +78,8 @@
     formula[[2]] <- NULL                # to remove the lhs
     rhs.frame <- model.frame(formula, data, drop.unused.levels = TRUE) # to get the data frame of rhs
     rhs <- model.matrix(formula, rhs.frame) # and finally the model.matrix
+    assign <- attr(rhs, "assign") ## assign attribute
+    sol$terminfo$assign <- assign[assign > 0]
     rhs <- rhs[,-1, drop=FALSE] # remove the (Intercept) to get rank right
     rhs <- scale(rhs, scale = FALSE, center = TRUE) # center
     qrhs <- qr(rhs)
@@ -80,10 +88,9 @@
         stop("internal error: contact developers")
     if (any(lhs < -TOL))
         stop("dissimilarities must be non-negative")
-    dmat <- as.matrix(lhs^2)
-    n <- nrow(dmat)
+    n <- attr(lhs, "Size")
     ## G is -dmat/2 centred
-    G <- -GowerDblcen(dmat)/2
+    G <- initDBRDA(lhs)
     ## preliminaries are over: start working
     Gfit <- qr.fitted(qrhs, G)
     Gres <- qr.resid(qrhs, G)
@@ -92,19 +99,19 @@
         CCA <- list(rank = qrhs$rank,
                     qrank = qrhs$rank,
                     tot.chi = sum(diag(Gfit)),
-                    QR = qrhs,
-                    G = G)
+                    QR = qrhs)
     else
         CCA <- NULL # empty model
     ## collect data for the residuals
     CA <- list(rank = n - max(qrhs$rank, 0) - 1,
                u = matrix(0, nrow=n),
-               tot.chi = sum(diag(Gres)),
-               Xbar = Gres)
+               tot.chi = sum(diag(Gres)))
     ## all together
     sol$tot.chi <- sum(diag(G))
+    sol$adjust <- 1
+    sol$Ybar <- G
     sol$CCA <- CCA
     sol$CA <- CA
-    class(sol) <- c("adonis2", "capscale", "rda", "cca")
+    class(sol) <- c("adonis2", "dbrda", "rda", "cca")
     sol
 }

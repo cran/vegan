@@ -35,7 +35,7 @@ Logical, if the algorithm applies to presence-absence or count matrices.
 Logical, if the algorithm is sequential (needs burnin and thinning) or not.
 }
   \item{mode}{
-Character, storage mode of the community matrix, either 
+Character, storage mode of the community matrix, either
 \code{"integer"} or \code{"double"}.
 }
   \item{x}{
@@ -115,15 +115,15 @@ and must take some of the following arguments:
   \item{\code{"r2"}: }{non-sequential algorithm for binary matrices
     that preserves the site (row) frequencies, and uses squared column
     marginal frequencies as as probabilities of selecting species.}
-  
+
   \item{\code{"c0"}: }{non-sequential algorithm for binary matrices
     that preserves species frequencies (Jonsson 2001). }
-  
+
   \item{\code{"swap"}: }{sequential algorithm for binary matrices that
     changes the matrix structure, but does not influence marginal sums
     (Gotelli & Entsminger 2003).  This inspects \eqn{2 \times 2}{2 by
     2} submatrices so long that a swap can be done.}
-  
+
   \item{\code{"tswap"}: }{sequential algorithm for binary matrices.
     Same as the \code{"swap"} algorithm, but it tries a fixed
     number of times and performs zero to many swaps at one step
@@ -154,17 +154,26 @@ and must take some of the following arguments:
     addition to fill changing swaps which helps in reducing or removing
     the bias.}
 
+  \item{\code{"greedyqswap"}: }{A greedy variant of quasiswap. In
+    greedy step, one element of the \eqn{2 \times 2}{2 by 2} matrix is
+    taken from \eqn{> 1} elements. The greedy steps are biased, but
+    the method can be thinned, and only the first of \code{thin}
+    steps is greedy. Even modest thinning (say \code{thin = 20})
+    removes or reduces the bias, and \code{thin = 100} (1\% greedy
+    steps) looks completely safe and still speeds up simulation. The
+    code is experimental and it is provided here for further scrutiny,
+    and should be tested for bias before use.}
+
   \item{\code{"backtracking"}: }{non-sequential algorithm for binary
-    matrices that implements a filling method with constraints both
-    for row and column frequencies (Gotelli & Entsminger 2001).  The
-    matrix is first filled randomly using row and column frequencies
-    as probabilities. Typically row and column sums are reached before
-    all incidences are filled in. After that begins "backtracking",
-    where some of the points are removed, and then filling is started
-    again, and this backtracking is done so may times that all
-    incidences will be filled into matrix. The function may be very slow
-    for some matrices. The results may be biased and should be inspected
-    carefully before use.}
+    matrices that implements a filling method with constraints both for
+    row and column frequencies (Gotelli & Entsminger 2001).  The matrix
+    is first filled randomly, but typically row and column sums are
+    reached before all incidences are filled in. After this begins
+    "backtracking", where some of the incidences are removed, and
+    filling is started again, and this backtracking is done so many
+    times that all incidences will be filled into matrix.  The results
+    may be biased and should be inspected carefully before use.}
+
 }
 }
 
@@ -176,7 +185,7 @@ and must take some of the following arguments:
   used for simulated \eqn{P}-values in \code{\link{chisq.test}}.
   Algorithm \code{quasiswap_count} uses the same, but preserves the
   original fill. Typically this means increasing numbers of zero cells
-  and the result is zero-inflated with respect to \code{r2dtable}. 
+  and the result is zero-inflated with respect to \code{r2dtable}.
 
 \itemize{
 
@@ -211,7 +220,7 @@ and must take some of the following arguments:
   null models can also be defined using \code{\link{permatswap}}
   function.
 
- \itemize{ 
+ \itemize{
 
    \item{\code{"swap_count"}: }{sequential algorithm for count matrices.
     This algorithm find \eqn{2 \times 2}{2 x 2} submatrices that can be
@@ -253,13 +262,13 @@ and must take some of the following arguments:
   shuffling within a column preserves column sums. These models can
   also be defined with \code{\link{permatswap}}.
 
-\itemize{ 
+\itemize{
 
   \item{\code{"swsh_samp"}: }{non-sequential algorithm for
     quantitative data (either integer counts or non-integer values).
     Original non-zero values values are shuffled.}
 
-  \item{\code{"swsh_both"}: }{non-sequential algorithm for count data. 
+  \item{\code{"swsh_both"}: }{non-sequential algorithm for count data.
     Individuals are shuffled freely over non-zero cells.}
 
   \item{\code{"swsh_samp_r"}: }{non-sequential algorithm for
@@ -270,10 +279,10 @@ and must take some of the following arguments:
     quantitative data.  Non-zero values (samples) are shuffled
     separately for each column.}
 
-  \item{\code{"swsh_both_r"}: }{non-sequential algorithm for count matrices. 
+  \item{\code{"swsh_both_r"}: }{non-sequential algorithm for count matrices.
     Individuals are shuffled freely for non-zero values within each row.}
 
-  \item{\code{"swsh_both_c"}: }{non-sequential algorithm for count matrices. 
+  \item{\code{"swsh_both_c"}: }{non-sequential algorithm for count matrices.
     Individuals are shuffled freely for non-zero values with each column.}
 }
 }
@@ -285,7 +294,7 @@ and must take some of the following arguments:
   shuffle individuals so that the grand sum, row sum or column sums
   are preserved.  These methods are similar as \code{r2dtable} but
   with still slacker constraints on marginal sums. The \code{_samp}
-  and \code{_both} methods first apply the correspongind binary model
+  and \code{_both} methods first apply the corresponding binary model
   with similar restriction on marginal frequencies and then distribute
   quantitative values over non-zero cells. The \code{_samp} models
   shuffle original cell values and can therefore handle also non-count
@@ -295,50 +304,50 @@ and must take some of the following arguments:
   \code{c0_} in all cases.
 
 \itemize{
-  \item{\code{"r00_ind"}: }{non-sequential algorithm for count matrices. 
+  \item{\code{"r00_ind"}: }{non-sequential algorithm for count matrices.
     This algorithm preserves grand sum and
     individuals are shuffled among cells of the matrix.}
 
-  \item{\code{"r0_ind"}: }{non-sequential algorithm for count matrices. 
+  \item{\code{"r0_ind"}: }{non-sequential algorithm for count matrices.
     This algorithm preserves row sums and
     individuals are shuffled among cells of each row of the matrix.}
 
-  \item{\code{"c0_ind"}: }{non-sequential algorithm for count matrices. 
+  \item{\code{"c0_ind"}: }{non-sequential algorithm for count matrices.
     This algorithm preserves column sums and
     individuals are shuffled among cells of each column of the matrix.}
 
-  \item{\code{"r00_samp"}: }{non-sequential algorithm for count 
-    or nonnegative real valued (\code{mode = "double"}) matrices. 
+  \item{\code{"r00_samp"}: }{non-sequential algorithm for count
+    or nonnegative real valued (\code{mode = "double"}) matrices.
     This algorithm preserves grand sum and
     cells of the matrix are shuffled.}
 
-  \item{\code{"r0_samp"}: }{non-sequential algorithm for count 
-    or nonnegative real valued (\code{mode = "double"}) matrices. 
+  \item{\code{"r0_samp"}: }{non-sequential algorithm for count
+    or nonnegative real valued (\code{mode = "double"}) matrices.
     This algorithm preserves row sums and
     cells within each row are shuffled.}
 
-  \item{\code{"c0_samp"}: }{non-sequential algorithm for count 
-    or nonnegative real valued (\code{mode = "double"}) matrices. 
-    This algorithm preseerves column sums constant and
+  \item{\code{"c0_samp"}: }{non-sequential algorithm for count
+    or nonnegative real valued (\code{mode = "double"}) matrices.
+    This algorithm preserves column sums constant and
     cells within each column are shuffled.}
 
-  \item{\code{"r00_both"}: }{non-sequential algorithm for count matrices. 
+  \item{\code{"r00_both"}: }{non-sequential algorithm for count matrices.
     This algorithm preserves grand sum and
     cells and individuals among cells of the matrix are shuffled.}
 
-  \item{\code{"r0_both"}: }{non-sequential algorithm for count matrices. 
+  \item{\code{"r0_both"}: }{non-sequential algorithm for count matrices.
     This algorithm preserves grand sum and
     cells and individuals among cells of each row are shuffled.}
 
-  \item{\code{"c0_both"}: }{non-sequential algorithm for count matrices. 
+  \item{\code{"c0_both"}: }{non-sequential algorithm for count matrices.
     This algorithm preserves grand sum and
     cells and individuals among cells of each column are shuffled.}
 }
 }
 
 \value{
-An object of class \code{commsim} with elements 
-corresponding to the arguments (\code{method}, \code{binary}, 
+An object of class \code{commsim} with elements
+corresponding to the arguments (\code{method}, \code{binary},
 \code{isSeq}, \code{mode}, \code{fun}).
 
 If the input of \code{make.comsimm} is a \code{commsim} object,
@@ -397,9 +406,9 @@ generate arrays of simulated null model matrices.  }
 
 \examples{
 ## write the r00 algorithm
-f <- function(x, n, ...) 
+f <- function(x, n, ...)
     array(replicate(n, sample(x)), c(dim(x), n))
-(cs <- commsim("r00", fun=f, binary=TRUE, 
+(cs <- commsim("r00", fun=f, binary=TRUE,
     isSeq=FALSE, mode="integer"))
 
 ## retrieving the sequential swap algorithm
@@ -420,7 +429,7 @@ diagfun <- function(x, y) {
 evalfun <- function(meth, x, n) {
     m <- nullmodel(x, meth)
     y <- simulate(m, nsim=n)
-    out <- rowMeans(sapply(1:dim(y)[3], 
+    out <- rowMeans(sapply(1:dim(y)[3],
         function(i) diagfun(attr(y, "data"), y[,,i])))
     z <- as.numeric(c(attr(y, "binary"), attr(y, "isSeq"),
         attr(y, "mode") == "double"))

@@ -6,7 +6,6 @@
 \alias{scores.rda}
 \alias{summary.cca}
 \alias{print.summary.cca}
-\alias{ade2vegancca}
 \alias{head.summary.cca}
 \alias{tail.summary.cca}
 
@@ -23,10 +22,10 @@
      correlation = FALSE, hill = FALSE, ...)
 \method{text}{cca}(x, display = "sites", labels, choices = c(1, 2),
      scaling = "species", arrow.mul, head.arrow = 0.05, select, const,
-     axis.bp = TRUE, correlation = FALSE, hill = FALSE, ...)
+     axis.bp = FALSE, correlation = FALSE, hill = FALSE, ...)
 \method{points}{cca}(x, display = "sites", choices = c(1, 2),
        scaling = "species", arrow.mul, head.arrow = 0.05, select, const,
-       axis.bp = TRUE, correlation = FALSE, hill = FALSE, ...)
+       axis.bp = FALSE, correlation = FALSE, hill = FALSE, ...)
 \method{scores}{cca}(x, choices = c(1,2), display = c("sp","wa","cn"),
        scaling = "species", hill = FALSE, ...)
 \method{scores}{rda}(x, choices = c(1,2), display = c("sp","wa","cn"),
@@ -46,8 +45,10 @@
   \item{display}{Scores shown.  These must include some of the
     alternatives \code{species} or \code{sp} for species scores,
     \code{sites} or \code{wa} for site scores, \code{lc} for linear
-    constraints or ``LC scores'', or \code{bp} for biplot arrows or
-    \code{cn} for centroids of factor constraints instead of an arrow.}
+    constraints or LC scores, or \code{bp} for biplot arrows or
+    \code{cn} for centroids of factor constraints instead of an arrow,
+    and \code{reg} for regression coefficients (a.k.a. canonical
+    coefficients). }
   \item{scaling}{Scaling for species and site scores. Either species
     (\code{2}) or site (\code{1}) scores are scaled by eigenvalues, and
     the other set of scores is left unscaled, or with \code{3} both are
@@ -131,12 +132,29 @@
   only if there were factors and a formula interface was used in
   \code{\link{cca}} or \code{\link{rda}}). With this option continuous
   variables still are presented as arrows and ordered factors as arrows
-  and centroids.
+  and centroids. With \code{display = "reg"} arrows will be drawn for
+  regression coefficients (a.k.a. canonical coefficients) of constraints
+  and conditions. Biplot arrows can be interpreted individually, but
+  regression coefficients must be interpreted all together: the LC score
+  for each site is the sum of regressions displayed by arrows. The
+  partialled out conditions are zero and not shown in biplot arrows, but
+  they are shown for regressions, and show the effect that must be
+  partialled out to get the LC scores. The biplot arrows are more
+  standard and more easily interpreted, and regression arrows should be
+  used only if you know that you need them.
 
-  If you want to have still a better control of plots, it is better to
-  produce them using primitive \code{plot} commands. Function
-  \code{scores} helps in extracting the 
-  needed components with the selected \code{scaling}.
+  If you want to have a better control of plots, it is best to
+  construct the plot \code{text} and \code{points} commands which
+  accept graphical parameters. It is important to remember to use the
+  same \code{scaling}, \code{correlation} and \code{hill} arguments
+  in all calls. The \code{plot.cca} command returns invisibly an
+  \code{\link{ordiplot}} result object, and this will have consistent
+  scaling for all its elements. The easiest way for full control of
+  graphics is to first set up the plot frame using \code{plot} with
+  \code{type = "n"} and all needed scores in \code{display} and save
+  this result. The \code{points} and \code{text} commands for
+  \code{\link{ordiplot}} will allow full graphical control (see
+  section Examples).
 
   Function \code{summary} lists all scores and the output can be very
   long.  You can suppress scores by setting \code{axes = 0} or
@@ -144,22 +162,19 @@
   first or last (or both) rows of scores by using \code{head} or
   \code{tail} or explicit \code{print} command for the \code{summary}.
   
- Palmer (1993) suggested using linear constraints
-  (``LC scores'') in ordination diagrams, because these gave better
-  results in simulations and site scores (``WA scores'') are a step from
+  Palmer (1993) suggested using linear constraints (\dQuote{LC scores})
+  in ordination diagrams, because these gave better results in
+  simulations and site scores (\dQuote{WA scores}) are a step from
   constrained to unconstrained analysis.  However, McCune (1997) showed
-  that noisy environmental variables (and all environmental
-  measurements are noisy) destroy ``LC scores'' whereas ``WA scores''
-  were little affected.  Therefore the \code{plot} function uses site
-  scores (``WA scores'') as the default. This is consistent with the
-  usage in statistics and other functions in \R
-  (\code{\link[MASS]{lda}}, \code{\link{cancor}}).
-}
-\value{
-  The \code{plot} function returns invisibly a plotting structure which
-  can be used by function \code{\link{identify.ordiplot}} to identify
-  the points or other functions in the \code{\link{ordiplot}} family. 
-}
+  that noisy environmental variables (and all environmental measurements
+  are noisy) destroy \dQuote{LC scores} whereas \dQuote{WA scores} were
+  little affected.  Therefore the \code{plot} function uses site scores
+  (\dQuote{WA scores}) as the default. This is consistent with the usage
+  in statistics and other functions in \R (\code{\link[MASS]{lda}},
+  \code{\link{cancor}}).  } \value{ The \code{plot} function returns
+  invisibly a plotting structure which can be used by function
+  \code{\link{identify.ordiplot}} to identify the points or other
+  functions in the \code{\link{ordiplot}} family.  }
 
 \author{Jari Oksanen }
 
@@ -173,10 +188,18 @@
 data(dune)
 data(dune.env)
 mod <- cca(dune ~ A1 + Moisture + Management, dune.env)
-plot(mod, type="n")
-text(mod, dis="cn")
-points(mod, pch=21, col="red", bg="yellow", cex=1.2)
-text(mod, "species", col="blue", cex=0.8)
+## better control -- remember to set scaling etc identically
+plot(mod, type="n", scaling="sites")
+text(mod, dis="cn", scaling="sites")
+points(mod, pch=21, col="red", bg="yellow", cex=1.2, scaling="sites")
+text(mod, "species", col="blue", cex=0.8, scaling="sites")
+## catch the invisible result and use ordiplot support - the example
+## will make a biplot with arrows for species and correlation scaling
+pca <- rda(dune)
+pl <- plot(pca, type="n", scaling="sites", correlation=TRUE)
+with(dune.env, points(pl, "site", pch=21, col=1, bg=Management))
+text(pl, "sp", arrow=TRUE, length=0.05, col=4, cex=0.6, xpd=TRUE)
+with(dune.env, legend("bottomleft", levels(Management), pch=21, pt.bg=1:4, bty="n"))
 ## Limited output of 'summary'
 head(summary(mod), tail=2)
 ## Scaling can be numeric or more user-friendly names

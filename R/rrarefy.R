@@ -15,21 +15,11 @@
         stop(gettextf(
              "length of 'sample' and number of rows of 'x' do not match"))
     sample <- rep(sample, length=nrow(x))
-    colnames(x) <- colnames(x, do.NULL = FALSE)
-    nm <- colnames(x)
-    if (any(duplicated(nm)))
-        nm <- make.names(nm, unique = TRUE)
     ## warn if something cannot be rarefied
     if (any(rowSums(x) < sample))
-        warning("Some row sums < 'sample' and are not rarefied")
+        warning("some row sums < 'sample' and are not rarefied")
     for (i in 1:nrow(x)) {
-        if (sum(x[i,]) <= sample[i]) ## nothing to rarefy: take all
-            next
-        row <- sample(rep(nm, times=x[i,]), sample[i])
-        row <- table(row)
-        ind <- names(row)
-        x[i,] <- 0
-        x[i,ind] <- row
+        x[i,] <- .Call(do_rrarefy, x[i,], sample[i])
     }
     x
 }
@@ -51,7 +41,7 @@
     else
         rs <- sum(x)
     if (any(rs < sample))
-        warning("Some row sums < 'sample' and probabilities either 0 or 1")
+        warning("some row sums < 'sample' and probabilities either 0 or 1")
     ## dfun is kluge: first item of  vector x must be the sample size,
     ## and the rest  is the community data. This  seemed an easy trick
     ## to evaluate dfun in an apply() instead of a loop.

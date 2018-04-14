@@ -24,10 +24,11 @@
 
 #include <R.h>
 #include <Rmath.h>
+#include <R_ext/Utils.h> /* interrupt */
 #include <float.h>
+#include <string.h> /* memset */
 
-
-/* Indices */
+/* Indices: The numbers here MUST match the order of indices in vegdist.R */
 
 #define MANHATTAN 1
 #define EUCLIDEAN 2
@@ -45,6 +46,7 @@
 #define GOWERDZ 14
 #define CAO 15
 #define MAHALANOBIS 16
+#define CLARK 17
 #define MATCHING 50
 #define NOSHARED 99
 
@@ -52,7 +54,7 @@
 
 /* Manhattan distance: duplicates base R */
 
-double veg_manhattan(double *x, int nr, int nc, int i1, int i2)
+static double veg_manhattan(double *x, int nr, int nc, int i1, int i2)
 {
      double dist;
      int count, j;
@@ -77,7 +79,7 @@ double veg_manhattan(double *x, int nr, int nc, int i1, int i2)
  * Some extra manipulations are needed in the calling R function.
  */
 
-double veg_gower(double *x, int nr, int nc, int i1, int i2)
+static double veg_gower(double *x, int nr, int nc, int i1, int i2)
 {
      double dist;
      int count, j;
@@ -104,7 +106,7 @@ double veg_gower(double *x, int nr, int nc, int i1, int i2)
  * presence/absence data this gives Jaccard of binary data.
  */
 
-double veg_gowerDZ(double *x, int nr, int nc, int i1, int i2)
+static double veg_gowerDZ(double *x, int nr, int nc, int i1, int i2)
 {
      double dist;
      int count, j;
@@ -130,7 +132,7 @@ double veg_gowerDZ(double *x, int nr, int nc, int i1, int i2)
  * transformation was performred in the calling routine, this will
  * give Mahalanobis distances. */
 
-double veg_euclidean(double *x, int nr, int nc, int i1, int i2)
+static double veg_euclidean(double *x, int nr, int nc, int i1, int i2)
 {
      double dist, dev;
      int count, j;
@@ -154,7 +156,7 @@ double veg_euclidean(double *x, int nr, int nc, int i1, int i2)
  * 0...1  
 */
 
-double veg_canberra(double *x, int nr, int nc, int i1, int i2)
+static double veg_canberra(double *x, int nr, int nc, int i1, int i2)
 {
      double numer, denom, dist;
      int count, j;
@@ -183,6 +185,42 @@ double veg_canberra(double *x, int nr, int nc, int i1, int i2)
      return dist;
 }
 
+/* Clark's (1952) coefficient of divergence is similar to Canberra
+ * index, but uses squared terms instead of minimum terms. This is one
+ * of the indices discussed by Legendre & De Caceres, Ecol Lett 16,
+ * 951-963 (2012) and therefore implemented here. Discussed as index
+ * D11 in Legendre & Legendre 2012, Numerical Ecology.
+ */
+
+static double veg_clark(double *x, int nr, int nc, int i1, int i2)
+{
+    double t1, denom, dist;
+    int count, j;
+
+    count = 0;
+    dist = 0.0;
+    for (j=0; j<nc; j++) {
+	if (!ISNAN(x[i1]) && !ISNAN(x[i2])) {
+	    if (x[i1] != 0 || x[i2] != 0) {
+		count++;
+		denom = x[i1] + x[i2];
+		if (denom > 0.0) {
+		    t1 = (x[i1] - x[i2])/denom;
+		    dist += t1 * t1;
+		}
+		else {
+		    dist += R_PosInf;
+		}
+	    }
+	}
+	i1 += nr;
+	i2 += nr;
+    }
+    if (count == 0) return NA_REAL;
+    dist /= (double)count;
+    return sqrt(dist);
+}
+
 /*  Bray-Curtis and Jaccard indices:
  *
  * Jaccard = (2 * Bray)/(1 + Bray). If Jaccard is requested, Bray is
@@ -191,7 +229,7 @@ double veg_canberra(double *x, int nr, int nc, int i1, int i2)
  * redundant, but since people ask for Jaccard, they get it.
  */
 
-double veg_bray(double *x, int nr, int nc, int i1, int i2)
+static double veg_bray(double *x, int nr, int nc, int i1, int i2)
 {
      double dist, total;
      int count, j;
@@ -215,7 +253,7 @@ double veg_bray(double *x, int nr, int nc, int i1, int i2)
 
 /* Kulczynski index */
 
-double veg_kulczynski(double *x, int nr, int nc, int i1, int i2)
+static double veg_kulczynski(double *x, int nr, int nc, int i1, int i2)
 {
      double sim, dist, t1, t2;
      int count, j;
@@ -245,7 +283,7 @@ double veg_kulczynski(double *x, int nr, int nc, int i1, int i2)
  * fail with unfortunate pairs of species occurring only once.
  */
 
-double veg_morisita(double *x, int nr, int nc, int i1, int i2)
+static double veg_morisita(double *x, int nr, int nc, int i1, int i2)
 {
      double sim, dist, t1, t2, tlam1, tlam2;
      int count, j;
@@ -277,7 +315,7 @@ double veg_morisita(double *x, int nr, int nc, int i1, int i2)
 
 /* Horn-Morisita index */
 
-double veg_horn(double *x, int nr, int nc, int i1, int i2)
+static double veg_horn(double *x, int nr, int nc, int i1, int i2)
 {
      double sim, dist,  t1, t2, sq1, sq2;
      int count, j;
@@ -319,17 +357,17 @@ double veg_horn(double *x, int nr, int nc, int i1, int i2)
 #define EPS 1e-12
 #define TOL 1e-5
 
-double mount_fun(double theta, double j, double a, double b) 
+static double mount_fun(double theta, double j, double a, double b)
 {
      return(exp(theta*a) + exp(theta*b) - exp(theta*(a+b-j)) - 1);
 }
 
-double mount_der(double theta, double j, double a, double b) 
+static double mount_der(double theta, double j, double a, double b)
 {
      return(a*exp(theta*a) + b*exp(theta*b) - (a+b-j)*exp(theta*(a+b-j)));
 }
 
-double veg_mountford(double *x, int nr, int nc, int i1, int i2)
+static double veg_mountford(double *x, int nr, int nc, int i1, int i2)
 {
      double dist, oldist, A,  B, J;
      int sim, t1, t2, j, count;
@@ -397,7 +435,7 @@ double veg_mountford(double *x, int nr, int nc, int i1, int i2)
  * This is a direct port from Bedward's R to C (Jari Oksanen, May 2005).
  */
 
-double veg_raup(double *x, int nr, int nc, int i1, int i2)
+static double veg_raup(double *x, int nr, int nc, int i1, int i2)
 {
 	double dist, J, A, B;
 	int sim, t1, t2, j, count;
@@ -435,7 +473,7 @@ double veg_raup(double *x, int nr, int nc, int i1, int i2)
  * to, say, Poisson case.
  */
 
-double veg_millar(double *x, int nr, int nc, int i1, int i2)
+static double veg_millar(double *x, int nr, int nc, int i1, int i2)
 {
      double dist, t1, t2, nk, lognk;
      int count, j;
@@ -464,23 +502,13 @@ double veg_millar(double *x, int nr, int nc, int i1, int i2)
  * estimating the number of unseen species. June 2006.
  */
 
-double veg_chao(double *x, int nr, int nc, int i1, int i2)
+static void chaoterms(double *x, int nr, int nc, int i1, int i2,
+		      double *U, double *V)
 {
-    double ionce, itwice, jonce, jtwice, itot, jtot, ishare, jshare, ishar1, jshar1;
-    double dist, U, V;
-    int count, j;
+    double ionce = 0, itwice = 0, jonce = 0, jtwice = 0, itot = 0, jtot = 0,
+	ishare = 0, jshare = 0, ishar1 = 0, jshar1 = 0;
+    int count = 0, j;
   
-    itot = 0;
-    jtot = 0;
-    ionce = 0;
-    jonce = 0;
-    itwice = 0;
-    jtwice = 0;
-    ishare = 0;
-    jshare = 0;
-    ishar1 = 0;
-    jshar1 = 0;
-    count = 0;
     for (j=0; j<nc; j++) {
 	if (!ISNAN(x[i1]) && !ISNAN(x[i2])) {
 	    count++;
@@ -506,21 +534,32 @@ double veg_chao(double *x, int nr, int nc, int i1, int i2)
 	i1 += nr;
 	i2 += nr;
     }
-    if (count==0) return NA_REAL;
-    U = ishare/itot;
+    if (count==0) {
+	*U = NA_REAL;
+	*V = NA_REAL;
+	return;
+    }
+    *U = ishare/itot;
     if (ishar1 > 0) {
 	if (jonce < 1) jonce = 1; /* Never true if got here? */
 	if (jtwice < 1) jtwice = 1;
-	U += (jtot - 1)/jtot * jonce/jtwice/2.0 * ishar1/itot;
+	*U += (jtot - 1)/jtot * jonce/jtwice/2.0 * ishar1/itot;
     }
-    if (U > 1) U = 1;
-    V = jshare/jtot;
+    if (*U > 1) *U = 1;
+    *V = jshare/jtot;
     if (jshar1 > 0) {
 	if (ionce < 1) ionce = 1; /* This never true? */
 	if (itwice < 1) itwice = 1;
-	V += (itot - 1)/itot * ionce/itwice/2.0 * jshar1/jtot;
+	*V += (itot - 1)/itot * ionce/itwice/2.0 * jshar1/jtot;
     }
-    if (V > 1) V = 1;
+    if (*V > 1) *V = 1;
+    return;
+}
+
+static double veg_chaojaccard(double *x, int nr, int nc, int i1, int i2)
+{
+    double dist, U, V;
+    chaoterms(x, nr, nc, i1, i2, &U, &V);
     if (U <= 0 || V <= 0)
 	dist = 1;
     else
@@ -535,7 +574,7 @@ double veg_chao(double *x, int nr, int nc, int i1, int i2)
  *   Appl 14, 1921-1935; 2004 use different but equal formulation.
  */
 
-double veg_cao(double *x, int nr, int nc, int i1, int i2)
+static double veg_cao(double *x, int nr, int nc, int i1, int i2)
 {
      double dist, x1, x2, t1, t2;
      int count, j;
@@ -577,7 +616,7 @@ double veg_cao(double *x, int nr, int nc, int i1, int i2)
  * should be fast).
  */
 
-double veg_noshared(double *x, int nr, int nc, int i1, int i2)
+static double veg_noshared(double *x, int nr, int nc, int i1, int i2)
 {
      double dist;
      int j, count;
@@ -602,7 +641,7 @@ double veg_noshared(double *x, int nr, int nc, int i1, int i2)
  * vegdist, but must be called separately.
  */
 
-double veg_matching(double *x, int nr, int nc, int i1, int i2)
+static double veg_matching(double *x, int nr, int nc, int i1, int i2)
 {
      double dist;
      int j, count, matches;
@@ -626,9 +665,11 @@ double veg_matching(double *x, int nr, int nc, int i1, int i2)
 
 static double (*distfun)(double*, int, int, int, int);
 
-void veg_distance(double *x, int *nr, int *nc, double *d, int *diag, int *method)
+static void veg_distance(double *x, int *nr, int *nc, double *d, int *diag,
+			 int *method)
 {
-    int dc, i, j, ij;
+    int dc, i, j;
+    size_t ij; /* can be a long vector exceeding int maximum */
     switch(*method) {
     case MANHATTAN:
 	distfun = veg_manhattan;
@@ -666,7 +707,7 @@ void veg_distance(double *x, int *nr, int *nc, double *d, int *diag, int *method
 	distfun = veg_millar;
 	break;
     case CHAO:
-	distfun = veg_chao;
+	distfun = veg_chaojaccard;
 	break;
     case GOWERDZ:
 	distfun = veg_gowerDZ;
@@ -674,6 +715,9 @@ void veg_distance(double *x, int *nr, int *nc, double *d, int *diag, int *method
     case CAO:
         distfun = veg_cao;
         break;
+    case CLARK:
+	distfun = veg_clark;
+	break;
     case MATCHING:
 	distfun = veg_matching;
 	break;
@@ -686,11 +730,125 @@ void veg_distance(double *x, int *nr, int *nc, double *d, int *diag, int *method
 
     dc = (*diag) ? 0 : 1;
     ij = 0;
-    for (j=0; j <= *nr; j++)
+    for (j=0; j <= *nr; j++) {
+	if (j % 200 == 199)
+	    R_CheckUserInterrupt();
 	for (i=j+dc; i < *nr; i++) {
 	    d[ij++] = distfun(x, *nr, *nc, i, j);
 	}
+    }
 }
 
 
+/* .Call interface to veg_distance */
 
+#include <Rinternals.h>
+
+SEXP do_vegdist(SEXP x, SEXP method)
+{
+    SEXP dist;
+    int nr, nc, imethod = asInteger(method), diag=0;
+    R_xlen_t ndis;
+
+    nr = nrows(x);
+    nc = ncols(x);
+    ndis = (R_xlen_t) nr * (nr-1)/2;
+
+    PROTECT(dist = allocVector(REALSXP, ndis));
+    if(TYPEOF(x) != REALSXP)
+	x = coerceVector(x, REALSXP);
+    PROTECT(x);
+
+    veg_distance(REAL(x), &nr, &nc, REAL(dist), &diag, &imethod);
+
+    UNPROTECT(2);
+    return dist;
+}
+
+/* Minimum terms for designdist. Returns a matrix where the diagonal
+ * contains row sums and below-diagonal elements the sums of pairwise
+ * minima for rows. Input x must be a matrix.
+ */
+
+SEXP do_minterms(SEXP x)
+{
+    int nr = nrows(x), nc = ncols(x), i, j, k;
+    double t1, t2, sum;
+
+    SEXP terms = PROTECT(allocMatrix(REALSXP, nr, nr));
+    double *rterm = REAL(terms);
+    memset(rterm, 0, nr * nr * sizeof(double));
+    if(TYPEOF(x) != REALSXP)
+	x = coerceVector(x, REALSXP);
+    PROTECT(x);
+    double *rx = REAL(x);
+
+    /* end R house keeping, start actual work */
+    for(i = 0; i < nr; i++) {
+	for(j = i; j < nr; j++) {
+	    sum = 0.0;
+	    /* allow for NA result and do not check ISNAN */
+	    for(k = 0; k < nc; k++) {
+		t1 = rx[i + nr*k];
+		t2 = rx[j + nr*k];
+		sum += (t1 < t2) ? t1 : t2;
+	    }
+	    /* fill the lower triangle and the diagonal */
+	    rterm[j + nr*i] = sum;
+	}
+    }
+
+    /* back to R house keeping: set dimnames */
+    SEXP rnames = getAttrib(x, R_DimNamesSymbol);
+    if (!isNull(rnames) && !isNull(VECTOR_ELT(rnames, 0))) {
+	SEXP dimnames = PROTECT(allocVector(VECSXP, 2));
+	SET_VECTOR_ELT(dimnames, 0, duplicate(VECTOR_ELT(rnames, 0)));
+	SET_VECTOR_ELT(dimnames, 1, duplicate(VECTOR_ELT(rnames, 0)));
+	setAttrib(terms, R_DimNamesSymbol, dimnames);
+	UNPROTECT(1);
+    }
+
+    UNPROTECT(2);
+    return terms;
+}
+
+/* Extract Chao terms U & V for designdist */
+
+SEXP do_chaoterms(SEXP x)
+{
+    int nr = nrows(x), nc = ncols(x);
+    R_xlen_t nterms, i, j, ij;
+    nterms = (R_xlen_t) nr * (nr-1)/2;
+
+    if (TYPEOF(x) != REALSXP)
+	x = coerceVector(x, REALSXP);
+    PROTECT(x);
+
+    SEXP U = PROTECT(allocVector(REALSXP, nterms));
+    SEXP V = PROTECT(allocVector(REALSXP, nterms));
+    double *ru = REAL(U);
+    double *rv = REAL(V);
+
+    /* collect U & V */
+
+    ij = 0;
+    for (j = 0; j < nr; j++)
+	for (i = j + 1; i < nr; i++) {
+	    chaoterms(REAL(x), nr, nc, i, j, ru + ij, rv + ij);
+	    ij++;
+	}
+
+    /* out */
+
+    SEXP out = PROTECT(allocVector(VECSXP, 2));
+    SEXP names = PROTECT(allocVector(STRSXP, 2));
+    SET_STRING_ELT(names, 0, mkChar("U"));
+    SET_STRING_ELT(names, 1, mkChar("V"));
+    setAttrib(out, R_NamesSymbol, names);
+    UNPROTECT(1); /* names */
+    SET_VECTOR_ELT(out, 0, U);
+    SET_VECTOR_ELT(out, 1, V);
+
+    UNPROTECT(4);
+    return out;
+}

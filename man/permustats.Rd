@@ -22,6 +22,7 @@
 \alias{density.permustats}
 \alias{qqnorm.permustats}
 \alias{qqmath.permustats}
+\alias{boxplot.permustats}
 
 \title{
   Extract, Analyse and Display Permutation Results
@@ -41,6 +42,7 @@ permustats(x, ...)
 \method{qqnorm}{permustats}(y, observed = TRUE, ...)
 \method{qqmath}{permustats}(x, data, observed = TRUE, sd.scale = FALSE,
     ylab = "Permutations", ...)
+\method{boxplot}{permustats}(x, scale = FALSE, names, ...)
 }
 
 \arguments{
@@ -59,15 +61,18 @@ permustats(x, ...)
   \item{sd.scale}{Scale permutations to unit standard deviation and observed
     statistic to standardized effect size.}
   \item{data}{Ignored.}
+  \item{scale}{Use standardized effect size (SES).}
+  \item{names}{Names of boxes (default: names of statistics).}
   \item{\dots}{ Other arguments passed to the function. In
-    \code{density} these are passed to \code{\link{density.default}}.}
+    \code{density} these are passed to \code{\link{density.default}},
+    and in \code{boxplot} to \code{\link{boxplot.default}}.}
 }
 
-\details{ 
+\details{
 
   The \code{permustats} function extracts permutation results and
   observed statistics from several \pkg{vegan} functions that perform
-  permutations or simulations.  
+  permutations or simulations.
 
   The \code{summary} method of \code{permustats} estimates the
   standardized effect sizes (SES) as the difference of observed
@@ -91,7 +96,7 @@ permustats(x, ...)
   the statistic is included in the permuted values, the
   \code{densityplot} method marks the observed statistic as a vertical
   line. However the \code{density} method uses its standard \code{plot}
-  method and cannot mark the obseved value.
+  method and cannot mark the observed value.
 
   The \code{qqnorm} and \code{qqmath} display Q-Q plots of
   permutations, optionally together with the observed value (default)
@@ -116,6 +121,11 @@ permustats(x, ...)
   in all subplots of the lattice. You can use argument \code{scales} to
   set independent scaling for subplots when this is appropriate (see
   \code{\link[lattice]{xyplot}} for an exhaustive list of arguments).
+
+  Function \code{boxplot} draws the box-and-whiskers plots of effect
+  size, or the difference of permutations and observed statistic. If
+  \code{scale = TRUE}, permutations are standardized to unit standard
+  deviation, and the plot will show the standardized effect sizes.
 
   The \code{permustats} can extract permutation statistics from the
   results of \code{\link{adonis2}}, \code{\link{adonis}},
@@ -157,7 +167,8 @@ perm <- permustats(mod)
 summary(perm)
 densityplot(perm)
 qqmath(perm)
-
+boxplot(perm, scale=TRUE, lty=1, pch=16, cex=0.6, col="hotpink", ylab="SES")
+abline(h=0, col="skyblue")
 ## example of multiple types of statistic
 mod <- with(dune.env, betadisper(vegdist(dune), Management))
 pmod <- permutest(mod, nperm = 99, pairwise = TRUE)

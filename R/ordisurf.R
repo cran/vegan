@@ -69,7 +69,7 @@
     knots <- rep(knots, length.out = 2)
     ## handle the bs - we only allow some of the possible options
     if (length(bs) > 2L)
-        warning("number of basis types supplied exceeds '2': only using the first two")
+        warning("number of basis types supplied exceeds '2': using the first two")
     bs <- rep(bs, length.out = 2)
     ## check allowed types
     BS <- c("tp","ts","cr","cs","ds","ps","ad")
@@ -77,9 +77,8 @@
     user.bs <- bs ## store supplied (well expanded supplied ones)
     bs <- BS[want]
     if (any(wrong <- is.na(bs))) {
-        stop(paste("Supplied basis type of",
-                   paste(sQuote(unique(user.bs[wrong])), collapse = ", "),
-                   "not supported."))
+        stop(gettextf("supplied basis type of '%s' not supported",
+                   paste(unique(user.bs[wrong]), collapse = ", ")))
     }
     ## can't use "cr", "cs", "ps" in 2-d smoother with s()
     if(isTRUE(isotropic) && any(bs %in% c("cr", "cs", "ps"))) {
@@ -130,10 +129,9 @@
     npol <- length(poly)
     np <- nrow(newd)
     inpoly <- numeric(np)
-    inpoly <- .C("pnpoly", as.integer(npol), as.double(xhull1),
+    inpoly <- .C(pnpoly, as.integer(npol), as.double(xhull1),
                  as.double(xhull2), as.integer(np), as.double(newd[,1]),
-                 as.double(newd[,2]), inpoly = as.integer(inpoly),
-                 PACKAGE="vegan")$inpoly
+                 as.double(newd[,2]), inpoly = as.integer(inpoly))$inpoly
     is.na(fit) <- inpoly == 0
     if(plot) {
         if (!add) {
