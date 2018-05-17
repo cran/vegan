@@ -1,13 +1,13 @@
 Package: vegan
 Title: Community Ecology Package
-Version: 2.5-1
-Date: 2018-04-13
+Version: 2.5-2
+Date: 2018-05-16
 Author: Jari Oksanen, F. Guillaume Blanchet, Michael Friendly, Roeland Kindt,
    Pierre Legendre, Dan McGlinn, Peter R. Minchin, R. B. O'Hara,
    Gavin L. Simpson, Peter Solymos, M. Henry H. Stevens, Eduard Szoecs,
    Helene Wagner
 Maintainer: Jari Oksanen <jari.oksanen@oulu.fi>
-Depends: permute (>= 0.9-0), lattice, R (>= 3.1.0)
+Depends: permute (>= 0.9-0), lattice, R (>= 3.2.0)
 Suggests: parallel, tcltk, knitr
 Imports: MASS, cluster, mgcv
 VignetteBuilder: utils, knitr
@@ -17,6 +17,6 @@ License: GPL-2
 BugReports: https://github.com/vegandevs/vegan/issues
 URL: https://cran.r-project.org, https://github.com/vegandevs/vegan
 NeedsCompilation: yes
-Packaged: 2018-04-14 06:57:45 UTC; jarioksa
+Packaged: 2018-05-16 07:55:22 UTC; jarioksa
 Repository: CRAN
-Date/Publication: 2018-04-14 15:09:35 UTC
+Date/Publication: 2018-05-17 09:05:08 UTC

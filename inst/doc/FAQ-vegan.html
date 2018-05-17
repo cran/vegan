@@ -557,6 +557,33 @@ read with command <code>browseVignettes(&quot;vegan&quot;)</code>.</p>
 
 <hr/>
 
+<h3>I cannot print and plot RDA results properly</h3>
+
+<p>If the RDA ordination results have a weird format or you cannot plot
+them properly, you probably have a name clash with <strong>klaR</strong> package
+which also has function <code>rda</code>, and the <strong>klaR</strong> <code>print</code>, <code>plot</code> or
+<code>predict</code> functions are used for <strong>vegan</strong> RDA results. You can choose
+between <code>rda</code> functions using <code>vegan::rda()</code> or <code>klaR::rda()</code>: you
+will get obscure error messages if you use the wrong function. In
+general, <strong>vegan</strong> should be able to work normally if <strong>vegan</strong> was
+loaded after <strong>klaR</strong>, but if <strong>klaR</strong> was loaded later, its functions
+will take precedence over <strong>vegan</strong>. Sometimes <strong>vegan</strong> namespace is
+loaded automatically when restoring a previously stored workspace at
+the start-up, and then <strong>klaR</strong> methods will always take precedence
+over <strong>vegan</strong>. You should check your loaded packages. <strong>klaR</strong> may be
+also loaded indirectly via other packages (in the reported cases it
+was most often loaded via <strong>agricolae</strong> package). <strong>Vegan</strong> and
+<strong>klaR</strong> both have the same function name (<code>rda</code>), and it may not be
+possible to use these packages simultaneously, and the safest choice
+is to unload one of the packages if only possible. See discussion in
+<a href="https://github.com/vegandevs/vegan/issues/277">vegan github issues</a>.</p>
+
+<p>If you have a very old version of <strong>ade4</strong> (prior to 1.7-8), you may
+have similar name clashes with <code>cca</code>. The solution is to upgrade
+<strong>ade4</strong>.</p>
+
+<hr/>
+
 <h3>Ordination fails with “Error in La.svd”</h3>
 
 <p>Constrained ordination (<code>cca</code>, <code>rda</code>, <code>capscale</code>) will sometimes fail
