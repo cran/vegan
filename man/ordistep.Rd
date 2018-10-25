@@ -23,7 +23,8 @@ ordiR2step(object, scope, Pin = 0.05, R2scope = TRUE,
 
 \arguments{
   \item{object}{
-  In \code{ordistep}, an ordination object inheriting from \code{\link{cca}} or \code{\link{rda}}. In \code{ordiR2step}, the object must inherit from \code{\link{rda}}, that is, it must have been computed using \code{\link{rda}} or \code{\link{capscale}}.
+  In \code{ordistep}, an ordination object inheriting from
+  \code{\link{cca}} or \code{\link{rda}}.
 }
 
   \item{scope}{ Defines the range of models examined in the stepwise
@@ -34,7 +35,8 @@ ordiR2step(object, scope, Pin = 0.05, R2scope = TRUE,
   the \code{upper} scope and the formula of the input \code{object} as
   the \code{lower} scope.  See \code{\link{step}} for details. In
   \code{ordiR2step}, this defines the upper scope; it can also be an
-  ordination object from with the model is extracted.  }
+  ordination object from with the model is extracted.
+  }
 
   \item{direction}{
   The mode of stepwise search, can be one of \code{"both"},
@@ -102,16 +104,18 @@ ordiR2step(object, scope, Pin = 0.05, R2scope = TRUE,
 
   Function \code{ordiR2step} builds model forward so that it maximizes
   adjusted \eqn{R^2}{R2} (function \code{\link{RsquareAdj}}) at every
-  step, and stopping when the adjusted \eqn{R^2}{R2} starts to
-  decrease, or the adjusted \eqn{R^2}{R2} of the \code{scope} is
-  exceeded, or the selected permutation \eqn{P}-value is exceeded
-  (Blanchet et al. 2008). The second criterion is ignored with option
-  \code{R2scope = FALSE}, and the third criterion can be ignored
-  setting \code{Pin = 1} (or higher). Adjusted \eqn{R^2}{R2} cannot be
-  calculated if the number of predictors is higher than the number of
-  observations, but such models can be analysed with
-  \code{R2scope = FALSE}.  The \eqn{R^2}{R2} of \code{\link{cca}} is
-  based on simulations (see \code{\link{RsquareAdj}}) and different
+  step, and stopping when the adjusted \eqn{R^2}{R2} starts to decrease,
+  or the adjusted \eqn{R^2}{R2} of the \code{scope} is exceeded, or the
+  selected permutation \eqn{P}-value is exceeded (Blanchet et
+  al. 2008). The second criterion is ignored with option
+  \code{R2scope = FALSE}, and the third criterion can be ignored setting
+  \code{Pin = 1} (or higher).
+  The function cannot be used if adjusted \eqn{R^2}{R2}
+  cannot be calculated, including partial models.  If the number of
+  predictors is higher than the number of observations, adjusted
+  \eqn{R^2}{R2} is also unavailable, but such models can be analysed
+  with \code{R2scope = FALSE}.  The \eqn{R^2}{R2} of \code{\link{cca}}
+  is based on simulations (see \code{\link{RsquareAdj}}) and different
   runs of \code{ordiR2step} can give different results.
 
   Functions \code{ordistep} (based on \eqn{P} values) and \code{ordiR2step}
@@ -158,33 +162,19 @@ mod0 <- rda(dune ~ 1, dune.env)  # Model with intercept only
 mod1 <- rda(dune ~ ., dune.env)  # Model with all explanatory variables
 
 ## With scope present, the default direction is "both"
-ordistep(mod0, scope = formula(mod1))
-
-## Example without scope. Default direction is "backward"
-ordistep(mod1)
+mod <- ordistep(mod0, scope = formula(mod1))
+mod
+## summary table of steps
+mod$anova
 
 ## Example of ordistep, forward
-\dontrun{
 ordistep(mod0, scope = formula(mod1), direction="forward")
-}
-### Mite data
-data(mite)
-data(mite.env)
-mite.hel = decostand(mite, "hel")
-mod0 <- rda(mite.hel ~ 1, mite.env)  # Model with intercept only
-mod1 <- rda(mite.hel ~ ., mite.env)  # Model with all explanatory variables
 
-## Example of ordiR2step with default direction = "both"
-## (This never goes "backward" but evaluates included terms.)
-step.res <- ordiR2step(mod0, mod1)
-step.res$anova  # Summary table
+## Example of ordiR2step (always forward)
+## stops because R2 of 'mod1' exceeded
+ordiR2step(mod0, mod1)
+}
 
-## Example of ordiR2step with direction = "forward"
-\dontrun{
-step.res <- ordiR2step(mod0, scope = formula(mod1), direction="forward")
-step.res$anova  # Summary table
-}
-}
 
 \keyword{ multivariate }
 \keyword{ models }

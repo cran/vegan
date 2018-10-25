@@ -2,6 +2,82 @@
 \title{vegan News}
 \encoding{UTF-8}
 
+\section{Changes in version 2.5-3}{
+  \subsection{INSTALLATION}{
+    \itemize{
+
+      \item Tests for numerical analysis were written more robustly so
+      that they give more similar results with alternative platforms and
+      versions of \R{} and BLAS/Lapack libraries. See github issue
+      \href{https://github.com/vegandevs/vegan/issues/282}{#282}.
+
+    } %itemize
+  } %installation
+
+  \subsection{BUG FIXES}{
+    \itemize{
+
+      \item Constrained ordination gave misleading results when some
+      constraints or conditions had data with NULL variables. This
+      rarely happens in normal usage, but could happen in marginal
+      \code{anova} as reported in github issue
+      \href{https://github.com/vegandevs/vegan/issues/291}{#291}.
+
+      \item Several functions for numerical analysis wrongly accepted
+      non-numeric data (for instance, factors) and gave either
+      meaningless results or confusing error messages. Fixed functions
+      include \code{beals}, \code{designdist}, \code{diversity},
+      \code{gdispweight}, \code{indpower}, \code{spantree},
+      \code{specpool}, \code{tsallis}, \code{tsallisaccum} and
+      \code{vegdist}. See github issue
+      \href{https://github.com/vegandevs/vegan/issues/292}{#292}.
+      
+      \item \code{envfit} with vectors could fail with missing data.
+
+      \item The original data were not scaled and centred similarly as
+      simulations in \code{simulate.rda} when several simulations were
+      returned as a \code{simmat} object (which is compatible with
+      \code{nullmodel} simulations and can be used in
+      \code{oecosimu}).
+
+    } %itemize
+  } % bug fixes
+
+  \subsection{NEW FEATURES}{
+    \itemize{
+
+      \item \code{anosim} checks its input to avoid confusing error
+      messages like that reported in
+      \href{https://stackoverflow.com/questions/52082743/}{StackOverflow
+      question 52082743}. 
+
+      \item Broken-stick distribution (function \code{bstick}) is no
+      longer calculated for distance-based Redundancy Analysis
+      (\code{dbrda}) with negative eigenvalues, because it is not clear
+      how this should be done. Now \code{dbrda} and \code{capscale} are
+      similar with this respect.
+
+      \item \code{print} function for \code{betadisper} results gained
+      new argument \code{neigen} to select the number of eigenvalues
+      shown. The \code{print} is more robust when the number of
+      eigenvalues is lower than the requested \code{neigen}.
+
+    } %itemize
+  } % new features
+
+  \subsection{DEPRECATED}{
+    \itemize{
+
+      \item Function \code{humpfit} was moved to the \pkg{natto} package
+      and is still available from
+      \url{https://github.com/jarioksa/natto}.  It is scheduled for
+      complete removal in \pkg{vegan} 2.6-0.
+
+    } %itemize
+  } %deprecated
+  
+} % 2.5-3
+
 \section{Changes in version 2.5-2}{
 
   \subsection{INSTALLATION AND COMPATIBILITY}{
@@ -276,7 +352,7 @@
 
       \item \code{ordiplot} and other ordination \code{plot} functions
       can  be chained with their \code{points} and \code{text}
-      functions allowing the use of \pkg{magrittr} pipes.  The
+      functions allowing the use of \CRANpkg{magrittr} pipes.  The
       \code{points} and \code{text} functions gained argument to draw
       arrows allowing their use in drawing biplots or adding vectors of
       environmental variables with \code{ordiplot}.  Since many
@@ -370,7 +446,7 @@
       \item \code{commsimulator} is now defunct: use \code{simulate}
       for \code{nullmodel} objects.
 
-      \item \pkg{ade4} \code{cca} objects are no longer handled in
+      \item \CRANpkg{ade4} \code{cca} objects are no longer handled in
       \pkg{vegan}: \pkg{ade4} has had no \code{cca} since version
       1.7-8 (August 9, 2017).
 
@@ -390,10 +466,8 @@
       was re-written in \R. The new \code{read.cep} is less powerful and
       more fragile, and can only read data in \dQuote{condensed} format,
       and it can fail in several cases that were successful with the old
-      code. The old FORTRAN-based function is still available in CRAN
-      package
-      \href{https://CRAN.R-project.org/package=cepreader}{cepreader}.
-      See github issue
+      code. The old FORTRAN-based function is still available in
+      \CRANpkg{cepreader}.  See github issue
       \href{https://github.com/vegandevs/vegan/issues/263}{#263}. The
       \pkg{cepreader} package is developed in
       \href{https://github.com/vegandevs/cepreader}{https://github.com/vegandevs/cepreader}.
@@ -716,7 +790,7 @@
       or Sørensen dissimilarity indices.
 
       \item Function \code{as.mcmc} to cast \code{oecosimu} result to an
-      MCMC object (\pkg{coda} package) failed if there was only one
+      MCMC object (\CRANpkg{coda} package) failed if there was only one
       chain.
 
     } % itemize
@@ -902,7 +976,7 @@
 
       \item \code{MDSrotate} can rotate ordination to show maximum
       separation of factor levels (classes) using linear discriminant
-      analysis (\code{lda} in \pkg{MASS} package).
+      analysis (\code{lda} in \CRANpkg{MASS} package).
 
       \item \code{adipart}, \code{hiersimu} and \code{multipart}
       expose argument \code{method} to specify the null model.
@@ -927,7 +1001,7 @@
       and \code{lines} and \code{plot} functions for \code{isomap} and
       \code{spantree} can use a mixture of colours of connected
       points. Their behaviour is similar as in analogous functions in
-      the the \pkg{vegan3d} package.
+      the the \CRANpkg{vegan3d} package.
 
       \item \code{plot} of \code{betadisper} is more configurable. See
       issues
@@ -1022,7 +1096,7 @@
       \item Dependence on external software \code{texi2dvi} was
       removed. Version 6.1 of \code{texi2dvi} was incompatible with \R{}
       and prevented building \pkg{vegan}. The \code{FAQ-vegan} that was
-      earlier built with \code{texi2dvi} uses now \pkg{knitr}. Because
+      earlier built with \code{texi2dvi} uses now \CRANpkg{knitr}. Because
       of this, \pkg{vegan} is now dependent on \R-3.0.0.  Fixes issue
       \href{https://github.com/vegandevs/vegan/issues/158}{#158} in
       Github.
@@ -1043,7 +1117,7 @@
 	\href{https://github.com/vegandevs/vegan/issues/152}{#152} in
 	Github.
 
-       \item Permutations failed if they were defined as \pkg{permute}
+       \item Permutations failed if they were defined as \CRANpkg{permute}
        control structures in \code{estaccum}, \code{ordiareatest},
        \code{renyiaccum} and \code{tsallisaccum}. Reported by Dan
        Gafta (Cluj-Napoca) for \code{renyiaccum}.
@@ -1059,7 +1133,7 @@
        handled smoothly instead of failing: observed non-extrapolated
        richness with zero standard error will be reported. The issue
        was reported in
-       \href{http://stackoverflow.com/questions/34027496/error-message-when-using-specpool-in-vegan-package}{StackOverflow}.
+       \href{https://stackoverflow.com/questions/34027496/}{StackOverflow}.
 
     } %itemize
   } % bug fixes
@@ -1184,7 +1258,7 @@
       input data are integers that can be interpreted as counts on
       individuals and all sampling units have some species. Unchecked
       bad inputs were the reason for problems reported in
-      \href{http://stackoverflow.com/questions/30856909/error-while-using-rarecurve-in-r}{Stackoverflow}.
+      \href{https://stackoverflow.com/questions/30856909/}{Stackoverflow}.
 
     }
   } % bug fixes
@@ -1350,9 +1424,9 @@
   \subsection{BUG FIXES}{
     \itemize{
 
-      \item \code{ordisurf} failed if \pkg{gam} package was loaded due
+      \item \code{ordisurf} failed if \CRANpkg{gam} package was loaded due
       to namespace issues: some support functions of \pkg{gam} were used
-      instead of \pkg{mgcv} functions.
+      instead of \CRANpkg{mgcv} functions.
 
       \item \code{tolerance} function failed for unconstrained
       correspondence analysis.
@@ -1367,13 +1441,12 @@
       bias-corrected Chao estimate of extrapolated number of
       species. The new formula may be unpublished, but it was derived
       following the guidelines of Chiu, Wang, Walther & Chao,
-      \emph{Biometrics} 70, 671--682 (2014),
-      \href{http://onlinelibrary.wiley.com/doi/10.1111/biom.12200/suppinfo}{online
-      supplementary material}.
+      \emph{Biometrics} 70, 671--682 (2014), \doi{10.1111/biom.12200},
+      online supplementary material.
 
       \item Diversity accumulation functions \code{specaccum},
       \code{renyiaccum}, \code{tsallisaccum}, \code{poolaccum} and
-      \code{estaccumR} use now \pkg{permute} package for permutations
+      \code{estaccumR} use now \CRANpkg{permute} package for permutations
       of the order of sampling sites. Normally these functions only
       need simple random permutation of sites, but restricted
       permutation of the \pkg{permute} package and user-supplied
@@ -1420,7 +1493,7 @@
       parallel, and \code{oecosimu} can evaluate test statistics for
       several null models in parallel.
 
-      \item All permutation tests are based on the \pkg{permute} package
+      \item All permutation tests are based on the \CRANpkg{permute} package
       which offers strong tools for restricted permutation. All these
       functions have argument \code{permutations}. The default usage of
       simple non-restricted permutations is achieved by giving a single
@@ -1436,7 +1509,7 @@
       be read from \pkg{vegan} with command
       \code{vegandocs("permutations")}.
 
-      The following functions use the \pkg{permute} package:
+      The following functions use the \CRANpkg{permute} package:
       \code{CCorA}, \code{adonis}, \code{anosim}, \code{anova.cca} (plus
       associated \code{permutest.cca}, \code{add1.cca},
       \code{drop1.cca}, \code{ordistep}, \code{ordiR2step}),
@@ -1470,9 +1543,9 @@
       notes in package tests.
 
       \item Three-dimensional ordination graphics using
-      \pkg{scatterplot3d} for static plots and \pkg{rgl} for dynamic
+      \CRANpkg{scatterplot3d} for static plots and \CRANpkg{rgl} for dynamic
       plots were removed from \pkg{vegan} and moved to a companion
-      package \pkg{vegan3d}. The package is available in CRAN.
+      package \CRANpkg{vegan3d}. The package is available in CRAN.
 
      } %end itemize
    } % end installation
@@ -1610,8 +1683,8 @@
       singletons and doubletons, but switches now to bias corrected Chao
       extrapolation if there are no doubletons (species found
       twice). The variance formula for bias corrected Chao was derived
-      following the supporting
-      \href{http://onlinelibrary.wiley.com/doi/10.1111/biom.12200/suppinfo}{online material}
+      following the supporting on line material of
+      \doi{10.1111/biom.12200}
       and differs slightly from Chiu et al. (2014).
 
       The \code{poolaccum} function was changed similarly, but the small
@@ -2327,7 +2400,7 @@
       species and analytic equations. The new \code{raupcrick}
       function uses simulation with \code{oecosimu}. The function
       follows Chase et al. (2011) \emph{Ecosphere} 2:art24
-      [\href{http://www.esajournals.org/doi/abs/10.1890/ES10-00117.1}{doi:10.1890/ES10-00117.1}],
+      [\doi{10.1890/ES10-00117.1}],
       and was developed with the consultation of Brian Inouye.
 
     }
