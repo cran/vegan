@@ -2,6 +2,58 @@
 \title{vegan News}
 \encoding{UTF-8}
 
+\section{Changes in version 2.5-4}{
+  \subsection{INSTALLATION AND TESTING}{
+    \itemize{
+
+      \item The code for interpreting formula will change in \R 3.6.0,
+      and this makes constrained ordination methods (\code{cca},
+      \code{rda}, \code{dbrda}, \code{capscale}) to fail.  See github
+      issue
+      \href{https://github.com/vegandevs/vegan/issues/299}{#299}.
+
+      \item \R 3.6.0 introduces a new environment variable
+      \code{_R_CHECK_LENGTH_1_LOGIC2_}, and several functions fail if
+      this variable is set. Changes concern \code{ordiplot},
+      \code{plot} and \code{summary} for constrained ordination
+      objects, and \code{ordixyplot}. See github issue
+      \href{https://github.com/vegandevs/vegan/issues/305}{#305}.
+
+    } %itemize
+  } % INSTALLATION
+
+  \subsection{BUG FIXES}{
+    \itemize{
+
+      \item \code{decorana} gave incorrect results when downweighting
+      was used (argument \code{iweigh = 1}). The bug was introduced in
+      \pkg{vegan} 2.5-1 and reported as github issue
+      \href{https://github.com/vegandevs/vegan/issues/303}{#303}.
+
+      \item \code{goodness} for constrained ordination methods failed
+      when the constraints had rank = 1 (only one constraining
+      variable). Reported by Pierre Legendre.
+      
+    } %itemize
+  } % bugs
+
+  \subsection{NEW FEATURES}{
+    \itemize{
+
+      \item Adjusted \eqn{R^2}{R-squared} is enabled for partial RDA
+      models (functions \code{rda} and \code{dbrda}) and partial CCA
+      models (function \code{cca}) in function \code{RsquareAdj}. The
+      feature was disabled in \pkg{vegan} 2.5-1 for both. For RDA, the
+      calculation is similar as in \pkg{vegan} 2.4-6 and
+      earlier. Partial CCA is now consistent with RDA and differs from
+      the earlier implementation. For both methods, the partial models
+      are consistent with \code{varpart}. See github issue
+      \href{https://github.com/vegandevs/vegan/issues/295}{#295}.
+      
+    } %itemize
+  } %new features
+} % version 2.5-4
+  
 \section{Changes in version 2.5-3}{
   \subsection{INSTALLATION}{
     \itemize{
