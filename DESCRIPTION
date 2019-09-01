@@ -1,7 +1,6 @@
 Package: vegan
 Title: Community Ecology Package
-Version: 2.5-5
-Date: 2019-05-08
+Version: 2.5-6
 Author: Jari Oksanen, F. Guillaume Blanchet, Michael Friendly, Roeland Kindt,
    Pierre Legendre, Dan McGlinn, Peter R. Minchin, R. B. O'Hara,
    Gavin L. Simpson, Peter Solymos, M. Henry H. Stevens, Eduard Szoecs,
@@ -17,6 +16,6 @@ License: GPL-2
 BugReports: https://github.com/vegandevs/vegan/issues
 URL: https://cran.r-project.org, https://github.com/vegandevs/vegan
 NeedsCompilation: yes
-Packaged: 2019-05-11 14:15:58 UTC; jarioksa
+Packaged: 2019-08-31 07:21:37 UTC; jarioksa
 Repository: CRAN
-Date/Publication: 2019-05-12 14:50:03 UTC
+Date/Publication: 2019-09-01 14:30:02 UTC

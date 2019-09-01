@@ -11,7 +11,7 @@ options("prompt" = "> ", "continue" = "  ")
 
 
 ###################################################
-### code chunk number 2: intro-vegan.Rnw:71-74
+### code chunk number 2: intro-vegan.Rnw:73-76
 ###################################################
 library(vegan)
 data(dune)
@@ -19,13 +19,13 @@ ord <- decorana(dune)
 
 
 ###################################################
-### code chunk number 3: intro-vegan.Rnw:77-78
+### code chunk number 3: intro-vegan.Rnw:79-80
 ###################################################
 ord
 
 
 ###################################################
-### code chunk number 4: intro-vegan.Rnw:101-103
+### code chunk number 4: intro-vegan.Rnw:103-105
 ###################################################
 ord <- metaMDS(dune)
 ord
@@ -38,7 +38,7 @@ plot(ord)
 
 
 ###################################################
-### code chunk number 6: intro-vegan.Rnw:118-119
+### code chunk number 6: intro-vegan.Rnw:120-121
 ###################################################
 getOption("SweaveHooks")[["fig"]]()
 plot(ord)
@@ -53,7 +53,7 @@ text(ord, display = "spec", cex=0.7, col="blue")
 
 
 ###################################################
-### code chunk number 8: intro-vegan.Rnw:140-141
+### code chunk number 8: intro-vegan.Rnw:142-143
 ###################################################
 getOption("SweaveHooks")[["fig"]]()
 plot(ord, type = "n")
@@ -62,7 +62,7 @@ text(ord, display = "spec", cex=0.7, col="blue")
 
 
 ###################################################
-### code chunk number 9: intro-vegan.Rnw:206-208
+### code chunk number 9: intro-vegan.Rnw:208-210
 ###################################################
 data(dune.env)
 attach(dune.env)
@@ -80,7 +80,7 @@ points(ord, disp="sites", pch=21, col="red", bg="yellow", cex=1.3)
 
 
 ###################################################
-### code chunk number 11: intro-vegan.Rnw:219-220
+### code chunk number 11: intro-vegan.Rnw:221-222
 ###################################################
 getOption("SweaveHooks")[["fig"]]()
 plot(ord, disp="sites", type="n")
@@ -92,7 +92,7 @@ points(ord, disp="sites", pch=21, col="red", bg="yellow", cex=1.3)
 
 
 ###################################################
-### code chunk number 12: intro-vegan.Rnw:250-252
+### code chunk number 12: intro-vegan.Rnw:252-254
 ###################################################
 ord.fit <- envfit(ord ~ A1 + Management, data=dune.env, perm=999)
 ord.fit
@@ -112,7 +112,7 @@ ordisurf(ord, A1, add=TRUE)
 
 
 ###################################################
-### code chunk number 15: intro-vegan.Rnw:268-270
+### code chunk number 15: intro-vegan.Rnw:270-272
 ###################################################
 getOption("SweaveHooks")[["fig"]]()
 plot(ord, dis="site")
@@ -121,7 +121,7 @@ ordisurf(ord, A1, add=TRUE)
 
 
 ###################################################
-### code chunk number 16: intro-vegan.Rnw:290-292
+### code chunk number 16: intro-vegan.Rnw:292-294
 ###################################################
 ord <- cca(dune ~ A1 + Management, data=dune.env)
 ord
@@ -134,32 +134,32 @@ plot(ord)
 
 
 ###################################################
-### code chunk number 18: intro-vegan.Rnw:299-300
+### code chunk number 18: intro-vegan.Rnw:301-302
 ###################################################
 getOption("SweaveHooks")[["fig"]]()
 plot(ord)
 
 
 ###################################################
-### code chunk number 19: intro-vegan.Rnw:317-318
+### code chunk number 19: intro-vegan.Rnw:319-320
 ###################################################
 cca(dune ~ ., data=dune.env)
 
 
 ###################################################
-### code chunk number 20: intro-vegan.Rnw:327-328
+### code chunk number 20: intro-vegan.Rnw:329-330
 ###################################################
 anova(ord)
 
 
 ###################################################
-### code chunk number 21: intro-vegan.Rnw:336-337
+### code chunk number 21: intro-vegan.Rnw:338-339
 ###################################################
 anova(ord, by="term", permutations=199)
 
 
 ###################################################
-### code chunk number 22: intro-vegan.Rnw:342-343
+### code chunk number 22: intro-vegan.Rnw:344-345
 ###################################################
 anova(ord, by="mar", permutations=199)
 
@@ -171,27 +171,27 @@ anova(ord, by="axis", permutations=499)
 
 
 ###################################################
-### code chunk number 24: intro-vegan.Rnw:355-357
+### code chunk number 24: intro-vegan.Rnw:357-359
 ###################################################
 ord <- cca(dune ~ A1 + Management + Condition(Moisture), data=dune.env)
 ord
 
 
 ###################################################
-### code chunk number 25: intro-vegan.Rnw:362-363
+### code chunk number 25: intro-vegan.Rnw:364-365
 ###################################################
 anova(ord, by="term", permutations=499)
 
 
 ###################################################
-### code chunk number 26: intro-vegan.Rnw:371-373
+### code chunk number 26: intro-vegan.Rnw:373-375
 ###################################################
 how <- how(nperm=499, plots = Plots(strata=dune.env$Moisture))
 anova(ord, by="term", permutations = how)
 
 
 ###################################################
-### code chunk number 27: intro-vegan.Rnw:377-378
+### code chunk number 27: intro-vegan.Rnw:379-380
 ###################################################
 detach(dune.env)
 
