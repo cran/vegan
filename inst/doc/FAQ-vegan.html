@@ -219,7 +219,7 @@ License. To view a copy of this license, visit
 Creative Commons, 543 Howard Street, 5th Floor, San Francisco,
 California, 94105, USA.</p>
 
-<p>Copyright © 2008-2016 vegan development team</p>
+<p>Copyright © 2008-2020 vegan development team</p>
 </blockquote>
 
 <hr/>
@@ -817,7 +817,7 @@ configurable, and allow different plotting symbols and characters.</p>
 <p>If there is a really high number of species or sites, the graphs often
 are congested and many labels are overwritten. It may be impossible to
 have complete readable graphics with some data sets. Below we give a
-brief overview of tricks you can use. Gavin Simpson’s blog <a href="https://www.fromthebottomoftheheap.net">From the
+brief overview of tricks you can use. Gavin Simpson’s blog <a href="https://fromthebottomoftheheap.net">From the
 bottom of the heap</a> has a series
 of articles on “decluttering ordination plots” with more detailed
 discussion and examples.</p>
@@ -833,24 +833,24 @@ to your <code>plot</code> command.)</li>
 <li>  Add labels using function <code>ordilabel</code> which uses non-transparent
 background to the text. The labels still shadow each other, but the
 uppermost labels are readable. Argument <code>priority</code> will help in
-displaying the most interesting labels (see <a href="https://www.fromthebottomoftheheap.net/2013/01/12/decluttering-ordination-plots-in-vegan-part-1-ordilabel/">Decluttering blog, part
+displaying the most interesting labels (see <a href="https://fromthebottomoftheheap.net/2013/01/12/decluttering-ordination-plots-in-vegan-part-1-ordilabel/">Decluttering blog, part
 1</a>).</li>
 <li>  Use <code>orditorp</code> function that uses labels only if these can be added
 to a graph without overwriting other labels, and points otherwise,
 if you do not need to see all labels. You must first create an empty
 plot using <code>plot(..., type=&quot;n&quot;)</code>, and then add labels or points with
-<code>orditorp</code> (see <a href="https://www.fromthebottomoftheheap.net/2013/01/13/decluttering-ordination-plots-in-vegan-part-2-orditorp/">Decluttering
+<code>orditorp</code> (see <a href="https://fromthebottomoftheheap.net/2013/01/13/decluttering-ordination-plots-in-vegan-part-2-orditorp/">Decluttering
 blog</a>).</li>
 <li>  Use <code>ordipointlabel</code> which uses points and text labels to the
 points, and tries to optimize the location of the text to minimize
-the overlap (see <a href="https://www.fromthebottomoftheheap.net/2013/06/27/decluttering-ordination-plots-in-vegan-part-3-ordipointlabel/">Decluttering
+the overlap (see <a href="https://fromthebottomoftheheap.net/2013/06/27/decluttering-ordination-plots-in-vegan-part-3-ordipointlabel/">Decluttering
 blog</a>).</li>
 <li>  Ordination <code>text</code> and <code>points</code> functions have argument <code>select</code> that
 can be used for full control of selecting items plotted as text or
 points.</li>
 <li>  Use interactive <code>orditkplot</code> function that lets you drag labels of
 points to better positions if you need to see all labels. Only one
-set of points can be used (see <a href="https://www.fromthebottomoftheheap.net/2013/12/31/decluttering-ordination-in-vegan-part-4-orditkplot/">Decluttering
+set of points can be used (see <a href="https://fromthebottomoftheheap.net/2013/12/31/decluttering-ordination-in-vegan-part-4-orditkplot/">Decluttering
 blog</a>).</li>
 <li>  Most <code>plot</code> functions allow you to zoom to a part of the graph using
 <code>xlim</code> and <code>ylim</code> arguments to reduce clutter in congested areas.</li>

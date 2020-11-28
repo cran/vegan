@@ -128,8 +128,8 @@
             }
         } else {
             f.perms <-
-                sapply(1:nterms, function(i) 
-                       sapply(1:permutations, function(j) 
+                sapply(1:nterms, function(i)
+                       sapply(1:permutations, function(j)
                               f.test(tH.s[[i]], G[p[j,], p[j,]],
                                      df.Exp[i], df.Res, tIH.snterm)))
         }
