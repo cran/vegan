@@ -141,6 +141,8 @@
     }
     ## QR decomposition
     Q <- qr(Z)
+    if (Q$rank == 0) # nothing partialled out
+        return(list(Y = Y, result = NULL))
     ## partialled out variation as a trace of Yfit
     Yfit <- qr.fitted(Q, Y)
     if (DISTBASED) {
@@ -160,7 +162,6 @@
         rank = if (totvar > 0) Q$rank else 0,
         tot.chi = totvar,
         QR = Q,
-        Fit = Yfit,
         envcentre = envcentre)
     list(Y = Y, result = result)
 }
@@ -194,6 +195,9 @@
     Q <- qr(X)
     ## we need to see how much rank grows over rank of conditions
     rank <- sum(Q$pivot[seq_len(Q$rank)] > zcol)
+    ## nothing explained (e.g., constant constrain)
+    if (rank == 0)
+        return(list(Y = Y, result = NULL))
     ## check for aliased terms
     if (length(Q$pivot) > Q$rank)
         alias <- colnames(Q$qr)[-seq_len(Q$rank)]
@@ -241,8 +245,9 @@
     ## de-weight
     if (!is.null(RW)) {
         u <- sweep(u, 1, sqrt(RW), "/")
-        if (all(!is.na(wa)))
+        if (!anyNA(wa)) {
             wa <- sweep(wa, 1, sqrt(RW), "/")
+        }
     }
     if (!is.null(CW) && nrow(v)) {
         v <- sweep(v, 1, sqrt(CW), "/")
@@ -282,8 +287,7 @@
         qrank = rank,
         tot.chi = sum(lambda),
         QR = Q,
-        envcentre = envcentre,
-        Xbar = Y)
+        envcentre = envcentre)
     ## residual of Y
     Y <- qr.resid(Q, Y)
     if (DISTBASED)
@@ -360,8 +364,7 @@
         "u" = u,
         "v" = v,
         "rank" = length(lambda),
-        "tot.chi" = sum(lambda),
-        "Xbar" = Y)
+        "tot.chi" = sum(lambda))
     out
 }
 
@@ -382,6 +385,21 @@
                 "capscale" = initCAP(Y),
                 "dbrda" = initDBRDA(Y),
                 "pass" = Y)
+    ## sanity checks for the input
+    if (!is.numeric(Y))
+        stop("dependent data (community) must be numeric")
+    if (!is.null(X)) {
+        if (!is.numeric(X))
+            stop("constraints must be numeric or factors")
+        if (nrow(Y) != nrow(X))
+            stop("dependent data and constraints must have the same number of rows")
+    }
+    if (!is.null(Z)) {
+        if (!is.numeric(Z))
+            stop("conditions must be numeric or factors")
+        if (nrow(Y) != nrow(Z))
+            stop("dependent data and conditions must have the same number of rows")
+    }
     ## header info for the model
     head <- ordHead(Y)
     ## Partial

@@ -1,3 +1,4 @@
+\encoding{UTF-8}
 \name{cascadeKM}
 \alias{cascadeKM}
 \alias{cIndexKM}
@@ -13,7 +14,8 @@
 }
 
 \usage{
-cascadeKM(data, inf.gr, sup.gr, iter = 100, criterion = "calinski")
+cascadeKM(data, inf.gr, sup.gr, iter = 100, criterion = "calinski",
+  parallel = getOption("mc.cores"))
 
 cIndexKM(y, x, index = "all")
 
@@ -33,7 +35,7 @@ cIndexKM(y, x, index = "all")
     partition. The default value is \code{"calinski"}, which refers to
     the Calinski-Harabasz (1974) criterion. The simple structure index
     (\code{"ssi"}) is also available. Other indices are available in
-    function \code{\link[cclust]{clustIndex}} (package \pkg{cclust}). In
+    package \pkg{cclust}. In
     our experience, the two indices that work best and are most likely
     to return their maximum value at or near the optimal number of
     clusters are \code{"calinski"} and \code{"ssi"}. }
@@ -56,13 +58,17 @@ cIndexKM(y, x, index = "all")
   \item{gridcol}{The colour of the grid lines in the plots. \code{NA},
     which is the default value, removes the grid lines.}
   \item{\dots}{Other parameters to the functions (ignored).}
+  \item{parallel}{Number of parallel processes or a predefined socket
+    cluster.  With \code{parallel = 1} uses ordinary, non-parallel
+    processing. The parallel processing is done with \pkg{parallel}
+    package.}
     
 }
 \details{
   The function creates several partitions forming a cascade from a small
   to a large number of groups formed by \code{\link{kmeans}}.  Most
   of the work is performed by function \code{cIndex} which is based on the
-  \code{\link[cclust]{clustIndex}} function (package \pkg{cclust}). 
+  \code{clustIndex} in package \pkg{cclust}). 
   Some of the criteria were removed from this version because computation 
   errors were generated when only one object was found in a group.
   
@@ -172,11 +178,10 @@ cIndexKM(y, x, index = "all")
 \author{ Marie-Helene Ouellette
   \email{Marie-Helene.Ouellette@UMontreal.ca}, Sebastien Durand
   \email{Sebastien.Durand@UMontreal.ca} and Pierre Legendre
-  \email{Pierre.Legendre@UMontreal.ca}. Edited for \pkg{vegan} by Jari
-  Oksanen.
-}
+  \email{Pierre.Legendre@UMontreal.ca}. Parallel processing by Virgilio
+  Gómez-Rubio.  Edited for \pkg{vegan} by Jari Oksanen.  }
 
-\seealso{\code{\link{kmeans}}, \code{\link[cclust]{clustIndex}}.}
+\seealso{\code{\link{kmeans}}.}
 
 \examples{
  # Partitioning a (10 x 10) data matrix of random numbers

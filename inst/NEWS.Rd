@@ -2,6 +2,142 @@
 \title{vegan News}
 \encoding{UTF-8}
 
+\section{Changes in version 2.6-0}{
+  \subsection{INSTALLATION}{
+    \itemize{
+    
+      \item Compiled code is adapted to the changes in \R{} 4.2.0. See
+      issues
+      \href{https://github.com/vegandevs/vegan/issues/447}{#447},
+      \href{https://github.com/vegandevs/vegan/issues/507}{#507}.
+
+      \item Cross-references to function in other packages were
+      adapted to more stringent tests in CRAN
+
+    }
+  } %installation
+
+  \subsection{NEW FEATURES}{
+    \itemize{
+
+      \item Aitchison and robust Aitchison distances were added to
+      \code{vegdist}. Similar data transformations were added to
+      \code{decostand}.
+
+      \item Several functions can return \dQuote{tidy} data structures
+      that can be used in \pkg{ggplot2} graphics: \code{rarecurve},
+      \code{scores} functions for constrained ordination (\code{cca}
+      etc.), \code{decorana}, \code{envfit}, \code{metaMDS}.
+
+      \item \code{scores.envfit} gained argument
+      \code{arrow.mul}. \pkg{vegan} \code{plot} functions used this
+      automatically, but now it is easier to use \code{envfit} in
+      non-\pkg{vegan} plotting.
+
+      \item Added function \code{simpson.unb} for unbiased Simpson
+      diversity that is more robust to the variation in sample sizes.
+
+      \item \code{diversity} gained argument \code{group} to calculate
+      indices for pooled data. Discussed in issue
+      \href{https://github.com/vegandevs/vegan/issues/393}{#393}.
+
+      \item \code{simper} is much faster even though parallel processing
+      is not implemented in the new code.
+
+      \item \code{pairs} function was added to plot \code{permustats}
+      variables against each other.
+
+      \item \code{varpart} accepts dissimilarities given as a
+      symmetric square matrix instead of \code{"dist"} object per wish
+      of issue
+      \href{https://github.com/vegandevs/vegan/issues/497}{#497}.
+
+      \item \code{metaMDS} adopted a more user-friendly policy, and
+      \code{trymax} will always be the maximum number of tries. See
+      dicussion in
+      \url{https://stackoverflow.com/questions/66748605/}.
+
+      \item \code{adonis2} accepts \code{strata}. \code{adonis2} is
+      the new main function that replaces old \code{adonis}. See issue
+      \href{https://github.com/vegandevs/vegan/issues/427}{#427}.
+
+      \item Fisher alpha (\code{fisherfit}) is badly suited for extreme
+      communities that do not fit Fisher's model. Now \code{fisherfit}
+      returns \code{NA} to communities that have 0 or 1 species, and
+      issues a warning with communities consisting of singletons and
+      having extreme Fisher alpha.
+
+      \item \code{adipart} and \code{multipart} formulae will
+      automatically add unique id and and constant. This will always
+      sandwich the requested grouping between alpha and gamma
+      diversities, but not change the results for requested groupings.
+
+    }
+  } % new features
+
+  \subsection{BUG FIXES}{
+    \itemize{
+
+      \item \code{anova} function failed in marginal tests when
+      constrained partial ordination model (\code{cca}, \code{rda}
+      etc.) had interaction terms. Issue
+      \href{https://github.com/vegandevs/vegan/issues/463}{#463}.
+
+      \item Constrained ordination (\code{cca} etc.) gave misleading
+      results when all external variables (constraints, condition)
+      were constant and explained nothing.
+
+      \item \code{decorana} could fail when some axes had zero
+       eigenvalues.  Issue
+       \href{https://github.com/vegandevs/vegan/issues/401}{#401}.
+
+      \item Species accumulation (\code{specaccum}) failed when there
+      was only one species, but several \dQuote{communities}. Issue
+      \href{https://github.com/vegandevs/vegan/issues/501}{#501}.
+
+      \item Parallel processing failed in Windows or with socket
+      clusters in \code{permutest} of \code{betadisper}. Issue
+      \href{https://github.com/vegandevs/vegan/issues/369}{#369}.
+
+      \item \code{orditorp} failed if numeric labels were
+      supplied. Reported in
+      \url{https://stackoverflow.com/questions/69272366/}.
+
+      \item Argument \code{summarize} was accidentally dropped from
+      \code{goodness.cca} in 2017.
+
+      \item \code{taxa2dist} failed if there was only one usable
+      taxonomic level. See
+      \url{https://stackoverflow.com/questions/67231431/}.
+
+    }
+  } % bug fixes
+
+  \subsection{DEPRECATED AND DEFUNCT}{
+
+    \itemize{
+
+      \item Function \code{adonis2} will replace \code{adonis}.
+
+      \item \code{humpfit} functions are defunct and removed. They are
+      available in non-CRAN package \pkg{natto} at
+      \url{https://github.com/jarioksa/natto}.
+
+      \item \code{commisimulator} is defunct. Use \code{simulate} for
+      \code{nullmodel} objects.
+
+      \item \code{permuted.index} is finally defunct (it was
+      deprecated in \pkg{vegan} 2.2-0).
+
+      \item \code{as.mlm} is defunct. Use functions documented with
+      \code{influence.cca}, such as \code{hatvalues.cca},
+      \code{rstandard.cca}, \code{rstudent.cca},
+      \code{cooks.distance.cca} and others.
+
+    }
+  } % deprecated
+} % 2.6.0
+
 \section{Changes in version 2.5-7}{
   \subsection{BUG FIXES}{
     \itemize{
@@ -60,7 +196,7 @@
       \item \code{ordiplot} passes \code{cex} argument to
       \code{linestack} and \code{decorana} plots.
 
-      } %itemize
+    } %itemize
   } % features
 
 } % 2.5-7
@@ -1904,11 +2040,11 @@
       The abundance based \code{estimateR} uses bias corrected Chao
       extrapolation, but earlier it estimated its variance with classic
       Chao model. Now we use the widespread
-      \href{http://viceroy.eeb.uconn.edu/EstimateS/EstimateSPages/EstSUsersGuide/EstimateSUsersGuide.htm#AppendixB}{approximate
+      \href{https://viceroy.eeb.uconn.edu/EstimateS/EstimateSPages/EstSUsersGuide/EstimateSUsersGuide.htm#AppendixB}{approximate
 	equation} for variance.
 
       With these changes these functions are more similar to
-            \href{http://viceroy.eeb.uconn.edu/EstimateS/EstimateSPages/EstSUsersGuide/EstimateSUsersGuide.htm#AppendixB}{EstimateS}.
+            \href{https://viceroy.eeb.uconn.edu/EstimateS/EstimateSPages/EstSUsersGuide/EstimateSUsersGuide.htm#AppendixB}{EstimateS}.
 
       \item \code{tabasco} uses now \code{reorder.hclust} for
       \code{hclust} object for better ordering than previously when it

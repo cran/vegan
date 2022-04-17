@@ -7,7 +7,7 @@
     if (length(display) > 1)
         stop("only one 'display' item can be added in one command")
     pts <- scores(x, choices = choices, display = display, scaling = scaling,
-                  const, correlation = correlation, hill = hill)
+                  const, correlation = correlation, hill = hill, tidy=FALSE)
     ## store rownames of pts for use later, otherwise if user supplies
     ## labels, the checks in "cn" branch fail and "bp" branch will
     ## be entered even if there should be no "bp" plotting
@@ -21,17 +21,23 @@
     ## centroids ("cn") have special treatment: also plot biplot
     ## arrows ("bp") for continuous variables and ordered factors.
     if (display == "cn") {
-        cnlabs <- seq_len(nrow(pts))
-        text(pts, labels = labels[cnlabs], ...)
+        if (!is.null(nrow(pts))) { # has "cn"
+            cnlabs <- seq_len(nrow(pts))
+            text(pts, labels = labels[cnlabs], ...)
+        } else {
+            cnlabs <- NULL
+        }
         pts <- scores(x, choices = choices, display = "bp", scaling = scaling,
-                      const, correlation = correlation, hill = hill)
+                      const, correlation = correlation, hill = hill,
+                      tidy=FALSE)
         bnam <- rownames(pts)
         pts <- pts[!(bnam %in% cnam), , drop = FALSE]
         if (nrow(pts) == 0)
             return(invisible())
         else {
             display <- "bp"
-            labels <- labels[-cnlabs]
+            if (!is.null(cnlabs))
+                labels <- labels[-cnlabs]
         }
     }
     ## draw arrows before adding labels

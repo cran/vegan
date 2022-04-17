@@ -1,6 +1,7 @@
 \encoding{UTF-8}
 \name{diversity}
 \alias{diversity}
+\alias{simpson.unb}
 \alias{fisher.alpha}
 \alias{specnumber}
 
@@ -10,7 +11,9 @@
   richness.  }
 
 \usage{
-diversity(x, index = "shannon", MARGIN = 1, base = exp(1))
+diversity(x, index = "shannon", groups, equalize.groups = FALSE,
+   MARGIN = 1, base = exp(1))
+simpson.unb(x, inverse = FALSE)
 fisher.alpha(x, MARGIN = 1, ...)
 specnumber(x, groups, MARGIN = 1)
 }
@@ -21,8 +24,12 @@ specnumber(x, groups, MARGIN = 1)
     \code{"simpson"} or \code{"invsimpson"}.}
   \item{MARGIN}{Margin for which the index is computed. }
   \item{base}{ The logarithm \code{base} used in \code{shannon}.}
-  \item{groups}{A grouping factor: if given, finds the total number of
-    species in each group.}
+  \item{inverse}{Use inverse Simpson similarly as in
+     \code{diversity(x, "invsimpson")}.}
+  \item{groups}{A grouping factor: if given, finds the diversity of
+    communities pooled by the groups.}
+  \item{equalize.groups}{Instead of observed abundances, standardize all
+    communities to unit total.}
   \item{...}{Parameters passed to the function.}
 }
 \details{
@@ -36,11 +43,31 @@ specnumber(x, groups, MARGIN = 1)
   Both variants of Simpson's index are based on \eqn{D = \sum p_i^2}{D =
     sum p_i^2}. Choice \code{simpson} returns \eqn{1-D} and
   \code{invsimpson} returns \eqn{1/D}.
+
+  \code{simpson.unb} finds unbiased Simpson indices for discrete
+  samples (Hurlbert 1971, eq. 5). These are less sensitive to sample
+  size than the basic Simpson indices. The unbiased indices can be only
+  calculated for data of integer counts.
+
+  The \code{diversity} function can find the total (or gamma) diversity
+  of pooled communities with argument \code{groups}. The average alpha
+  diversity can be found as the mean of diversities by the same groups,
+  and their difference or ratio is an estimate of beta diversity (see
+  Examples). The pooling can be based either on the observed
+  abundancies, or all communities can be equalized to unit total before
+  pooling; see Jost (2007) for discussion. Functions
+  \code{\link{adipart}} and \code{\link{multipart}} provide canned
+  alternatives for estimating alpha, beta and gamma diversities in
+  hierarchical settings.
  
   \code{fisher.alpha} estimates the \eqn{\alpha} parameter of
   Fisher's logarithmic series (see \code{\link{fisherfit}}). 
   The estimation is possible only for genuine
-  counts of individuals. 
+  counts of individuals.
+
+  None of these diversity indices is usable for empty sampling units
+  without any species, but some of the indices can give a numeric
+  value. Filtering out these cases is left for the user.
   
   Function \code{specnumber} finds the number of species. With
   \code{MARGIN = 2}, it finds frequencies of species. If \code{groups}
@@ -73,6 +100,9 @@ specnumber(x, groups, MARGIN = 1)
   
   Hurlbert, S.H. (1971). The nonconcept of species diversity: a critique
   and alternative parameters. \emph{Ecology} \strong{52}, 577--586.
+
+  Jost, L. (2007) Partitioning diversity into independent alpha and beta
+  components. \emph{Ecology} \strong{88}, 2427--2439.
  
 }
 
@@ -89,12 +119,12 @@ specnumber(x, groups, MARGIN = 1)
 \author{ Jari Oksanen  and  Bob O'Hara (\code{fisher.alpha}).}
 
 \examples{
-data(BCI)
+data(BCI, BCI.env)
 H <- diversity(BCI)
 simp <- diversity(BCI, "simpson")
 invsimp <- diversity(BCI, "inv")
-## Unbiased Simpson (Hurlbert 1971, eq. 5) with rarefy:
-unbias.simp <- rarefy(BCI, 2) - 1
+## Unbiased Simpson
+unbias.simp <- simpson.unb(BCI)
 ## Fisher alpha
 alpha <- fisher.alpha(BCI)
 ## Plot all
@@ -103,11 +133,16 @@ pairs(cbind(H, simp, invsimp, unbias.simp, alpha), pch="+", col="blue")
 S <- specnumber(BCI) ## rowSums(BCI > 0) does the same...
 J <- H/log(S)
 ## beta diversity defined as gamma/alpha - 1:
-data(dune)
-data(dune.env)
-alpha <- with(dune.env, tapply(specnumber(dune), Management, mean))
-gamma <- with(dune.env, specnumber(dune, Management))
+## alpha is the average no. of species in a group, and gamma is the
+## total number of species in the group
+(alpha <- with(BCI.env, tapply(specnumber(BCI), Habitat, mean)))
+(gamma <- with(BCI.env, specnumber(BCI, Habitat)))
 gamma/alpha - 1
+## similar calculations with Shannon diversity
+(alpha <- with(BCI.env, tapply(diversity(BCI), Habitat, mean))) # average
+(gamma <- with(BCI.env, diversity(BCI, groups=Habitat))) # pooled
+## additive beta diversity based on Shannon index
+gamma-alpha
 }
 \keyword{ univar }
 

@@ -41,6 +41,8 @@ anova(m, permutations=99)
 anova(m, by="term", permutations=99) # failed before 2.5-0
 anova(m, by="margin", permutations=99) # works since 2.5-0
 anova(m, by="axis", permutations=99)
+## adonis
+adonis2(fla, data = dune.env)
 ## capscale
 p <- capscale(fla, data=df, na.action=na.exclude, subset = Use != "Pasture" & spno > 7)
 anova(p, permutations=99)
@@ -74,9 +76,17 @@ foo("cca", dune, Management, na.action = na.omit)
 foo("rda", dune, Management, na.action = na.omit)
 foo("capscale", dune, Management, dist="jaccard", na.action = na.omit)
 foo("capscale", vegdist(dune), Management, na.action = na.omit)
-foo("capscale", dune, Management, na.action = na.omit) ## fails in 2.2-1
-###
+foo("capscale", dune, Management, na.action = na.omit) # fails in 2.2-1
+## adonis must be done with detached 'df' or it will be used instead
+## of with(dune.env, ...)
 detach(df)
+with(dune.env, foo("adonis2", dune, Management))
+## the test case reported in github issue #285 by @ktmbiome
+var <- "Moisture"
+adonis2(dune ~ dune.env[, var])
+rm(var)
+###
+
 ### Check that statistics match in partial constrained ordination
 m <- cca(dune ~ A1 + Moisture + Condition(Management), dune.env, subset = A1 > 3)
 tab <- anova(m, by = "axis", permutations = 99)
@@ -155,6 +165,25 @@ out$Poatriv
 rm(foo, out)
 ### end Richard Telford test
 
+### github issue #291 reported that anova(mod, by="margin") gave wrong
+### results in vegan 2.5-2 when 'mod' had only one constraining
+### variable. In such corner case, all the following models should be
+### equal
+
+set.seed(1046)
+z <- runif(20)
+p <- shuffleSet(20, 99)
+mod <- rda(dune ~ z)
+(a0 <- anova(mod, permutations=p))
+(at <- anova(mod, permutations=p, by="term"))
+(am <- anova(mod, permutations=p, by="margin"))
+(aa <- anova(mod, permutations=p, by="axis"))
+(p1 <- permutest(mod, permutations=p, by="onedf"))
+all.equal(permustats(a0)$permutations, permustats(at)$permutations)
+all.equal(permustats(a0)$permutations, permustats(am)$permutations)
+all.equal(permustats(a0)$permutations, permustats(aa)$permutations)
+all.equal(permustats(a0)$permutations, permustats(p1)$permutations)
+rm(z,p,mod,a0,at,am,aa,p1)
 
 ### nestednodf: test case by Daniel Spitale in a comment to News on
 ### the release of vegan 1.17-6 in vegan.r-forge.r-project.org.

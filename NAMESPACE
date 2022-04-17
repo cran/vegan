@@ -26,7 +26,7 @@ pcnm, permatfull, permatswap, permustats, permutest,
 poolaccum, postMDS, prc, prestondistr, prestonfit, procrustes,
 protest, radfit, radlattice, rankindex, rarefy, rarecurve, rareslope,
 raupcrick, rda, renyiaccum, renyi, rrarefy, scores,
-showvarparts, simper, spandepth, spantree, specaccum, specslope,
+showvarparts, simper, simpson.unb, spandepth, spantree, specaccum, specslope,
 specnumber, specpool2vect, specpool, spenvcor, "sppscores<-", sppscores,
 stepacross, stressplot, swan, tabasco, taxa2dist, taxondive, tolerance,
 treedist, treedive, treeheight, tsallisaccum, tsallis, varpart,
@@ -217,7 +217,6 @@ S3method(labels, cca)
 S3method(labels, envfit)
 # lines: graphics
 S3method(lines, fitspecaccum)
-S3method(lines, humpfit)
 S3method(lines, permat)
 S3method(lines, preston)
 S3method(lines, prestonfit)
@@ -239,7 +238,6 @@ S3method(multipart, default)
 S3method(multipart, formula)
 # nobs: stats
 S3method(nobs, CCorA)
-S3method(nobs, adonis)
 S3method(nobs, anova.cca)
 S3method(nobs, betadisper)
 S3method(nobs, cca)
@@ -255,9 +253,9 @@ S3method(nobs, wcmdscale)
 # ordisurf: vegan
 S3method(ordisurf, default)
 S3method(ordisurf, formula)
-
+# pairs: graphics
+S3method(pairs, permustats)
 ## permustats methods
-S3method(permustats, adonis)
 S3method(permustats, anosim)
 S3method(permustats, mantel)
 S3method(permustats, mrpp)
@@ -299,7 +297,6 @@ S3method(plot, envfit)
 S3method(plot, fisher)
 S3method(plot, fisherfit)
 S3method(plot, fitspecaccum)
-S3method(plot, humpfit)
 S3method(plot, isomap)
 S3method(plot, mantel.correlog)
 S3method(plot, meandist)
@@ -332,7 +329,6 @@ S3method(plot, wcmdscale)
 # points: graphics
 S3method(points, cca)
 S3method(points, decorana)
-S3method(points, humpfit)
 S3method(points, metaMDS)
 S3method(points, monoMDS)
 S3method(points, ordiplot)
@@ -344,7 +340,6 @@ S3method(points, radfit)
 S3method(predict, cca)
 S3method(predict, decorana)
 S3method(predict, fitspecaccum)
-S3method(predict, humpfit)
 S3method(predict, procrustes)
 S3method(predict, radline)
 S3method(predict, radfit)
@@ -354,7 +349,6 @@ S3method(predict, specaccum)
 # print: base
 S3method(print, CCorA)
 S3method(print, MOStest)
-S3method(print, adonis)
 S3method(print, anosim)
 S3method(print, rad)
 S3method(print, betadisper)
@@ -366,7 +360,6 @@ S3method(print, eigenvals)
 S3method(print, envfit)
 S3method(print, factorfit)
 S3method(print, fisherfit)
-S3method(print, humpfit)
 S3method(print, isomap)
 S3method(print, mantel)
 S3method(print, mantel.correlog)
@@ -402,7 +395,6 @@ S3method(print, summary.clamtest)
 S3method(print, summary.decorana)
 S3method(print, summary.dispweight)
 S3method(print, summary.eigenvals)
-S3method(print, summary.humpfit)
 S3method(print, summary.isomap)
 S3method(print, summary.meandist)
 S3method(print, summary.permat)
@@ -419,7 +411,6 @@ S3method(print, wcmdscale)
 # profile: stats
 # see note on 'confint'
 S3method(profile, MOStest)
-S3method(profile, humpfit)
 ## qqmath: lattice
 S3method(qqmath, permustats)
 ## qqnorm: stats
@@ -498,7 +489,6 @@ S3method(summary, clamtest)
 S3method(summary, decorana)
 S3method(summary, dispweight)
 S3method(summary, eigenvals)
-S3method(summary, humpfit)
 S3method(summary, isomap)
 S3method(summary, meandist)
 S3method(summary, ordiellipse)

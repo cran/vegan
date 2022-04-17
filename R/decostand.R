@@ -5,12 +5,12 @@
     x <- as.matrix(x)
     METHODS <- c("total", "max", "frequency", "normalize", "range", "rank",
                  "rrank", "standardize", "pa", "chi.square", "hellinger",
-                 "log")
+                 "log", "clr", "rclr", "alr")
     method <- match.arg(method, METHODS)
     if (any(x < 0, na.rm = na.rm)) {
         k <- min(x, na.rm = na.rm)
         if (method %in% c("total", "frequency", "pa", "chi.square", "rank",
-                          "rrank")) {
+                          "rrank", "clr", "rclr", "alr")) {
             warning("input data contains negative entries: result may be non-sense\n")
         }
     }
@@ -78,18 +78,101 @@
                          na.rm = na.rm)), sqrt(colSums(x, na.rm = na.rm)))
     }, hellinger = {
         x <- sqrt(decostand(x, "total", MARGIN = MARGIN, na.rm = na.rm))
-      }, log = {### Marti Anderson logs, after Etienne Laliberte
+    }, log = {### Marti Anderson logs, after Etienne Laliberte
         if (!isTRUE(all.equal(as.integer(x), as.vector(x)))) {
             x <- x / min(x[x > 0], na.rm = TRUE)
             warning("non-integer data: divided by smallest positive value",
                     call. = FALSE)
         }
         x[x > 0 & !is.na(x)] <- log(x[x > 0 & !is.na(x)], base = logbase) + 1
+
+    }, alr = {
+        if (missing(MARGIN))
+	    MARGIN <- 1
+        if (MARGIN == 1) 
+          x <- .calc_alr(x, ...)
+	else x <- t(.calc_alr(t(x), ...))
+    }, clr = {
+        if (missing(MARGIN))
+	    MARGIN <- 1
+        if (MARGIN == 1) 
+          x <- .calc_clr(x, ...)
+	else x <- t(.calc_clr(t(x), ...))
+    }, rclr = {
+        if (missing(MARGIN))
+	    MARGIN <- 1
+        if (MARGIN == 1) 
+          x <- .calc_rclr(x, ...)
+	else x <- t(.calc_rclr(t(x), ...))
     })
     if (any(is.nan(x)))
-        warning("result contains NaN, perhaps due to impossible mathematical operation\n")
+        warning("result contains NaN, perhaps due to impossible mathematical 
+                 operation\n")
     if (wasDataFrame)
         x <- as.data.frame(x)
     attr(x, "decostand") <- method
     x
 }
+
+
+# Modified from the original version in mia R package
+.calc_clr <- function(x, pseudocount=0, na.rm=TRUE){
+    # Add pseudocount
+    x <- x + pseudocount
+    # Error with negative values
+    if (any(x <= 0, na.rm = TRUE)) {
+        stop("Abundance table contains zero or negative values and ",
+             "clr-transformation is being applied without (suitable) ",
+             "pseudocount. \n")
+    }
+    # In every sample, calculate the log of individual entries.
+    # Then calculate
+    # the sample-specific mean value and subtract every entries'
+    # value with that.
+    clog <- log(x)
+    clog - rowMeans(clog)
+    
+}
+
+# Modified from the original version in mia R package
+.calc_rclr <- function(x, na.rm=TRUE){
+    # Error with negative values
+    if (any(x < 0, na.rm = na.rm)) {
+        stop("Matrix has negative values but the 
+              rclr transformation assumes non-negative values.\n")
+    }
+   # Log transform
+   clog <- log(x)
+   # Convert zeros to NAs in rclr
+   clog[is.infinite(clog)] <- NA
+   # Calculate mean for every sample, ignoring the NAs 
+   mean_clog <- rowMeans(clog, na.rm = TRUE)
+   # Calculate geometric means per sample
+   geom_mean <- exp(mean_clog)
+   # Divide all values by their sample-wide geometric means
+   # Log and transpose back to original shape
+   xx <- log(x/geom_mean)
+   # If there were zeros, there are infinite values after logarithmic transform.
+   # Convert those to zero.
+   xx[is.infinite(xx)] <- 0
+   xx
+}
+
+
+.calc_alr <- function (x, reference = 1, na.rm=TRUE, pseudocount=0) {
+    # Add pseudocount
+    x <- x + pseudocount
+    # If there is negative values, gives an error.
+    if (any(x < 0, na.rm = na.rm)) {
+        stop("Abundance table contains negative values and ",
+             "alr-transformation is being applied without (suitable) ",
+             "pseudocount. \n")
+    }    
+    if (reference > nrow(x)) 
+        stop("The reference should be a feature name, or index between 1 to", ncol(x))
+    clog <- log(x)
+    clog[, -reference]-clog[, reference]
+}
+
+
+

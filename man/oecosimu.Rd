@@ -153,7 +153,7 @@ oecosimu(comm, nestfun, method, nsimul = 99, burnin = 0, thin = 1,
   methods into a time series or a \code{\link{ts}} object. This allows
   using analytic tools for time series in studying the sequences (see
   examples). Function \code{as.mcmc} transforms the simulated results
-  of sequential methods into an \code{\link[coda]{mcmc}} object of the
+  of sequential methods into an \code{mcmc} object of the
   \pkg{coda} package. The \pkg{coda} package provides functions for
   the analysis of stationarity, adequacy of sample size,
   autocorrelation, need of burn-in and much more for sequential
@@ -215,9 +215,7 @@ oecosimu(comm, nestfun, method, nsimul = 99, burnin = 0, thin = 1,
   The internal structure of the function was radically changed in
   \pkg{vegan 2.2-0} with introduction of \code{\link{commsim}} and
   \code{\link{nullmodel}} and deprecation of
-  \code{\link{commsimulator}}. However, the results and the basic user
-  interface remain the same (except that \code{method = "r0_old"} must
-  be used to reproduce the old results of \code{"method = r0"}).  
+  \code{\link{commsimulator}}.
 }
 
 \seealso{Function \code{oecosimu} currently defines null models with

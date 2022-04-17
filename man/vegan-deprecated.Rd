@@ -1,11 +1,7 @@
-\encoding{UTF-8}
 \name{vegan-deprecated}
 
+\alias{adonis}
 \alias{vegan-deprecated}
-\alias{as.mlm}
-\alias{as.mlm.cca}
-\alias{as.mlm.rda}
-\alias{humpfit}
 
 %------ NOTE:  ../R/vegan-deprecated.R   must be synchronized with this!
 \title{Deprecated Functions in vegan package}
@@ -17,31 +13,26 @@
 }
 
 \usage{
-as.mlm(x)
+## use adonis2 instead
+adonis(formula, data, permutations = 999, method = "bray",
+    strata = NULL, contr.unordered = "contr.sum",
+    contr.ordered = "contr.poly", parallel = getOption("mc.cores"), ...)
 }
+
 \arguments{
-  \item{x}{Constrained ordination result. }
+  \item{formula, data, permutations, method, parallel, \dots}{See
+    \code{\link{adonis2}}.}
+  \item{strata}{groups (strata) within which to constrain permutations.}
+  \item{contr.unordered, contr.ordered}{contrasts used for design matrix.}
 }
+
 \details{
 
-  Function \code{as.mlm} refits results of constrained ordination
-  (\code{\link{cca}}, \code{\link{rda}}, \code{\link{capscale}}) as a
-  multiple response linear model (\code{\link{lm}}). This allows
-  finding influence statistics (\code{\link{influence.measures}}).
-  It is also possible to derive several other statistics, but most of
-  these are biased and misleading, since refitting ignores a major
-  component of variation in constrained ordination. This function is
-  replaced with a set functions that can find the same statistics
-  directly from the ordination result object: see
-  \code{\link{hatvalues.cca}}, \code{\link{rstandard.cca}},
-  \code{\link{rstudent.cca}}, \code{\link{cooks.distance.cca}},
-  \code{\link{vcov.cca}}.
-
-  Function \code{humpfit} was moved to the \pkg{natto} package and is
-  still available from \url{https://github.com/jarioksa/natto}. The
-  function fits a neutral no-interaction model for the biomass --
-  species-richness relation. The old help page is still available with
-  \code{help("humpfit-deprecated")} (note the quotes).
+  \code{\link{adonis2}} replaces \code{adonis} with extended
+  functionality and completely new internal design. The shared arguments
+  of \code{adonis} are similar as in \code{\link{adonis2}}, but
+  arguments \code{contr.unordered} and \code{contr.ordered} can set the
+  contrasts within \code{adonis}.
 
 }
 

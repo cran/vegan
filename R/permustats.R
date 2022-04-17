@@ -222,6 +222,16 @@
     boxplot(p, names = names, ...)
 }
 
+## pairs plot permuted variables against each other
+
+`pairs.permustats` <-
+    function(x, ...)
+{
+    p <- x$permutations
+    colnames(p) <- attr(x$statistic, "names")
+    pairs(p, ...)
+}
+
 ###
 ### specific methods to extract permustats
 ###
@@ -232,18 +242,6 @@
     structure(list(
         "statistic" = structure(x$statistic, names = "R"),
         "permutations" = x$perm,
-        "alternative" = "greater"),
-              class = "permustats")
-}
-
-`permustats.adonis` <-
-    function(x, ...)
-{
-    tab <- x$aov.tab
-    k <- !is.na(tab$F.Model)
-    structure(list(
-        "statistic" = structure(tab$F.Model[k], names = rownames(tab)[k]),
-        "permutations" = x$f.perms,
         "alternative" = "greater"),
               class = "permustats")
 }

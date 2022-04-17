@@ -10,12 +10,18 @@
     ## Solve 'x' (Fisher alpha).
     d1fun <- function(x, S, N) x * log(1 + N/x) - S
 
-    ## 'extendInt' arg was added in R r63162 | maechler | 2013-07-03
-    ## 11:47:22 +0300 (Wed, 03 Jul 2013) and released in R 3.1.0
-    ## (2014-04-10).
-
-    sol <- uniroot(d1fun, c(1,50), extendInt = "upX", S = S, N = N, ...)
-
+    ## Function will give extremely high values when all species occur
+    ## only once or S==N, starting from fisherfit(1) which is ca. 1e8,
+    ## and it can make sense to have special treatment of S==N. With S
+    ## == 0, we force alpha 0 whereas the function would give
+    ## fisherfit(0) as 1 (which hardly makes sense).
+    if (S > 0) {
+        sol <- uniroot(d1fun, c(1,50), extendInt = "upX", S = S, N = N, ...)
+        if (S == N)
+            warning("all species singletons: alpha arbitrarily high")
+    } else {
+        sol <- list(root = 0, iter = 0, estim.prec = NA)
+    }
     nuisance <- N/(N + sol$root)
     ## we used nlm() earlier, and the following output is compatible
     out <- list(estimate = sol$root, hessian = NA,
