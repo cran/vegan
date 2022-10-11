@@ -470,7 +470,18 @@ correct.</p>
 
 <hr/>
 
-<h3>I get zero stress but no convergent solutions in <code>metaMDS</code></h3>
+<h3>I get zero stress but no repeated solutions in <code>metaMDS</code></h3>
+
+<p>The first (try 0) run of <code>metaMDS</code> starts from the metric scaling
+solution and is usually good, and most sofware only return that
+solution. However, <code>metaMDS</code> tries to see if that standard solution
+can be repeated, or improved and the improved solution still
+repeated. In all cases, it will return the best solution found, and
+there is no burning need to do anything if you get the message tha the
+solution could not be repeated. If you are keen to know that the
+solution really is the global optimum, you may follow the instructions
+in the <code>metaMDS</code> help section &ldquo;Results Could Not Be Repeated&rdquo; and try
+more.</p>
 
 <p>Most common reason is that you have too few observations for your NMDS.
 For <code>n</code> observations (points) and <code>k</code> dimensions you need to estimate
