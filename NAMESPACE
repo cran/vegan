@@ -52,7 +52,6 @@ export(panel.ordi, panel.ordiarrows, panel.ordi3d, prepanel.ordi3d)
 export(commsimulator)
 export(as.mlm)
 S3method(as.mlm, cca)
-S3method(as.mlm, rda)
 
 ## Deprecated functions & methods
 export(as.mcmc.oecosimu)
@@ -105,9 +104,15 @@ importFrom(grDevices, bmp, check.options, chull, col2rgb, dev.off,
            heat.colors, jpeg, palette, pdf, png, postscript, rainbow,
            rgb, svg, tiff, xfig, xy.coords)
 ## import(grDevices) ## too many functions to be listed separately
-import(lattice) # vegan depends on lattice: import all
+## import(lattice) # vegan depends on lattice: import all
+importFrom(lattice, densityplot, qqmath, bwplot, cloud, lpolygon, panel.abline,
+           panel.arrows, panel.cloud, panel.densityplot, panel.lines,
+           panel.number, panel.qqmath, panel.superpose, panel.text,
+           panel.xyplot,prepanel.default.cloud, splom, xyplot,
+           trellis.par.get)
 importFrom(parallel, mclapply, makeCluster, stopCluster, clusterEvalQ,
-           parApply, parLapply, parSapply, parRapply, parCapply)
+           parApply, parLapply, parSapply, parRapply, parCapply,
+           splitIndices)
 importFrom(MASS, isoMDS, sammon, Shepard, mvrnorm, lda)
 importFrom(cluster, daisy, ellipsoidhull)
 ## 's' must be imported in mgcv < 1.8-0 (not needed later)
@@ -233,8 +238,6 @@ S3method(goodness, monoMDS)
 # hatvalues: stats
 S3method(hatvalues, cca)
 S3method(hatvalues, rda)
-# head: utils
-S3method(head, summary.cca)
 # hiersimu: vegan
 S3method(hiersimu, default)
 S3method(hiersimu, formula)
@@ -370,6 +373,7 @@ S3method(points, radfit)
 # predict: stats
 S3method(predict, cca)
 S3method(predict, decorana)
+S3method(predict, dbrda)
 S3method(predict, fitspecaccum)
 S3method(predict, procrustes)
 S3method(predict, radline)
@@ -534,8 +538,6 @@ S3method(summary, simper)
 S3method(summary, specaccum)
 S3method(summary, taxondive)
 S3method(summary, varpart)
-# tail: utils
-S3method(tail, summary.cca)
 # text: graphics
 S3method(text, cca)
 S3method(text, decorana)

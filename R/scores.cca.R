@@ -1,6 +1,6 @@
 `scores.cca` <-
-    function (x, choices = c(1, 2), display = c("sp", "wa", "bp", "cn"),
-              scaling = "species", hill = FALSE, tidy = FALSE, ...)
+    function (x, choices = c(1, 2), display = "all", scaling = "species",
+              hill = FALSE, tidy = FALSE, droplist = TRUE, ...)
 {
     ## Check the na.action, and pad the result with NA or WA if class
     ## "exclude"
@@ -24,9 +24,12 @@
     if("all" %in% display)
         display <- names(tabula)
     take <- tabula[display]
-    slam <- sqrt(c(x$CCA$eig, x$CA$eig)[choices])
     rnk <- x$CCA$rank
+    if (is.null(rnk))
+        rnk <- 0
+    choices <- choices[choices %in% seq_len(x$CA$rank + rnk)]
     sol <- list()
+    slam <- sqrt(c(x$CCA$eig, x$CA$eig)[choices])
     ## process scaling; numeric scaling will just be returned as is
     scaling <- scalingType(scaling = scaling, hill = hill)
     if ("species" %in% take) {
@@ -150,5 +153,8 @@
     }
     ## return NULL instead of list(), and matrix instead of a list of
     ## one matrix
-    switch(min(2, length(sol)), sol[[1]], sol)
+    if (droplist)
+        switch(min(2, length(sol)), sol[[1]], sol)
+    else
+        sol
 }

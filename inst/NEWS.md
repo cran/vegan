@@ -1,5 +1,173 @@
 ## vegan News
 
+### Changes in version 2\.6-6
+
+#### INSTALLATION
+
+* **vegan** depends on **R** version 4.1.0.
+
+* It is possible to build **vegan** with webR/wasm Fortran
+  compiler. Issue [#623](https://github.com/vegandevs/vegan/issues/623).
+
+#### NEW FEATURES
+
+* Permutation tests for CCA were completely redesigned to follow C.J.F
+  ter Braak & D.E. te Beest: Environ Ecol Stat 29, 849–868 (2022)
+  (https://doi.org/10.1007/s10651-022-00545-4). The constraints are
+  now re-weighted for the permuted response data, and in partial model
+  they are also residualized by conditions (partial terms). In
+  **vegan** (after release 2.4-6) the tests were identical to Canoco,
+  but ter Braak & te Beest demonstrated that the results are biased.
+  In old **vegan** (release 2.4-2 and earlier) the predictors were
+  re-weighted but not residualized. Re-weighting was sufficient to
+  remove bias with moderate variation of weights, but residualizing of
+  predictors is necessary with strongly varying weights. See
+  discussion in issue
+  [#542](https://github.com/vegandevs/vegan/issues/542).
+  The new scheme only concerns CCA which is a weighted method, and RDA
+  and dbRDA permutation is unchanged.
+
+* `summary` of ordination results no longer prints ordination scores
+  that often are so voluminous that they hide the real summary; see issue
+  [#203](https://github.com/vegandevs/vegan/issues/203). Ordination
+  scores should be extracted with `scores` function. This breaks some
+  CRAN packages that use `summary.cca` to extract scores. These should
+  switch to use `scores`. The maintainers have been contacted and
+  patch files are suggested to adapt to this change. See
+  [instructions](https://github.com/vegandevs/vegan/discussions/644)
+  to fix the packages.
+
+* `scores` function for constrained ordination (CCA, RDA,dbRDA)
+  default to return all types of scores (`display = "all"`). Function
+  can optionally return a single type of scores as a list of one matrix
+  instead of returning a matrix (new argument `droplist`).
+
+* Constrained ordination objects (`cca`, `rda`, `dbrda`) fitted
+  without formula interface can have permutation tests (`anova`) by
+  `"axis"` and by `"onedf"`. Models by `"terms"` and `"margin"` are only
+  possible with formula interface.
+
+* Permutation tests for constrained ordination objects (`cca`, `rda`,
+  `dbrda`) with `by = "axis"` stop permutations of later axis once the
+  `cutoff` limit is reached. Earlier `cutoff` had to be exceeded. The
+  default is to stop permutations once _P_-value 1 is reached. The
+  analysis takes care that _P_-values of axes are non-decreasing
+  similarly as in Canoco.
+
+* Coefficients of effects in `prc` models are scaled similarly as they
+  were scaled in **vegan** pre 2\.5-1. The change was suggested by
+  Cajo ter Braak.
+
+* Handling of negative eigenvalues was changed in the `summary` of
+  `eigenvals`. Negative eigenvalues are given as negative
+  "explanation", and the accumulated proportions add up over 1 for the
+  last non-negative eigenvalue, and 1 for the last negative
+  eigenvalue.
+
+* The printed output of `capscale` shows proportions for real
+  components only and ignores imaginary dimensions. This is consistent
+  to `summary` and other support methods. Issue
+  [#636](https://github.com/vegandevs/vegan/issues/636).
+
+* `RsquareAdj` of `capscale` is based only on positive eigenvalues,
+  and imaginary components are ignored.
+
+* `stressplot.dbrda` refuses to handle partial models. Only the first
+  component of variation can be displayed because `dbrda` internal
+  ("working") data structures are not additive. For unconstrained
+  model `"CA"`, for constrained `"CCA"` and for partial none.
+
+* `predict` for `dbrda` will return the actual
+  `type = "working"`. Earlier it returned `"lc"` scores weighted by
+  eigenvalues. Both generated same distances and eigenvalues, though.
+
+#### BUG FIXES
+
+* Parallel processing was inefficiently implemented and could be
+  slower than non-parallel in permutation tests for constrained
+  ordination and `adonis2`.
+
+* `plot` and `scores` for `cca` and `rda` family of methods gave an
+  error when non-existing axes were requested. Now ignores requests to
+  axes numbers that are higher than in the result object.
+
+* `summary` of `prc` ignored extra parameters (such as `const`).
+
+* Over-fitted models with high number of aliased variables caused a
+  rare failure in `adonis2` and permutation tests of constrained
+  ordination methods (`cca`, `rda`, `dbrda`, `capscale`) with
+  arguments `by = "margin"` or `by = "axis"`. This also concerned
+  `vif.cca` and `intersetcor`. Typically this occurred with high-order
+  interactions of factor variables. See issues
+  [#452](https://github.com/vegandevs/vegan/issues/452) and
+  [#622](https://github.com/vegandevs/vegan/issues/622)
+  
+* Some methods accept rectangular raw data input as alternative to
+  distances, but did not pass all arguments to distance
+  functions. These arguments in `vegdist` could be `binary = TRUE` or
+  `pseudocount` with Aitchison distance. This concerns `dbrda`,
+  `capscale` and `bioenv`. See issue
+  [#631](https://github.com/vegandevs/vegan/issues/631)
+  
+* `simper` gave arbitrary *p*-values for species that did not occur in
+  a subset. Now these are given as `NA`. See
+  https://stackoverflow.com/questions/77881877/
+  
+* `Rsquare.adj` gave arbitrary *p*-values for over-fitted models with
+  no residual variation. Now returns `NA` when _R_<sup>2</sup> cannot
+  be adjusted. Automatic model building could proceed to such cases,
+  and this was fixed in `ordiR2step` which returns _R_<sup>2</sup> = 0
+  for overfitted cases. The constrained ordination methods issue a
+  warning if the model has no residual component. See issue
+  [#610](https://github.com/vegandevs/vegan/issues/610)
+  
+* `inertcomp(..., display = "sites", proportional = TRUE)` gave wrong
+  values.
+
+#### DATA SETS
+
+* Extended the description of the BCI data sets to avoid
+  confusion. The complete BCI survey includes all stems of down to
+  1&nbsp;cm DBH, but the BCI data set in **vegan** is a subset of stems of
+  DBH 10&nbsp;cm that was published in
+  [Science 295, 666&mdash;669, 2002](https://www.science.org/doi/10.1126/science.1066854).
+  The data set is intended only to demonstrate methods in **vegan** and for
+  ecological research we suggest contacting the BCI team and using the
+  complete surveys made available in
+  [Dryad](https://doi.org/10.15146/5xcp-0d46).
+
+#### DEPRECATED AND DEFUNCT
+
+* `adonis` is deprecated: use `adonis2`. There are several CRAN
+  packages that still use `adonis` although we have contacted all
+  their authors in June 2022 and again in April 2024, and printed a
+  message of forthcoming deprecation since **vegan** 2.6-2. See issue
+  [#523](https://github.com/vegandevs/vegan/issues/523). See
+  [instructions](https://github.com/vegandevs/vegan/discussions/641)
+  to adapt your packages and functions to use `adonis2`.
+  
+* `orditkplot` was moved to CRAN package **vegan3d** and is deprecated
+  in **vegan**. See issue
+  [#585](https://github.com/vegandevs/vegan/issues/585) and
+  announcement
+  [#632](https://github.com/vegandevs/vegan/discussions/632)
+
+* The use of `summary` to extract ordination scores is deprecated: you
+  should use `scores` to extract scores. This version still allows
+  extracting scores with `summary`, but this will fail in next
+  versions. For `summary.cca` see
+  [instructions](https://github.com/vegandevs/vegan/discussions/644)
+  to change your package.
+
+* Support was removed from ancient `cca` objects (results of `cca`,
+  `rda`, `dbrda` or `capscale`) generated before CRAN release 2.5
+  (2016). If you still have such stray relics, use
+  `newobject <- update(ancientobject)` to modernize the result.
+
+* `as.mcmc.oecosimu` and `as.mcmc.permat` are defunct: use `toCoda`.
+
+* Code of defunct functions was completely removed.
+
 ### Changes in version 2\.6-4
 
 #### NEW FEATURES

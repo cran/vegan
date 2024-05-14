@@ -2,8 +2,8 @@
 ### latter can have special features which are commented below. cca
 ### results are handled by scores.cca.
 `scores.rda` <-
-    function (x, choices = c(1, 2), display = c("sp", "wa", "bp", "cn"),
-              scaling = "species", const, correlation = FALSE, tidy = FALSE,
+    function (x, choices = c(1, 2), display = "all", scaling = "species",
+              const, correlation = FALSE, tidy = FALSE, droplist = TRUE,
               ...)
 {
     ## Check the na.action, and pad the result with NA or WA if class
@@ -34,7 +34,6 @@
     eigval <- eigenvals(x)
     if (inherits(x, "dbrda") && any(eigval < 0))
         eigval <- eigval[eigval > 0]
-    slam <- sqrt(eigval[choices]/sumev)
     nr <- if (is.null(x$CCA))
         nrow(x$CA$u)
     else
@@ -56,6 +55,10 @@
         rnk <- x$CCA$poseig
     else
         rnk <- x$CCA$rank
+    if (is.null(rnk))
+        rnk <- 0
+    choices <- choices[choices %in% seq_len(rnk + x$CA$rank)]
+    slam <- sqrt(eigval[choices]/sumev)
     sol <- list()
     ## process scaling; numeric scaling will just be returned as is
     scaling <- scalingType(scaling = scaling, correlation = correlation)
@@ -166,7 +169,8 @@
         const <- const[1]
     ## return NULL for list(), matrix for single scores, and a list
     ## for several scores
-    sol <- switch(min(2, length(sol)), sol[[1]], sol)
+    if (droplist)
+        sol <- switch(min(2, length(sol)), sol[[1]], sol)
     if (!is.null(sol))
         attr(sol, "const") <- const
     sol

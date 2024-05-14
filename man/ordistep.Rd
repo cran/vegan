@@ -6,13 +6,16 @@
   Choose a Model by Permutation Tests in Constrained Ordination
 }
 \description{
+
   Automatic stepwise model building for constrained ordination methods
-  (\code{\link{cca}}, \code{\link{rda}}, \code{\link{capscale}}).
-  The function \code{ordistep} is modelled after \code{\link{step}} and
-  can do forward, backward and stepwise model selection using permutation tests.
-  Function \code{ordiR2step} performs forward model choice solely on adjusted
-  \eqn{R^2}{R2} and P-value, for ordination objects created by \code{\link{rda}} or \code{\link{capscale}}.
+  (\code{\link{cca}}, \code{\link{rda}}, \code{\link{dbrda}},
+  \code{\link{capscale}}).  The function \code{ordistep} is modelled
+  after \code{\link{step}} and can do forward, backward and stepwise
+  model selection using permutation tests.  Function \code{ordiR2step}
+  performs forward model choice solely on adjusted \eqn{R^2}{R2} and
+  \eqn{P}-value.
 }
+
 \usage{
 ordistep(object, scope, direction = c("both", "backward", "forward"),
    Pin = 0.05, Pout = 0.1, permutations = how(nperm = 199), steps = 50,
@@ -107,16 +110,17 @@ ordiR2step(object, scope, Pin = 0.05, R2scope = TRUE,
   step, and stopping when the adjusted \eqn{R^2}{R2} starts to decrease,
   or the adjusted \eqn{R^2}{R2} of the \code{scope} is exceeded, or the
   selected permutation \eqn{P}-value is exceeded (Blanchet et
-  al. 2008). The second criterion is ignored with option
-  \code{R2scope = FALSE}, and the third criterion can be ignored setting
-  \code{Pin = 1} (or higher).
-  The function cannot be used if adjusted \eqn{R^2}{R2}
-  cannot be calculated, including partial models.  If the number of
-  predictors is higher than the number of observations, adjusted
-  \eqn{R^2}{R2} is also unavailable, but such models can be analysed
-  with \code{R2scope = FALSE}.  The \eqn{R^2}{R2} of \code{\link{cca}}
-  is based on simulations (see \code{\link{RsquareAdj}}) and different
-  runs of \code{ordiR2step} can give different results.
+  al. 2008). The second criterion is ignored with option \code{R2scope =
+  FALSE}, and the third criterion can be ignored setting \code{Pin = 1}
+  (or higher).  The function cannot be used if adjusted \eqn{R^2}{R2}
+  cannot be calculated. If the number of predictors is higher than the
+  number of observations, adjusted \eqn{R^2}{R2} is also unavailable.
+  Such models can be analysed with \code{R2scope = FALSE}, but the
+  variable selection will stop if models become overfitted and adjusted
+  \eqn{R^2}{R2} cannot be calculated, and the adjusted \eqn{R^2}{R2}
+  will be reported as zero. The \eqn{R^2}{R2} of \code{\link{cca}} is
+  based on simulations (see \code{\link{RsquareAdj}}) and different runs
+  of \code{ordiR2step} can give different results.
 
   Functions \code{ordistep} (based on \eqn{P} values) and \code{ordiR2step}
   (based on adjusted \eqn{R^2}{R2} and hence on eigenvalues) can select

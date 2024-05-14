@@ -34,8 +34,8 @@ ordiplot(ord, choices = c(1, 2), type="points", display, xlim, ylim,
     \code{"text"} or \code{"none"} for any ordination method.}
   \item{display}{Display only "sites" or "species". The default for most
     methods is to display both, but for \code{\link{cca}},
-    \code{\link{rda}} and \code{\link{capscale}} it is the same as in
-    \code{\link{plot.cca}}.  }
+    \code{\link{rda}}, \code{\link{dbrda}} and \code{\link{capscale}}
+    it is the same as in \code{\link{plot.cca}}.  }
   \item{xlim, ylim}{the x and y limits (min,max) of the plot.}
   \item{cex}{Character expansion factor for points and text.}
   \item{\dots}{Other graphical parameters. }
@@ -124,8 +124,7 @@ pl <- ordiplot(dune.mds, type = "none")
 points(pl, "sites", pch=21, col="red", bg="yellow")
 text(pl, "species", col="blue", cex=0.9)
 \dontrun{
-## same plot using pipes (pipes |> are available from R version 4.1.0)
-if (getRversion() >= "4.1") {
+## same plot using pipes (|>)
 ordiplot(dune.mds, type="n") |>
   points("sites", pch=21, col="red", bg="yellow") |>
   text("species", col="blue", cex=0.9)
@@ -136,7 +135,6 @@ mod <- rda(dune)
 plot(mod, type="n") |>
   points("sites", pch=16, col="red") |>
   text("species", arrows = TRUE, length=0.05, col="blue")
-}
 }
 ## Default plot of the previous using identify to label selected points
 \dontrun{

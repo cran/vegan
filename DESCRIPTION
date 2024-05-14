@@ -1,6 +1,6 @@
 Package: vegan
 Title: Community Ecology Package
-Version: 2.6-4
+Version: 2.6-6
 Authors@R: c(person("Jari", "Oksanen", role=c("aut","cre"),
                     email="jhoksane@gmail.com"),
 	   person("Gavin L.", "Simpson", role="aut",
@@ -36,7 +36,7 @@ Authors@R: c(person("Jari", "Oksanen", role=c("aut","cre"),
 	   person("Adrian", "Stier", role="aut"),
 	   person("Cajo J.F.", "Ter Braak", role="aut"),
 	   person("James", "Weedon", role="aut"))
-Depends: permute (>= 0.9-0), lattice, R (>= 3.4.0)
+Depends: permute (>= 0.9-0), lattice, R (>= 4.1.0)
 Suggests: parallel, tcltk, knitr, markdown
 Imports: MASS, cluster, mgcv
 VignetteBuilder: utils, knitr
@@ -46,7 +46,7 @@ License: GPL-2
 BugReports: https://github.com/vegandevs/vegan/issues
 URL: https://github.com/vegandevs/vegan
 NeedsCompilation: yes
-Packaged: 2022-10-11 08:36:07 UTC; jarioksa
+Packaged: 2024-05-13 11:57:37 UTC; jarioksa
 Author: Jari Oksanen [aut, cre],
   Gavin L. Simpson [aut],
   F. Guillaume Blanchet [aut],
@@ -82,4 +82,4 @@ Author: Jari Oksanen [aut, cre],
   James Weedon [aut]
 Maintainer: Jari Oksanen <jhoksane@gmail.com>
 Repository: CRAN
-Date/Publication: 2022-10-11 12:40:02 UTC
+Date/Publication: 2024-05-14 07:40:02 UTC

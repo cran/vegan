@@ -47,7 +47,7 @@ static void goffactor(double *ord, int *f, double *w, int *nrow, int *ndim,
 
 #include <math.h> /* sqrt */
 
-static void wcentre(double *x, double *w, int *nr, int *nc)
+void wcentre(double *x, double *retx, double *w, int *nr, int *nc)
 {
      int i, j, ij;
      double sw, swx;
@@ -61,8 +61,8 @@ static void wcentre(double *x, double *w, int *nr, int *nc)
 	  }
 	  swx /= sw;
 	  for (i = 0,  ij = (*nr)*j; i < (*nr); i++, ij++) {
-	       x[ij] -= swx;
-	       x[ij] *= sqrt(w[i]);
+	       retx[ij] = x[ij] - swx;
+	       retx[ij] *= sqrt(w[i]);
 	  }
      }
 }
@@ -79,12 +79,22 @@ SEXP do_wcentre(SEXP x, SEXP w)
     if (TYPEOF(x) != REALSXP)
 	x  = coerceVector(x, REALSXP);
     SEXP rx = PROTECT(duplicate(x));
-    if (TYPEOF(x) != REALSXP)
+    if (TYPEOF(w) != REALSXP)
 	w = coerceVector(w, REALSXP);
-    PROTECT(w);
-    wcentre(REAL(rx), REAL(w), &nr, &nc);
-    UNPROTECT(2);
-    return rx;
+    w = PROTECT(duplicate(w));
+    SEXP retx = PROTECT(allocMatrix(REALSXP, nr, nc));
+    wcentre(REAL(rx), REAL(retx), REAL(w), &nr, &nc);
+    /* set dimnames */
+    SEXP dnames = getAttrib(x, R_DimNamesSymbol);
+    if (!isNull(dnames)) {
+        SEXP dimnames = PROTECT(allocVector(VECSXP, 2));
+        SET_VECTOR_ELT(dimnames, 0, duplicate(VECTOR_ELT(dnames, 0)));
+        SET_VECTOR_ELT(dimnames, 1, duplicate(VECTOR_ELT(dnames, 1)));
+        setAttrib(retx, R_DimNamesSymbol, dimnames);
+        UNPROTECT(1);
+    }
+    UNPROTECT(3);
+    return retx;
 }
 
 SEXP do_goffactor(SEXP x, SEXP factor, SEXP nlevels, SEXP w)

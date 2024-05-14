@@ -27,7 +27,9 @@ adonis2(formula, data, permutations = 999, method = "bray",
     defines the independent variables. These can be continuous variables
     or factors, they can be transformed within the formula, and they can
     have interactions as in a typical \code{\link{formula}}.}
-  \item{data}{ the data frame for the independent variables.}
+  \item{data}{ the data frame for the independent variables, with rows
+    in the same order as the community data matrix or dissimilarity
+    matrix named on the LHS of \code{formula}.}
   \item{permutations}{a list of control values for the permutations
     as returned by the function \code{\link[permute]{how}}, or the
     number of permutations required, or a permutation matrix where each
@@ -80,20 +82,20 @@ negative eigenvalues. The \code{adonis2} tests are identical to
 distances, the tests are also identical to \code{\link{anova.cca}} of
 \code{\link{rda}}.
 
-The function partitions sums of squares of a multivariate data set, and
-they are directly analogous to MANOVA (multivariate analysis of
-variance). McArdle and Anderson (2001) and Anderson (2001) refer to the
-method as \dQuote{permutational MANOVA} (formerly \dQuote{nonparametric
-MANOVA}). Further, as the inputs are linear predictors, and a response
-matrix of an arbitrary number of columns, they are a robust alternative
-to both parametric MANOVA and to ordination methods for describing how
-variation is attributed to different experimental treatments or
-uncontrolled covariates. The method is also analogous to distance-based
-redundancy analysis in functions \code{\link{dbrda}} and
-\code{\link{capscale}} (Legendre and Anderson 1999), and provides
-an alternative to AMOVA (nested analysis of molecular variance,
-Excoffier, Smouse, and Quattro, 1992; \code{amova} in the
-\pkg{ade4} package) for both crossed and nested factors.
+The function partitions sums of squares of a multivariate data set,
+and they are directly analogous to MANOVA (multivariate analysis of
+variance). McArdle and Anderson (2001) and Anderson (2001) refer to
+the method as \dQuote{permutational MANOVA} (formerly
+\dQuote{nonparametric MANOVA}). Further, as the inputs are linear
+predictors, and a response matrix of an arbitrary number of columns,
+they are a robust alternative to both parametric MANOVA and to
+ordination methods for describing how variation is attributed to
+different experimental treatments or uncontrolled covariates. The
+method is also analogous to distance-based redundancy analysis and
+algorithmically similar to \code{\link{dbrda}} (Legendre and Anderson
+1999), and provides an alternative to AMOVA (nested analysis of
+molecular variance, Excoffier, Smouse, and Quattro, 1992; \code{amova}
+in the \pkg{ade4} package) for both crossed and nested factors.
 
 }
 
@@ -165,9 +167,9 @@ Y <- data.frame(Agropyron, Schizachyrium)
 mod <- metaMDS(Y, trace = FALSE)
 plot(mod)
 ### Ellipsoid hulls show treatment
-with(dat, ordiellipse(mod, field, kind = "ehull", label = TRUE))
+with(dat, ordiellipse(mod, NO3, kind = "ehull", label = TRUE))
 ### Spider shows fields
-with(dat, ordispider(mod, field, lty=3, col="red"))
+with(dat, ordispider(mod, field, lty=3, col="red", label = TRUE))
 
 ### Incorrect (no strata)
 adonis2(Y ~ NO3, data = dat, permutations = 199)

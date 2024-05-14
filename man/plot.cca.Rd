@@ -6,15 +6,14 @@
 \alias{scores.rda}
 \alias{summary.cca}
 \alias{print.summary.cca}
-\alias{head.summary.cca}
-\alias{tail.summary.cca}
 \alias{labels.cca}
 
 \title{Plot or Extract Results of Constrained Correspondence Analysis
   or Redundancy Analysis}
 \description{
   Functions to plot or extract results of constrained correspondence analysis
-  (\code{\link{cca}}), redundancy analysis (\code{\link{rda}}) or
+  (\code{\link{cca}}), redundancy analysis (\code{\link{rda}}), distance-based
+  redundancy analysis (\code{\link{dbrda}}) or
   constrained analysis of principal coordinates (\code{\link{capscale}}).
 }
 \usage{
@@ -27,17 +26,16 @@
 \method{points}{cca}(x, display = "sites", choices = c(1, 2),
        scaling = "species", arrow.mul, head.arrow = 0.05, select, const,
        axis.bp = FALSE, correlation = FALSE, hill = FALSE, ...)
-\method{scores}{cca}(x, choices = c(1,2), display = c("sp","wa","bp","cn"),
-       scaling = "species", hill = FALSE, tidy = FALSE, ...)
-\method{scores}{rda}(x, choices = c(1,2), display = c("sp","wa","bp","cn"),
-       scaling = "species", const, correlation = FALSE, tidy = FALSE, ...)
+\method{scores}{cca}(x, choices = c(1,2), display = "all",
+       scaling = "species", hill = FALSE, tidy = FALSE, droplist = TRUE,
+       ...)
+\method{scores}{rda}(x, choices = c(1,2), display = "all",
+       scaling = "species", const, correlation = FALSE, tidy = FALSE,
+       droplist = TRUE, ...)
 \method{summary}{cca}(object, scaling = "species", axes = 6,
-        display = c("sp", "wa", "lc", "bp", "cn"),
-        digits = max(3, getOption("digits") - 3),
-        correlation = FALSE, hill = FALSE, ...)
-\method{print}{summary.cca}(x, digits = x$digits, head = NA, tail = head, ...)
-\method{head}{summary.cca}(x, n = 6, tail = 0, ...)
-\method{tail}{summary.cca}(x, n = 6, head = 0, ...)
+                      display=c("sp","wa","lc","bp","cn"),
+                      digits = max(3, getOption("digits") - 3),
+                      correlation = FALSE, hill = FALSE, ...)
 \method{labels}{cca}(object, display, ...)
 }
 
@@ -113,11 +111,11 @@
     for details and discussion). If \code{const} is a vector of two
     items, the first is used for species, and the second item for site
     scores.}
+  \item{droplist}{Return a matrix instead of a named list when only one
+    kind of scores were requested.}
   \item{axis.bp}{Draw \code{\link{axis}} for biplot arrows.}
   \item{axes}{Number of axes in summaries.}
   \item{digits}{Number of digits in output.}
-  \item{n, head, tail}{Number of rows printed from the head and tail of
-    species and site scores.  Default \code{NA} prints all.}
   \item{...}{Parameters passed to other functions.}
 }
 
@@ -176,12 +174,6 @@
   \code{\link{ordiplot}} will allow full graphical control (see
   section Examples). Utility function \code{labels} returns the default
   labels in the order they are applied in \code{text}.
-
-  Function \code{summary} lists all scores and the output can be very
-  long.  You can suppress scores by setting \code{axes = 0} or
-  \code{display = NA} or \code{display = NULL}. You can display some
-  first or last (or both) rows of scores by using \code{head} or
-  \code{tail} or explicit \code{print} command for the \code{summary}.
   
   Palmer (1993) suggested using linear constraints (\dQuote{LC scores})
   in ordination diagrams, because these gave better results in
@@ -205,6 +197,14 @@
   and more support functions, and \code{\link{text}},
   \code{\link{points}} and \code{\link{arrows}} for the basic routines.  }
 
+\note{Up to \pkg{vegan} release 2.6-4 \code{summary} printed
+  ordination scores, and function was occasionally used to extract
+  scores. This is now deprecated and you should use
+  \code{scores}. This version of \pkg{vegan} still enables extracting
+  scores with \code{summary}, but you should change your code to use
+  \code{scores} before next \pkg{vegan} release. For instructions,
+  see \url{https://github.com/vegandevs/vegan/discussions/644}.  }
+
 \examples{
 data(dune)
 data(dune.env)
@@ -221,11 +221,6 @@ pl <- plot(pca, type="n", scaling="sites", correlation=TRUE)
 with(dune.env, points(pl, "site", pch=21, col=1, bg=Management))
 text(pl, "sp", arrow=TRUE, length=0.05, col=4, cex=0.6, xpd=TRUE)
 with(dune.env, legend("bottomleft", levels(Management), pch=21, pt.bg=1:4, bty="n"))
-## Limited output of 'summary' (NB. Signs of axes are arbitrary and can change
-## when the command is run repeatedly).
-## IGNORE_RDIFF_BEGIN
-head(summary(mod), tail=2)
-## IGNORE_RDIFF_END
 ## Scaling can be numeric or more user-friendly names
 ## e.g. Hill's scaling for (C)CA
 scrs <- scores(mod, scaling = "sites", hill = TRUE)

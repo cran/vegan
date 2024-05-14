@@ -16,7 +16,7 @@
   The function performs an ANOVA like permutation test for Constrained
   Correspondence Analysis (\code{\link{cca}}), Redundancy Analysis
   (\code{\link{rda}}) or distance-based Redundancy Analysis (dbRDA,
-  \code{\link{capscale}}) to assess the significance of constraints.
+  \code{\link{dbrda}}) to assess the significance of constraints.
 }
 
 \usage{
@@ -70,7 +70,8 @@
     \code{permutations = how(\dots, blocks)} instead. }
 
   \item{cutoff}{Only effective with \code{by="axis"} where stops
-    permutations after an axis exceeds the \code{cutoff} \eqn{p}-value.}
+    permutations after an axis equals or exceeds the \code{cutoff}
+    \eqn{p}-value.}
 
   \item{scope}{Only effective with \code{by="margin"} where it can be
     used to select the marginal terms for testing. The default is to
