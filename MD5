@@ -1,4 +1,4 @@
-69c6e29c1415c83b0a5d792eba2a4e5e *DESCRIPTION
+c07c2d7f393c643b7a984fb484bcf845 *DESCRIPTION
 508f4634213ddf62516ecb556986d8dc *NAMESPACE
 4b8531b446af54510e5fb31f841aed2f *R/AIC.radfit.R
 e6a868d9ee71f8bffad9e37695f33358 *R/CCorA.R
@@ -434,7 +434,7 @@ ecfd48e2f4df6bcd683a87203dd80e12 *R/weights.cca.R
 ba447bd2a21d20dd5f37c9a088f395a4 *R/weights.rda.R
 0e4595a9b261a56a8512513453454078 *R/wisconsin.R
 678368022e0d66a4fd7722ab6bcc8beb *R/zzz.R
-287d55ae7bebd4b4ab3ec3be8bb234ce *build/partial.rdb
+e4da2b41ec211af28f94fd39bf343c3b *build/partial.rdb
 ac779b963ed1b0fa4baac8e2aa993d7b *build/vignette.rds
 72cc26156e4b9ce7e2655c228ab87107 *data/BCI.env.rda
 0a5c36b1ebd892c80a84d0d6417e1d6f *data/BCI.rda
@@ -451,7 +451,7 @@ c51905bd025ccea2737527b6fca4a081 *data/mite.pcnm.rda
 76e2094d33dc3ec6705886bb25865185 *data/sipoo.rda
 f87df84297865b5faf31e232e97a0f94 *data/varechem.rda
 7136b8666250a538d60c88869390a085 *data/varespec.rda
-b99edddbcabad43b230c68b5d5238077 *inst/NEWS.md
+e755f5b1c687d8e72669035adb7c7d16 *inst/NEWS.md
 9abfab8b05c34dd283379a7d87500ffb *inst/ONEWS
 1fb35aec7042529e18e4673818fecf7f *inst/OldChangeLog
 21cfc15b15bb9574bc4eaabd4b45d435 *inst/doc/FAQ-vegan.R
@@ -459,16 +459,16 @@ f20139b5feb8acef6ebb89bfc1bc8a6e *inst/doc/FAQ-vegan.Rmd
 e4f7c5b96239993d70dac39ef65f9fa5 *inst/doc/FAQ-vegan.html
 b37bcad94d646c591a902c5bc9f7fade *inst/doc/decision-vegan.R
 3512143479903526fb454bdd66bf1778 *inst/doc/decision-vegan.Rnw
-a6024b3f7279ad90f315606ae711c8d9 *inst/doc/decision-vegan.pdf
+8a55c6aea7141298cff07b88d7028e4d *inst/doc/decision-vegan.pdf
 950bb6110eeec509515c3faef1f03585 *inst/doc/diversity-vegan.R
 d005c5c5c744762b47a66c97fe674d95 *inst/doc/diversity-vegan.Rnw
-af0a65a70d92d18b578639c13ad2dd3d *inst/doc/diversity-vegan.pdf
+80452a69233a0b9b17eaf22c9f57585e *inst/doc/diversity-vegan.pdf
 c1507164f31fbcbe084e36bd9b434457 *inst/doc/intro-vegan.R
 7f9b334a68daf2c86e24b4d8a2393cd6 *inst/doc/intro-vegan.Rnw
-a043ee603596b95823d1f18fa20feeba *inst/doc/intro-vegan.pdf
+4f58de3590bb5cc4b0cd0a25776a2a4b *inst/doc/intro-vegan.pdf
 d56c6fb7eaff59b945aad2459b96bce7 *inst/doc/partitioning.R
 5b17ce6c86e3334b796a658328d426f9 *inst/doc/partitioning.Rnw
-bd04d64a6ab1eb8a35174686a1c7f892 *inst/doc/partitioning.pdf
+5b6f5b59794035be454156cb7072d0e0 *inst/doc/partitioning.pdf
 33fd131340bef0458b605f867c59350d *man/BCI.Rd
 d4d97e3b71561f61bd9f1f0686a57434 *man/CCorA.Rd
 2b36702bf2b1931f955fb7dd9d044c99 *man/MDSrotate.Rd
@@ -585,7 +585,7 @@ e4a5f8d87e65631cebf6aa43ecbc7369 *man/wcmdscale.Rd
 f5d4d3cd72f6a657fa32f51f516479bd *src/data2hill.c
 016c28ebcf648ee496a065c62a18f522 *src/decorana.f
 b171bc09823292a6358bd7d18cec171a *src/getF.c
-4bf2e1570c601cdea156b305eaa57e93 *src/goffactor.c
+d7d0df17665a79da15e5ce717ed2aa9a *src/goffactor.c
 b3b56a1b694087c76cb29bf0a1fdf0f5 *src/init.c
 ad886377b34d57c240392215a0acfbed *src/monoMDS.f
 e9d68291d83291a61331a199b18bbad3 *src/nestedness.c
