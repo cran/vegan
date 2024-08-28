@@ -106,8 +106,11 @@
     ## separate eigenvectors associated with negative eigenvalues from
     ## u into imaginary.u
     if (!is.null(sol$CCA) && sol$CCA$rank > sol$CCA$poseig) {
-        sol$CCA$imaginary.u <- sol$CCA$u[, -seq_len(sol$CCA$poseig),
-                                         drop = FALSE]
+        if (sol$CCA$poseig > 0)
+            sol$CCA$imaginary.u <- sol$CCA$u[, -seq_len(sol$CCA$poseig),
+                                             drop = FALSE]
+        else
+            sol$CCA$imaginary.u <- sol$CCA$u
         sol$CCA$u <- sol$CCA$u[, seq_len(sol$CCA$poseig), drop = FALSE]
     }
     if (!is.null(sol$CA) && sol$CA$rank > sol$CA$poseig) {
@@ -115,18 +118,8 @@
                                        drop = FALSE]
         sol$CA$u <- sol$CA$u[, seq_len(sol$CA$poseig), drop = FALSE]
     }
-    if (!is.null(sol$CCA) && sol$CCA$rank > 0)
-        sol$CCA$centroids <-
-            centroids.cca(sol$CCA$u, d$modelframe)
-    if (!is.null(sol$CCA$alias))
-        sol$CCA$centroids <- unique(sol$CCA$centroids)
-    if (!is.null(sol$CCA$centroids)) {
-        rs <- rowSums(sol$CCA$centroids^2)
-        sol$CCA$centroids <- sol$CCA$centroids[rs > 1e-04, ,
-                                               drop = FALSE]
-        if (nrow(sol$CCA$centroids) == 0)
-            sol$CCA$centroids <- NULL
-    }
+    sol$CCA$centroids <- getCentroids(sol, d$modelframe)
+
     sol$call <- match.call()
     sol$terms <- terms(formula, "Condition", data = data)
     sol$terminfo <- ordiTerminfo(d, data)
