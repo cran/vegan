@@ -1,10 +1,17 @@
 `envfit.default` <-
     function (ord, env, permutations = 999, strata = NULL, choices = c(1, 2),
-             display = "sites", w = weights(ord, display), na.rm = FALSE, ...)
+             display = "sites", w, na.rm = FALSE, ...)
 {
     vectors <- NULL
     factors <- NULL
+    if (missing(w))
+        w <- if (is.atomic(ord)) attr(ord, "weights")
+             else weights(ord, display = display)
     X <- scores(ord, display = display, choices = choices, ...)
+    if (is.null(dim(env))) { # can fail with dropped dims: issue #720
+        env.name <- deparse1(substitute(env))
+        env <- as.data.frame(env, nm=env.name)
+    }
     keep <- complete.cases(X) & complete.cases(env)
     if (any(!keep)) {
         if (!na.rm)
