@@ -20,10 +20,12 @@ monoMDS(dist, y, k = 2, model = c("global", "local", "linear", "hybrid"),
     threshold = 0.8, maxit = 200, weakties = TRUE, stress = 1,
     scaling = TRUE, pc = TRUE, smin = 1e-4, sfgrmin = 1e-7,
     sratmax=0.999999, ...)
-\method{scores}{monoMDS}(x, choices = NA, ...)
-\method{plot}{monoMDS}(x, choices = c(1,2), type = "t", ...)
-\method{points}{monoMDS}(x, choices = c(1,2), select, ...)
-\method{text}{monoMDS}(x, labels, choices = c(1,2), select, ...)
+\method{scores}{monoMDS}(x, display = "sites", shrink = FALSE, choices,
+    tidy = FALSE, ...)
+\method{plot}{monoMDS}(x, display = "sites", choices = c(1,2), type = "t", ...)
+\method{points}{monoMDS}(x, display = "sites", choices = c(1,2), select, ...)
+\method{text}{monoMDS}(x, display = "sites", labels, choices = c(1,2),
+    select, ...)
 }
 
 \arguments{
@@ -65,6 +67,20 @@ monoMDS(dist, y, k = 2, model = c("global", "local", "linear", "hybrid"),
 
   \item{x}{A \code{monoMDS} result.}
 
+  \item{display}{Kind of scores. Normally there are only scores for
+    \code{"sites"}, but \code{"species"} scores can be added with
+    \code{\link{sppscores}.}}
+
+  \item{shrink}{Shrink back species scores if they were expanded in
+      \code{\link{wascores}}.}
+
+  \item{tidy}{Return scores that are compatible with \CRANpkg{ggplot2}:
+    all scores are in a single \code{data.frame}, score type is
+    identified by factor variable \code{code} (\code{"sites"} or
+    \code{"species"}), the names by variable \code{label}. These scores
+    are incompatible with conventional \code{plot} functions, but they can
+    be used in \pkg{ggplot2}.}
+
   \item{choices}{Dimensions returned or plotted. The default \code{NA}
     returns all dimensions. }
 
@@ -75,7 +91,9 @@ monoMDS(dist, y, k = 2, model = c("global", "local", "linear", "hybrid"),
           vector which is \code{TRUE} for displayed items or a vector of
           indices of displayed items.}
 
-  \item{labels}{Labels to be use used instead of row names.}
+  \item{labels}{Labels to be use used instead of row names. If
+    \code{select} is used, labels are given only the selected items in
+    the order they occur in the scores.}
 
   \item{\dots}{Other parameters to the functions (ignored in
     \code{monoMDS}, passed to graphical functions in \code{plot}.).}
@@ -191,7 +209,8 @@ monoMDS(dist, y, k = 2, model = c("global", "local", "linear", "hybrid"),
   are returned in item \code{points} (function \code{scores} extracts
   these results), and the stress in item \code{stress}. In addition,
   there is a large number of other items (but these may change without
-  notice in the future releases). }
+  notice in the future releases). There are no species scores, but these
+  can be added with \code{\link{sppscores}} function.}
 
 \references{
 

@@ -1,3 +1,4 @@
+\encoding{UTF-8}
 \name{plot.cca}
 \alias{plot.cca}
 \alias{text.cca}
@@ -19,23 +20,22 @@
 \usage{
 \method{plot}{cca}(x, choices = c(1, 2), display = c("sp", "wa", "cn"),
      scaling = "species", type, xlim, ylim, const,
-     correlation = FALSE, hill = FALSE, cex = 0.7, ...)
+     correlation = FALSE, hill = FALSE, optimize = FALSE, arrows = FALSE,
+     spe.par = list(), sit.par = list(), con.par = list(), bip.par = list(),
+     cen.par = list(), reg.par = list(), ...)
 \method{text}{cca}(x, display = "sites", labels, choices = c(1, 2),
      scaling = "species", arrow.mul, head.arrow = 0.05, select, const,
-     axis.bp = FALSE, correlation = FALSE, hill = FALSE, ...)
+     correlation = FALSE, hill = FALSE, ...)
 \method{points}{cca}(x, display = "sites", choices = c(1, 2),
-       scaling = "species", arrow.mul, head.arrow = 0.05, select, const,
-       axis.bp = FALSE, correlation = FALSE, hill = FALSE, ...)
+     scaling = "species", arrow.mul, head.arrow = 0.05, select, const,
+     correlation = FALSE, hill = FALSE, ...)
 \method{scores}{cca}(x, choices = c(1,2), display = "all",
-       scaling = "species", hill = FALSE, tidy = FALSE, droplist = TRUE,
-       ...)
+     scaling = "species", hill = FALSE, tidy = FALSE, droplist = TRUE,
+     ...)
 \method{scores}{rda}(x, choices = c(1,2), display = "all",
-       scaling = "species", const, correlation = FALSE, tidy = FALSE,
-       droplist = TRUE, ...)
-\method{summary}{cca}(object, scaling = "species", axes = 6,
-                      display=c("sp","wa","lc","bp","cn"),
-                      digits = max(3, getOption("digits") - 3),
-                      correlation = FALSE, hill = FALSE, ...)
+     scaling = "species", const, correlation = FALSE, tidy = FALSE,
+     droplist = TRUE, ...)
+\method{summary}{cca}(object, digits = max(3, getOption("digits") - 3), ...)
 \method{labels}{cca}(object, display, ...)
 }
 
@@ -75,6 +75,22 @@
     are used to select the corresponding negative scaling type; either
     correlation-like scores or Hill's scaling for PCA/RDA and CA/CCA
     respectively. See argument \code{scaling} for details.}
+
+  \item{optimize}{Optimize locations of text to reduce overlap and plot
+    point in the actual locations of the scores. Uses
+    \code{\link{ordipointlabel}}. }
+
+  \item{arrows}{Draw arrows from the origin. This will always be
+    \code{TRUE} for biplot and regression scores in constrained
+    ordination (\code{\link{cca}} etc.). Setting this \code{TRUE} will
+    draw arrows for any type of scores. This allows, e.g, using biplot
+    arrows for species. The arrow head will be at the value of scores,
+    and possible text is moved outwards.}
+  
+  \item{spe.par, sit.par, con.par, bip.par, cen.par, reg.par}{
+    Lists of graphical parameters for species, sites, constraints (lc
+    scores), biplot and text, centroids and regression. These take
+    precedence over globally set parameters and defaults.} 
   
   \item{tidy}{Return scores that are compatible with
     \CRANpkg{ggplot2}: all scores are in a single \code{data.frame},
@@ -95,9 +111,10 @@
     setting frames only.  If omitted, \code{text} is selected for
     smaller data sets, and \code{points} for larger.}
   \item{xlim, ylim}{the x and y limits (min,max) of the plot.}
-  \item{labels}{Optional text to be used instead of row names. If you
-    use this, it is good to check the default labels and their order
-    using \code{labels} command.}
+    \item{labels}{Optional text to be used for selected items instead of
+    row names. If you use this, it is good to check the default labels
+    and their order using \code{labels} command. If \code{select} is
+    given, give \code{labels} only to the selected items.}
   \item{arrow.mul}{Factor to expand arrows in the graph.  Arrows will be
     scaled automatically to fit the graph if this is missing.}
   \item{head.arrow}{Default length of arrow heads.}
@@ -113,33 +130,67 @@
     scores.}
   \item{droplist}{Return a matrix instead of a named list when only one
     kind of scores were requested.}
-  \item{axis.bp}{Draw \code{\link{axis}} for biplot arrows.}
-  \item{axes}{Number of axes in summaries.}
   \item{digits}{Number of digits in output.}
-  \item{cex}{Character expansion.}
-  \item{...}{Parameters passed to other functions.}
+
+  \item{...}{Parameters passed to graphical functions. These will be
+    applied to all score types, but will be superseded by score type
+    parameters list (except \code{type = "none"} which will only draw
+    the frame).}
 }
 
-\details{
-  Same \code{plot} function will be used for \code{\link{cca}} and
-  \code{\link{rda}}. This produces a quick, standard plot with current
-  \code{scaling}.
+\details{ Same \code{plot} function will be used for \code{\link{cca}},
+  \code{\link{rda}}, \code{\link{dbrda}} and
+  \code{\link{capscale}}. This produces a quick, standard plot with
+  current \code{scaling}.
 
   The \code{plot} function sets colours (\code{col}), plotting
-  characters (\code{pch}) and character sizes (\code{cex}) to
-  certain standard values. For a fuller control of produced plot, it is
-  best to call \code{plot} with \code{type="none"} first, and then add
-  each plotting item separately using \code{text.cca} or
-  \code{points.cca} functions. These use the default settings of standard
-  \code{\link{text}} and \code{\link{points}} functions and accept all
-  their parameters, allowing  a full user control of produced plots.
+  characters (\code{pch}) and character sizes (\code{cex}) to default
+  values for each score type. The defaults can be changed with global
+  parameters (\dQuote{dot arguments}) applied to all score types, or a
+  list of parameters for a specified score type (\code{spe.par},
+  \code{sit.par} etc.) which take precedence over global parameters and
+  defaults. This allows full control of graphics. The scores are plotted
+  with \code{\link{text.ordiplot}} and \code{\link{points.ordiplot}} and
+  accept paremeters of these functions. In addition to standard
+  graphical parameters, text can be plotted over non-transparent label
+  with arbument \code{bg = <colour>}, and location of text can be
+  optimized to avoid over-writing with argument \code{optimize = TRUE},
+  and argument \code{arrows = TRUE} to draw arrows pointing to the
+  ordination scores.
+
+  the \code{plot} function returns (invisible) \code{\link{ordiplot}}
+  object. You can save this object and use it to construct your plot
+  with \code{ordiplot} functions \code{points} and \code{text}. These
+  functions can be used in pipe (\code{|>}) which allows incremental
+  building of plots with full control of graphical parameters for each
+  score type. With pipe it is best to first create an empty plot with
+  \code{plot(<cca-result>, type = "n")} and then add elements with
+  \code{points}, \code{text} of \code{\link{ordiplot}} or
+  \code{\link{ordilabel}}. Within pipe, the first argument should be a
+  quoted score type, and then the grapcical parameters. The full
+  object may contain scores with names
+  \Sexpr[results=rd,stage=build]{require(vegan, quietly=TRUE);
+    data(dune, dune.env);
+    noquote(paste0(sQuote(names(scores(rda(dune ~ Moisture, dune.env)))),
+    collapse=", "))}
+  (some of these may be missing depending on your model and are only
+  available if given in \code{display}). The first
+  \code{plot} will set the dimensions of graph, and if you do not use
+  some score type there may be empty white space. In addition to
+  \code{\link{ordiplot}} \code{text} and \code{points}, you can also use
+  \code{\link{ordilabel}} and \code{\link{ordipointlabel}} in a
+  pipe. Unlike in basic \code{plot}, there are no defaults for score
+  types, but all graphical parameters must be set in the command in
+  pipe. On the other hand, there may be more flexibility in these
+  settings than in \code{plot} arguments, in particular in
+  \code{\link{ordilabel}} and \code{\link{ordipointlabel}}.
 
   Environmental variables receive a special treatment. With
   \code{display="bp"}, arrows will be drawn. These are labelled with
   \code{text} and unlabelled with \code{points}. The arrows have
   basically unit scaling, but if sites were scaled (\code{scaling}
   \code{"sites"} or \code{"symmetric"}), the scores of requested axes
-  are adjusted relative to the axis with highest eigenvalue.  With
+  are adjusted to the plotting area.  With
   \code{scaling = "species"} or \code{scaling = "none"}, the arrows will
   be consistent with vectors fitted to linear combination scores
   (\code{display = "lc"} in function \code{\link{envfit}}), but with
@@ -160,20 +211,14 @@
   standard and more easily interpreted, and regression arrows should be
   used only if you know that you need them.
 
-  If you want to have a better control of plots, it is best to
-  construct the plot \code{text} and \code{points} commands which
-  accept graphical parameters. It is important to remember to use the
-  same \code{scaling}, \code{correlation} and \code{hill} arguments
-  in all calls. The \code{plot.cca} command returns invisibly an
-  \code{\link{ordiplot}} result object, and this will have consistent
-  scaling for all its elements. The easiest way for full control of
-  graphics is to first set up the plot frame using \code{plot} with
-  \code{type = "n"} and all needed scores in \code{display} and save
-  this result. The \code{points} and \code{text} commands for
-  \code{\link{ordiplot}} will allow full graphical control (see
-  section Examples). Utility function \code{labels} returns the default
-  labels in the order they are applied in \code{text}.
-  
+  The ordination object has \code{text} and \code{points} methods that
+  can be used to add items to an existing plot from the ordination
+  result directly. These should be used with extreme care, because you
+  must set scaling and other graphical parameters exactly similarly as
+  in the original \code{plot} command. It is best to avoid using these
+  historic functions and instead configure \code{plot} command or use
+  pipe.
+
   Palmer (1993) suggested using linear constraints (\dQuote{LC scores})
   in ordination diagrams, because these gave better results in
   simulations and site scores (\dQuote{WA scores}) are a step from
@@ -183,43 +228,62 @@
   little affected.  Therefore the \code{plot} function uses site scores
   (\dQuote{WA scores}) as the default. This is consistent with the usage
   in statistics and other functions in \R (\code{\link[MASS]{lda}},
-  \code{\link{cancor}}).  } \value{ The \code{plot} function returns
+  \code{\link{cancor}}).}
+
+\value{ The \code{plot} function returns
   invisibly a plotting structure which can be used by function
   \code{\link{identify.ordiplot}} to identify the points or other
-  functions in the \code{\link{ordiplot}} family.  }
+  functions in the \code{\link{ordiplot}} family or in a pipe to add new
+  graphicael elements with \code{\link{ordiplot}} \code{text} and
+  \code{points} or with \code{\link{ordilabel}} and
+  \code{\link{ordipointlabel}}. }
 
 \author{Jari Oksanen }
 
-\seealso{\code{\link{cca}}, \code{\link{rda}} and \code{\link{capscale}}
-  for getting something
-  to plot, \code{\link{ordiplot}} for an alternative plotting routine
-  and more support functions, and \code{\link{text}},
-  \code{\link{points}} and \code{\link{arrows}} for the basic routines.  }
-
-\note{Up to \pkg{vegan} release 2.6-4 \code{summary} printed
-  ordination scores, and function was occasionally used to extract
-  scores. This is now deprecated and you should use
-  \code{scores}. This version of \pkg{vegan} still enables extracting
-  scores with \code{summary}, but you should change your code to use
-  \code{scores} before next \pkg{vegan} release. For instructions,
-  see \url{https://github.com/vegandevs/vegan/discussions/644}.  }
+\seealso{
+  The function builds upon \code{\link{ordiplot}} and its
+  \code{text} and \code{points} functions. See these to find new
+  graphical parameters such as \code{arrows} (for drawing arrows),
+  \code{bg} (for writing text on non-transparent label) and
+  \code{optimize} (to move text labels of points to avoid overwriting).
+}
 
 \examples{
-data(dune)
-data(dune.env)
-mod <- cca(dune ~ A1 + Moisture + Management, dune.env)
-## better control -- remember to set scaling etc identically
-plot(mod, type="n", scaling="sites")
-text(mod, dis="cn", scaling="sites")
-points(mod, pch=21, col="red", bg="yellow", cex=1.2, scaling="sites")
-text(mod, "species", col="blue", cex=0.8, scaling="sites")
+data(dune, dune.env)
+mod <- cca(dune ~ Moisture + Management, dune.env)
+
+## default and modified plot
+plot(mod, scaling="sites")
+plot(mod, scaling="sites", type = "text",
+  sit.par = list(type = "points", pch=21, col="red", bg="yellow", cex=1.2),
+  spe.par = list(col="blue", cex=0.8),
+  cen.par = list(bg="white"))
+
+## same with pipe
+plot(mod, type="n", scaling="sites") |>
+  points("sites", pch=21, col="red", bg = "yellow", cex=1.2) |>
+  text("species", col="blue", cex=0.8) |>
+  text("biplot") |>
+  text("centroids", bg="white")
+
+## LC scores & factors mean much overplotting: try optimize=TRUE
+plot(mod, display = c("lc","sp","cn"), optimize = TRUE,
+   bip.par = list(optimize = FALSE)) # arrows and optimize mix poorly
+
 ## catch the invisible result and use ordiplot support - the example
 ## will make a biplot with arrows for species and correlation scaling
 pca <- rda(dune)
 pl <- plot(pca, type="n", scaling="sites", correlation=TRUE)
 with(dune.env, points(pl, "site", pch=21, col=1, bg=Management))
 text(pl, "sp", arrow=TRUE, length=0.05, col=4, cex=0.6, xpd=TRUE)
-with(dune.env, legend("bottomleft", levels(Management), pch=21, pt.bg=1:4, bty="n"))
+with(dune.env, legend("bottomleft", levels(Management), pch=21,
+   pt.bg=1:4, bty="n"))
+
+## Pipe
+plot(pca, type="n", scaling="sites", correlation=TRUE) |>
+    points("sites", pch=21, col = 1, cex=1.5, bg = dune.env$Management) |>
+    text("species", col = "blue", arrows = TRUE, xpd = TRUE, font = 3)
+
 ## Scaling can be numeric or more user-friendly names
 ## e.g. Hill's scaling for (C)CA
 scrs <- scores(mod, scaling = "sites", hill = TRUE)

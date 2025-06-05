@@ -17,20 +17,23 @@ orditorp(x, display, labels, choices = c(1, 2), priority,
 
 \arguments{
   \item{x}{A result object from ordination or an \code{\link{ordiplot}}
-    result. }
+    result. If the function is used in \code{\link{ordiplot}} pipe, this
+    should be missing and first argument be \code{display}.}
   \item{display}{Items to be displayed in the plot.  Only one
     alternative is allowed. Typically this is \code{"sites"} or
     \code{"species"}.  }
-  \item{labels}{ Optional text used for labels. Row names will be used if
-  this is missing. }
+  \item{labels}{ Optional text used for labels. Row names of scores will
+    be used if this is missing. If \code{select} is used, labels are
+    given only selected items in the order they occur in the scores. }
   \item{choices}{ Axes shown.}
   \item{priority}{ Text will be used for items with higher priority
     if labels overlap.  This should be vector of the same
-    length as the number of items plotted.}
+    length as the number of items plotted or number of scores.}
   \item{select}{Items to be displayed.  This can either be a logical
-    vector which is \code{TRUE} for displayed items or a vector of indices
-    of displayed items. If a logical vector is used, it must have the
-    same length as the scores plotted.}
+    vector which is \code{TRUE} for displayed items or a vector of
+    indices, or \code{labels} and if these are missing, row names of
+    scores. If a logical vector is used, it must have the same length as
+    the scores plotted.} 
   \item{cex, pcex}{Text and point sizes, see \code{\link{plot.default}}..}
   \item{col, pcol}{Text and point colours, see \code{\link{plot.default}}.}
   \item{pch}{Plotting character, see \code{\link{points}}.}
@@ -49,18 +52,23 @@ orditorp(x, display, labels, choices = c(1, 2), priority,
   with most ordination results, or plotting results from
   \code{\link{ordiplot}} or ordination plot functions
   (\code{\link{plot.cca}}, \code{\link{plot.decorana}},
-  \code{\link{plot.metaMDS}}).
+  \code{\link{plot.metaMDS}}). Function can also be used in a pipe
+  (\code{|>}) where the first command is a \pkg{vegan} ordination
+  \code{plot} command or \code{\link{ordiplot}}.
 
   Arguments can be passed to the relevant \code{\link{scores}} method
   for the ordination object (\code{x}) being drawn. See the relevant
   \code{\link{scores}} help page for arguments that can be used.
 }
 \value{
-  The function returns invisibly a logical vector where \code{TRUE}
-  means that item was labelled with text and \code{FALSE} means that it
-  was marked with a point. The returned vector can be used as the
-  \code{select} argument in ordination \code{text} and \code{points}
-  functions.
+  The function returns invisibly the The function returns invisibly a
+  logical vector where \code{TRUE} means that item was labelled with
+  text and \code{FALSE} means that it was marked with a point. If
+  function is used in an \code{\link{ordiplot}} pipe, it will return the
+  input \code{ordiplot} object, but amend the plotted scores with this
+  vector as attribute \code{"orditorp"}. The returned vector can be used
+  as the \code{select} argument in ordination \code{text} and
+  \code{points} functions.
 }
 
 \author{ Jari Oksanen }
@@ -75,14 +83,16 @@ plot(mod, dis="sp", type="t")
 cnam <- make.cepnames(names(BCI))
 plot(mod, dis="sp", type="n")
 stems <- colSums(BCI)
-orditorp(mod, "sp", label = cnam, priority=stems, pch="+", pcol="grey")
+orditorp(mod, "sp", labels = cnam, priority=stems, pch="+", pcol="grey")
 
 ## show select in action
 set.seed(1)
 take <- sample(ncol(BCI), 50)
 plot(mod, dis="sp", type="n")
 stems <- colSums(BCI)
-orditorp(mod, "sp", label = cnam, priority=stems, select = take,
+## only selected items are labelled, and the labels must be in the some
+## order as in the scores
+orditorp(mod, "sp", labels = cnam[sort(take)], priority=stems, select = take,
          pch="+", pcol="grey")
 \dontshow{
 ## example(orditorp) should not set random seed in the user session

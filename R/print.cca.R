@@ -3,7 +3,7 @@
 {
     ord_obj <- deparse(substitute(x))
     msg_w <- 0.95 * getOption("width")
-    writeLines(strwrap(pasteCall(x$call), width = msg_w))
+    writeLines(strwrap(pasteCall(x$call), width = msg_w, initial = "\n"))
     cat("\n")
     if (!is.null(x$CA$imaginary.chi))
         totchi <- x$tot.chi - x$CA$imaginary.chi
@@ -39,7 +39,6 @@
         tbl <- tbl[,-2]
     ## 'cs' columns before "Rank" are non-integer
     cs <- which(colnames(tbl) == "Rank") - 1
-    writeLines("-- Model Summary --\n")
     printCoefmat(tbl, digits = digits, na.print = "", cs.ind = seq_len(cs))
     writeLines(strwrap(paste("Inertia is", x$inertia), width = msg_w,
         initial = "\n"))
@@ -48,7 +47,7 @@
     # print any notices
     if (any(!is.null(x$vdata), !is.null(x$CCA$alias), x$CA$rank < 1,
         !is.null(x$na.action), !is.null(sp.na))) {
-        writeLines("\n-- Note --")
+        cat("\n-- NOTE:")
     }
     ## data used for species scores in db ordination
     if (!is.null(x$vdata)) {
@@ -62,7 +61,7 @@
         vif_msg <- sQuote(paste0("vif.cca(", ord_obj, ")"))
         aliased <- paste(sQuote(alias(x, names.only = TRUE)), collapse = ", ")
         msg <- paste("Some constraints or conditions were aliased because they were redundant.",
-        "This can happen if terms are linearly dependent (collinear):", aliased)
+        "This can happen if terms are constant or linearly dependent (collinear):", aliased)
         writeLines(strwrap(msg, width = msg_w, initial = "\n"))
     }
     if (x$CA$rank < 1) {
@@ -78,7 +77,6 @@
             ifelse(length(sp.na) == 1, "(variable)", "(variables)"),
             "deleted due to missingness."), width = msg_w, initial = "\n"))
     }
-    writeLines("\n-- Eigenvalues --")
     if (!is.null(x$CCA) && x$CCA$rank > 0) {
         cat("\nEigenvalues for constrained axes:\n")
         print(zapsmall(x$CCA$eig, digits = digits), ...)
@@ -115,5 +113,5 @@
     if (!("CA" %in% names(x)))
         stop(gettextf("%s is not a vegan rda object",
                       sQuote(deparse(substitute(x)))))
-    NextMethod("print", x, ...)
+    NextMethod("print")
 }

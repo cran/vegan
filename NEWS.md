@@ -1,14 +1,188 @@
-## vegan News
+# vegan 2.7-1
 
-### Changes in version 2\.6-10
+## Installation
 
-#### Startup
+* **vegan** no longer depends on **lattice**, but only imports
+  **lattice** functions. The **lattice** package is no longer
+  automatically loaded. To use **lattice** functions directly, you
+  must first attach the package with `library(lattice)`. Longer-term
+  plan is to remove **lattice** functions as soon as more modern
+  alternatives in **ggplot2** are made available. See Discussion
+  [#727](https://github.com/vegandevs/vegan/discussions/727) and
+  section Deprecated and Defunct for the changes in this release.
 
-* Prints startup message ("This is vegan <version number>") only in
+* **vegan** no longer suggests **tcltk**. See `orditkplot` in section
+  Deprecated and Defunct.
+
+## New Functions
+
+* Added a set of functions to add new points to an existing NMDS
+  ordination from `metaMDS` or `monoMDS`. This serves the same purpose
+  as adding new points to an existing eigenvector ordination (for
+  instance, `predict.rda`). The main function is `MDSaddpoints`. This
+  needs an input of rectangular matrix of dissimilarities of all new
+  points (rows) to all old points (columns). Support function
+  `dist2xy` can extract needed matrices from dissimilarities of all
+  (old and new) points, and function `designdist2` can directly find
+  the needed dissimilarities between two data matrices. In addition,
+  **analogue** package can calculate such rectangular dissimilarities,
+  including many indices that cannot be defined with `designdist2`.
+
+* `betadistances`: new functions to find distances of points to
+  group centroids in `betadisper`.  See
+  https://stackoverflow.com/questions/77391007/ and issue
+  [#606](https://github.com/vegandevs/vegan/issues/606).
+
+* `permulattice`: new function to use lattice graphics for
+  `permustats` results without need to first issue `library(lattice)`.
+
+* `optspace`: a new function for matrix completion or filling missing
+  elements in a matrix.  The function is used in robust Aitchison
+  distance (see below).
+
+## New Features in Ordination Graphics
+
+* `plot.cca` graphics can be configured. `plot.cca` had hard-coded
+  graphical parameters and user arguments were ignored (see issue
+  [#656](https://github.com/vegandevs/vegan/issues/656)). Now
+  graphical parameters can be given either for all score types, or
+  with a list of graphical parameters for a specific score.
+
+  The new features are more extensively described in help pages of
+  `plot.cca`, `ordiplot` and `biplot.rda`.
+
+* `text.ordiplot` and hence `plot.cca` gained argument `optimize` that
+  will call `ordipointlabel` to optimize the location of the text to
+  minimize over-writing, but mark the exact score with a point.
+
+* `text.ordiplot` and hence `plot.cca` gained argument `bg=<colour>`
+  that will plot text over non-transparent label using `ordilabel`.
+
+* Alternatively ordination plots can be built up adding each score
+  type in piped commands. Pipes were available since **vegan** 2.5-1,
+  but their use is now improved: `ordilabel` can be used in a pipe,
+  `text` can use opaque background label, and `text` and `points`
+  function (for `ordiplot`) gained argument for adjusting arrow
+  lengths similarly as in `cca`.
+
+* `text.cca` and `points.cca` were completely redesigned because of
+  the concerns raised in PR
+  [#729](https://github.com/vegandevs/vegan/pull/729). Support
+  function `labels.cca` now accepts abbreviated names of score types.
+
+* `text` functions for ordination graphics have arguments `labels` to
+  rename `text`and `select` to show only some items. Now these
+  functions are consistent and use first `select` and then `labels`
+  for the selected subset. Concerns functions `ordilabel`,
+  `ordipointlabel`, `orditorp` as well as `text` functions for `cca`
+  and friends, `decorana`, `monoMDS`, `metaMDS` and `ordiplot`. See
+  issue [#730](https://github.com/vegandevs/vegan/pull/730).
+
+* `orditorp`, `points.cca` and `text.cca` did not accept row names or
+  `labels` in `select`. PR
+  [#729](https://github.com/vegandevs/vegan/pull/729).
+
+  Species scores can be added to `monoMDS` with `sppscores` function,
+  and now these can be accessed in `points` and `text` functions.
+
+* `ordipointlabel` can be used in pipe. Function gained argument
+  `label` that allows changing plotted text, and a function `labels`
+  that return the current labels. The optimization rules were changed
+  to give a slight preference for putting labels outwards from origin
+  but avoiding corner positions.
+  
+* `orditorp` can be used in pipe.
+
+## New Features in Other Functions
+
+* Constrained ordination models (`cca`, `rda`, `dbrda`) inform users
+  on completely aliased conditions or constraints, and behave more
+  robustly with these degenerate cases. If a model component
+  (condition, constrained, residual unconstrained) is completely
+  aliased, it still appears in summary table with rank and
+  inertia 0. See https://stackoverflow.com/questions/79613784/ and
+  issue [#682](https://github.com/vegandevs/vegan/issues/682).
+
+* Robust Aitchison distance uses matrix completion to estimate the
+  missing values (`-Inf`) that result from log transformation of zeros
+  of the original input data. Earlier we used only above zero values,
+  or in simple Aitchison distance replaced zeros with an arbitrary
+  pseudocount. For matrix completion **vegan** adds new function
+  `optspace` which also can be used independently. The Robust
+  Aitchison distance is directly evaluated in `vegdist`, and the
+  needed transformation can be performed in `decostand`. PR
+  [#667](https://github.com/vegandevs/vegan/pull/667).
+
+* `ordiR2step` calls current model `<model>` instead of `<none>`.
+
+* `vegemite` and `tabasco` can now `use` a factor to show a
+  classification. The factor levels and sites within levels can be
+  reordered to give a diagonal pattern, as default in `tabasco`
+  and in `vegemite` with new argument `diagonalize = TRUE` (defaults
+  `FALSE`). With the same argument, `vegemite` can also reorder
+  dendrogram (or tree) to give a diagonal pattern. If `coverscale` is
+  used, all internal calculations for ordering rows and columns will
+  be based on scaled data.
+
+* `make.cepnames` was completely re-designed and is much more flexible
+  with enhanced user-control.
+
+* `wascores` can now calculate (unbiased) weighted standard deviation
+  of weighted averages with argument `stdev = TRUE`.
+
+* `mantel`, `mrpp`, `oecosimu` and `ordiareatest` gained `summary`
+  methods based on `summary.permustats`.
+
+## Bug Fixes
+
+* `ordistep` never dropped aliased terms.
+
+* `permatswap` failed to set some null models (`swsh_samp`,
+  `swsh_both`, `backtrack`).
+
+* `df.residual.cca` ignored conditions (partial component). This
+  influences many diagnostic statistics documented together with
+  `cooks.distance.cca` and `rstandard.cca`.
+
+* `densityplot.permustats` did not know argument `observed` to display
+  the observed statistic.
+
+## Deprecated and Defunct
+
+* Disabled use of `summary` to get ordination scores: use `scores` to
+  get scores!  For `summary.cca` see
+  [#644](https://github.com/vegandevs/vegan/discussions/644).
+
+* lattice function `ordicloud` is deprecated. It is still available in
+  CRAN package **vegan3d** (version 1.4-0) as function `ordilattice3d`.
+
+* lattice function `ordisplom` is deprecated: it had bad design and
+  was not very useful.
+
+* lattice function `ordiresids` is deprecated: you can access the same
+  items using `fitted`, `residuals`, `rstandard`, `rstudent` _etc_ and
+  design your own plots.
+
+* `summary.decorana` is defunct. It did nothing useful, but you can
+  extract the same information with `scores` and `weights`.
+
+* `orditkplot` was moved to **vegan3d** package and is defunct in
+  **vegan**.
+
+* relic function `vegandocs` is officially defunct. Better tools to
+  read **vegan** documentation are `browseVignettes("vegan")` and
+  `news(package="vegan")`. The function was deprecated in **vegan**
+  2\.3-4.
+
+# vegan 2\.6-10
+
+## Startup
+
+* Prints startup message ("This is vegan 2.6-10") only in
   interactive sessions. Version number is no longer shown in
   package checks and other scripts.
 
-#### Bug Fixes
+## Bug Fixes
 
 * `anova.cca(..., by="margin")` failed when a constraint was
   completely aliased by conditions. See
@@ -18,19 +192,19 @@
   instead of a complex ordination result object. Issue
   [#713](https://github.com/vegandevs/vegan/issues/713).
 
-* `envfit` could fail when it was called with only one environmental
+  `envfit` could fail when it was called with only one environmental
   variable *without* formula interface. Formula interface worked
   correctly. Issue [#720](https://github.com/vegandevs/vegan/issues/720).
 
 * `vegemite` dropped dimensions when only one site or species was
   requested.
 
-* `vegemite` could fail with variable lengths of row names (SU
+  `vegemite` could fail with variable lengths of row names (SU
   names).
 
-### Changes in version 2\.6-8
+# vegan 2.6-8
 
-#### New Features
+## New Features
 
 * Wrappers for the unconstrained ordination methods principal components
   analysis (PCA), correspondence anslysis (CA), and principal coordinates
@@ -73,7 +247,7 @@
 * `make.cepnames` no longer splits names by hyphen: _Capsella
   bursa-pastoris_ used to be `Capspast` but now is `Capsburs`.
 
-#### Bug Fixes
+## Bug Fixes
 
 * `dbrda` failed in rare cases when an ordination component had only
   negative eigenvalues. Issue
@@ -111,7 +285,9 @@
 * `vegemite` returned only the last page of multi-page table in its
   (invisible) return object.
 
-### Changes in version 2\.6-6\.1
+# vegan 2.6-6.1
+
+## Bug Fixes
 
 * C function `do_wcentre` (weighted centring) can segfault due to a
   protection error. The problem was found in automatic CRAN
@@ -119,16 +295,16 @@
   `envfit` (`vectorfit`), `wcmdscale` and `varpart` (`simpleCCA`)
   Fixes bug [#653](https://github.com/vegandevs/vegan/issues/653).
 
-### Changes in version 2\.6-6
+# vegan 2.6-6
 
-#### INSTALLATION
+## Installation
 
 * **vegan** depends on **R** version 4.1.0.
 
 * It is possible to build **vegan** with webR/wasm Fortran
   compiler. Issue [#623](https://github.com/vegandevs/vegan/issues/623).
 
-#### NEW FEATURES
+## New Features
 
 * Permutation tests for CCA were completely redesigned to follow C.J.F
   ter Braak & D.E. te Beest: Environ Ecol Stat 29, 849–868 (2022)
@@ -200,7 +376,7 @@
   `type = "working"`. Earlier it returned `"lc"` scores weighted by
   eigenvalues. Both generated same distances and eigenvalues, though.
 
-#### BUG FIXES
+## Bug Fixes
 
 * Parallel processing was inefficiently implemented and could be
   slower than non-parallel in permutation tests for constrained
@@ -243,7 +419,7 @@
 * `inertcomp(..., display = "sites", proportional = TRUE)` gave wrong
   values.
 
-#### DATA SETS
+## Data Sets
 
 * Extended the description of the BCI data sets to avoid
   confusion. The complete BCI survey includes all stems of down to
@@ -255,7 +431,7 @@
   complete surveys made available in
   [Dryad](https://doi.org/10.15146/5xcp-0d46).
 
-#### DEPRECATED AND DEFUNCT
+## Deprecated and Defunct
 
 * `adonis` is deprecated: use `adonis2`. There are several CRAN
   packages that still use `adonis` although we have contacted all
@@ -287,9 +463,9 @@
 
 * Code of defunct functions was completely removed.
 
-### Changes in version 2\.6-4
+# vegan 2.6-4
 
-#### NEW FEATURES
+## New Features
 
 * Support of `scores` for
   [**ggplot2**](https://CRAN.R-project.org/package=ggplot2) graphics is
@@ -371,7 +547,7 @@
   there is an attempt to keep original zeros exact. Back-transformation
   is not possible for methods `pa`, `rank` and `rrank` and it is not
   implemented for `alr`. Back-transformation queried in
-  <https://stackoverflow.com/questions/73263526/>
+  https://stackoverflow.com/questions/73263526/
 
 * Rarefaction and rarefaction-based methods make sense only with
   original observed counts and give misleading results if data are
@@ -391,7 +567,7 @@
 * `betadisper` plots accept `col` argument
   ([PR \#300](https://github.com/vegandevs/vegan/pull/300)).
 
-#### BUG FIXES
+## Bug Fixes
 
 * `decorana` returned wrong results when Hill's piecewise transformation
   (arguments `before`/`after`) were used, unless downweighting was also
@@ -399,7 +575,7 @@
 
 * `scores` failed when `metaMDS` result had no species scores. Bug was
   introduced in release 2\.6-2\. Issue raised in
-  <https://stackoverflow.com/questions/72483924/>
+  https://stackoverflow.com/questions/72483924/
 
 * `tolerance.cca` failed when only one axis (`choice`) was requested.
 
@@ -410,7 +586,7 @@
   obscure error (github issue
   [\#528](https://github.com/vegandevs/vegan/issues/528)).
 
-#### DEPRECATED AND DEFUNCT
+## Deprecated and Defunct
 
 * `adonis` is on way to deprecation. Use `adonis2` instead.
 
@@ -418,9 +594,9 @@
   not be used as S3 methods without depending on **coda** package. Use
   `toCoda` instead.
 
-### Changes in version 2\.6-2
+# vegan 2.6-2
 
-#### INSTALLATION
+## Installation
 
 * Compiled code is adapted to the changes in **R** 4\.2\.0\. See issues
   [\#447](https://github.com/vegandevs/vegan/issues/447),
@@ -429,7 +605,7 @@
 * Cross-references to function in other packages were adapted to more
   stringent tests in CRAN
 
-#### NEW FEATURES
+## New Features
 
 * Aitchison and robust Aitchison distances were added to `vegdist`.
   Similar data transformations were added to `decostand`.
@@ -461,7 +637,7 @@
 
 * `metaMDS` adopted a more user-friendly policy, and `trymax` will
   always be the maximum number of tries. See dicussion in
-  <https://stackoverflow.com/questions/66748605/>.
+  https://stackoverflow.com/questions/66748605/.
 
 * `adonis2` accepts `strata`. `adonis2` is the new main function that
   replaces old `adonis`. See issue
@@ -477,7 +653,7 @@
   between alpha and gamma diversities, but not change the results for
   requested groupings.
 
-#### BUG FIXES
+## Bug Fixes
 
 * `anova` function failed in marginal tests when constrained partial
   ordination model (`cca`, `rda` etc.) had interaction terms. Issue
@@ -499,15 +675,15 @@
   [\#369](https://github.com/vegandevs/vegan/issues/369).
 
 * `orditorp` failed if numeric labels were supplied. Reported in
-  <https://stackoverflow.com/questions/69272366/>.
+  https://stackoverflow.com/questions/69272366/.
 
 * Argument `summarize` was accidentally dropped from `goodness.cca` in
   2017\.
 
 * `taxa2dist` failed if there was only one usable taxonomic level. See
-  <https://stackoverflow.com/questions/67231431/>.
+  https://stackoverflow.com/questions/67231431/.
 
-#### DEPRECATED AND DEFUNCT
+## Deprecated and Defunct
 
 * Function `adonis2` will replace `adonis`.
 
@@ -523,9 +699,9 @@
   such as `hatvalues.cca`, `rstandard.cca`, `rstudent.cca`,
   `cooks.distance.cca` and others.
 
-### Changes in version 2\.5-7
+# vegan 2.5-7
 
-#### BUG FIXES
+## Bug Fixes
 
 * Several distance-based functions failed if all distances were zero
   (`betadisper`, `capscale`, `isomap`, `monoMDS`, `pcnm`, `wcmdscale`).
@@ -547,7 +723,7 @@
   and in other systems when socket clusters were used. Github issue
   [\#369](https://github.com/vegandevs/vegan/issues/369).
 
-#### NEW FEATURES
+## New Features
 
 * Chi-square and Chord distances were added to `vegdist`. Both of these
   distances can be calculated as Euclidean distances of transformed
@@ -572,9 +748,9 @@
 
 * `ordiplot` passes `cex` argument to `linestack` and `decorana` plots.
 
-### Changes in version 2\.5-6
+# vegan 2.5-6
 
-#### BUG FIXES
+## Bug Fixes
 
 * `vegdist` silently accepted missing values (`NA`) and removed them
   from the analysis also with option `na.rm = FALSE`. The behaviour was
@@ -589,14 +765,14 @@
   data, unlike most traditional cover class scales which are undefined
   above 100% cover.
 
-#### NEW FEATURES
+## New Features
 
 * The results of `as.rad` no longer print the index attribute: the
   attribute is still in the object, but printing made the output messy.
 
-### Changes in version 2\.5-5
+# vegan 2.5-5
 
-#### INSTALLATION
+## Installation
 
 * vegan depends on **R** 3\.4\.0 or higher. The next vegan release may
   increase the dependence to **R** 3\.6\.0\.
@@ -624,13 +800,13 @@
 * Vegan test results cannot be reproduced in older versions than **R**
   3\.6\.0\. If you are worried about this, you should upgrade **R**.
 
-#### BUG FIXES
+## Bug Fixes
 
 * `metaMDS` failed in scaling results when other `engine` than `monoMDS`
   was used. However, we recommend you use `monoMDS`. See github issue
   [\#310](https://github.com/vegandevs/vegan/issues/310).
 
-#### NEW FEATURES
+## New Features
 
 * `betadisper` changed interpretation of negative squared distances
   which give complex-valued distances. Now they are regarded as
@@ -639,9 +815,9 @@
   further discussion, see github issue
   [\#306](https://github.com/vegandevs/vegan/issues/306).
 
-### Changes in version 2\.5-4
+# vegan 2.5-4
 
-#### INSTALLATION AND TESTING
+## Installation and Testing
 
 * The code for interpreting formula will change in **R** 3\.6\.0, and
   this makes constrained ordination methods (`cca`, `rda`, `dbrda`,
@@ -654,7 +830,7 @@
   constrained ordination objects, and `ordixyplot`. See github issue
   [\#305](https://github.com/vegandevs/vegan/issues/305).
 
-#### BUG FIXES
+## Bug Fixes
 
 * `decorana` gave incorrect results when downweighting was used
   (argument `iweigh = 1`). The bug was introduced in vegan 2\.5-1 and
@@ -665,7 +841,7 @@
   constraints had rank = 1 (only one constraining variable). Reported by
   Pierre Legendre.
 
-#### NEW FEATURES
+## New Features
 
 * Adjusted _R_<sup>2</sup> is enabled for partial RDA models (functions `rda` and
   `dbrda`) and partial CCA models (function `cca`) in function
@@ -676,16 +852,16 @@
   with `varpart`. See github issue
   [\#295](https://github.com/vegandevs/vegan/issues/295).
 
-### Changes in version 2\.5-3
+# vegan 2.5-3
 
-#### INSTALLATION
+## Installation
 
 * Tests for numerical analysis were written more robustly so that they
   give more similar results with alternative platforms and versions of
   **R** and BLAS/Lapack libraries. See github issue
   [\#282](https://github.com/vegandevs/vegan/issues/282).
 
-#### BUG FIXES
+## Bug Fixes
 
 * Constrained ordination gave misleading results when some constraints
   or conditions had data with NULL variables. This rarely happens in
@@ -706,11 +882,10 @@
   object (which is compatible with `nullmodel` simulations and can be
   used in `oecosimu`).
 
-#### NEW FEATURES
+## New Features
 
 * `anosim` checks its input to avoid confusing error messages like that
-  reported in [StackOverflow question
-  52082743](https://stackoverflow.com/questions/52082743/).
+  reported in https://stackoverflow.com/questions/52082743/.
 
 * Broken-stick distribution (function `bstick`) is no longer calculated
   for distance-based Redundancy Analysis (`dbrda`) with negative
@@ -721,15 +896,15 @@
   to select the number of eigenvalues shown. The `print` is more robust
   when the number of eigenvalues is lower than the requested `neigen`.
 
-#### DEPRECATED
+## Deprecated
 
 * Function `humpfit` was moved to the natto package and is still
   available from <https://github.com/jarioksa/natto>. It is scheduled
   for complete removal in vegan 2\.6-0\.
 
-### Changes in version 2\.5-2
+# vegan 2.5-2
 
-#### INSTALLATION AND COMPATIBILITY
+## Installation and Compatibility
 
 * Vegan declares dependence on **R** version 3\.2\.0\. This dependence
   was not yet noticed in the previous vegan release. However, the
@@ -754,18 +929,16 @@
   phyloseq from its *source package*. If you cannot do this, you must
   either downgrade to vegan version 2\.4-6 or wait till Bioconductor
   binary packages are upgraded. This was reported in
-  [Stackoverflow](https://stackoverflow.com/questions/49882886/), and as
+  https://stackoverflow.com/questions/49882886/, and as
   vegan issue [\#272](https://github.com/vegandevs/vegan/issues/272),
   and as phyloseq issues
   [\#918](https://github.com/joey711/phyloseq/issues/918) and
   [\#921](https://github.com/joey711/phyloseq/issues/921).
 
-#### BUG FIXES
+## Bug Fixes
 
 * Plotting `betadisper` failed if any of the `groups` had only one
-  member. Reported in Stackoverflow as [“Error: Incorrect no.of
-  dimensions” when plotting multivariate data in
-  Vegan](https://stackoverflow.com/questions/50267430/).
+  member. Reported in https://stackoverflow.com/questions/50267430/.
 
 * Permutation tests for constrained ordination (`anova.cca`,
   `permutest.cca`) could fail in parallel processing with socket
@@ -773,9 +946,9 @@
   be used in other operating systems when created with `makeCluster`.
   See issue [\#276](https://github.com/vegandevs/vegan/issues/276).
 
-### Changes in version 2\.5-1
+# vegan 2.5-1
 
-#### GENERAL
+## GENERAL
 
 * This is a major new release with changes all over the package: Nearly
   40% of program files were changed from the previous release. Please
@@ -811,7 +984,7 @@
 * The informative messages (warnings, notes and error messages) are
   cleaned and unified which also makes possible to provide translations.
 
-#### NEW FUNCTIONS
+## New Functions
 
 * `avgdist`: new function to find averaged dissimilarities from several
   random rarefactions of communities. Code by Geoffrey Hannigan. See
@@ -849,7 +1022,7 @@
 * `sipoo.map`: a new data set of locations and sizes of the islands in
   the Sipoo archipelago bird data set `sipoo`.
 
-#### NEW FEATURES IN CONSTRAINED ORDINATION
+## New Features in Constrained Ordination
 
 * The inertia of Correspondence Analysis (`cca`) is called “scaled
   Chi-square” instead of using a name of a little known statistic.
@@ -911,7 +1084,7 @@
 
 * `prc` uses regression scores for Canoco-compatibility.
 
-#### NEW FEATURES IN NULL MODEL COMMUNITIES
+## New Features in Null Model Communities
 
 * The C code for swap-based binary null models was made more efficients,
   and the models are all faster. Many of these models selected a 2
@@ -935,7 +1108,7 @@
   backtracking models are biased, and they are provided only because
   they are classic legacy models.
 
-#### NEW FEATURES IN OTHER FUNCTIONS
+## New Features in Other Functions
 
 * `adonis2` gained a column of _R_<sup>2</sup> similarly as old `adonis`.
 
@@ -966,8 +1139,7 @@
   much faster.
 
 * `plot` of `specaccum` can draw short horizontal bars to vertical error
-  bars. See StackOverflow question
-  [45378751](https://stackoverflow.com/questions/45378751).
+  bars. See https://stackoverflow.com/questions/45378751.
 
 * `decostand` gained new standardization methods `rank` and `rrank`
   which replace abundance values by their ranks or relative ranks. See
@@ -999,21 +1171,20 @@
   formulae. Based on the code suggested by Daniel Borcard, Univ.
   Montréal.
 
-#### BUG FIXES
+## Bug Fixes
 
 * Very long `Condition()` statements (\> 500 characters) failed in
   partial constrained ordination models (`cca`, `rda`, `dbrda`,
-  `capscale`). The problem was detected in StackOverflow question
-  [49249816](https://stackoverflow.com/questions/49249816).
+  `capscale`). The problem was detected in
+  https://stackoverflow.com/questions/49249816.
 
 * Labels were not adjusted when arrows were rescaled in `envfit` plots.
-  See StackOverflow question
-  [49259747](https://stackoverflow.com/questions/49259747).
+  See https://stackoverflow.com/questions/49259747.
 
 * `ordiArrowMul` failed if there was only one arrow to be plotted in
   `envfit`.
 
-#### DEPRECATED AND DEFUNCT
+## Deprecated and Defunct
 
 * `as.mlm` function for constrained correspondence analysis is
   deprecated in favour of new functions that directly give the influence
@@ -1027,9 +1198,9 @@
   longer handled in vegan: ade4 has had no `cca` since version 1\.7-8
   (August 9, 2017\).
 
-### Changes in version 2\.4-6
+# vegan 2.4-6
 
-#### INSTALLATION AND BUILDING
+## Installation and Building
 
 * CRAN packages are no longer allowed to use FORTRAN input, but
   `read.cep` function used FORTRAN format to read legacy CEP and Canoco
@@ -1043,7 +1214,7 @@
   cepreader package is developed in
   <https://github.com/vegandevs/cepreader>.
 
-#### BUG FIXES
+## Bug Fixes
 
 * Some functions for rarefaction (`rrarefy`), species abundance
   distribution (`preston`) and species pool (`estimateR`) need exact
@@ -1054,13 +1225,13 @@
   was interpreted strictly as integer 2\. See github issue
   [\#259](https://github.com/vegandevs/vegan/issues/259).
 
-#### NEW FEATURES
+## New Features
 
 * `ordiresids` uses now weighted residuals for `cca` results.
 
-### Changes in version 2\.4-5
+# vegan 2.4-5
 
-#### BUG FIXES
+## Bug Fixes
 
 * Several “Swap & Shuffle” null models generated wrong number of initial
   matrices. Usually they generated too many, which was not dangerous,
@@ -1073,12 +1244,12 @@
   reporting permutation tests (e.g., in `anova` for constrained
   ordination).
 
-#### NEW FEATURES
+## New Features
 
 * `ordistep` has improved interpretation of `scope`: if the lower scope
   is missing, the formula of the starting solution is taken as the lower
-  scope instead of using an empty model. See Stackoverflow question
-  [46985029](https://stackoverflow.com/questions/46985029/).
+  scope instead of using an empty model. See
+  https://stackoverflow.com/questions/46985029/.
 
 * `fitspecaccum` gained new support functions `nobs` and `logLik` which
   allow better co-operation with other packages and functions. See
@@ -1088,25 +1259,24 @@
   However, “backtracking” is a biased legacy model that should not be
   used except in comparative studies.
 
-### Changes in version 2\.4-4
+# vegan 2.4-4
 
-#### INSTALLATION AND BUILDING
+## Installation and Building
 
 * `orditkplot` should no longer give warnings in CRAN tests.
 
-#### BUG FIXES
+## Bug Fixes
 
 * `anova(..., by = "axis")` for constrained ordination (`cca`, `rda`,
   `dbrda`) ignored partial terms in `Condition()`.
 
 * `inertcomp` and `summary.cca` failed if the constrained component was
-  defined, but explained nothing and had zero rank. See StackOverflow:
-  [R - Error message in doing RDA analysis - vegan
-  package](https://stackoverflow.com/questions/43683699/).
+  defined, but explained nothing and had zero rank. See
+  https://stackoverflow.com/questions/43683699/.
 
 * Labels are no longer cropped in the `meandist` plots.
 
-#### NEW FEATURES
+## New Features
 
 * The significance tests for the axes of constrained ordination use now
   forward testing strategy. More extensive analysis indicated that the
@@ -1117,9 +1287,9 @@
 * Canberra distance in `vegdist` can now handle negative input entries
   similarly as latest versions of **R**.
 
-### Changes in version 2\.4-3
+# vegan 2.4-3
 
-#### INSTALLATION AND BUILDING
+## Installation and Building
 
 * vegan registers native **C** and **Fortran** routines. This avoids
   warnings in model checking, and may also give a small gain in speed.
@@ -1131,7 +1301,7 @@
   functions directly accessing these elements should switch to
   `ordiYbar` for smooth transition.
 
-#### BUG FIXES
+## Bug Fixes
 
 * `as.mlm` methods for constrained ordination include zero intercept to
   give the correct residual degrees of freedom for derived statistics.
@@ -1168,9 +1338,9 @@
   Misleading (non-zero) tolerances were sometimes given for species that
   occurred only once or sampling units that had only one species.
 
-### Changes in version 2\.4-2
+# vegan 2.4-2
 
-#### BUG FIXES
+## Bug Fixes
 
 * Permutation tests (`permutests`, `anova`) for the first axis failed in
   constrained distance-based ordination (`dbrda`, `capscale`). Now
@@ -1202,7 +1372,7 @@
   See issue [\#216](https://github.com/vegandevs/vegan/issues/216) for
   details.
 
-#### NEW FEATURES
+## New Features
 
 * Biplot scores are scaled similarly as site scores in constrained
   ordination methods `cca`, `rda`, `capscale` and `dbrda`. Earlier they
@@ -1232,16 +1402,16 @@
   for higher levels (Chase & Reveal, *Bot J Linnean Soc* **161,**
   122-127; 2009\).
 
-### Changes in version 2\.4-1
+# vegan 2.4-1
 
-#### INSTALLATION
+## Installation
 
 * Fortran code was modernized to avoid warnings in latest **R**. The
   modernization should have no visible effect in functions. Please
   report all suspect cases as [vegan
   issues](https://github.com/vegandevs/vegan/issues/).
 
-#### BUG FIXES
+## Bug Fixes
 
 * Several support functions for ordination methods failed if the
   solution had only one ordination axis, for instance, if there was only
@@ -1271,7 +1441,7 @@
   ([coda](https://CRAN.R-project.org/package=coda) package) failed if
   there was only one chain.
 
-#### NEW FEATURES
+## New Features
 
 * `diversity` function returns now `NA` if the observation had `NA`
   values instead of returning `0`. The function also checks the input
@@ -1289,9 +1459,9 @@
   [\#192](https://github.com/vegandevs/vegan/issues/192) and
   [\#193](https://github.com/vegandevs/vegan/issues/193).
 
-### Changes in version 2\.4-0
+# vegan 2.4-0
 
-#### DISTANCE-BASED ANALYSIS
+## Distance-based Analysis
 
 * Distance-based methods were redesigned and made consistent for
   ordination (`capscale`, new `dbrda`), permutational ANOVA (`adonis`,
@@ -1348,12 +1518,12 @@
 * `RsquareAdj` works with `capscale` and `dbrda` and this allows using
   `ordiR2step` in model building.
 
-#### BUG FIXES
+## Bug Fixes
 
 * `specaccum`: `plot` failed if line type (`lty`) was given. Reported by
   Lila Nath Sharma (Univ Bergen, Norway)
 
-#### NEW FUNCTIONS
+## New Functions
 
 * `ordibar` is a new function to draw crosses of standard deviations or
   standard errors in ordination diagrams instead of corresponding
@@ -1368,7 +1538,7 @@
   `as.mcmc`). See issue
   [\#164](https://github.com/vegandevs/vegan/issues/164) in Github.
 
-#### NEW FEATURES
+## New Features
 
 * Null model analysis was upgraded:
   
@@ -1446,7 +1616,7 @@
   new variables from Harms et al. (*J. Ecol.* 89, 947–959; 2001\). Issue
   [\#178](https://github.com/vegandevs/vegan/issues/178) in Github.
 
-#### DEPRECATED AND DEFUNCT
+## Deprecated and Defunct
 
 * Function `metaMDSrotate` was removed and replaced with `MDSrotate`.
 
@@ -1455,9 +1625,9 @@
   `permustats`. Function `permustats` can extract the permutation and
   simulation results of vegan result objects.
 
-### Changes in version 2\.3-5
+# vegan 2.3-5
 
-#### BUG FIXES
+## Bug Fixes
 
 * `eigenvals` fails with `prcomp` results in **R**-devel. The next
   version of `prcomp` will have an argument to limit the number of
@@ -1465,27 +1635,27 @@
 
 * `calibrate` failed for `cca` and friends if `rank` was given.
 
-### Changes in version 2\.3-4
+# vegan 2.3-4
 
-#### BUG FIXES
+## Bug Fixes
 
 * `betadiver` index `19` had wrong sign in one of its terms.
 
 * `linestack` failed when the `labels` were given, but the input scores
   had no names. Reported by Jeff Wood (ANU, Canberra, ACT).
 
-#### DEPRECATED
+## Deprecated
 
 * `vegandocs` is deprecated. Current **R** provides better tools for
   seeing extra documentation (`news()` and `browseVignettes()`).
 
-#### VIGNETTES
+## Vignettes
 
 * All vignettes are built with standard **R** tools and can be browsed
   with `browseVignettes`. `FAQ-vegan` and `partitioning` were only
   accessible with `vegandocs` function.
 
-#### BUILDING
+## Building
 
 * Dependence on external software `texi2dvi` was removed. Version 6\.1
   of `texi2dvi` was incompatible with **R** and prevented building
@@ -1494,9 +1664,9 @@
   vegan is now dependent on **R**-3\.0\.0\. Fixes issue
   [\#158](https://github.com/vegandevs/vegan/issues/158) in Github.
 
-### Changes in version 2\.3-3
+# vegan 2.3-3
 
-#### BUG FIXES
+## Bug Fixes
 
 * `metaMDS` and `monoMDS` could fail if input dissimilarities were huge:
   in the reported case they were of magnitude 1E85\. Fixes issue
@@ -1516,10 +1686,9 @@
   extrapolated richness cannot be estimated from a single sampling unit,
   but now such cases are handled smoothly instead of failing: observed
   non-extrapolated richness with zero standard error will be reported.
-  The issue was reported in
-  [StackOverflow](https://stackoverflow.com/questions/34027496/).
+  The issue was reported in https://stackoverflow.com/questions/34027496/.
 
-#### NEW FEATURES
+## New Features
 
 * `treedist` and `treedive` refuse to handle trees with reversals, i.e,
   higher levels are more homogeneous than lower levels. Function
@@ -1534,9 +1703,9 @@
 * Input dissimilarities supplied in symmetric matrices or data frames
   are more robustly recognized by `anosim`, `bioenv` and `mrpp`.
 
-### Changes in version 2\.3-2
+# vegan 2.3-2
 
-#### BUG FIXES
+## Bug Fixes
 
 * Printing details of a gridded permutation design would fail when the
   grid was at the within-plot level.
@@ -1547,7 +1716,7 @@
   = "se"`). This influenced plots of `cca`, and also influenced
   `ordiareatest`.
 
-#### NEW FEATURES
+## New Features
 
 * `adonis` and `capscale` functions recognize symmetric square matrices
   as dissimilarities. Formerly dissimilarities had to be given as
@@ -1570,9 +1739,9 @@
   warning. Fixes issue
   [\#144](https://github.com/vegandevs/vegan/issues/144) in Github.
 
-### Changes in version 2\.3-1
+# vegan 2.3-1
 
-#### BUG FIXES
+## Bug Fixes
 
 * Permutation tests did not always correctly recognize ties with the
   observed statistic and this could result in too low `P`-values. This
@@ -1609,10 +1778,9 @@
   confusing error messages. Now function checks that input data are
   integers that can be interpreted as counts on individuals and all
   sampling units have some species. Unchecked bad inputs were the reason
-  for problems reported in
-  [Stackoverflow](https://stackoverflow.com/questions/30856909/).
+  for problems reported in https://stackoverflow.com/questions/30856909/.
 
-#### NEW FEATURES AND FUNCTIONS
+## New Features and Functions
 
 * Scaling of ordination axes in `cca`, `rda` and `capscale` can now be
   expressed with descriptive strings `"none"`, `"sites"`, `"species"` or
@@ -1630,9 +1798,9 @@
   coordinates of sample plots. Other variables are constant or nearly
   constant and of little use in normal analysis.
 
-### Changes in version 2\.3-0
+# vegan 2.3-0
 
-#### BUG FIXES
+## Bug Fixes
 
 * Constrained ordination functions `cca`, `rda` and `capscale` are now
   more robust. Scoping of data set names and variable names is much
@@ -1653,13 +1821,13 @@
   [R-sig-ecology](https://stat.ethz.ch/pipermail/r-sig-ecology/2015-March/004936.html)
   message by Christoph von Redwitz.
 
-#### WINDOWS
+## Windows
 
 * `orditkplot` did not add file type identifier to saved graphics in
   Windows although that is required. The problem only concerned Windows
   OS.
 
-#### NEW FEATURES AND FUNCTIONS
+## New Features and Functions
 
 * `goodness` function for constrained ordination (`cca`, `rda`,
   `capscale`) was redesigned. Function gained argument `addprevious` to
@@ -1717,21 +1885,21 @@
   components are now labelled in plots, and the circles and ellipses can
   be easily filled with transparent background colour.
 
-### Changes in version 2\.2-1
+# vegan 2.2-1
 
-#### GENERAL
+## General
 
 * This is a maintenance release to avoid warning messages caused by
   changes in CRAN repository. The namespace usage is also more stringent
   to avoid warnings and notes in development versions of **R**.
 
-#### INSTALLATION
+## Installation
 
 * vegan can be installed and loaded without tcltk package. The tcltk
   package is needed in `orditkplot` function for interactive editing of
   ordination graphics.
 
-#### BUG FIXES
+## Bug Fixes
 
 * `ordisurf` failed if [gam](https://CRAN.R-project.org/package=gam)
   package was loaded due to namespace issues: some support functions of
@@ -1740,7 +1908,7 @@
 
 * `tolerance` function failed for unconstrained correspondence analysis.
 
-#### NEW FEATURES
+## New Features
 
 * `estimateR` uses a more exact variance formula for bias-corrected Chao
   estimate of extrapolated number of species. The new formula may be
@@ -1762,9 +1930,9 @@
 * `linestack` accepts now expressions as labels. This allows using
   mathematical symbols and formula given as mathematical expressions.
 
-### Changes in version 2\.2-0
+# vegan 2.2-0
 
-#### GENERAL
+## General
 
 * Several vegan functions can now use parallel processing for slow and
   repeating calculations. All these functions have argument `parallel`.
@@ -1823,7 +1991,7 @@
   `oecosimu` allows analysing any statistic, and null models are better
   seen as an alternative to permutation tests.
 
-#### INSTALLATION
+## Installation
 
 * vegan package dependencies and namespace imports were adapted to
   changes in **R**, and no more trigger warnings and notes in package
@@ -1836,7 +2004,7 @@
   [vegan3d](https://CRAN.R-project.org/package=vegan3d). The package is
   available in CRAN.
 
-#### NEW FUNCTIONS
+## New Functions
 
 * Function `dispweight` implements dispersion weighting of Clarke et al.
   (*Marine Ecology Progress Series*, 320, 11–27\). In addition, we
@@ -1873,7 +2041,7 @@
   the results `capscale`, `cca`, `princomp`, `prcomp`, `rda`, and
   `wcmdscale`.
 
-#### BUG FIXES
+## Bug Fixes
 
 * `cascadeKM` of only one group will be `NA` instead of a random value.
 
@@ -1888,7 +2056,7 @@
 
 * `simper` failed when a group had only a single member.
 
-#### NEW FEATURES
+## New Features
 
 * `anova.cca` functions were re-written to use the permute package. Old
   results may not be exactly reproduced, and models with missing data
@@ -1977,7 +2145,7 @@
 
 * User configurable plots for `rarecurve`.
 
-#### DEPRECATED AND DEFUNCT
+## Deprecated and Defunct
 
 * `strata` are deprecated in permutations. It is still accepted but will
   be phased out in next releases. Use `how` of permute package.
@@ -1991,9 +2159,9 @@
 * `density` and `densityplot` for permutation results are deprecated:
   use `permustats` with its `density` and `densityplot` method.
 
-### Changes in version 2\.0-10
+# vegan 2.0-10
 
-#### GENERAL
+## General
 
 * This version is adapted to the changes in permute package version
   0\.8-0 and no more triggers NOTEs in package checks. This release may
@@ -2005,7 +2173,7 @@
   [GitHub](https://github.com/jarioksa/vegan) and report the problems
   and user experience to us.
 
-#### BUG FIXES
+## Bug Fixes
 
 * `envfit` function assumed that all external variables were either
   numeric or factors, and failed if they were, say, character strings.
@@ -2025,7 +2193,7 @@
 * `renyiaccum` plotting failed if only one level of diversity `scale`
   was used.
 
-#### NEW FEATURES
+## New Features
 
 * The Kempton and Taylor algorithm was found unreliable in `fisherfit`
   and `fisher.alpha`, and now the estimation of Fisher &alpha; is only
@@ -2045,7 +2213,7 @@
 * `specaccum` can now perform weighted accumulation using the sampling
   effort as weights.
 
-### Changes in version 2\.0-9
+# vegan 2.0-9
 
 * This version is released due to changes in programming interface and
   testing procedures in **R** 3\.0\.2\. If you are using an older
@@ -2055,15 +2223,15 @@
   changes, this version is dependent on **R** version 2\.14\.0 or newer
   and on lattice package.
 
-### Changes in version 2\.0-8
+# vegan 2.0-8
 
-#### GENERAL
+## General
 
 * This is a maintenance release that fixes some issues raised by changed
   in **R** toolset for processing vignettes. In the same we also fix
   some typographic issues in the vignettes.
 
-#### NEW FEATURES
+## New Features
 
 * `ordisurf` gained new arguments for more flexible definition of fitted
   models to better utilize the mgcv`::gam` function.
@@ -2079,9 +2247,9 @@
 * `ordipointlabel` gained a `plot` method that can be used to replot the
   saved result.
 
-### Changes in version 2\.0-7
+# vegan 2.0-7
 
-#### NEW FUNCTIONS
+## New Functions
 
 * `tabasco()` is a new function for graphical display of community data
   matrix. Technically it is an interface to **R** `heatmap`, but its use
@@ -2092,14 +2260,14 @@
   correspondence analysis. Species are ordered to match site ordering or
   like determined by the user.
 
-#### BUG FIXES
+## Bug Fixes
 
 * Function `fitspecaccum(..., model = "asymp")` fitted logistic model
   instead of asymptotic model (or the same as `model = "logis"`).
 
 * `nestedtemp()` failed with very sparse data (fill `< 0.38`%).
 
-#### NEW FEATURES
+## New Features
 
 * The `plot` function for constrained ordination results (`cca`, `rda`,
   `capscale`) gained argument `axis.bp` (defaults `TRUE`) which can be
@@ -2108,7 +2276,7 @@
 * Number of iterations in nonmetric multidimensional scaling (NMDS) can
   be set with keyword `maxit` (defaults `200`) in `metaMDS`.
 
-#### DEPRECATED
+## Deprecated
 
 * The result objects of `cca`, `rda` and `capscale` will no longer have
   scores `u.eig`, `v.eig` and `wa.eig` in the future versions of vegan.
@@ -2116,9 +2284,9 @@
   do not need these items. However, external scripts and packages may
   need changes in the future versions of vegan.
 
-### Changes in version 2\.0-6
+# vegan 2.0-6
 
-#### BUG FIXES
+## Bug Fixes
 
 * The species scores were scaled wrongly in `capscale()`. They were
   scaled correctly only when Euclidean distances were used, but usually
@@ -2154,7 +2322,7 @@
   data. Related function `treedist()` for phylogenetic distances did not
   try to match the names at all.
 
-#### NEW FEATURES
+## New Features
 
 * The output of `capscale()` displays the value of the additive constant
   when argument `add = TRUE` was used.
@@ -2203,9 +2371,9 @@
   a matrix of scores similarly as the standard **R** function
   `cmdscale()`, and in that case the new methods are not used.
 
-### Changes in version 2\.0-5
+# vegan 2.0-5
 
-#### BUG FIXES
+## Bug Fixes
 
 * `anova(<cca_object>, ...)` failed with `by = "axis"` and `by =
   "term"`. The bug was reported by Dr Sven Neulinger (Christian Albrecht
@@ -2214,7 +2382,7 @@
 * `radlattice` did not honour argument `BIC = TRUE`, but always
   displayed AIC.
 
-#### NEW FUNCTIONS
+## New Functions
 
 * Most vegan functions with permutation tests have now a `density`
   method that can be used to find empirical probability distributions of
@@ -2235,7 +2403,7 @@
   The functions can also interpolate to non-integer “ranks”, and in some
   models also extrapolate.
 
-#### NEW FEATURES
+## New Features
 
 * Labels can now be set in the `plot` of `envfit` results. The labels
   must be given in the same order that the function uses internally, and
@@ -2253,7 +2421,7 @@
   have methods `AIC`, `coef`, `deviance`, `logLik`, `fitted`, `predict`
   and `residuals`.
 
-#### INSTALLATION AND BUILDING
+## Installation and Building
 
 * Building of vegan vignettes failed with the latest version of LaTeX
   (TeXLive 2012\).
@@ -2264,9 +2432,9 @@
   `cIndexKM` and `betadisper`, and the error occurs in `betadisper`.
   These errors and warnings were triggered by internal changes in **R**.
 
-### Changes in version 2\.0-4
+# vegan 2.0-4
 
-#### BUG FIXES
+## Bug Fixes
 
 * `adipart` assumed constant gamma diversity in simulations when
   assessing the `P`-value. This could give biased results if the null
@@ -2291,7 +2459,7 @@
   concern `rda` or `capscale` results which do not need row weights.
   Reported by Glenn De'ath.
 
-#### NEW FEATURES
+## New Features
 
 * Functions for diversity partitioning (`adipart`, `hiersimu` and
   `multipart`) have now `formula` and `default` methods. The `formula`
@@ -2340,9 +2508,9 @@
   items for plotting. The argument can be used only with one set of
   points.
 
-### Changes in version 2\.0-3
+# vegan 2.0-3
 
-#### NEW FUNCTIONS
+## New Functions
 
 * Added new nestedness functions `nestedbetasor` and `nestedbetajac`
   that implement multiple-site dissimilarity indices and their
@@ -2361,7 +2529,7 @@
   [GitHub](https://github.com/jarioksa/vegan) by Eduard Szöcs (Uni
   Landau, Germany).
 
-#### BUG FIXES
+## Bug Fixes
 
 * `betadisper()` failed when the `groups` was a factor with empty
   levels.
@@ -2381,7 +2549,7 @@
   [R-sig-ecology](https://stat.ethz.ch/pipermail/r-sig-ecology/2012-February/002768.html)
   mailing list.
 
-#### NEW FEATURES
+## New Features
 
 * `metaMDS` argument `noshare = 0` is now regarded as a numeric
   threshold that always triggers extended dissimilarities
@@ -2405,9 +2573,9 @@
   variable sampling intensity. Thanks to consultation to Yong Cao (Univ
   Illinois, USA).
 
-### Changes in version 2\.0-2
+# vegan 2.0-2
 
-#### BUG FIXES
+## Bug Fixes
 
 * Function `capscale` failed if constrained component had zero rank.
   This happened most likely in partial models when the conditions
@@ -2429,7 +2597,7 @@
   first bug. In fixing both bugs, a speed-up in the internal f.test()
   function is fully realised. Reported by Nicholas Lewin-Koh.
 
-#### NEW FEATURES
+## New Features
 
 * `ordiarrows` and `ordisegments` gained argument `order.by` that gives
   a variable to sort points within `groups`. Earlier the points were
@@ -2440,9 +2608,9 @@
   point, but for constrained ordination with no `groups` they are the LC
   scores.
 
-### Changes in version 2\.0-1
+# vegan 2.0-1
 
-#### NEW FUNCTIONS
+## New Functions
 
 * `clamtest`: new function to classify species as generalists and
   specialists in two distinct habitats (CLAM test of Chazdon et al.,
@@ -2465,7 +2633,7 @@
   \[[doi:10\.1890/ES10-00117\.1](https://doi.org/10.1890/ES10-00117.1)\],
   and was developed with the consultation of Brian Inouye.
 
-#### BUG FIXES
+## Bug Fixes
 
 * Function `meandist` could scramble items and give wrong results,
   especially when the `grouping` was numerical. The problem was reported
@@ -2489,16 +2657,16 @@
   results but you probably wish to upgrade vegan to avoid annoying
   warnings.
 
-#### ANALYSES
+## Analyses
 
 * `nesteddisc` is slacker and hence faster when trying to optimize the
   statistic for tied column frequencies. Tracing showed that in most
   cases an improved ordering was found rather early in tries, and the
   results are equally good in most cases.
 
-### Changes in version 2\.0-0
+# vegan 2.0-0
 
-#### GENERAL
+## General
 
 * Peter Minchin joins the vegan team.
 
@@ -2516,7 +2684,7 @@
   gradually move to use permute, but currently only `betadisper` uses
   the new feature.
 
-#### NEW FUNCTIONS
+## New Functions
 
 * `monoMDS`: a new function for non-metric multidimensional scaling
   (NMDS). This function replaces `MASS::isoMDS` as the default method in
@@ -2555,7 +2723,7 @@
   functions were implemented because they were found good for
   species-area models by Dengler (*J. Biogeogr.* 36, 728-744; 2009\).
 
-#### NEW FEATURES
+## New Features
 
 * `adonis`, `anosim`, `meandist` and `mrpp` warn on negative
   dissimilarities, and `betadisper` refuses to analyse them. All these
@@ -2580,7 +2748,7 @@
   grouping factor `pool`. Now also checks that the length of the `pool`
   matches the number of observations.
 
-#### DEPRECATED AND DEFUNCT
+## Deprecated and Defunct
 
 * `metaMDSrotate` was replaced with `MDSrotate` that can also handle the
   results of `monoMDS`.
@@ -2590,7 +2758,6 @@
   use, but packages depending on that code in vegan should instead
   depend on permute.
 
-#### ANALYSES
+## Analyses
 
 * `treeheight` uses much snappier code. The results should be unchanged.
-

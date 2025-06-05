@@ -866,7 +866,7 @@ SEXP do_swap(SEXP x, SEXP nsim, SEXP thin, SEXP method)
 
     /* sequential trialswap of ix and save result to the iout
        array */
-    memcpy(ix, INTEGER(x), N * sizeof(int));
+    if (N) memcpy(ix, INTEGER_RO(x), N * sizeof(int));
     GetRNGstate();
     for(i = 0; i < ny; i++) {
 	swap_fun(ix, &nr, &nc, &ithin);
@@ -899,7 +899,7 @@ SEXP do_curveball(SEXP x, SEXP nsim, SEXP thin)
 
     /* sequential trialswap of ix and save result to the iout
        array */
-    memcpy(ix, INTEGER(x), N * sizeof(int));
+    if (N) memcpy(ix, INTEGER_RO(x), N * sizeof(int));
     GetRNGstate();
     for(i = 0; i < ny; i++) {
 	/* different call than in do_swap */
@@ -930,7 +930,7 @@ SEXP do_abuswap(SEXP x, SEXP nsim, SEXP thin, SEXP direct)
     double *rx = (double *) R_alloc(N, sizeof(double));
 
     /* sequential swap as in do_swap */
-    memcpy(rx, REAL(x), N * sizeof(double));
+    if (N) memcpy(rx, REAL_RO(x), N * sizeof(double));
     GetRNGstate();
     for(i = 0; i < ny; i++) {
 	abuswap(rx, &nr, &nc, &ithin, &idirect);
@@ -1132,17 +1132,9 @@ SEXP do_rcfill(SEXP n, SEXP rs, SEXP cs)
  *  of items dropped in backtracking, RESET chooses between restoring
  *  old solution if fill decreases in backtracking, and LOUD prints
  *  information on every step. These can be set at compile time using
- *  preprocessor switches, e.g., -D BACKSTEP=6 */
-#ifndef BACKSTEP
-#define BACKSTEP (4)
-#endif /* BACKSTEP depth */
-#ifndef RESET
-#define RESET 1
-#endif /* RESET */
-#ifndef LOUD
-#define LOUD 0
-#endif /* LOUD */
+ *  preprocessor switches, e.g., -D BACKSTEP=6  or editing backtrack.h */
 
+#include "backtrack.h" /* MACRO defs for compilation */
 
 #if RESET
 /* return index of val in set or EMPTY if not found -- support
@@ -1162,9 +1154,9 @@ static int imatch(int val, int *set, int len)
 static void backtrack(int *out, int *rowsum, int *colsum, int fill,
 		      int nr, int nc, int *rfill, int *cfill, int *ind)
 {
-    int tmp, i, j, k, ir, ic;
+    int tmp, i, j, ir, ic;
     int izero = nr * nc - 1, ielig = nr * nc - 1, npick = 0, oldpick = 0,
-	ndrop = 1, dropouts[BACKSTEP], idrop = 0, lastpick = 0;
+	ndrop = 1, dropouts[BACKSTEP], idrop = 0;
 
     /* initialize */
     for(i = 0; i < nr * nc; i++)
@@ -1241,6 +1233,8 @@ static void backtrack(int *out, int *rowsum, int *colsum, int fill,
 	
 	/* if we did worse than previously, undo: remove picked items
 	 * and put back the ones removed as dropouts */
+
+	int k, lastpick = 0;
 
 	if (npick < oldpick) {
 #if LOUD

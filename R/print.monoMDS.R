@@ -40,41 +40,37 @@
 }
 
 `scores.monoMDS` <-
-    function(x, choices = NA, ...)
+    function(x, display = "sites",  shrink = FALSE, choices, tidy = FALSE, ...)
 {
-    if (any(is.na(choices)))
-        x$points
-    else {
-        choices <- choices[choices <= x$ndim]
-        x$points[, choices, drop = FALSE]
-    }
+    scores.metaMDS(x, display = display, shrink = shrink, choices, tidy = tidy,
+                   ...)
 }
 
 `plot.monoMDS` <-
-    function(x, choices = c(1,2), type = "t",  ...)
+    function(x, display = "sites", choices = c(1,2), type = "t",  ...)
 {
-    ordiplot(x, display = "sites", choices = choices, type = type, ...)
+    ordiplot(x, display = display, choices = choices, type = type, ...)
 }
 
 `points.monoMDS` <-
-    function(x, choices = c(1,2), select, ...)
+    function(x, display = "sites", choices = c(1,2), select, ...)
 {
-    x <- scores(x, choices = choices)
+    x <- scores(x, display = display, choices = choices)
     if (!missing(select))
         x <- .checkSelect(select, x)
-    points(x, ...)
+    points (x, ...)
     invisible()
 }
 
 `text.monoMDS` <-
-    function(x, labels, choices = c(1,2), select, ...)
+    function(x, display = "sites", labels, choices = c(1,2), select, ...)
 {
-    x <- scores(x, choices = choices)
-    if (!missing(labels))
-        rownames(x) <- labels
+    x <- scores(x, display = display, choices = choices)
     if (!missing(select))
         x <- .checkSelect(select, x)
-    text(x, labels = rownames(x), ...)
+    if (!missing(labels))
+        rownames(x) <- labels
+    text.ordiplot(x, what = "sites", labels = rownames(x), ...)
     invisible()
 }
 
