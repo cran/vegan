@@ -1,6 +1,6 @@
 Package: vegan
 Title: Community Ecology Package
-Version: 2.7-1
+Version: 2.7-2
 Authors@R: c(person("Jari", "Oksanen", role=c("aut","cre"),
                     email="jhoksane@gmail.com"),
 	   person("Gavin L.", "Simpson", role="aut",
@@ -49,7 +49,7 @@ BugReports: https://github.com/vegandevs/vegan/issues
 URL: https://vegandevs.github.io/vegan/,
         https://github.com/vegandevs/vegan
 NeedsCompilation: yes
-Packaged: 2025-06-05 10:38:41 UTC; jarioksa
+Packaged: 2025-10-08 10:33:50 UTC; jarioksa
 Author: Jari Oksanen [aut, cre],
   Gavin L. Simpson [aut],
   F. Guillaume Blanchet [aut],
@@ -87,4 +87,4 @@ Author: Jari Oksanen [aut, cre],
   James Weedon [aut]
 Maintainer: Jari Oksanen <jhoksane@gmail.com>
 Repository: CRAN
-Date/Publication: 2025-06-05 22:20:02 UTC
+Date/Publication: 2025-10-08 14:30:02 UTC

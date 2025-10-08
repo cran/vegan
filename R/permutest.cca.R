@@ -46,7 +46,7 @@ permutest.default <- function(x, ...)
         if (!is.matrix(indx))
             indx <- matrix(indx, nrow = 1)
         out <- .Call(do_getF, indx, E, Q, QZ, effects, w, first, isPartial,
-                     isCCA, isDB)
+                     isCCA, isDB, PACKAGE = "vegan")
         p <- length(effects)
         if (!isPartial && !first)
             out[, p + 1] <- Chi.tot - rowSums(out[,seq_len(p), drop=FALSE])
@@ -149,6 +149,9 @@ permutest.default <- function(x, ...)
         Chi.z <- diff(c(0, F.0))
         F.0 <- Chi.z/q * r/Chi.xz
     }
+    ## residualizing constraints will remove pCCA terms
+    if (isPartial)
+        effects <- effects - x$pCCA$QR$rank
 
     ## permutation data
     E <- switch(model,

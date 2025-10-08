@@ -8,7 +8,7 @@
     terms <- match.arg(terms)
     if ((abcd || alphagamma) && terms != "binary")
         warning("perhaps terms should be 'binary' with 'abcd' or 'alphagamma'?")
-    x <- as.matrix(x)
+    x <- as.matrix(x, rownames.force = TRUE)
     ## only do numeric data for which "pa", minimum and quadratic make sense
     if (!(is.numeric(x) || is.logical(x)))
         stop("input data must be numeric")
@@ -19,7 +19,7 @@
     if (terms == "binary" || terms == "quadratic")
         XX <- tcrossprod(x)
     if (terms == "minimum")
-        XX <- .Call(do_minterms, as.matrix(x))
+        XX <- .Call(do_minterms, as.matrix(x), PACKAGE = "vegan")
     d <- diag(XX)
     A <- as.dist(outer(rep(1, N), d))
     B <- as.dist(outer(d, rep(1, N)))
@@ -65,8 +65,8 @@
     terms <- match.arg(terms)
     if ((abcd || alphagamma) && terms != "binary")
         warning("perhaps terms should be 'binary' with 'abcd' or 'alphagamma'?")
-    x <- as.matrix(x)
-    y <- as.matrix(y)
+    x <- as.matrix(x, rownames.force = TRUE)
+    y <- as.matrix(y, rownames.force = TRUE)
     ## only do numeric data for which "pa", minimum and quadratic make sense
     if (!(is.numeric(x) || is.logical(x)))
         stop("input data must be numeric")
@@ -141,7 +141,7 @@
     N <- nrow(x)
     ## do_chaoterms returns a list with U, V which are non-classed
     ## vectors where the order of terms matches 'dist' objects
-    vu <- .Call(do_chaoterms, x)
+    vu <- .Call(do_chaoterms, x, PACKAGE = "vegan")
     U <- vu$U
     V <- vu$V
     ## dissimilarities

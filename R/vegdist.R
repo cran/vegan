@@ -20,7 +20,7 @@
         stop("ambiguous distance method")
     ## most tests are faster for matrix than for data frame, and we
     ## need matrix in .Call() anyway
-    x <- as.matrix(x)
+    x <- as.matrix(x, rownames.force = TRUE)
     if (!na.rm && anyNA(x))
         stop("missing values are not allowed with argument 'na.rm = FALSE'")
     ## all vegdist indices need numeric data (Gower included).
@@ -55,7 +55,7 @@
     if (method %in% c(7, 13, 15) && !isTRUE(all.equal(x, round(x))))
         warning("results may be meaningless with non-integer data in method ",
                 dQuote(inm))
-    d <- .Call(do_vegdist, x, as.integer(method))
+    d <- .Call(do_vegdist, x, as.integer(method), PACKAGE = "vegan")
     d[d < ZAP] <- 0
     if (any(is.na(d)))
         warning("missing values in results")

@@ -1,8 +1,8 @@
 `no.shared` <-
     function(x)
 {
-    x <- as.matrix(x)
-    d <- .Call(do_vegdist, x, as.integer(99))
+    x <- as.matrix(x, rownames.force = TRUE)
+    d <- .Call(do_vegdist, x, as.integer(99), PACKAGE = "vegan")
     d <- as.logical(d)
     attr(d, "Size") <- NROW(x)
     attr(d, "Labels") <- dimnames(x)[[1]]

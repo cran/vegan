@@ -13,7 +13,7 @@
     ## et al., or the standard R function cmdscale with matching
     ## coefficient provided by vegdist.c as method=50.
 
-    USEPOWERALGORITHM <- TRUE
+    USEPOWERALGORITHM <- FALSE
 
     ##Check up
 
@@ -27,16 +27,16 @@
     scores<-rep(0.0,nb.obj)
     if (USEPOWERALGORITHM) {
 	scores <- as.vector(.Fortran(orderdata, as.integer(mat),
-                                   as.integer(nb.obj), as.integer(nb.desc),
-                                   sc=as.double(scores))$sc)
+                                 as.integer(nb.obj), as.integer(nb.desc),
+                                 sc=as.double(scores), PACKAGE = "vegan")$sc)
     } else {
-        d <- .Call(do_vegdist, as.matrix(mat), as.integer(50))
-        attr(d, "Size") <- nb.obj
-        attr(d, "Labels") <- dimnames(mat)[[1]]
-        attr(d, "Diag") <- FALSE
-        attr(d, "Upper") <- FALSE
-        attr(d, "method") <- "matching"
-        class(d) <- "dist"
+        d <- .Call(do_vegdist, as.matrix(mat), as.integer(50), PACKAGE = "vegan")
+        attributes(d) <- list("Size" = nb.obj,
+                              "Labels" = dimnames(mat)[[1]],
+                              "Diag" = FALSE,
+                              "Upper" = FALSE,
+                              "method" = "matching",
+                              "class" = "dist")
         scores <- cmdscale(d, k = 1)[,1]
     }
     scores <- order(scores)

@@ -7,7 +7,7 @@
     Const3 <- 1e-11
     ZEROEIG <- 1e-7 # same limit as in the C function do_decorana
     ## data
-    veg <- as.matrix(veg)
+    veg <- as.matrix(veg, rownames.force = TRUE)
     if (!is.numeric(veg))
         stop("data 'veg' must be numeric (not factors or characters)")
     if (any(veg < 0))
@@ -38,7 +38,7 @@
         iresc <- 0
     ## Start analysis
     CA <- .Call(do_decorana, veg, ira, iresc, short, mk, as.double(aidot),
-                as.double(adotj))
+                as.double(adotj), PACKAGE = "vegan")
     if (ira)
         dnames <- paste("RA", 1:4, sep = "")
     else dnames <- paste("DCA", 1:4, sep = "")
