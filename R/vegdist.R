@@ -26,6 +26,8 @@
     ## all vegdist indices need numeric data (Gower included).
     if (!(is.numeric(x) || is.logical(x)))
         stop("input data must be numeric")
+    if (binary)
+        x <- decostand(x, "pa")
     if (!method %in% c(1,2,6,16,18) && any(rowSums(x, na.rm = TRUE) == 0))
         warning("you have empty rows: their dissimilarities may be
                  meaningless in method ",
@@ -49,12 +51,22 @@
         x <- decostand(x, "clr", ...)  # dots to pass possible pseudocount
     if (method == 22)  # robust.aitchison
         x <- decostand(x, "rclr", na.rm = na.rm, ...) # No pseudocount for rclr
-    if (binary)
-        x <- decostand(x, "pa")
     N <- nrow(x)
     if (method %in% c(7, 13, 15) && !isTRUE(all.equal(x, round(x))))
         warning("results may be meaningless with non-integer data in method ",
                 dQuote(inm))
+    if (method %in% 7) { # morisita
+        if (any(x[x>0] < 1))
+            warning("results may be meaningless with positive values < 1 in ",
+                    dQuote(inm))
+        if (round(max(x)) == 1)
+            warning("results may be meaningless with largest integer 1 in ",
+                    dQuote(inm))
+        else if (any(r1 <- apply(x, 1, max) <= 1))
+            warning(dQuote(inm),
+                    " expects some counts > 1, none in row(s) ",
+                    paste(which(r1), collapse=", "))
+    }
     d <- .Call(do_vegdist, x, as.integer(method), PACKAGE = "vegan")
     d[d < ZAP] <- 0
     if (any(is.na(d)))

@@ -25,6 +25,7 @@
 #include <R.h>
 #include <Rmath.h>
 #include <R_ext/Utils.h> /* interrupt */
+#include <math.h> /* probably already included by Rmath.h */
 #include <float.h>
 #include <string.h> /* memset */
 
@@ -186,9 +187,9 @@ static double veg_chord(double *x, int nr, int nc, int i1, int i2)
 	i2 += nr;
     }
 
-    if (count == 0) return NA_REAL;
+    if (count == 0 || ss1 * ss2 <= 0.0) return NA_REAL;
     dist = 2.0 * (1.0 - cp/sqrt(ss1 * ss2));
-    return sqrt(dist);
+    return sqrt(fmax(dist, 0.0));
 }
 
 /* It may not make sense to use direct formula to Chord distance as
@@ -215,9 +216,9 @@ static double veg_hellinger(double *x, int nr, int nc, int i1, int i2)
 	i2 += nr;
     }
 
-    if (count == 0) return NA_REAL;
+    if (count == 0 || ss1 * ss2 <= 0.0) return NA_REAL;
     dist = 2.0 * (1.0 - cp/sqrt(ss1 * ss2));
-    return sqrt(dist);
+    return sqrt(fmax(dist, 0.0));
 }
 
 /* Canberra distance: duplicates R base, but is scaled into range
@@ -351,8 +352,13 @@ static double veg_kulczynski(double *x, int nr, int nc, int i1, int i2)
      return dist;
 }
 
-/* Morisita index.  Can only be used with integer data, and may still
- * fail with unfortunate pairs of species occurring only once.
+/* Morisita index.  Can only be used with non-negative integer data
+ * (counts) and is hardly meaningful for presence/absence data or
+ * comparisons where largest integer is 1.  Function involves terms
+ * tlam1, tlam2 which for x=1 are x*(x-1) = 0 and if both are 0 this
+ * will give sim/0 which for sim > 0 is -Inf (made to 0), and for sim
+ * == 0 is NaN (made to 1). While this technically works, this is not
+ * very meaningful.
  */
 
 static double veg_morisita(double *x, int nr, int nc, int i1, int i2)
@@ -379,8 +385,11 @@ static double veg_morisita(double *x, int nr, int nc, int i1, int i2)
 	  i2 += nr;
      }
      if (count==0) return NA_REAL;
-     dist = 1 - 2*sim/(tlam1/t1/(t1-1) + tlam2/t2/(t2-1))/t1/t2;
-     if (dist < 0)
+     if (sim <= 0)
+	 dist = 1;
+     else
+	 dist = 1 - 2*sim/(tlam1/t1/(t1-1) + tlam2/t2/(t2-1))/t1/t2;
+     if (dist < 0) /* round-off error or sim > 0 && tlam1+tlam2 == 0 */
 	  dist = 0;
      return dist;
 }

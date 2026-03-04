@@ -8,30 +8,28 @@
                  "log", "clr", "rclr", "alr")
     method <- match.arg(method, METHODS)
     if (any(x < 0, na.rm = TRUE)) {
-        k <- min(x, na.rm = TRUE)
         if (method %in% c("total", "frequency", "pa", "chi.square", "rank",
                           "rrank", "rclr")) {
             warning("input data contains negative entries: result may be non-sense")
         }
     }
-    else k <- .Machine$double.eps
     attr <- NULL
     switch(method, total = {
         if (missing(MARGIN))
             MARGIN <- 1
-        tmp <- pmax.int(k, apply(x, MARGIN, sum, na.rm = na.rm))
+        tmp <- apply(x, MARGIN, sum, na.rm = na.rm)
         x <- sweep(x, MARGIN, tmp, "/")
         attr <- list("total" = tmp, "margin" = MARGIN)
     }, max = {
         if (missing(MARGIN))
             MARGIN <- 2
-        tmp <- pmax.int(k, apply(x, MARGIN, max, na.rm = na.rm))
+        tmp <- apply(x, MARGIN, max, na.rm = na.rm)
         x <- sweep(x, MARGIN, tmp, "/")
         attr <- list("max" = tmp, "margin" = MARGIN)
     }, frequency = {
         if (missing(MARGIN))
             MARGIN <- 2
-        tmp <- pmax.int(k, apply(x, MARGIN, sum, na.rm = na.rm))
+        tmp <- apply(x, MARGIN, sum, na.rm = na.rm)
         fre <- apply(x > 0, MARGIN, sum, na.rm = na.rm)
         tmp <- fre/tmp
         x <- sweep(x, MARGIN, tmp, "*")
@@ -56,7 +54,6 @@
         tmp <- apply(xtmp, MARGIN, min, na.rm = na.rm)
         ran <- apply(xtmp, MARGIN, max, na.rm = na.rm)
         ran <- ran - tmp
-        ran <- pmax.int(k, ran, na.rm = na.rm)
         x <- sweep(x, MARGIN, tmp, "-")
         x <- sweep(x, MARGIN, ran, "/")
         attr <- list("min" = tmp, "range" = ran, "margin" = MARGIN)
@@ -101,8 +98,8 @@
         ## MARGIN 2 transposes the result!
         if (MARGIN == 2)
             x <- t(x)
-        rs <- pmax.int(k, rowSums(x, na.rm = na.rm))
-        cs <- pmax.int(k, colSums(x, na.rm = na.rm))
+        rs <- rowSums(x, na.rm = na.rm)
+        cs <- colSums(x, na.rm = na.rm)
         tot <- sum(x, na.rm = na.rm)
         x <- sqrt(tot) * x/outer(rs, sqrt(cs))
         attr <- list("tot" = tot, "rsum" = rs, "csum" = cs, margin = MARGIN)
@@ -143,7 +140,8 @@
             x <- .calc_rclr(x, na.rm = na.rm, ...)
 	else x <- t(.calc_rclr(t(x), na.rm = na.rm, ...))
         attr <- attr(x, "parameters")
-        attr$margin <- MARGIN
+        if (!is.null(attr)) # no transformation parameters with imputed matrix
+            attr$margin <- MARGIN
     })
     if (any(is.nan(x)))
         warning("result contains NaN, perhaps due to impossible mathematical
@@ -221,25 +219,10 @@
    # Impute NAs if impute=TRUE
    # Otherwise return the transformation with NAs
    if (impute && any(is.na(xx))) {
-
-     opt_res <- optspace(xx, ropt = ropt, niter = niter, tol = tol, verbose = verbose)
-
-     # recenter the data
-     # (the means of rclr can get thrown off since we work on only missing)
-     M_I <- opt_res$X %*% opt_res$S %*% t(opt_res$Y)
-
-     # Center cols to 0
-     M_I <- as.matrix(scale(M_I, center = TRUE, scale = FALSE))
-
-     # Center rows to 0
-     M_I <- as.matrix(t(scale(t(M_I), center = TRUE, scale = FALSE)))
-
-     # Imputed matrix
-     xx <- M_I
+     xx <- optspace(xx, ropt = ropt, niter = niter, tol = tol,
+                    verbose = verbose)$M
    }
-
    xx
-
 }
 
 .calc_alr <-
@@ -311,7 +294,7 @@
                               x * para$minpos},
                 "clr" = exp(sweep(x, para$margin, para$means, "+")) -
                     para$pseudocount,
-                "rclr" = { x[x == 0] <- -Inf # x==0 was set: should be safe
+                "rclr" = { x[is.na(x)] <- -Inf # no imputation: 0 |-> NA
                            exp(sweep(x, para$margin, para$means, "+"))},
                 "wisconsin" = { x <- sweep(x, 1, para$total, "*")
                                 sweep(x, 2, para$max, "*") },

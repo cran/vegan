@@ -1,3 +1,58 @@
+# vegan 2.7-3
+
+## New Features
+
+* `metaMDS` is more robust with missing values in community data.
+
+* `decostand` for data with zero row or column sums or maxima gives
+  now `NaN` (not a number) in methods `"chi.square"`, `"frequency"`,
+  `"hellinger"`, `"max"` and `"total"`. Since 2005 (CRAN release
+  1.6-10) we avoided division by zero and returned these as
+  zero. However, this can give wrong and misleading results in further
+  analysis, because originally invalid data is regarded as valid. As
+  an example, see issue
+  [#762](https://github.com/vegandevs/vegan/issues/762).
+
+* `vegdist` warns now when Morisita index is used with
+  presence/absence data or when a sampling unit (row) has no counts
+  above 1. Cases when two compared rows have largest count 1 and share
+  no species are now handled smoothly (used to be `NaN`), but results
+  for 0/1 rows are unreliable. For instance, two sampling units (rows)
+  are regarded identical (distance 0) if they share one species
+  although they differ in all other species with 0/1 data. It is best
+  to use `method = "horn"` if `"morisita"` gives warnings.  See issue
+  [#444](https://github.com/vegandevs/vegan/issues/444).
+
+* `wisconsin` double standardization gained argument `na.rm` similarly
+  as `decostand`.
+
+## Bug Fixes
+
+* `decostand(..., method = "rclr")` and `optspace` lost row and column
+  names of imputed matrix. Issue
+  [#759](https://github.com/vegandevs/vegan/issues/759).
+
+  Back-transformation of `"rclr"` failed with `decobackstand`.
+  Back-transformation cannot be done with imputed matrix, and without
+  imputed matrix original zeros were returned as `NA`.
+
+* `vegdist(..., binary = TRUE)` did not use binary data in Chi-square
+  and Mahalanobis distances (methods `"chisq"` and `"mahalanobis"`).
+
+* `vegdist` for Chord and Hellinger distances gave wrong or misleading
+  results when two sites were identical or one of sites was empty (all
+  zeros). Issues [#761](https://github.com/vegandevs/vegan/issues/761)
+  and [#762](https://github.com/vegandevs/vegan/issues/762).
+
+## Deprecated
+
+* Several Lattice functions are deprecated after CRAN release of
+  **ggvegan** for **ggplot2** graphics. These include `ordixyplot`,
+  `plot` functions for the results of `poolaccum`, `renyi` and
+  `renyiaccum`, `permulattice` with `densityplot` and `qqmath`
+  functions for `permustats`. **ggvegan** provides `autoplot` for all
+  these deprecated functions.
+
 # vegan 2.7-2
 
 ## New Features
