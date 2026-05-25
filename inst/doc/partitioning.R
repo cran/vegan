@@ -30,5 +30,3 @@ showvarparts(3, bg = cls, Xnames=labs)
 ###################################################
 getOption("SweaveHooks")[["fig"]]()
 showvarparts(4, bg = cls, Xnames=labs)
-
-

@@ -188,5 +188,3 @@ anova(ord, by="term", permutations = how)
 ### code chunk number 26: intro-vegan.Rnw:412-413
 ###################################################
 detach(dune.env)
-
-

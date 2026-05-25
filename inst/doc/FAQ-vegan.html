@@ -332,6 +332,28 @@ this non-linear step function using function <code>stressplot</code> in
 is correct to use <strong>vegan</strong> functions <code>envfit</code> and <code>ordisurf</code> with
 NMDS results.</p>
 <hr />
+<h3 id="sec:why-ordiellipses-are-much-smaller-than-ggplot2-ellipses">Why ordiellipses are much smaller than ggplot2 ellipses?</h3>
+<p><strong>vegan</strong> <code>ordiellipse</code> and <strong>ggplot2</strong> <code>stat_ellipse</code> use nearly
+identical methods, but there are three differences. In order of
+importance: (1) Greatest difference is that they are different
+ellipses. <strong>Vegan</strong> defaults to show standard deviation ellipses, but
+<strong>ggplot2</strong> shows data ellipses. Data ellipses are intended to enclose
+a given proportion of points. <code>ordiellipse</code> can also show data
+ellipses with its <code>conf</code> argument. Setting <code>ordiellipse(..., kind=&quot;sd&quot;, conf=0.95)</code> is similar to default <strong>ggplot2</strong> ellipse, and
+setting <code>level=0.39</code> in <code>stat_ellipse</code> will give a reasonable good
+approximation of SD ellipses. (2) <strong>Vegan</strong> uses standard
+<code>stats::cov.wt</code> function to find the covariance matrices, whereas
+<strong>ggplot2</strong> defaults to robust covariances with <code>MASS::cov.trob</code>
+(which is not (yet?) implemented in <strong>vegan</strong>).  Setting <code>type=&quot;norm&quot;</code>
+in <code>ggplot2::stat_ellipse</code> will use the same covariance matrix as
+<code>ordiellipse</code>. The use of robust covariances will influence both the
+shape and location of ellipses. (3) <code>ordiellipse</code> uses asymptotic
+confidence limits based on Chi-squared distribution whereas
+<code>stat_ellipse</code> uses <em>F</em>-statistic based on bivariate Normal
+distribution which takes into account group sizes and gives wider
+radius for smaller groups. The differences are usually small, and
+large groups are very similar.</p>
+<hr />
 <h3 id="sec:where-can-i-find-numerical-scores-of-ordination-axes">Where can I find numerical scores of ordination axes?</h3>
 <p>Normally you can use function <code>scores</code> to extract ordination scores for
 any ordination method. The <code>scores</code> function can also find ordination

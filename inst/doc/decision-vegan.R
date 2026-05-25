@@ -170,5 +170,3 @@ getOption("SweaveHooks")[["fig"]]()
 plot(orig, display="wa", type="points")
 ordispider(orig, col="red")
 text(orig, dis="cn", col="blue")
-
-
