@@ -9,7 +9,7 @@
     x <- formula[[2]]
     x <- eval.parent(x)
     formula[[2]] <- NULL
-    y <- drop(as.matrix(model.frame(formula, data, na.action = na.pass)))
+    y <- as.matrix(model.frame(formula, data, na.action = na.pass))
     if (NCOL(y) > 1)
         stop(gettextf("only one fitted variable allowed in the formula"))
     ordisurf(x, y, ...)
@@ -36,8 +36,12 @@
         w <- NULL
     X <- scores(x, choices = choices, display = display, ...)
     ## The original name of 'y' may be lost in handling NA: save for
-    ## plots
-    yname <- deparse(substitute(y))
+    ## plots. In R 4.4.0 the following can be written as
+    ##     yname <- colnames(y) %||% deparse(substitute(y))
+    yname <- if (is.null(colnames(y)))
+                 deparse(substitute(y))
+             else
+                 colnames(y)
     kk <- complete.cases(X) & !is.na(y)
     if (!all(kk)) {
         X <- X[kk, , drop = FALSE]
@@ -150,15 +154,20 @@
         }
         if (missing(levels))
             levels <- pretty(range(fit, finite = TRUE), nlevels)
-        ## Only plot surface is select is FALSE or (TRUE and EDF is diff from 0)
-        if(!select ||
-           (select && !isTRUE(all.equal(as.numeric(summary(mod)$edf), 0))))
+        ## Do not draw contours if select is TRUE and gam fit has EDF
+        ## nearly 0 (fixed knots 0, 1 or 2 have no EDF, hence isTRUE)
+        if(!select || !isTRUE(summary(mod)$edf < 1e-4))
             contour(xn1, xn2, matrix(fit, nrow=GRID), col = col, add = TRUE,
                     levels = levels, labcex = labcex,
                     drawlabels = !is.null(labcex) && labcex > 0,
                     lwd = lwd.cl)
     }
     mod$grid <- list(x = xn1, y = xn2, z = matrix(fit, nrow = GRID))
+    ## poly() models with knots 0,1,2 do not save x1, x2: needed in plot()
+    if (is.null(mod$model$x1) || is.null(mod$model$x2)) {
+        mod$model$x1 <- x1
+        mod$model$x2 <- x2
+    }
     class(mod) <- c("ordisurf", class(mod))
     mod
 }

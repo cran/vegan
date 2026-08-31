@@ -3,7 +3,8 @@
 \alias{tolerance.cca}
 \alias{tolerance.decorana}
 
-\title{Species tolerances and sample heterogeneities}
+\title{Species tolerances and sample heterogeneities.}
+
 \usage{
 tolerance(x, \dots)
 
@@ -18,13 +19,20 @@ tolerance(x, \dots)
   Species tolerances and sample heterogeneities.
 }
 \details{
-  Function to compute species tolerances and site heterogeneity measures
-  from unimodal ordinations (CCA & CA). Implements Eq 6.47 and 6.48 from
-  the Canoco 4.5 Reference Manual (pages 178--179).
 
-  Function \code{wascores} with \code{stdev = TRUE} uses the same
-  algebra, but bases the standard deviations on weighted averages
-  scores instead of linear combinations scores of \code{tolerance}.
+  Species tolerance is a measure of response widths in the ordination
+  space and it is estimated as a weighted dispersion of species scores
+  to their site score. It describes the specialist vs. generalist
+  responses of species. For sampling units it is a measure of weighted
+  dispersion of species scores within a sampling unit and describes
+  the heterogeneity of species composition in a sampling unit. Sum of
+  squared tolerances is a measure of weighted within-species or
+  within-site variation, while eigenvalue is a measure of
+  between-species or between-site variation (see Examples).
+
+  Function implements Eq 6.47 and 6.48 from the Canoco 4.5 Reference
+  Manual (pages 178--179).
+
 }
 \value{
   Matrix of tolerances/heterogeneities with some additional
@@ -53,8 +61,7 @@ tolerance(x, \dots)
   \item{\dots}{arguments passed to other methods.}
 }
 \examples{
-data(dune)
-data(dune.env)
+data(dune, dune.env)
 mod <- cca(dune ~ ., data = dune.env)
 
 ## defaults to species tolerances
@@ -71,4 +78,11 @@ apply(tol, 2, sd)
 tol <- tolerance(decorana(dune))
 colMeans(tol)
 apply(tol, 2, sd)
+
+## Relation of tolerances (within-species variation) and eigenvalues
+## (between-species variation) - with adequate 'scaling'.
+tol <- tolerance(mod, what = "species", scaling = "sites", choices=1:4)
+w <- weights(mod, "species")
+all.equal(colSums(tol^2 * w),
+          1 - eigenvals(mod)[1:4])
 }
