@@ -6,6 +6,7 @@
 \alias{rstudent.cca}
 \alias{cooks.distance.cca}
 \alias{SSD.cca}
+\alias{estVar.cca}
 \alias{vcov.cca}
 \alias{qr.cca}
 \alias{df.residual.cca}
@@ -31,16 +32,21 @@
 
 }
 
-\usage{
+\seealso{Similar linear mmodel functions \code{\link{influence.measures}},
+  \code{\link{hatvalues}}, \code{\link{rstandard}}, \code{\link{rstudent}},
+  \code{\link{cooks.distance}}, \code{\link{sigma}}, \code{\link{SSD}},
+  \code{\link{estVar}}, \code{\link{vcov}}, \code{\link{df.residual}}.}
 
+\usage{
 \method{hatvalues}{cca}(model, ...)
 \method{rstandard}{cca}(model, type = c("response", "canoco"), ...)
 \method{rstudent}{cca}(model, type = c("response", "canoco"), ...)
 \method{cooks.distance}{cca}(model, type = c("response", "canoco"), ...)
 
 \method{sigma}{cca}(object, type = c("response", "canoco"), ...)
-\method{vcov}{cca}(object, type = "canoco", ...)
-\method{SSD}{cca}(object, type = "canoco", ...)
+\method{SSD}{cca}(object, type = c("response", "canoco"), ...)
+\method{estVar}{cca}(object, type = c("response", "canoco"), ...)
+\method{vcov}{cca}(object, type = c("response", "canoco"), ...)
 
 \method{qr}{cca}(x, ...)
 \method{df.residual}{cca}(object, ...)
@@ -163,7 +169,12 @@ all(abs(cooks.distance(lmod1) - cooks.distance(mod)[, "Cladstel"]) < 1e-8)
 ## t-values of regression coefficients based on type = "canoco"
 ## residuals
 coef(mod)
-coef(mod)/sqrt(diag(vcov(mod, type = "canoco")))
+tval <- coef(mod)/sqrt(diag(vcov(mod, type = "canoco")))
+tval
+## P-values
+zapsmall(2 * pt(abs(tval), df.residual(mod), lower.tail=FALSE))
+plot(mod, scaling = "sites", display = c("lc", "reg"))
+title(main = "Linear Combination and Regression Scores")
 }
 
 \keyword{ models }

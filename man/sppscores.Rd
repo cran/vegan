@@ -26,6 +26,7 @@ Add or Replace Species Scores in Distance-Based Ordination
 }
 
 \usage{
+sppscores(object)
 sppscores(object) <- value
 }
 
@@ -80,7 +81,8 @@ sppscores(object) <- value
 \value{
 
   Replacement function adds the species scores or replaces the old
-  scores in the ordination object.
+  scores in the ordination object. Accessor function \code{sppscores}
+  is not implemented (yet).
 
 }
 
@@ -105,9 +107,9 @@ sppscores(mod) <- BCI
 ## Euclidean distances of BCI differ from used dissimilarity
 plot(vegdist(BCI), dist(BCI))
 ## more linear relationship
-plot(vegdist(BCI), dist(sqrt(decostand(BCI, "total"))))
+plot(vegdist(BCI), dist(decostand(BCI, "hellinger")))
 ## better species scores
-sppscores(mod) <- sqrt(decostand(BCI, "total"))
+sppscores(mod) <- decostand(BCI, "hellinger")
 }
 
 \keyword{ multivariate }

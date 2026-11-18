@@ -1,6 +1,6 @@
 Package: vegan
 Title: Community Ecology Package
-Version: 2.7-6
+Version: 2.7-8
 Authors@R: c(person("Jari", "Oksanen", role=c("aut","cre"),
                     email="jhoksane@gmail.com",
 		    comment = c(ORCID="0000-0001-7102-9626")),
@@ -43,8 +43,8 @@ Authors@R: c(person("Jari", "Oksanen", role=c("aut","cre"),
 	   person("Cajo J.F.", "Ter Braak", role="aut"),
 	   person("James", "Weedon", role="aut"))
 Depends: permute (>= 0.9-0), R (>= 4.1.0)
-Suggests: parallel, knitr, markdown
-Imports: MASS, cluster, lattice, mgcv
+Suggests: knitr, markdown
+Imports: MASS, cluster, lattice, mgcv, parallel
 VignetteBuilder: utils, knitr
 Description: Ordination methods, diversity analysis and other
   functions for community and vegetation ecologists.
@@ -53,7 +53,7 @@ BugReports: https://github.com/vegandevs/vegan/issues
 URL: https://vegandevs.github.io/vegan/,
         https://github.com/vegandevs/vegan
 NeedsCompilation: yes
-Packaged: 2026-08-31 10:13:55 UTC; jarioksa
+Packaged: 2026-11-18 14:57:31 UTC; jarioksa
 Author: Jari Oksanen [aut, cre] (ORCID:
     <https://orcid.org/0000-0001-7102-9626>),
   Gavin L. Simpson [aut] (ORCID: <https://orcid.org/0000-0002-9084-8413>),
@@ -94,4 +94,4 @@ Author: Jari Oksanen [aut, cre] (ORCID:
   James Weedon [aut]
 Maintainer: Jari Oksanen <jhoksane@gmail.com>
 Repository: CRAN
-Date/Publication: 2026-08-31 19:30:08 UTC
+Date/Publication: 2026-11-18 17:40:02 UTC

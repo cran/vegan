@@ -14,25 +14,34 @@
         stop("same ordination method must be used in all models")
     else
         method <- method[1]
-    ## 2. All models must be fitted with formula interface
+    ## 2. All models must be based on the same inertia: can vary in
+    ## dbrda, capscale, and rda (variance/correlation).
+    inertia <- sapply(object, function(z) z$inertia)
+    if (!all(inertia == inertia[[1]]))
+        stop("same kind of inertia must be used in all models")
+    ## 3. All models must be fitted with formula interface
     if (any(sapply(object, function(x) is.null(x$terms))))
         stop("all models must be fitted with formula interface")
-    ## 3. Same response
+    ## 4. Same response
     resp <- sapply(object, function(z) deparse(formula(z)[[2]]))
     if (!all(resp == resp[1]))
         stop("response must be same in all models")
-    ## 4. Same no. of observations
+    ## 5. Same no. of observations
     N <- sapply(object, nobs)
     if (!all(N == N[1]))
         stop("number of observations must be same in all models")
     else
         N <- N[1]
-    ## 5. Terms must be nested
+    ## 6. Terms must be nested
     trms <- lapply(object, function(z) labels(terms(z)))
     o  <- order(sapply(trms, length))
     for (i in 2:nmodels)
         if (!all(trms[[o[i-1]]] %in% trms[[o[i]]]))
             stop("models must be nested")
+
+    ## models should be ordered since tests are between successive
+    ## models
+    object <- object[o]
 
     ## Check permutation matrix
     nperm <- nrow(permutations)
@@ -60,25 +69,31 @@
     fval <- changedev/df/scale
     ## Collect permutation results: denominator of F varies in each
     ## permutation.
-    pscale <- mods[[big]]$den/resdf[big]
-    ## Numerator of F
-    pfvals <- sapply(mods, function(z) z$num)
-    if (is.list(pfvals))
-        pfvals <- do.call(cbind, pfvals)
-    pfvals <- apply(pfvals, 1, diff)
-    ## dropped to vector?
-    if (!is.matrix(pfvals))
-        pfvals <- matrix(pfvals, nrow = 1, ncol = nperm)
-    pfvals <- sweep(pfvals, 1, df, "/")
-    pfvals <- sweep(pfvals, 2, pscale, "/")
-    pval <- rowSums(sweep(pfvals, 1, fval - EPS, ">="))
-    pval <- (pval + 1)/(nperm + 1)
+    if (nperm > 0) {
+        pscale <- mods[[big]]$den/resdf[big]
+        ## Numerator of F
+        pfvals <- sapply(mods, function(z) z$num)
+        if (is.list(pfvals))
+            pfvals <- do.call(cbind, pfvals)
+        pfvals <- apply(pfvals, 1, diff)
+        ## dropped to vector?
+        if (!is.matrix(pfvals))
+            pfvals <- matrix(pfvals, nrow = 1, ncol = nperm)
+        pfvals <- sweep(pfvals, 1, df, "/")
+        pfvals <- sweep(pfvals, 2, pscale, "/")
+        pval <- rowSums(sweep(pfvals, 1, fval - EPS, ">="))
+        pval <- (pval + 1)/(nperm + 1)
+    } else {
+        pfvals <- matrix(0, length(fval), nperm)
+        pval <- rep(NA, length(fval))
+    }
     ## collect table
     table <- data.frame(resdf, resdev, c(NA, df),
                         c(NA,changedev), c(NA,fval), c(NA,pval))
-    if (inherits(object, c("capscale", "dbrda")) && object$adjust == 1)
+    if (inherits(object[[1]], c("capscale", "dbrda")) &&
+        object[[1]]$adjust == 1)
         varname <- "SumOfSqs"
-    else if (inherits(object, "rda"))
+    else if (inherits(object[[1]], "rda"))
         varname <- "Variance"
     else
         varname <- "ChiSquare"
@@ -90,7 +105,7 @@
                        function(z) deparse(formula(z), width.cutoff = 500))
     head <- paste0("Permutation tests for ", method, " under ",
                   mods[[big]]$model, " model\n",
-                   howHead(attr(permutations, "control")))
+                  howHead(attr(permutations, "control")))
     topnote <- paste("Model ", format(1L:nmodels), ": ", formulae,
                      sep = "", collapse = "\n")
     structure(table, heading = c(head,topnote),

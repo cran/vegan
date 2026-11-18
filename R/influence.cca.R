@@ -118,13 +118,27 @@
 ## residual sums of squares and products
 
 `SSD.cca` <-
-    function(object, type = "canoco", ...)
+    function(object, type = c("response", "canoco"), ...)
 {
     type <- match.arg(type)
     w <- sqrt(weights(object))
-    SSD <- crossprod(w * (object$CCA$wa - object$CCA$u))
+    if (inherits(object, "rda"))
+        adj <- nobs(object) - 1L
+    else
+        adj <- 1
+    SSD <- switch(type,
+                  "response" = crossprod(ordiYbar(object, "CA")) * adj,
+                  "canoco" = crossprod(w * (object$CCA$wa - object$CCA$u)))
     structure(list(SSD = SSD, call = object$call, df = df.residual(object)),
               class = "SSD")
+}
+
+## Estimated residual variance matrix
+
+`estVar.cca` <-
+    function(object, type = c("response", "canoco"), ...)
+{
+    estVar(SSD(object, type = type))
 }
 
 ## variances and covariances of coefficients. The sqrt(diag()) will be
@@ -134,7 +148,7 @@
 ## be determined by the output of SSD.
 
 `vcov.cca` <-
-    function(object, type = "canoco", ...)
+    function(object, type = c("response", "canoco"), ...)
 {
     type <- match.arg(type)
     QR <- qr(object)

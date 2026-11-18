@@ -1,3 +1,77 @@
+# vegan 2.7-8
+
+## Maintenance
+
+* Fixes issues in CRAN checks: PR
+  [#796](https://github.com/vegandevs/vegan/pull/796) and issue
+  [#808](https://github.com/vegandevs/vegan/issues/808).
+
+## New Features
+
+* `anova.cca`: when analysing differencens of several models, function
+  will now order the models so that they are nested.
+
+* `decorana` uses stricter convergence and is now similar to other
+  ordination methods in **vegan**. For instance, orthogonal
+  correspondence analysis (reciprocal averaging) results are similar
+  as with `ca` and `cca`.
+
+* `decostand` Aitchison or log-ratio methods were updated. The
+  documentation and code were made more consistent. Robust centred log
+  ratio (`"rclr"`) can now use imputation for complete matrix or only
+  for original zeros, and the optional estimation of rank of imputation
+  was fixed. The imputation function `optspace` no longer
+  double-centres result matrix allowing more general use outside
+  `decostand`, but double-centring is done within `decostand` keeping
+  the behaviour unchanged in `decostand` and
+  `vegdist(..., method = "robust.aitchison")`.
+  Back-transformation (`decobackstand`) was enabled for additive
+  log-ratio (`"alr"`). Issue
+  [#806](https://github.com/vegandevs/vegan/issues/806).
+
+* `CCoRA`: the right matrix `X` can be a data frame with factors.
+
+* `qqnorm` and `density` functions for `permustats` results gained
+  argument `which` to select the displayed statistic. Earlier they
+  refused to handle results with several statistics. `qqnorm`
+  function also gained argument `x` for user supplied theoretical
+  quantiles. With this it can show permutation values against other
+  reference distributions than standard Normal.
+
+* `SSD.cca` and `vcov.cca` can return `type = "response"`. Earlier
+  they only knew `type = "canoco"`. Added `estVar.cca`.
+
+## Bug Fixes
+
+* `adonis2`: additive constant (Lingoes or Cailliez) was wrongly
+  implemented.
+
+* `procrustes` guards against negative residual sums of squares caused
+  by rounding in perfect fits, preventing warnings and `NaN` root mean
+  squared errors in `summary`.
+
+* `anova` for `prc` result failed with `by` argument if `prc` was
+  called with expressions instead of plain names, for instance with
+  `prc(t(spe), md$treatment, md$time)`. Issue
+  [#797](https://github.com/vegandevs/vegan/issues/797),
+  PR [#798](https://github.com/vegandevs/vegan/pull/798).
+
+* `anova.cca` and `permutest.cca` failed in several cases with
+  `permutations = 0`.
+
+* `anova.cca(..., by = "axis")` inflated _F_-values after first
+  axis. Similar inflation was used both in the test statistic and
+  permutation, and _P_-values are unchanged.
+
+* `permustats` support methods `c`, `boxplot(..., scale=TRUE)`,
+  `density` and `qqnorm` failed when permuted values of the single
+  statistic were given as a vector instead of a one-column matrix. Now
+  all `permustats` methods return permuted values as a matrix. Issue
+  [#803](https://github.com/vegandevs/vegan/issues/803).
+
+* `metaMDSredist` failed (but it is not needed with the modern
+  `monoMDS` engine).
+
 # vegan 2.7-6
 
 ## New Features

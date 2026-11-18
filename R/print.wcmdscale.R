@@ -20,8 +20,9 @@
     }
     tbl <- cbind("Inertia" = evs, "Rank" = ranks)
     printCoefmat(tbl, digits = digits, na.print = "")
+    cat("Inertia is", x$inertia, "\n")
     if (!is.na(x$ac) && x$ac > 0)
-        cat("additive constant ", x$ac, " (method ", x$add, ")\n", sep = "")
+        cat("additive constant ", x$ac, "\n", sep = "")
     cat("\nResults have", NROW(x$points), "points,", NCOL(x$points), "axes\n")
     ## print eigenvalues, but truncate very long lists
     PRINLIM <- 120
@@ -48,10 +49,14 @@
 `scores.wcmdscale` <-
     function(x, choices = NA, display = "sites", tidy = FALSE, ...)
 {
-    if ("species" %in% names(x))
-        display <- match.arg(display, c("sites", "species"), several.ok = TRUE)
-    else
-        display <- match.arg(display, "sites")
+    display <- match.arg(display, c("sites", "species"), several.ok = TRUE)
+    if ("species" %in% display && !("species" %in% names(x))) {
+        warning("'species' scores are not available")
+        if (length(display) == 2) # has both "species" and "sites"
+            display <- "sites"
+        else # has only "species" and they do not exist
+            return(invisible(NULL))
+    }
     if (tidy && "species" %in% names(x)) # all scores when tidy
         display <- c("sites", "species")
     p <- list()
@@ -70,7 +75,7 @@
             wts <- if(sco == "sites") weights(x) else NA
             p[[sco]] <- data.frame("score" = sco,
                                    "label" = rownames(p[[sco]]),
-                                   p[[sco]], weights = wts,
+                                   p[[sco]], "weight" = wts,
                                    row.names = NULL)
         }
     }

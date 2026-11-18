@@ -29,7 +29,7 @@
         alt <- TAB[match(object$alternative, TAB)]
     else
         alt <- match.arg(alternative, TAB, several.ok = TRUE)
-    if (any(is.na(alt)))
+    if (anyNA(alt))
         stop("alternative missing")
     nstat <- length(object$statistic)
     nalt <- length(alt)
@@ -67,7 +67,7 @@
                          na.rm = TRUE)
     }
     nsimul <- nrow(permutations)
-    if (any(is.na(permutations))) {
+    if (anyNA(permutations)) {
         warning("some simulated values were NA and were removed")
         nsimul <- nsimul - colSums(is.na(permutations))
     }
@@ -116,7 +116,10 @@
     else
         alt <- NA
     ## combine permutations
-    p <- do.call(rbind, lapply(mods, function(z) z$permutations))
+    if (is.matrix(mods[[1]]$permutations))
+        p <- do.call(rbind, lapply(mods, function(z) z$permutations))
+    else
+        p <- do.call(c, lapply(mods, function(z) z$permutations))
     ## return permustats
     structure(list(statistic = stats,
                    permutations = p,
@@ -166,36 +169,49 @@
 ### without observed statistic.
 
 `density.permustats` <-
-    function(x, observed = TRUE, ...)
+    function(x, observed = TRUE, which, ...)
 {
-    ## only works with statistic
-    if (length(x$statistic) > 1)
-        stop(gettextf("only works with one statistic: you got %d",
-                      length(x$statistic)))
     p <- x$permutations
+    if (!is.matrix(p))
+        p <- as.matrix(p, ncol = length(x$statistic))
+    if (length(x$statistic) > 1 && missing(which))
+        stop("more than one statistic, and no 'which' given")
+    if (missing(which)) which <- 1L
+    p <- p[, which, drop = TRUE]
     if (observed)
-        p <- c(x$statistic, p)
+        p <- c(x$statistic[which], p)
     out <- density(p)
     out$call <- match.call()
     out$call[[1]] <- as.name("density")
     out
 }
 
-### QQ-plot against Guaussian distribution
+### QQ-plot against Gaussian distribution
 
 `qqnorm.permustats` <-
-    function(y, observed = TRUE, ...)
+    function(y, x, observed = TRUE, which, xlab, ylab, ...)
 {
-    ## only works with statistic
-    if (length(y$statistic) > 1)
-        stop(gettextf("only works with one statistic: you got %d",
-                      length(y$statistic)))
     p <- y$permutations
+    if (!is.matrix(p))
+        p <- as.matrix(p, ncol = length(y$statistic))
+    if (length(y$statistic) > 1 && missing(which))
+        stop("more than one statistic, and no 'which' given")
+    if (missing(which)) which <- 1L # 1-col matrix needs no 'which'
+    p <- p[, which, drop = TRUE]
     if (observed)
-        p <- c(y$statistic, p)
-    q <- qqnorm(p, ...)
+        p <- c(y$statistic[which], p)
+    n <- length(p)
+    ## axis labels
+    if (missing(ylab))
+        ylab <- paste(names(y$statistic[which]), "Permutation Values")
+    if (missing(xlab))
+        xlab <- "Theoretical Quantiles"
+    ## reference axis x for theoretical quantiles
+    if (missing(x))
+        x <- qnorm(ppoints(n))
+    q <- qqplot(x, p, xlab = xlab, ylab = ylab, ...)
     if (observed)
-        abline(h = y$statistic, ...)
+        abline(h = y$statistic[which], ...)
     invisible(q)
 }
 
@@ -237,6 +253,8 @@
     function(x, scale = FALSE, names, ...)
 {
     p <- x$permutations
+    if (!is.matrix(p))
+        p <- as.matrix(p, ncol = length(x$statistic))
     if (isTRUE(scale))
         scale <- apply(p, 2, sd, na.rm = TRUE)
     p <- scale(p, center = x$statistic, scale = scale)
@@ -251,6 +269,8 @@
     function(x, ...)
 {
     p <- x$permutations
+    if (!is.matrix(p) || ncol(p) < 2L)
+        stop("needs a matrix of permutations with at least two columns")
     colnames(p) <- attr(x$statistic, "names")
     pairs(p, ...)
 }
@@ -264,7 +284,7 @@
 {
     structure(list(
         "statistic" = structure(x$statistic, names = "R"),
-        "permutations" = x$perm,
+        "permutations" = matrix(x$perm, ncol = 1L),
         "alternative" = "greater"),
               class = "permustats")
 }
@@ -276,7 +296,7 @@
 {
     structure(list(
         "statistic" = structure(x$statistic, names = "r"),
-        "permutations" = x$perm,
+        "permutations" = matrix(x$perm, ncol = 1L),
         "alternative" = "greater"),
               class = "permustats")
 }
@@ -292,7 +312,7 @@
 {
     structure(list(
         "statistic" = structure(x$delta, names = "delta"),
-        "permutations" = x$boot.deltas,
+        "permutations" = matrix(x$boot.deltas, ncol = 1L),
         "alternative" = "less"),
               class = "permustats")
 }
@@ -352,7 +372,7 @@
 {
     structure(list(
         "statistic" = structure(x$t0, names = "r"),
-        "permutations" = x$t,
+        "permutations" = matrix(x$t, ncol = 1L),
         "alternative" = "greater"),
               class = "permustats")
 }
@@ -400,7 +420,7 @@
         "greater"
     }
     structure(list("statistic" = x$statistic,
-                   "permutations" = x$perm,
+                   "permutations" = as.matrix(x$perm, ncol=length(x$statistic)),
                    "alternative" = alt),
               class = "permustats")
 }
